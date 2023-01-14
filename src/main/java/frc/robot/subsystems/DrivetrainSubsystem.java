@@ -76,6 +76,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     ShuffleboardLayout frontRightLayout = null;
     ShuffleboardLayout backLeftLayout = null;
     ShuffleboardLayout backRightLayout = null;
+    ShuffleboardLayout orientation = null;
 
     if (DrivetrainConstants.ADD_TO_DASHBOARD) {
       frontLeftLayout = tab.getLayout("Front Left Module", BuiltInLayouts.kList)
@@ -86,13 +87,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
           .withSize(2, 4)
           .withPosition(2, 0);
       
-      backLeftLayout =tab.getLayout("Back Left Module", BuiltInLayouts.kList)
+      backLeftLayout = tab.getLayout("Back Left Module", BuiltInLayouts.kList)
           .withSize(2, 4)
           .withPosition(4, 0);
       
       backRightLayout = tab.getLayout("Back Right Module", BuiltInLayouts.kList)
           .withSize(2, 4)
           .withPosition(6, 0);
+      orientation = tab.getLayout("Robot Orientation", BuiltInLayouts.kList)
+          .withSize(2, 4)
+          .withPosition(8, 0);
     }
 
     swerveModules = new SwerveModule[] {
@@ -128,6 +132,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
             BACK_RIGHT_MODULE_STEER_ENCODER,
             BACK_RIGHT_MODULE_STEER_OFFSET
         )};
+
+      if (orientation != null)
+      {
+        orientation.addNumber("Yaw", () -> pigeon.getYaw());
+        orientation.addNumber("Pitch", () -> pigeon.getPitch());
+        orientation.addNumber("Roll", () -> pigeon.getRoll());
+      }
 
     // Put the motors in brake mode when enabled, coast mode when disabled
     new Trigger(RobotState::isEnabled).onTrue(new StartEndCommand(() -> {
