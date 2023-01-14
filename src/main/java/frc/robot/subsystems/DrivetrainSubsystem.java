@@ -185,6 +185,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
     pigeon.setYaw(angleDeg);
   }
 
+  public double getYaw()
+  {
+    return pigeon.getYaw();
+  }
+
+  public double getRoll()
+  {
+    return pigeon.getRoll();
+  }
+
+  public double getPitch()
+  {
+    return pigeon.getPitch();
+  }
+
   public void resetGyro(){
     setGyroscopeRotation(0);
   }
