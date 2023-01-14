@@ -25,12 +25,11 @@ import frc.robot.Constants.DrivetrainConstants;
 
 public class PoseEstimatorSubsystem extends SubsystemBase {
 
-  private final PhotonCamera photonCamera;
   private final DrivetrainSubsystem drivetrainSubsystem;
 
   // Ordered list of target poses by ID (WPILib is adding some functionality for
   // this)
-  private static final Map<Integer, Pose3d> targetPoses = Constants.FieldConstants.aprilTags;
+
    
   // Kalman Filter Configuration. These can be "tuned-to-taste" based on how much
   // you trust your various sensors. Smaller numbers will cause the filter to
@@ -56,8 +55,8 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
   private double previousPipelineTimestamp = 0;
 
-  public PoseEstimatorSubsystem(PhotonCamera photonCamera, DrivetrainSubsystem drivetrainSubsystem) {
-    this.photonCamera = photonCamera;
+  public PoseEstimatorSubsystem(DrivetrainSubsystem drivetrainSubsystem) {
+
     this.drivetrainSubsystem = drivetrainSubsystem;
 
     ShuffleboardTab tab = Shuffleboard.getTab("Vision");
@@ -82,27 +81,26 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update pose estimator with the best visible target
-    var pipelineResult = photonCamera.getLatestResult();
-    var resultTimestamp = pipelineResult.getTimestampSeconds();
-    if (resultTimestamp != previousPipelineTimestamp && pipelineResult.hasTargets()) {
-      previousPipelineTimestamp = resultTimestamp;
-      var target = pipelineResult.getBestTarget();
-      var fiducialId = target.getFiducialId();
-      if (target.getPoseAmbiguity() <= .2 && fiducialId >= 0 && fiducialId < targetPoses.size()) {
-        var targetPose = targetPoses.get(fiducialId);
-        Transform3d camToTarget = target.getBestCameraToTarget();
-        Pose3d camPose = targetPose.transformBy(camToTarget.inverse());
 
-        var visionMeasurement = camPose.transformBy(CAMERA_TO_ROBOT);
-        poseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(), resultTimestamp);
-      }
-    }
-    // Update pose estimator with drivetrain sensors
-    poseEstimator.update(
-      drivetrainSubsystem.getGyroscopeRotation(),
-      drivetrainSubsystem.getModulePositions());
+    // var resultTimestamp = pipelineResult.getTimestampSeconds();
+    // if (resultTimestamp != previousPipelineTimestamp && pipelineResult.hasTargets()) {
+    //   previousPipelineTimestamp = resultTimestamp;
+    //   var target = pipelineResult.getBestTarget();
+    //   var fiducialId = target.getFiducialId();
+    //   if (target.getPoseAmbiguity() <= .2 && fiducialId >= 0 && fiducialId < targetPoses.size()) {
+    //     var targetPose = targetPoses.get(fiducialId);
+    //     Transform3d camToTarget = target.getBestCameraToTarget();
+    //     Pose3d camPose = targetPose.transformBy(camToTarget.inverse());
 
-    field2d.setRobotPose(getCurrentPose());
+    //     var visionMeasurement = camPose.transformBy(CAMERA_TO_ROBOT);
+    //     poseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(),
+    //       resultTimestamp);
+    // // Update pose estimator with drivetrain sensors
+    // poseEstimator.update(
+    //   drivetrainSubsystem.getGyroscopeRotation(),
+    //   drivetrainSubsystem.getModulePositions());
+
+    // field2d.setRobotPose(getCurrentPose());
   }
 
   private String getFormattedPose() {
