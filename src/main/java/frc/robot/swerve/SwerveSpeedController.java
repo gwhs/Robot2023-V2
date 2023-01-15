@@ -16,8 +16,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
-//import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import frc.lib5507.wrappers.Falcon5507;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 
 public class SwerveSpeedController {
 
@@ -25,7 +25,7 @@ public class SwerveSpeedController {
   private static final int CAN_TIMEOUT_MS = 250;
   private static final double TICKS_PER_ROTATION = 2048.0;
 
-  private final Falcon5507 motor;
+  private final WPI_TalonFX motor;
 
   private final double sensorPositionCoefficient;
   private final double sensorVelocityCoefficient;
@@ -50,7 +50,7 @@ public class SwerveSpeedController {
     motorConfiguration.slot0.kI = DRIVE_kI;
     motorConfiguration.slot0.kD = DRIVE_kD;
 
-    motor = new Falcon5507(port,CANIVORE_NAME);
+    motor = new WPI_TalonFX(port,CANIVORE_NAME);
     CtreUtils.checkCtreError(motor.configAllSettings(motorConfiguration), "Failed to configure Falcon 500");
     motor.enableVoltageCompensation(true);
     motor.setNeutralMode(NeutralMode.Coast);
