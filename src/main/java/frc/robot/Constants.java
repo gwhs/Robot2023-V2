@@ -61,7 +61,6 @@ public final class Constants {
 
     //Pick the longest side of the robot for this and measure outside bumper to outside bumper
     public static final double ROBOT_LENGTH_WIDTH = 0.698;
-
     public static final String CANIVORE_NAME = "CAN_Network";
 
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1;
