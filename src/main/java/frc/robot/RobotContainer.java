@@ -155,8 +155,10 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+  private int autoPath = 1;
   public Command getAutonomousCommand() {
    return new TestAutonomous(drivetrainSubsystem, poseEstimator);
+     // An ExampleCommand will run in autonomous
   }
 
   private static double modifyAxis(double value) {
