@@ -47,13 +47,9 @@ public class RobotContainer {
   
   private final PhotonCamera photonCamera = new PhotonCamera("photonvision");
 
-<<<<<<< HEAD
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("hana");
-  private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(drivetrainSubsystem);
-=======
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
+  //change to hana or spring depending on robot
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("spring");
   private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
->>>>>>> main
 
   private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera, drivetrainSubsystem,
       poseEstimator::getCurrentPose);
