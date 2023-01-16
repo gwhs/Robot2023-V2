@@ -44,13 +44,14 @@ public class RobotContainer {
   private final CommandXboxController controller = new CommandXboxController(0);
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
+  
   private final PhotonCamera photonCamera = new PhotonCamera("photonvision");
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
-  private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(drivetrainSubsystem);
+  private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(photonCamera,drivetrainSubsystem);
 
-  //private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera, drivetrainSubsystem,
-      //poseEstimator::getCurrentPose);
+  private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera, drivetrainSubsystem,
+      poseEstimator::getCurrentPose);
 
   VisGraph AStarMap = new VisGraph();
   final Node finalNode = new Node(4, 4, Rotation2d.fromDegrees(180));

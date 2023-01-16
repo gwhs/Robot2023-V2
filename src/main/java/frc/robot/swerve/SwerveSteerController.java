@@ -21,7 +21,7 @@ import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
-import frc.lib5507.wrappers.Falcon5507;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class SwerveSteerController {
 
@@ -31,7 +31,7 @@ public class SwerveSteerController {
   private static final double TICKS_PER_ROTATION = 2048.0;
   private static final int CAN_TIMEOUT_MS = 250;
 
-  private final Falcon5507 motor;
+  private final WPI_TalonFX motor;
   private final double motorEncoderPositionCoefficient;
   private final double motorEncoderVelocityCoefficient;
   private final CANCoder encoder;
@@ -84,7 +84,7 @@ public class SwerveSteerController {
     motorConfiguration.supplyCurrLimit.currentLimit = 20;
     motorConfiguration.supplyCurrLimit.enable = true;
 
-    motor = new Falcon5507(motorPort,CANIVORE_NAME);
+    motor = new WPI_TalonFX(motorPort,CANIVORE_NAME);
     CtreUtils.checkCtreError(motor.configAllSettings(motorConfiguration, CAN_TIMEOUT_MS),
         "Failed to configure Falcon 500 settings");
 
