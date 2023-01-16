@@ -22,6 +22,7 @@ import static frc.robot.Constants.DrivetrainConstants.FRONT_RIGHT_MODULE_STEER_E
 import static frc.robot.Constants.DrivetrainConstants.FRONT_RIGHT_MODULE_STEER_MOTOR;
 import static frc.robot.Constants.DrivetrainConstants.FRONT_RIGHT_MODULE_STEER_OFFSET;
 import static frc.robot.Constants.DrivetrainConstants.PIGEON_ID;
+import frc.robot.DriveTrainConstants;
 
 import java.util.Arrays;
 import java.util.function.Supplier;
@@ -95,57 +96,102 @@ public class DrivetrainSubsystem extends SubsystemBase {
           .withPosition(6, 0);
     }
 
+    //change method we add hana, right now only does spring.
     swerveModules = swerveModuleSpring(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
-        // Put the motors in brake mode when enabled, coast mode when disabled
-        new Trigger(RobotState::isEnabled).onTrue(new StartEndCommand(() -> {
-          for (SwerveModule swerveModule : swerveModules) {
-            swerveModule.setNeutralMode(NeutralMode.Brake);
-          }
-        }, () -> {
-          for (SwerveModule swerveModule : swerveModules) {
-            swerveModule.setNeutralMode(NeutralMode.Coast);
-          }
-        }));
+   
+    // Put the motors in brake mode when enabled, coast mode when disabled
+    new Trigger(RobotState::isEnabled).onTrue(new StartEndCommand(() -> {
+      for (SwerveModule swerveModule : swerveModules) {
+        swerveModule.setNeutralMode(NeutralMode.Brake);
       }
+    }, () -> {
+      for (SwerveModule swerveModule : swerveModules) {
+        swerveModule.setNeutralMode(NeutralMode.Coast);
+      }
+    }));
+  }
 
   private SwerveModule[] swerveModuleSpring(ShuffleboardLayout frontLeftLayout, ShuffleboardLayout frontRightLayout, ShuffleboardLayout backLeftLayout, ShuffleboardLayout backRightLayout){
+    /*
+     * Specific to the springtrap drivetrain(just the offset)
+     */
+    DriveTrainConstants driveTrain = DriveTrainConstants.spring;
     SwerveModule[] swerveModules = new SwerveModule[] {
       createSwerveModule(
           frontLeftLayout,
           ModuleConfiguration.MK4I_L2,
-          FRONT_LEFT_MODULE_DRIVE_MOTOR,
-          FRONT_LEFT_MODULE_STEER_MOTOR,
-          FRONT_LEFT_MODULE_STEER_ENCODER,
-          FRONT_LEFT_MODULE_STEER_OFFSET
+          driveTrain.FRONT_LEFT_MODULE_DRIVE_MOTOR,
+          driveTrain.FRONT_LEFT_MODULE_STEER_MOTOR,
+          driveTrain.FRONT_LEFT_MODULE_STEER_ENCODER,
+          driveTrain.FRONT_LEFT_MODULE_STEER_OFFSET
       ),
       createSwerveModule(
           frontRightLayout,
           ModuleConfiguration.MK4I_L2,
-          FRONT_RIGHT_MODULE_DRIVE_MOTOR,
-          FRONT_RIGHT_MODULE_STEER_MOTOR,
-          FRONT_RIGHT_MODULE_STEER_ENCODER,
-          FRONT_RIGHT_MODULE_STEER_OFFSET
+          driveTrain.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
+          driveTrain.FRONT_RIGHT_MODULE_STEER_MOTOR,
+          driveTrain.FRONT_RIGHT_MODULE_STEER_ENCODER,
+          driveTrain.FRONT_RIGHT_MODULE_STEER_OFFSET
       ),
       createSwerveModule(
           backLeftLayout,
           ModuleConfiguration.MK4I_L2,
-          BACK_LEFT_MODULE_DRIVE_MOTOR,
-          BACK_LEFT_MODULE_STEER_MOTOR,
-          BACK_LEFT_MODULE_STEER_ENCODER,
-          BACK_LEFT_MODULE_STEER_OFFSET
+          driveTrain.BACK_LEFT_MODULE_DRIVE_MOTOR,
+          driveTrain.BACK_LEFT_MODULE_STEER_MOTOR,
+          driveTrain.BACK_LEFT_MODULE_STEER_ENCODER,
+          driveTrain.BACK_LEFT_MODULE_STEER_OFFSET
       ),
       createSwerveModule(
           backRightLayout,
           ModuleConfiguration.MK4I_L2,
-          BACK_RIGHT_MODULE_DRIVE_MOTOR,
-          BACK_RIGHT_MODULE_STEER_MOTOR,
-          BACK_RIGHT_MODULE_STEER_ENCODER,
-          BACK_RIGHT_MODULE_STEER_OFFSET
+          driveTrain.BACK_RIGHT_MODULE_DRIVE_MOTOR,
+          driveTrain.BACK_RIGHT_MODULE_STEER_MOTOR,
+          driveTrain.BACK_RIGHT_MODULE_STEER_ENCODER,
+          driveTrain.BACK_RIGHT_MODULE_STEER_OFFSET
       )};
       return swerveModules;
   }
     
-
+  private SwerveModule[] swerveModuleHana(ShuffleboardLayout frontLeftLayout, ShuffleboardLayout frontRightLayout, ShuffleboardLayout backLeftLayout, ShuffleboardLayout backRightLayout){
+    /*
+     * Specific to the hana drivetrain(just the offset)
+     */
+    DriveTrainConstants driveTrain = DriveTrainConstants.hana;
+    SwerveModule[] swerveModules = new SwerveModule[] {
+      createSwerveModule(
+          frontLeftLayout,
+          ModuleConfiguration.MK4I_L2,
+          driveTrain.FRONT_LEFT_MODULE_DRIVE_MOTOR,
+          driveTrain.FRONT_LEFT_MODULE_STEER_MOTOR,
+          driveTrain.FRONT_LEFT_MODULE_STEER_ENCODER,
+          driveTrain.FRONT_LEFT_MODULE_STEER_OFFSET
+      ),
+      createSwerveModule(
+          frontRightLayout,
+          ModuleConfiguration.MK4I_L2,
+          driveTrain.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
+          driveTrain.FRONT_RIGHT_MODULE_STEER_MOTOR,
+          driveTrain.FRONT_RIGHT_MODULE_STEER_ENCODER,
+          driveTrain.FRONT_RIGHT_MODULE_STEER_OFFSET
+      ),
+      createSwerveModule(
+          backLeftLayout,
+          ModuleConfiguration.MK4I_L2,
+          driveTrain.BACK_LEFT_MODULE_DRIVE_MOTOR,
+          driveTrain.BACK_LEFT_MODULE_STEER_MOTOR,
+          driveTrain.BACK_LEFT_MODULE_STEER_ENCODER,
+          driveTrain.BACK_LEFT_MODULE_STEER_OFFSET
+      ),
+      createSwerveModule(
+          backRightLayout,
+          ModuleConfiguration.MK4I_L2,
+          driveTrain.BACK_RIGHT_MODULE_DRIVE_MOTOR,
+          driveTrain.BACK_RIGHT_MODULE_STEER_MOTOR,
+          driveTrain.BACK_RIGHT_MODULE_STEER_ENCODER,
+          driveTrain.BACK_RIGHT_MODULE_STEER_OFFSET
+      )};
+      return swerveModules;
+  }
 
 
 

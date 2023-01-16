@@ -79,10 +79,6 @@ public final class Constants {
     public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7;
     public static final int BACK_LEFT_MODULE_STEER_MOTOR = 8;
     public static final int BACK_LEFT_MODULE_STEER_ENCODER = 12;
-
-
-
-
     
     // public static final double BACK_LEFT_MODULE_STEER_OFFSET = -toRadians(270);
     public static final double BACK_LEFT_MODULE_STEER_OFFSET = -toRadians(315);           //315.17578125
