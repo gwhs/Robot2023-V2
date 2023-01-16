@@ -47,7 +47,7 @@ public class RobotContainer {
   
   // private final PhotonCamera photonCamera = new PhotonCamera("photonvision");
 
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("hana");
   private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(drivetrainSubsystem);
 
   //private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera, drivetrainSubsystem,

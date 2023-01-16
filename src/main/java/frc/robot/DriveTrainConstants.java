@@ -32,7 +32,8 @@ public class DriveTrainConstants {
 
     public static DriveTrainConstants spring = new DriveTrainConstants(231.55, 306.4, 315, 160.5);
 
-    public static DriveTrainConstants hana = new DriveTrainConstants(0,0,0,0);
+    //hana drivemotors are inverted, steer motors are not
+    public static DriveTrainConstants hana = new DriveTrainConstants(155.4,141.5,-106.7,35);
 
     
     public DriveTrainConstants(double FRONT_LEFT_MODULE_STEER_OFFSET, double FRONT_RIGHT_MODULE_STEER_OFFSET, double BACK_LEFT_MODULE_STEER_OFFSET, double BACK_RIGHT_MODULE_STEER_OFFSET){

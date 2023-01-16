@@ -52,7 +52,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   private ChassisSpeeds desiredChassisSpeeds;
 
-  public DrivetrainSubsystem() {
+  public DrivetrainSubsystem(String robotName) {
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
     pigeon.configMountPoseRoll(0);
     pigeon.configMountPoseYaw(0);
@@ -81,8 +81,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     //change method we add hana, right now only does spring.
-    swerveModules = swerveModuleSpring(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
+    if(robotName.equals("spring")){
+      swerveModules = swerveModuleSpring(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
+    } 
+    else{
+      swerveModules = swerveModuleHana(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
    
+    }
+    
     // Put the motors in brake mode when enabled, coast mode when disabled
     new Trigger(RobotState::isEnabled).onTrue(new StartEndCommand(() -> {
       for (SwerveModule swerveModule : swerveModules) {
