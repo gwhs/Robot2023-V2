@@ -59,7 +59,7 @@ public class SwerveSteerController {
     config.sensorDirection = false;
     config.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
 
-    encoder = new CANCoder(canCoderPort);
+    encoder = new CANCoder(canCoderPort,"CAN_Network");
     CtreUtils.checkCtreError(encoder.configAllSettings(config, 250), "Failed to configure CANCoder");
     CtreUtils.checkCtreError(encoder.setPositionToAbsolute(250), "Failed to set CANCoder to absolute");
 
