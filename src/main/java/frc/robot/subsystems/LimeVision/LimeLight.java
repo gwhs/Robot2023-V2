@@ -5,7 +5,7 @@
 /*
  * Copied from 
  * https://github.com/FRC6854/VIKING/blob/87d32f06d99d272e8859735a67003e81cb4eae8b/src/main/java/viking/vision/limelight/LimelightComm.java
- * 
+ * All of this code are getters and setters for the 
  */
 
 package frc.robot.subsystems.LimeVision;
@@ -13,64 +13,85 @@ package frc.robot.subsystems.LimeVision;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimeLight{
-  private String networktable_name;
+  private String networkTableName;
 
-  public LimeLight(String limelight_networktable_name) {
-		networktable_name = limelight_networktable_name;
+  public LimeLight(String llNetworkTableName) {
+		networkTableName = llNetworkTableName;
 	}
+
+  /*tv 	Whether the limelight has any valid targets (0 or 1)
+  tx 	Horizontal Offset From Crosshair To Target (LL1: -27 degrees to 27 degrees | LL2: -29.8 to 29.8 degrees)
+  ty 	Vertical Offset From Crosshair To Target (LL1: -20.5 degrees to 20.5 degrees | LL2: -24.85 to 24.85 degrees)
+  ta 	Target Area (0% of image to 100% of image)
+  ts 	Skew or rotation (-90 degrees to 0 degrees)
+  tl 	The pipeline’s latency contribution (ms) Add at least 11ms for image capture latency.
+  tshort 	Sidelength of shortest side of the fitted bounding box (pixels)
+  tlong 	Sidelength of longest side of the fitted bounding box (pixels)
+  thor 	Horizontal sidelength of the rough bounding box (0 - 320 pixels)
+  tvert 	Vertical sidelength of the rough bounding box (0 - 320 pixels)
+  getpipe 	True active pipeline index of the camera (0 .. 9)
+  camtran 	Camera transform in target space of primary apriltag or solvepnp target. NumberArray: Translation (x,y,z) Rotation(pitch,yaw,roll)
+  tid 	ID of primary AprilTag
+  json 	Full JSON dump of targeting results
+  botpose 	Robot transform in field-space. Translation (X,Y,Z) Rotation(X,Y,Z)
+  tclass 	Class ID of primary neural detector result or neural classifier result
+   */
+
+
+
 
 	public double get_entry_double(String entry_name) {
 		return NetworkTableInstance.getDefault()
-			.getTable(networktable_name)
+			.getTable(networkTableName)
 			.getEntry(entry_name)
 			.getDouble(0);
 	}
 
 	public Number get_entry_number(String entry_name) {
-		return NetworkTableInstance.getDefault()
-			.getTable(networktable_name)
-			.getEntry(entry_name)
-			.getNumber(0);
+		return NetworkTableInstance.getDefault() 
+			.getTable(networkTableName)            
+			.getEntry(entry_name)                  
+			.getNumber(0);            
 	}
 
 	public double[] get_entry_double_array(String entry_name) {
 		return NetworkTableInstance.getDefault()
-			.getTable(networktable_name)
+			.getTable(networkTableName)
 			.getEntry(entry_name)
 			.getDoubleArray(new double[0]);
 	}
 
 	public Number[] get_entry_number_array(String entry_name) {
 		return NetworkTableInstance.getDefault()
-			.getTable(networktable_name)
+			.getTable(networkTableName)
 			.getEntry(entry_name)
 			.getNumberArray(new Number[0]);
 	}
 
 	public void set_entry_double(String entry_name, double value) {
 		NetworkTableInstance.getDefault()
-			.getTable(networktable_name)
+			.getTable(networkTableName)
 			.getEntry(entry_name)
 			.setDouble(value);
 	}
 
 	public void set_entry_number(String entry_name, Number value) {
 		NetworkTableInstance.getDefault()
-			.getTable(networktable_name)
+			.getTable(networkTableName)
 			.getEntry(entry_name)
 			.setNumber(value);
 	}
 
 	public void set_entry_double_array(String entry_name, double[] array) {
 		NetworkTableInstance.getDefault()
-			.getTable(networktable_name)
+			.getTable(networkTableName)
 			.getEntry(entry_name)
 			.setDoubleArray(array);
 	}
 
 	public void set_entry_number_array(String entry_name, Number[] array) {
 		NetworkTableInstance.getDefault()
-			.getTable(networktable_name)
+			.getTable(networkTableName)
 			.getEntry(entry_name)
 			.getNumberArray(new Number[0]);
 	}
