@@ -48,10 +48,10 @@ public class RobotContainer {
   // private final PhotonCamera photonCamera = new PhotonCamera("photonvision");
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
-  private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(drivetrainSubsystem);
+  private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
 
-  //private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera, drivetrainSubsystem,
-      //poseEstimator::getCurrentPose);
+  private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera, drivetrainSubsystem,
+      poseEstimator::getCurrentPose);
 
   VisGraph AStarMap = new VisGraph();
   final Node finalNode = new Node(4, 4, Rotation2d.fromDegrees(180));
@@ -125,7 +125,7 @@ public class RobotContainer {
     // Back button resets the robot pose
     controller.back().onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    //controller.b().whileTrue(chaseTagCommand);
+    controller.b().whileTrue(chaseTagCommand);
 
     controller.start().toggleOnTrue(fieldHeadingDriveCommand);
 
