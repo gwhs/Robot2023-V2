@@ -19,7 +19,9 @@ public class LimeLight{
 		networkTableName = llNetworkTableName;
 	}
 
-  /*tv 	Whether the limelight has any valid targets (0 or 1)
+  /*
+  These are possible entries
+  tv 	Whether the limelight has any valid targets (0 or 1)
   tx 	Horizontal Offset From Crosshair To Target (LL1: -27 degrees to 27 degrees | LL2: -29.8 to 29.8 degrees)
   ty 	Vertical Offset From Crosshair To Target (LL1: -20.5 degrees to 20.5 degrees | LL2: -24.85 to 24.85 degrees)
   ta 	Target Area (0% of image to 100% of image)
@@ -30,14 +32,14 @@ public class LimeLight{
   thor 	Horizontal sidelength of the rough bounding box (0 - 320 pixels)
   tvert 	Vertical sidelength of the rough bounding box (0 - 320 pixels)
   getpipe 	True active pipeline index of the camera (0 .. 9)
-  camtran 	Camera transform in target space of primary apriltag or solvepnp target. NumberArray: Translation (x,y,z) Rotation(pitch,yaw,roll)
   tid 	ID of primary AprilTag
   json 	Full JSON dump of targeting results
-  botpose 	Robot transform in field-space. Translation (X,Y,Z) Rotation(X,Y,Z)
   tclass 	Class ID of primary neural detector result or neural classifier result
+
+  Array entries
+  botpose 	Robot transform in field-space. Translation (X,Y,Z) Rotation(X,Y,Z)
+  camtran 	Camera transform in target space of primary apriltag or solvepnp target. NumberArray: Translation (x,y,z) Rotation(pitch,yaw,roll)
    */
-
-
 
 
 	public double get_entry_double(String entry_name) {
