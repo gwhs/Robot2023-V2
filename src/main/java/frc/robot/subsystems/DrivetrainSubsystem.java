@@ -95,51 +95,60 @@ public class DrivetrainSubsystem extends SubsystemBase {
           .withPosition(6, 0);
     }
 
-    swerveModules = new SwerveModule[] {
-        createSwerveModule(
-            frontLeftLayout,
-            ModuleConfiguration.MK4I_L2,
-            FRONT_LEFT_MODULE_DRIVE_MOTOR,
-            FRONT_LEFT_MODULE_STEER_MOTOR,
-            FRONT_LEFT_MODULE_STEER_ENCODER,
-            FRONT_LEFT_MODULE_STEER_OFFSET
-        ),
-        createSwerveModule(
-            frontRightLayout,
-            ModuleConfiguration.MK4I_L2,
-            FRONT_RIGHT_MODULE_DRIVE_MOTOR,
-            FRONT_RIGHT_MODULE_STEER_MOTOR,
-            FRONT_RIGHT_MODULE_STEER_ENCODER,
-            FRONT_RIGHT_MODULE_STEER_OFFSET
-        ),
-        createSwerveModule(
-            backLeftLayout,
-            ModuleConfiguration.MK4I_L2,
-            BACK_LEFT_MODULE_DRIVE_MOTOR,
-            BACK_LEFT_MODULE_STEER_MOTOR,
-            BACK_LEFT_MODULE_STEER_ENCODER,
-            BACK_LEFT_MODULE_STEER_OFFSET
-        ),
-        createSwerveModule(
-            backRightLayout,
-            ModuleConfiguration.MK4I_L2,
-            BACK_RIGHT_MODULE_DRIVE_MOTOR,
-            BACK_RIGHT_MODULE_STEER_MOTOR,
-            BACK_RIGHT_MODULE_STEER_ENCODER,
-            BACK_RIGHT_MODULE_STEER_OFFSET
-        )};
+    swerveModules = swerveModuleSpring(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
+        // Put the motors in brake mode when enabled, coast mode when disabled
+        new Trigger(RobotState::isEnabled).onTrue(new StartEndCommand(() -> {
+          for (SwerveModule swerveModule : swerveModules) {
+            swerveModule.setNeutralMode(NeutralMode.Brake);
+          }
+        }, () -> {
+          for (SwerveModule swerveModule : swerveModules) {
+            swerveModule.setNeutralMode(NeutralMode.Coast);
+          }
+        }));
+      }
 
-    // Put the motors in brake mode when enabled, coast mode when disabled
-    new Trigger(RobotState::isEnabled).onTrue(new StartEndCommand(() -> {
-      for (SwerveModule swerveModule : swerveModules) {
-        swerveModule.setNeutralMode(NeutralMode.Brake);
-      }
-    }, () -> {
-      for (SwerveModule swerveModule : swerveModules) {
-        swerveModule.setNeutralMode(NeutralMode.Coast);
-      }
-    }));
+  private SwerveModule[] swerveModuleSpring(ShuffleboardLayout frontLeftLayout, ShuffleboardLayout frontRightLayout, ShuffleboardLayout backLeftLayout, ShuffleboardLayout backRightLayout){
+    SwerveModule[] swerveModules = new SwerveModule[] {
+      createSwerveModule(
+          frontLeftLayout,
+          ModuleConfiguration.MK4I_L2,
+          FRONT_LEFT_MODULE_DRIVE_MOTOR,
+          FRONT_LEFT_MODULE_STEER_MOTOR,
+          FRONT_LEFT_MODULE_STEER_ENCODER,
+          FRONT_LEFT_MODULE_STEER_OFFSET
+      ),
+      createSwerveModule(
+          frontRightLayout,
+          ModuleConfiguration.MK4I_L2,
+          FRONT_RIGHT_MODULE_DRIVE_MOTOR,
+          FRONT_RIGHT_MODULE_STEER_MOTOR,
+          FRONT_RIGHT_MODULE_STEER_ENCODER,
+          FRONT_RIGHT_MODULE_STEER_OFFSET
+      ),
+      createSwerveModule(
+          backLeftLayout,
+          ModuleConfiguration.MK4I_L2,
+          BACK_LEFT_MODULE_DRIVE_MOTOR,
+          BACK_LEFT_MODULE_STEER_MOTOR,
+          BACK_LEFT_MODULE_STEER_ENCODER,
+          BACK_LEFT_MODULE_STEER_OFFSET
+      ),
+      createSwerveModule(
+          backRightLayout,
+          ModuleConfiguration.MK4I_L2,
+          BACK_RIGHT_MODULE_DRIVE_MOTOR,
+          BACK_RIGHT_MODULE_STEER_MOTOR,
+          BACK_RIGHT_MODULE_STEER_ENCODER,
+          BACK_RIGHT_MODULE_STEER_OFFSET
+      )};
+      return swerveModules;
   }
+    
+
+
+
+
 
   /**
    * Creates a server module instance
