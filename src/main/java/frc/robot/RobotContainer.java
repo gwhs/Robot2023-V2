@@ -45,13 +45,18 @@ public class RobotContainer {
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
   
-  // private final PhotonCamera photonCamera = new PhotonCamera("photonvision");
+  private final PhotonCamera photonCamera = new PhotonCamera("photonvision");
 
+<<<<<<< HEAD
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("hana");
   private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(drivetrainSubsystem);
+=======
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
+  private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
+>>>>>>> main
 
-  //private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera, drivetrainSubsystem,
-      //poseEstimator::getCurrentPose);
+  private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera, drivetrainSubsystem,
+      poseEstimator::getCurrentPose);
 
   VisGraph AStarMap = new VisGraph();
   final Node finalNode = new Node(4, 4, Rotation2d.fromDegrees(180));
@@ -125,7 +130,7 @@ public class RobotContainer {
     // Back button resets the robot pose
     controller.back().onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    //controller.b().whileTrue(chaseTagCommand);
+    controller.b().whileTrue(chaseTagCommand);
 
     controller.start().toggleOnTrue(fieldHeadingDriveCommand);
 
