@@ -126,7 +126,7 @@ public class RobotContainer {
     // Back button resets the robot pose
     controller.back().onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    controller.b().whileTrue(chaseTagCommand);
+    //controller.b().whileTrue(chaseTagCommand);
 
     controller.start().toggleOnTrue(fieldHeadingDriveCommand);
 
