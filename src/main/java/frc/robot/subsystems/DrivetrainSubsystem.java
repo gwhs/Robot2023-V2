@@ -56,6 +56,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.GyroMoment.WrappedGyro;
+import frc.robot.GyroMoment.WrappedGyro.GyroType;
 import frc.robot.swerve.ModuleConfiguration;
 import frc.robot.swerve.SwerveModule;
 import frc.robot.swerve.SwerveSpeedController;
@@ -63,16 +65,17 @@ import frc.robot.swerve.SwerveSteerController;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
-  private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(PIGEON_ID);
-  private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
+  // private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(PIGEON_ID);
+  // private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
+  private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON);
   private final SwerveModule[] swerveModules;
 
   private ChassisSpeeds desiredChassisSpeeds;
 
   public DrivetrainSubsystem() {
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
-    pigeon.configMountPoseRoll(0);
-    pigeon.configMountPoseYaw(0);
+    gyro.configMountPoseRoll(0);
+    gyro.configMountPoseYaw(0);
 
     ShuffleboardLayout frontLeftLayout = null;
     ShuffleboardLayout frontRightLayout = null;
@@ -137,9 +140,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
       if (orientation != null)
       {
-        orientation.addNumber("Yaw", () -> pigeon.getYaw());
-        orientation.addNumber("Pitch", () -> pigeon.getPitch());
-        orientation.addNumber("Roll", () -> pigeon.getRoll());
+        orientation.addNumber("Yaw", () -> gyro.getYaw());
+        orientation.addNumber("Pitch", () -> gyro.getPitch());
+        orientation.addNumber("Roll", () -> gyro.getRoll());
       }
 
     // Put the motors in brake mode when enabled, coast mode when disabled
@@ -178,28 +181,28 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public Rotation2d getGyroscopeRotation() {
-    return pigeon.getRotation2d();
+    return gyro.getRotation2d();
     // We have to invert the angle of the NavX so that rotating the robot counter-clockwise makes the angle increase.
     // return Rotation2d.fromDegrees(360.0 - navx.getYaw());
   }
 
   public void setGyroscopeRotation(double angleDeg){
-    pigeon.setYaw(angleDeg);
+    gyro.setYaw(angleDeg);
   }
 
   public double getYaw()
   {
-    return pigeon.getYaw();
+    return gyro.getYaw();
   }
 
   public double getRoll()
   {
-    return pigeon.getRoll();
+    return gyro.getRoll();
   }
 
   public double getPitch()
   {
-    return pigeon.getPitch();
+    return gyro.getPitch();
   }
 
   public void resetGyro(){

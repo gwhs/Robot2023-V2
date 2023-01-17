@@ -6,6 +6,7 @@ package frc.robot.GyroMoment;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SPI;
 
 /** Add your docs here. */
@@ -54,4 +55,45 @@ public class NavXGyro extends AbstractGyro {
         return ahrs.getRoll();
     }
 
+    @Override
+    public void configMountPoseRoll(double roll)
+    {
+        //ignored
+    }
+
+    @Override
+    public void configMountPoseYaw(double yaw)
+    {
+        //ignored
+    }
+
+    @Override
+    public Rotation2d getRotation2d()
+    {
+        return ahrs.getRotation2d();
+    }
+
+    @Override
+    public void setYaw(double yaw)
+    {
+        //ignored
+    }
+
+    @Override
+    public double getYawRate()
+    {
+        return ahrs.getRawGyroY();
+    }
+
+    @Override
+    public double getPitchRate()
+    {
+        return ahrs.getRawGyroX();
+    }
+
+    @Override
+    public double getRollRate()
+    {
+        return ahrs.getRawGyroZ();
+    }
 }

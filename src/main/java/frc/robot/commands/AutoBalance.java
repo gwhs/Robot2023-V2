@@ -14,17 +14,21 @@ public class AutoBalance extends CommandBase {
 
   private double currentAngle;
   private double speed;
-  private double speedConstant;
+  private double pConstant;
+  private double dConstant;
   private Timer timer;
+  private final double DESIRED_ANGLE;
+  private double error;
   private final double DESIRED_ENGAGE_TIME; //in milliseconds
 
   /** Creates a new AutoBalance. */
   public AutoBalance(DrivetrainSubsystem drivetrainSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
-    speedConstant = 0.2;
+    pConstant = 0.2;
     timer = new Timer();
     timer.stop();
+    DESIRED_ANGLE = 0;
     DESIRED_ENGAGE_TIME = 1000;
 
     addRequirements(drivetrainSubsystem);
@@ -40,8 +44,9 @@ public class AutoBalance extends CommandBase {
   @Override
   public void execute() {
     currentAngle = drivetrainSubsystem.getRoll();
+    error = currentAngle - DESIRED_ANGLE;
 
-    speed = currentAngle * speedConstant;
+    speed = error * pConstant;
 
     if (speed > 0.2)
     {
@@ -52,7 +57,7 @@ public class AutoBalance extends CommandBase {
 
     }
 
-    if (Math.abs(currentAngle) <= 2.5)
+    if (Math.abs(error) <= 2.5)
     {
       timer.start();
     }

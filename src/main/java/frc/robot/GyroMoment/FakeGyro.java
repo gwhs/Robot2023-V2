@@ -14,12 +14,19 @@ public class FakeGyro extends AbstractGyro {
     private double pitch;
     private double roll;
 
+    private double rawGyroX; //in degrees per sec
+    private double rawGyroY;
+    private double rawGyroZ;
+
     public FakeGyro()
     {
         angle = 0;
         yaw = 0;
         pitch = 0;
         roll = 0;
+        rawGyroX = 0;
+        rawGyroY = 0;
+        rawGyroZ = 0;
     }
 
     @Override
@@ -29,6 +36,9 @@ public class FakeGyro extends AbstractGyro {
         yaw = 0;
         pitch = 0;
         roll = 0;
+        rawGyroX = 0;
+        rawGyroY = 0;
+        rawGyroZ = 0;
     }
 
     @Override
@@ -97,6 +107,39 @@ public class FakeGyro extends AbstractGyro {
     public Rotation2d getRotation2d()
     {
         return new Rotation2d(Math.toRadians(yaw));
+    }
+
+    @Override
+    public double getYawRate()
+    {
+        return rawGyroY;
+    }
+
+    @Override
+    public double getPitchRate()
+    {
+        return rawGyroX;
+    }
+
+    @Override
+    public double getRollRate()
+    {
+        return rawGyroZ;
+    }
+
+    public void setYawRate(double dps)
+    {
+        rawGyroY = dps;
+    }
+
+    public void setPitchRate(double dps)
+    {
+        rawGyroX = dps;
+    }
+
+    public void setRollRate(double dps)
+    {
+        rawGyroZ = dps;
     }
 
 }

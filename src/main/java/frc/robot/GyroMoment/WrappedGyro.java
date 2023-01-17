@@ -86,4 +86,19 @@ public class WrappedGyro {
     {
         gyro.setYaw(yaw);
     }
+
+    public double getYawRate()
+    {
+        return gyro.getYawRate();
+    }
+
+    public double getPitchRate()
+    {
+        return gyro.getPitchRate();
+    }
+
+    public double getRollRate()
+    {
+        return gyro.getRollRate();
+    }
 }
