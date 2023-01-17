@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.commands.AutoBalance;
 import frc.robot.commands.ChaseTagCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
@@ -48,6 +49,8 @@ public class RobotContainer {
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   private final PoseEstimatorSubsystem poseEstimator = new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
+
+  private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
 
   private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera, drivetrainSubsystem,
       poseEstimator::getCurrentPose);
@@ -127,6 +130,8 @@ public class RobotContainer {
     controller.b().whileTrue(chaseTagCommand);
 
     controller.start().toggleOnTrue(fieldHeadingDriveCommand);
+
+    controller.x().toggleOnTrue(autoBalance);
 
     controller.a().onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
 
