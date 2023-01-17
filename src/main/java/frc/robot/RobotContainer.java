@@ -61,10 +61,10 @@ public class RobotContainer {
   private final FieldHeadingDriveCommand fieldHeadingDriveCommand = new FieldHeadingDriveCommand(
       drivetrainSubsystem,
       () -> poseEstimator.getCurrentPose().getRotation(),
-      () -> -modifyAxis(controller.getLeftY()) * 2,
-      () -> -modifyAxis(controller.getLeftX()) * 2,
-      () -> -controller.getRightY() * 2,
-      () -> -controller.getRightX() * 2);
+      () -> -modifyAxis(controller.getLeftY()) * Constants.DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
+      () -> -modifyAxis(controller.getLeftX()) * Constants.DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
+      () -> -controller.getRightY(),
+      () -> -controller.getRightX());
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -74,9 +74,9 @@ public class RobotContainer {
     drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
         drivetrainSubsystem,
         () -> poseEstimator.getCurrentPose().getRotation(),
-        () -> -modifyAxis(controller.getLeftY()) * 2,
-        () -> -modifyAxis(controller.getLeftX()) * 2,
-        () -> modifyAxis(controller.getRightX()) * 2));
+        () -> -modifyAxis(controller.getLeftY()) * Constants.DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
+        () -> -modifyAxis(controller.getLeftX()) * Constants.DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
+        () -> modifyAxis(controller.getRightX()) * Constants.DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
 
     // Configure the button bindings
     configureButtonBindings();
