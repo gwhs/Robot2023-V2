@@ -19,7 +19,7 @@ public class TestAutonomous extends SequentialCommandGroup {
   /** Creates a new TestAutonomous. */
   public TestAutonomous(DrivetrainSubsystem drivetrain, PoseEstimatorSubsystem poseEstimatorSystem) {
     
-    List<PathPlannerTrajectory> trajectories = PathPlanner.loadPathGroup("2 stay", new PathConstraints(0, 0));
+    List<PathPlannerTrajectory> trajectories = PathPlanner.loadPathGroup("forward 1 m", new PathConstraints(2, 3));
 
     PPSwerveControllerCommand drive = DrivetrainSubsystem.followTrajectory(drivetrain, poseEstimatorSystem, trajectories.get(0));
 
