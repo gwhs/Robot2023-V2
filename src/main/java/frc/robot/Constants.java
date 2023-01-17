@@ -100,7 +100,7 @@ public final class Constants {
      * <p>
      * This is a measure of how fast the robot should be able to drive in a straight line.
      */
-    public static final double MAX_VELOCITY_METERS_PER_SECOND = 20 * //was 6380.0 / 60.0
+    public static final double MAX_VELOCITY_METERS_PER_SECOND = 45 * //was 6380.0 / 60.0
         ModuleConfiguration.MK4I_L2.getDriveReduction() *
         ModuleConfiguration.MK4I_L2.getWheelDiameter() * PI;
 
