@@ -26,8 +26,8 @@ public class AutoBalance extends CommandBase {
   public AutoBalance(DrivetrainSubsystem drivetrainSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
-    pConstant = 0.008;
-    dConstant = -0.01;
+    pConstant = 0.004;
+    dConstant = 0;
     timer = new Timer();
     timer.stop();
     TOLERANCE = 2.5; // in degrees

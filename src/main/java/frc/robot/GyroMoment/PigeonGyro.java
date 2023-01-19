@@ -13,6 +13,16 @@ public class PigeonGyro extends AbstractGyro {
 
   private WPI_Pigeon2 pigeon;
 
+  // LOOK AT THIS!!!!11
+  // imu is weird
+  // so getRoll actually returns pitch, getPitch actually returns roll
+  // same for the get rate functions
+
+  // TO DO LIST
+  // -Fix name of get methods
+  // -Make auto balance faster
+  // -
+
   public PigeonGyro() {
     pigeon = new WPI_Pigeon2(DrivetrainConstants.PIGEON_ID);
   }
