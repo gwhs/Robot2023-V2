@@ -73,6 +73,10 @@ public class AutoBalance extends CommandBase {
     pConstant = pConstantEntry.getDouble(0.008);
     dConstant = dConstantEntry.getDouble(0);
     tolerance = toleranceEntry.getDouble(2.5); // in degrees
+    System.out.printf(
+        "max = %f, p Constant = %f, d Constant = %f, tolerance = %f, Desired Engage Time = %f",
+        maxSpeed, pConstant, dConstant, tolerance, desiredEngageTime);
+
     timer.reset();
     timer.stop();
   }
@@ -89,8 +93,8 @@ public class AutoBalance extends CommandBase {
 
     if (speed > maxSpeed) {
       speed = maxSpeed;
-    } else {
-
+    } else if (speed < -maxSpeed) {
+      speed = -maxSpeed;
     }
 
     if (Math.abs(error) <= tolerance) {
