@@ -56,5 +56,6 @@ public class LimeLightSub extends SubsystemBase {
   private double getTy() {
     return tv.getDouble(0);
   }
+  public double getTheta() {return theta;}
   public double getDistance() {return distance;}
 }
