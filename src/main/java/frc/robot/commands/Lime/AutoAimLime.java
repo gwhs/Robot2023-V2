@@ -41,6 +41,7 @@ public class AutoAimLime extends CommandBase {
       drivetrainSubsystem.drive(new ChassisSpeeds(0,0,Math.toRadians(10)));
   }
   drivetrainSubsystem.drive(new ChassisSpeeds(0,0,Math.toRadians(0)));
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
