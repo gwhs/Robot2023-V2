@@ -148,7 +148,7 @@ public class RobotContainer {
     // controller.x().
     //     whileTrue(new PPAStar(drivetrainSubsystem, poseEstimator, 
     //         new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
-    controller.y().toggleOnTrue(new TestAutonomous(drivetrainSubsystem, poseEstimator));
+    controller.y().onTrue(new TestAutonomous(drivetrainSubsystem, poseEstimator));
   }
 
   /**
