@@ -40,11 +40,11 @@ public class LimeLightSub extends SubsystemBase {
   public void periodic() {
     distance = (kTargetHeight-kCameraHeight)/(Math.tan(Math.toRadians(getTy() + 5))//LimelightConstants.mountingAngle))
     *(Math.cos(Math.toRadians(getTx()))));
-    // SmartDashboard.putNumber("tv", tv.getDouble(0));
-    // SmartDashboard.putNumber("tx", tx.getDouble(0));
-    // SmartDashboard.putNumber("ty", ty.getDouble(0));
-    // SmartDashboard.putNumber("ta", ta.getDouble(0));
-    // SmartDashboard.putNumber("theta", getTheta());
+    SmartDashboard.putNumber("tv", tv.getDouble(0));
+    SmartDashboard.putNumber("tx", tx.getDouble(0));
+    SmartDashboard.putNumber("ty", ty.getDouble(0));
+    SmartDashboard.putNumber("ta", ta.getDouble(0));
+    SmartDashboard.putNumber("theta", getTheta());
     SmartDashboard.putNumber("distance", getDistance());
     // This method will be called once per scheduler run
   }
