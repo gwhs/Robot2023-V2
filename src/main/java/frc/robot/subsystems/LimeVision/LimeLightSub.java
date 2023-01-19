@@ -49,12 +49,12 @@ public class LimeLightSub extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  private double getTx() {
-    return tv.getDouble(0);
+  public double getTx() {
+    return tx.getDouble(0);
   }
 
-  private double getTy() {
-    return tv.getDouble(0);
+  public double getTy() {
+    return ty.getDouble(0);
   }
   public double getTheta() {return theta;}
   public double getDistance() {return distance;}

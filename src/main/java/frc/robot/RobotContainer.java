@@ -24,12 +24,14 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.WPIAStar;
 import frc.robot.commands.autonomous.TestAutonomous;
+import frc.robot.commands.Lime.AutoAimLime;
 import frc.robot.pathfind.Edge;
 import frc.robot.pathfind.Node;
 import frc.robot.pathfind.Obstacle;
 import frc.robot.pathfind.VisGraph;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
+import frc.robot.subsystems.LimeVision.LimeLightSub;
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -46,6 +48,7 @@ public class RobotContainer {
   // Set RoboRio to 10.57.12.2
   
   private final PhotonCamera photonCamera = new PhotonCamera("photonvision");
+  private final LimeLightSub limeLightSub= new LimeLightSub();
 
   //change to hana or spring depending on robot
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("spring");
@@ -53,6 +56,8 @@ public class RobotContainer {
 
   private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera, drivetrainSubsystem,
       poseEstimator::getCurrentPose);
+
+  private final AutoAimLime autoAimLime = new AutoAimLime(drivetrainSubsystem, limeLightSub);
 
   VisGraph AStarMap = new VisGraph();
   final Node finalNode = new Node(4, 4, Rotation2d.fromDegrees(180));

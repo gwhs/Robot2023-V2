@@ -14,20 +14,29 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
 public class AutoAimLime extends CommandBase {
-  DrivetrainSubsystem drivetrainSubsystem;
-  double degreesToTarget;
+  private DrivetrainSubsystem drivetrainSubsystem;
+  private LimeLightSub limeLight;
+  private double xDegToTarget;
+  private double yDegToTarget;
+  private double targetX = 0;
+  private double targetY = ;
+
 
   /** Creates a new AutoAimLime. */
-  public AutoAimLime(DrivetrainSubsystem drivetrainSubsystem, double degreesToTarget) {
+  public AutoAimLime(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.degreesToTarget = degreesToTarget;
+    this.limeLight = limeLightSub;
     this.drivetrainSubsystem = drivetrainSubsystem;
     addRequirements(drivetrainSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    degreesToTarget = limeLight.getTx();
+
+    
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
