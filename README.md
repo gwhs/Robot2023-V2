@@ -35,5 +35,6 @@ Open a pull request for your branch at https://github.com/gwhs/Robot2023-V2/pull
 Specify the compare branch as `<your_branch_name>`, and target as `main`
 Add a description of what was changed, and ask other software team members to review.
 
-If a change needs must be made to `main`, an admin will need to change protection rules
+When you open a PR, it will attempt to build your branch.  If the build fails, look at the results to understand why the build fails. 
 
+If a change needs must be made to `main`, an admin will need to change protection rules
