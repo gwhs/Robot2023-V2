@@ -28,6 +28,13 @@ public class AutoBalance extends CommandBase {
   private double tolerance;
   private double desiredEngageTime; // in seconds
   private double maxSpeed;
+
+  private double pConstantDefault;
+  private double dConstantDefault;
+  private double maxSpeedDefault;
+  private double desiredEngageTimeDefault;
+  private double toleranceDefault;
+
   private final ShuffleboardTab tab;
   private final GenericEntry pConstantEntry;
   private final GenericEntry dConstantEntry;
@@ -39,6 +46,13 @@ public class AutoBalance extends CommandBase {
   public AutoBalance(DrivetrainSubsystem drivetrainSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
+
+    pConstantDefault = 0.004;
+    dConstantDefault = -0.001;
+    toleranceDefault = 2.5;
+    maxSpeedDefault = 0.5;
+    desiredEngageTimeDefault = 1;
+
     timer = new Timer();
     timer.stop();
     tab = Shuffleboard.getTab("Auto Balance");
@@ -55,12 +69,12 @@ public class AutoBalance extends CommandBase {
     orientation.addNumber("Pitch Rate", () -> drivetrainSubsystem.getPitchRate());
     orientation.addNumber("Roll Rate", () -> drivetrainSubsystem.getRollRate());
 
-    pConstantEntry = input.add("p Constant", 0.008).withWidget(BuiltInWidgets.kTextView).getEntry();
-    dConstantEntry = input.add("d Constant", 0).withWidget(BuiltInWidgets.kTextView).getEntry();
-    toleranceEntry = input.add("Tolerance", 2.5).withWidget(BuiltInWidgets.kTextView).getEntry();
-    maxSpeedEntry = input.add("Max Speed", 0.5).withWidget(BuiltInWidgets.kTextView).getEntry();
+    pConstantEntry = input.add("p Constant", pConstantDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+    dConstantEntry = input.add("d Constant", dConstantDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+    toleranceEntry = input.add("Tolerance", toleranceDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+    maxSpeedEntry = input.add("Max Speed", maxSpeedDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
     desiredEngageTimeEntry =
-        input.add("Desired Engage Time", 1).withWidget(BuiltInWidgets.kTextView).getEntry();
+        input.add("Desired Engage Time", desiredEngageTimeDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
 
     addRequirements(drivetrainSubsystem);
   }
@@ -68,11 +82,11 @@ public class AutoBalance extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    desiredEngageTime = desiredEngageTimeEntry.getDouble(1); // in seconds
-    maxSpeed = maxSpeedEntry.getDouble(0.5);
-    pConstant = pConstantEntry.getDouble(0.008);
-    dConstant = dConstantEntry.getDouble(0);
-    tolerance = toleranceEntry.getDouble(2.5); // in degrees
+    desiredEngageTime = desiredEngageTimeEntry.getDouble(desiredEngageTimeDefault); // in seconds
+    maxSpeed = maxSpeedEntry.getDouble(maxSpeedDefault);
+    pConstant = pConstantEntry.getDouble(pConstantDefault);
+    dConstant = dConstantEntry.getDouble(dConstantDefault);
+    tolerance = toleranceEntry.getDouble(toleranceDefault); // in degrees
     System.out.printf(
         "max = %f, p Constant = %f, d Constant = %f, tolerance = %f, Desired Engage Time = %f",
         maxSpeed, pConstant, dConstant, tolerance, desiredEngageTime);
