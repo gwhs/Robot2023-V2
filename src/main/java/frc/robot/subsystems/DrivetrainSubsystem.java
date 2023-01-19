@@ -60,7 +60,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     ShuffleboardLayout frontRightLayout = null;
     ShuffleboardLayout backLeftLayout = null;
     ShuffleboardLayout backRightLayout = null;
-    ShuffleboardLayout orientation = null;
 
     if (DrivetrainConstants.ADD_TO_DASHBOARD) {
       frontLeftLayout =
@@ -80,19 +79,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
           tab.getLayout("Back Right Module", BuiltInLayouts.kList)
               .withSize(2, 4)
               .withPosition(6, 0);
-      orientation =
-          tab.getLayout("Robot Orientation", BuiltInLayouts.kList)
-              .withSize(2, 4)
-              .withPosition(8, 0);
-    }
-
-    if (orientation != null) {
-      orientation.addNumber("Yaw", () -> gyro.getYaw());
-      orientation.addNumber("Pitch", () -> gyro.getPitch());
-      orientation.addNumber("Roll", () -> gyro.getRoll());
-      orientation.addNumber("Yaw Rate", () -> gyro.getYawRate());
-      orientation.addNumber("Pitch Rate", () -> gyro.getPitchRate());
-      orientation.addNumber("Roll Rate", () -> gyro.getRollRate());
     }
 
     // change method we add hana, right now only does spring.
