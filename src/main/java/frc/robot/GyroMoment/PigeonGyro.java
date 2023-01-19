@@ -71,20 +71,20 @@ public class PigeonGyro extends AbstractGyro {
   public double getYawRate() {
     double[] xyz_dps = new double[3];
     pigeon.getRawGyro(xyz_dps);
-    return xyz_dps[1];
+    return xyz_dps[2];
   }
 
   @Override
   public double getPitchRate() {
     double[] xyz_dps = new double[3];
     pigeon.getRawGyro(xyz_dps);
-    return xyz_dps[0];
+    return xyz_dps[1];
   }
 
   @Override
   public double getRollRate() {
     double[] xyz_dps = new double[3];
     pigeon.getRawGyro(xyz_dps);
-    return xyz_dps[2];
+    return xyz_dps[0];
   }
 }
