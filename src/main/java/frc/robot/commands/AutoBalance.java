@@ -13,23 +13,25 @@ public class AutoBalance extends CommandBase {
   private final DrivetrainSubsystem drivetrainSubsystem;
 
   private double currentAngle;
+  private double currentDPS;
   private double speed;
   private double pConstant;
   private double dConstant;
   private Timer timer;
-  private final double DESIRED_ANGLE;
   private double error;
+  private final double TOLERANCE;
   private final double DESIRED_ENGAGE_TIME; //in milliseconds
 
   /** Creates a new AutoBalance. */
   public AutoBalance(DrivetrainSubsystem drivetrainSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
-    pConstant = 0.2;
+    pConstant = 0.008;
+    dConstant = -0.01;
     timer = new Timer();
     timer.stop();
-    DESIRED_ANGLE = 0;
-    DESIRED_ENGAGE_TIME = 1000;
+    TOLERANCE = 2.5; //in degrees
+    DESIRED_ENGAGE_TIME = 1; //in seconds
 
     addRequirements(drivetrainSubsystem);
   }
@@ -44,9 +46,11 @@ public class AutoBalance extends CommandBase {
   @Override
   public void execute() {
     currentAngle = drivetrainSubsystem.getRoll();
-    error = currentAngle - DESIRED_ANGLE;
+    currentDPS = drivetrainSubsystem.getRollRate();
 
-    speed = error * pConstant;
+    error = currentAngle - 0;
+
+    speed = error * pConstant + currentDPS * dConstant;
 
     if (speed > 0.2)
     {
@@ -57,7 +61,7 @@ public class AutoBalance extends CommandBase {
 
     }
 
-    if (Math.abs(error) <= 2.5)
+    if (Math.abs(error) <= TOLERANCE)
     {
       timer.start();
     }
@@ -80,6 +84,6 @@ public class AutoBalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(1);
+    return timer.hasElapsed(DESIRED_ENGAGE_TIME);
   }
 }

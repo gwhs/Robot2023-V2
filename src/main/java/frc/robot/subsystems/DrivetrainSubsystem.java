@@ -143,6 +143,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
         orientation.addNumber("Yaw", () -> gyro.getYaw());
         orientation.addNumber("Pitch", () -> gyro.getPitch());
         orientation.addNumber("Roll", () -> gyro.getRoll());
+        orientation.addNumber("Yaw Rate", () -> gyro.getYawRate());
+        orientation.addNumber("Pitch Rate", () -> gyro.getPitchRate());
+        orientation.addNumber("Roll Rate", () -> gyro.getRollRate());
       }
 
     // Put the motors in brake mode when enabled, coast mode when disabled
@@ -203,6 +206,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public double getPitch()
   {
     return gyro.getPitch();
+  }
+
+  public double getYawRate()
+  {
+    return gyro.getYawRate();
+  }
+
+  public double getRollRate()
+  {
+    return gyro.getRollRate();
+  }
+
+  public double getPitchRate()
+  {
+    return gyro.getPitchRate();
   }
 
   public void resetGyro(){
