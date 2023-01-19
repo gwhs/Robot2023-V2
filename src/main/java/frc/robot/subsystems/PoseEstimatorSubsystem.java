@@ -2,10 +2,6 @@ package frc.robot.subsystems;
 
 import static frc.robot.Constants.VisionConstants.CAMERA_TO_ROBOT;
 
-import java.util.Map;
-
-import org.photonvision.PhotonCamera;
-
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -22,6 +18,8 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DrivetrainConstants;
+import java.util.Map;
+import org.photonvision.PhotonCamera;
 
 public class PoseEstimatorSubsystem extends SubsystemBase {
 
@@ -31,24 +29,28 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   // Ordered list of target poses by ID (WPILib is adding some functionality for
   // this)
   private static final Map<Integer, Pose3d> targetPoses = Constants.FieldConstants.aprilTags;
-   
+
   // Kalman Filter Configuration. These can be "tuned-to-taste" based on how much
   // you trust your various sensors. Smaller numbers will cause the filter to
-  // "trust" the estimate from that particular component more than the others. 
+  // "trust" the estimate from that particular component more than the others.
   // This in turn means the particualr component will have a stronger influence
   // on the final pose estimate.
 
   /**
-   * Standard deviations of model states. Increase these numbers to trust your model's state estimates less. This
-   * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then meters.
+   * Standard deviations of model states. Increase these numbers to trust your model's state
+   * estimates less. This matrix is in the form [x, y, theta]ᵀ, with units in meters and radians,
+   * then meters.
    */
-  private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5));
-  
+  private static final Vector<N3> stateStdDevs =
+      VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5));
+
   /**
-   * Standard deviations of the vision measurements. Increase these numbers to trust global measurements from vision
-   * less. This matrix is in the form [x, y, theta]ᵀ, with units in meters and radians.
+   * Standard deviations of the vision measurements. Increase these numbers to trust global
+   * measurements from vision less. This matrix is in the form [x, y, theta]ᵀ, with units in meters
+   * and radians.
    */
-  private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(10));
+  private static final Vector<N3> visionMeasurementStdDevs =
+      VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(10));
 
   private final SwerveDrivePoseEstimator poseEstimator;
 
@@ -56,26 +58,27 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
   private double previousPipelineTimestamp = 0;
 
-  public PoseEstimatorSubsystem(PhotonCamera photonCamera, DrivetrainSubsystem drivetrainSubsystem) {
+  public PoseEstimatorSubsystem(
+      PhotonCamera photonCamera, DrivetrainSubsystem drivetrainSubsystem) {
     this.photonCamera = photonCamera;
     this.drivetrainSubsystem = drivetrainSubsystem;
 
     ShuffleboardTab tab = Shuffleboard.getTab("Vision");
 
-    poseEstimator =  new SwerveDrivePoseEstimator(
-        DrivetrainConstants.KINEMATICS,
-        drivetrainSubsystem.getGyroscopeRotation(),
-        drivetrainSubsystem.getModulePositions(),
-        new Pose2d(),
-        stateStdDevs,
-        visionMeasurementStdDevs);
-    
+    poseEstimator =
+        new SwerveDrivePoseEstimator(
+            DrivetrainConstants.KINEMATICS,
+            drivetrainSubsystem.getGyroscopeRotation(),
+            drivetrainSubsystem.getModulePositions(),
+            new Pose2d(),
+            stateStdDevs,
+            visionMeasurementStdDevs);
+
     tab.addString("Pose", this::getFormattedPose).withPosition(0, 0).withSize(2, 0);
     tab.add("Field", field2d).withPosition(2, 0).withSize(6, 4);
   }
 
-  public void addTrajectory(Trajectory traj)
-  {
+  public void addTrajectory(Trajectory traj) {
     field2d.getObject("Trajectory").setTrajectory(traj);
   }
 
@@ -99,18 +102,15 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     }
     // Update pose estimator with drivetrain sensors
     poseEstimator.update(
-      drivetrainSubsystem.getGyroscopeRotation(),
-      drivetrainSubsystem.getModulePositions());
+        drivetrainSubsystem.getGyroscopeRotation(), drivetrainSubsystem.getModulePositions());
 
     field2d.setRobotPose(getCurrentPose());
   }
 
   private String getFormattedPose() {
     var pose = getCurrentPose();
-    return String.format("(%.2f, %.2f) %.2f degrees", 
-        pose.getX(), 
-        pose.getY(),
-        pose.getRotation().getDegrees());
+    return String.format(
+        "(%.2f, %.2f) %.2f degrees", pose.getX(), pose.getY(), pose.getRotation().getDegrees());
   }
 
   public Pose2d getCurrentPose() {
@@ -118,16 +118,16 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   }
 
   /**
-   * Resets the current pose to the specified pose. This should ONLY be called
-   * when the robot's position on the field is known, like at the beginning of
-   * a match.
+   * Resets the current pose to the specified pose. This should ONLY be called when the robot's
+   * position on the field is known, like at the beginning of a match.
+   *
    * @param newPose new pose
    */
   public void setCurrentPose(Pose2d newPose) {
     poseEstimator.resetPosition(
-      drivetrainSubsystem.getGyroscopeRotation(),
-      drivetrainSubsystem.getModulePositions(),
-      newPose);
+        drivetrainSubsystem.getGyroscopeRotation(),
+        drivetrainSubsystem.getModulePositions(),
+        newPose);
   }
 
   /**
@@ -138,9 +138,11 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     setCurrentPose(new Pose2d());
   }
 
-  public void initializeGyro(double angleDegree){
+  public void initializeGyro(double angleDegree) {
     drivetrainSubsystem.setGyroscopeRotation(angleDegree);
-    poseEstimator.resetPosition(drivetrainSubsystem.getGyroscopeRotation(), drivetrainSubsystem.getModulePositions(), new Pose2d(getCurrentPose().getX(), getCurrentPose().getY(), Rotation2d.fromDegrees(0)));
+    poseEstimator.resetPosition(
+        drivetrainSubsystem.getGyroscopeRotation(),
+        drivetrainSubsystem.getModulePositions(),
+        new Pose2d(getCurrentPose().getX(), getCurrentPose().getY(), Rotation2d.fromDegrees(0)));
   }
-
 }
