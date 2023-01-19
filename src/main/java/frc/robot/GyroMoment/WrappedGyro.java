@@ -10,95 +10,74 @@ import frc.robot.Robot;
 /** Add your docs here. */
 public class WrappedGyro {
 
-    private AbstractGyro gyro;
-    
-    public enum GyroType
-    {
-        PIGEON,
-        NAVX
-    }
+  private AbstractGyro gyro;
 
-    public WrappedGyro(GyroType type)
-    {
-        if (Robot.isReal())
-        {
-            if (type == GyroType.PIGEON)
-            {
-                gyro = new PigeonGyro();
-            }
-            else if (type == GyroType.NAVX)
-            {
-                gyro = new NavXGyro();
-            }
-            else
-            {
-                gyro = new FakeGyro();
-            }
-        }
-    }
+  public enum GyroType {
+    PIGEON,
+    NAVX
+  }
 
-    public void reset()
-    {
-        gyro.reset();
+  public WrappedGyro(GyroType type) {
+    if (Robot.isReal()) {
+      if (type == GyroType.PIGEON) {
+        gyro = new PigeonGyro();
+      } else if (type == GyroType.NAVX) {
+        gyro = new NavXGyro();
+      } else {
+        gyro = new FakeGyro();
+      }
     }
+  }
 
-    public void calibrate()
-    {
-        gyro.calibrate();
-    }
+  public void reset() {
+    gyro.reset();
+  }
 
-    public double getAngle()
-    {
-        return gyro.getAngle();
-    }
+  public void calibrate() {
+    gyro.calibrate();
+  }
 
-    public double getYaw()
-    {
-        return gyro.getYaw();
-    }
+  public double getAngle() {
+    return gyro.getAngle();
+  }
 
-    public double getRoll()
-    {
-        return gyro.getRoll();
-    }
+  public double getYaw() {
+    return gyro.getYaw();
+  }
 
-    public double getPitch()
-    {
-        return gyro.getPitch();
-    }
-    
-    public void configMountPoseRoll(double roll)
-    {
-        gyro.configMountPoseRoll(roll);
-    }
+  public double getRoll() {
+    return gyro.getRoll();
+  }
 
-    public void configMountPoseYaw(double yaw)
-    {
-        gyro.configMountPoseYaw(yaw);
-    }
+  public double getPitch() {
+    return gyro.getPitch();
+  }
 
-    public Rotation2d getRotation2d()
-    {
-        return gyro.getRotation2d();
-    }
+  public void configMountPoseRoll(double roll) {
+    gyro.configMountPoseRoll(roll);
+  }
 
-    public void setYaw(double yaw)
-    {
-        gyro.setYaw(yaw);
-    }
+  public void configMountPoseYaw(double yaw) {
+    gyro.configMountPoseYaw(yaw);
+  }
 
-    public double getYawRate()
-    {
-        return gyro.getYawRate();
-    }
+  public Rotation2d getRotation2d() {
+    return gyro.getRotation2d();
+  }
 
-    public double getPitchRate()
-    {
-        return gyro.getPitchRate();
-    }
+  public void setYaw(double yaw) {
+    gyro.setYaw(yaw);
+  }
 
-    public double getRollRate()
-    {
-        return gyro.getRollRate();
-    }
+  public double getYawRate() {
+    return gyro.getYawRate();
+  }
+
+  public double getPitchRate() {
+    return gyro.getPitchRate();
+  }
+
+  public double getRollRate() {
+    return gyro.getRollRate();
+  }
 }

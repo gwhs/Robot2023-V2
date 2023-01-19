@@ -20,7 +20,7 @@ public class AutoBalance extends CommandBase {
   private Timer timer;
   private double error;
   private final double TOLERANCE;
-  private final double DESIRED_ENGAGE_TIME; //in milliseconds
+  private final double DESIRED_ENGAGE_TIME; // in milliseconds
 
   /** Creates a new AutoBalance. */
   public AutoBalance(DrivetrainSubsystem drivetrainSubsystem) {
@@ -30,17 +30,15 @@ public class AutoBalance extends CommandBase {
     dConstant = -0.01;
     timer = new Timer();
     timer.stop();
-    TOLERANCE = 2.5; //in degrees
-    DESIRED_ENGAGE_TIME = 1; //in seconds
+    TOLERANCE = 2.5; // in degrees
+    DESIRED_ENGAGE_TIME = 1; // in seconds
 
     addRequirements(drivetrainSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -52,27 +50,20 @@ public class AutoBalance extends CommandBase {
 
     speed = error * pConstant + currentDPS * dConstant;
 
-    if (speed > 0.2)
-    {
+    if (speed > 0.2) {
       speed = 0.2;
-    }
-    else
-    {
+    } else {
 
     }
 
-    if (Math.abs(error) <= TOLERANCE)
-    {
+    if (Math.abs(error) <= TOLERANCE) {
       timer.start();
-    }
-    else
-    {
+    } else {
       timer.stop();
       timer.reset();
     }
 
     drivetrainSubsystem.drive(new ChassisSpeeds(speed, 0.0, 0.0));
-
   }
 
   // Called once the command ends or is interrupted.

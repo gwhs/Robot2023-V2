@@ -9,20 +9,29 @@ import edu.wpi.first.math.geometry.Rotation2d;
 /** Add your docs here. */
 public abstract class AbstractGyro {
 
-    public abstract void reset();
-    public abstract void calibrate();
-    public abstract double getAngle();
-    public abstract double getYaw();
-    public abstract double getPitch();
-    public abstract double getRoll();
+  public abstract void reset();
 
-    public abstract void configMountPoseRoll(double roll);
-    public abstract void configMountPoseYaw(double yaw);
-    public abstract Rotation2d getRotation2d();
+  public abstract void calibrate();
 
-    public abstract void setYaw(double yaw);
+  public abstract double getAngle();
 
-    public abstract double getYawRate();
-    public abstract double getPitchRate();
-    public abstract double getRollRate();
+  public abstract double getYaw();
+
+  public abstract double getPitch();
+
+  public abstract double getRoll();
+
+  public abstract void configMountPoseRoll(double roll);
+
+  public abstract void configMountPoseYaw(double yaw);
+
+  public abstract Rotation2d getRotation2d();
+
+  public abstract void setYaw(double yaw);
+
+  public abstract double getYawRate();
+
+  public abstract double getPitchRate();
+
+  public abstract double getRollRate();
 }

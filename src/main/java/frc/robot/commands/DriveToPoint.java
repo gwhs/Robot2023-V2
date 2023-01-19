@@ -10,13 +10,12 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 
 public class DriveToPoint extends CommandBase {
 
-
   private final DrivetrainSubsystem driveSystem;
   private final PoseEstimatorSubsystem poseEstimatorSystem;
   private final ProfiledPIDController xController = Constants.TeleopDriveConstants.xController;
   private final ProfiledPIDController yController = Constants.TeleopDriveConstants.yController;
-  private final ProfiledPIDController omegaController = Constants.TeleopDriveConstants.omegaController;
-
+  private final ProfiledPIDController omegaController =
+      Constants.TeleopDriveConstants.omegaController;
 
   private final double x, y;
 
@@ -28,7 +27,7 @@ public class DriveToPoint extends CommandBase {
     this.y = y;
 
     this.xController.setTolerance(0.2);
-    
+
     this.yController.setTolerance(0.2);
 
     omegaController.setTolerance(Units.degreesToRadians(3));
@@ -47,32 +46,32 @@ public class DriveToPoint extends CommandBase {
 
   @Override
   public void execute() {
-        // Drive
-        xController.setGoal(x);
-        yController.setGoal(y);
-        omegaController.setGoal(Math.toRadians(180.0));
-    
-      var robotPose = poseEstimatorSystem.getCurrentPose();
+    // Drive
+    xController.setGoal(x);
+    yController.setGoal(y);
+    omegaController.setGoal(Math.toRadians(180.0));
 
-      // Drive to the target
-      var xSpeed =  xController.calculate(robotPose.getX());
-      if ( xController.atGoal()) {
-        xSpeed = 0;
-      }
+    var robotPose = poseEstimatorSystem.getCurrentPose();
 
-      var ySpeed =  yController.calculate(robotPose.getY());
-      if ( yController.atGoal()) {
-        ySpeed = 0;
-      }
-
-      var omegaSpeed =  omegaController.calculate(robotPose.getRotation().getRadians());
-      if ( omegaController.atGoal()) {
-        omegaSpeed = 0;
-      }
-
-      driveSystem.drive(
-        ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation()));
+    // Drive to the target
+    var xSpeed = xController.calculate(robotPose.getX());
+    if (xController.atGoal()) {
+      xSpeed = 0;
     }
+
+    var ySpeed = yController.calculate(robotPose.getY());
+    if (yController.atGoal()) {
+      ySpeed = 0;
+    }
+
+    var omegaSpeed = omegaController.calculate(robotPose.getRotation().getRadians());
+    if (omegaController.atGoal()) {
+      omegaSpeed = 0;
+    }
+
+    driveSystem.drive(
+        ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, omegaSpeed, robotPose.getRotation()));
+  }
 
   @Override
   public void end(boolean interrupted) {
@@ -80,8 +79,7 @@ public class DriveToPoint extends CommandBase {
   }
 
   @Override
-  public boolean isFinished()
-  {
+  public boolean isFinished() {
     return false;
   }
 }
