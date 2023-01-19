@@ -5,16 +5,24 @@
 package frc.robot.commands.Lime;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import frc.robot.DriveTrainConstants;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.LimeVision.LimeLightSub;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
 public class AutoAimLime extends CommandBase {
+  DrivetrainSubsystem drivetrainSubsystem;
+  double degreesToTarget;
+
   /** Creates a new AutoAimLime. */
-  public AutoAimLime() {
+  public AutoAimLime(DrivetrainSubsystem drivetrainSubsystem, double degreesToTarget) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.degreesToTarget = degreesToTarget;
+    this.drivetrainSubsystem = drivetrainSubsystem;
+    addRequirements(drivetrainSubsystem);
   }
 
   // Called when the command is initially scheduled.
