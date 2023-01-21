@@ -35,12 +35,11 @@ public class LimeLightSub extends SubsystemBase {
   private double distance;
 
   private LimeLightComms limelight_comm;
-  private String limeLightName;
 
   /** Creates a new LimeLightSub. */
-  public LimeLightSub(String limeLightName, String limelight_networktable_name) {
+  public LimeLightSub(String limelight_networktable_name) {
     limelight_comm = new LimeLightComms(limelight_networktable_name);
-    this.limeLightName = limeLightName;
+    limelight_comm.set_entry_double("ledMode", 3);
   }
 
   @Override

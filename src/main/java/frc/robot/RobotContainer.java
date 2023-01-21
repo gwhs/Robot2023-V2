@@ -44,7 +44,7 @@ public class RobotContainer {
   // Set RoboRio to 10.57.12.2
 
   private final PhotonCamera photonCamera = new PhotonCamera("photonvision");
-  private final LimeLightSub limeLightSub = new LimeLightSub("LL", "LimeLightTable");
+  private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
   // change to hana or spring depending on robot
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("spring");
