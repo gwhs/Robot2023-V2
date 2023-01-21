@@ -5,10 +5,9 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Constants.AutoConstants.THETA_CONSTRAINTS;
-import static frc.robot.Constants.DrivetrainConstants.PIGEON_ID;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
@@ -21,6 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -44,16 +44,16 @@ import java.util.stream.IntStream;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
-  private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(PIGEON_ID);
-  // private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
+  // private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(PIGEON_ID);
+  private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
   private final SwerveModule[] swerveModules;
 
   private ChassisSpeeds desiredChassisSpeeds;
 
   public DrivetrainSubsystem(String robotName) {
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
-    pigeon.configMountPoseRoll(0);
-    pigeon.configMountPoseYaw(0);
+    // pigeon.configMountPoseRoll(0);
+    // pigeon.configMountPoseYaw(0);
 
     ShuffleboardLayout frontLeftLayout = null;
     ShuffleboardLayout frontRightLayout = null;
@@ -84,9 +84,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if (robotName.equals("spring")) {
       swerveModules =
           swerveModuleSpring(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
-    } else {
+    } else if (robotName.equals("hana")) {
       swerveModules =
           swerveModuleHana(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
+    } else {
+      swerveModules =
+          swerveModuleCalliope(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
     }
 
     // Put the motors in brake mode when enabled, coast mode when disabled
@@ -188,6 +191,51 @@ public class DrivetrainSubsystem extends SubsystemBase {
               driveTrain.BACK_RIGHT_MODULE_STEER_ENCODER,
               driveTrain.BACK_RIGHT_MODULE_STEER_OFFSET)
         };
+
+    return swerveModules;
+  }
+
+  private SwerveModule[] swerveModuleCalliope(
+      ShuffleboardLayout frontLeftLayout,
+      ShuffleboardLayout frontRightLayout,
+      ShuffleboardLayout backLeftLayout,
+      ShuffleboardLayout backRightLayout) {
+    /*
+     * Specific to the calliope drivetrain(just the offset)
+     */
+    DriveTrainConstants driveTrain = DriveTrainConstants.calliope;
+    SwerveModule[] swerveModules =
+        new SwerveModule[] {
+          createSwerveModule(
+              frontLeftLayout,
+              ModuleConfiguration.MK4I_L2,
+              driveTrain.FRONT_LEFT_MODULE_DRIVE_MOTOR,
+              driveTrain.FRONT_LEFT_MODULE_STEER_MOTOR,
+              driveTrain.FRONT_LEFT_MODULE_STEER_ENCODER,
+              driveTrain.FRONT_LEFT_MODULE_STEER_OFFSET),
+          createSwerveModule(
+              frontRightLayout,
+              ModuleConfiguration.MK4I_L2,
+              driveTrain.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
+              driveTrain.FRONT_RIGHT_MODULE_STEER_MOTOR,
+              driveTrain.FRONT_RIGHT_MODULE_STEER_ENCODER,
+              driveTrain.FRONT_RIGHT_MODULE_STEER_OFFSET),
+          createSwerveModule(
+              backLeftLayout,
+              ModuleConfiguration.MK4I_L2,
+              driveTrain.BACK_LEFT_MODULE_DRIVE_MOTOR,
+              driveTrain.BACK_LEFT_MODULE_STEER_MOTOR,
+              driveTrain.BACK_LEFT_MODULE_STEER_ENCODER,
+              driveTrain.BACK_LEFT_MODULE_STEER_OFFSET),
+          createSwerveModule(
+              backRightLayout,
+              ModuleConfiguration.MK4I_L2,
+              driveTrain.BACK_RIGHT_MODULE_DRIVE_MOTOR,
+              driveTrain.BACK_RIGHT_MODULE_STEER_MOTOR,
+              driveTrain.BACK_RIGHT_MODULE_STEER_ENCODER,
+              driveTrain.BACK_RIGHT_MODULE_STEER_OFFSET)
+        };
+
     return swerveModules;
   }
 
@@ -217,14 +265,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public Rotation2d getGyroscopeRotation() {
-    return pigeon.getRotation2d();
+    return navx.getRotation2d();
     // We have to invert the angle of the NavX so that rotating the robot counter-clockwise makes
     // the angle increase.
     // return Rotation2d.fromDegrees(360.0 - navx.getYaw());
   }
 
   public void setGyroscopeRotation(double angleDeg) {
-    pigeon.setYaw(angleDeg);
+
+    navx.setAngleAdjustment(angleDeg);
   }
 
   public void resetGyro() {
