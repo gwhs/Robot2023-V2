@@ -9,8 +9,11 @@ import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -27,6 +30,7 @@ import frc.robot.pathfind.VisGraph;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.List;
+import java.util.Map;
 import org.photonvision.PhotonCamera;
 
 /**
@@ -62,10 +66,12 @@ public class RobotContainer {
           () -> poseEstimator.getCurrentPose().getRotation(),
           () ->
               -modifyAxis(controller.getLeftY())
-                  * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
+                  * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
+                  * drivetrainAmplificationScale(),
           () ->
               -modifyAxis(controller.getLeftX())
-                  * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
+                  * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
+                  * drivetrainAmplificationScale(),
           () -> -controller.getRightY(),
           () -> -controller.getRightX());
 
@@ -78,10 +84,12 @@ public class RobotContainer {
             () -> poseEstimator.getCurrentPose().getRotation(),
             () ->
                 -modifyAxis(controller.getLeftY())
-                    * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
+                    * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
+                    * drivetrainAmplificationScale(),
             () ->
                 -modifyAxis(controller.getLeftX())
-                    * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
+                    * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
+                    * drivetrainAmplificationScale(),
             () ->
                 modifyAxis(controller.getRightX())
                     * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
@@ -113,8 +121,22 @@ public class RobotContainer {
 
   }
 
-  private void configureDashboard() {}
+  private GenericEntry maxSpeedAdjustment;
 
+  private void configureDashboard() {
+    maxSpeedAdjustment =
+        Shuffleboard.getTab("Drive")
+            .add("Max Speed", 1)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 1)) // specify widget properties here
+            .getEntry();
+  }
+
+  private double drivetrainAmplificationScale() {
+    // This function multiplies the controller input to reduce the maximum speed,
+    // 1 = full speed forward, 0.5 is half speed.
+    return maxSpeedAdjustment.getDouble(1);
+  }
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
