@@ -57,7 +57,7 @@ public final class Constants {
     public static final double ROBOT_LENGTH_WIDTH = 0.698;
 
     // "rio" for springtrap, "CAN_Network" for hana
-    public static final String CANIVORE_NAME = "CAN_Network";
+    public static final String CANIVORE_NAME = "rio";
 
     public static final int PIGEON_ID = 30;
 
@@ -68,6 +68,7 @@ public final class Constants {
      */
     public static final double MAX_VELOCITY_METERS_PER_SECOND =
         638.0
+            * 5
             / 60.0
             * // was 6380.0 / 60.0
             ModuleConfiguration.MK4I_L2.getDriveReduction()
