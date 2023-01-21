@@ -17,7 +17,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class AutoBalance extends CommandBase {
   private final DrivetrainSubsystem drivetrainSubsystem;
-  
+
   private Timer timer;
 
   private double pConstant;
@@ -25,12 +25,19 @@ public class AutoBalance extends CommandBase {
   private double tolerance;
   private double desiredEngageTime; // in seconds
   private double maxSpeed;
+  private double pConstantInitial;
 
   private double pConstantDefault;
   private double dConstantDefault;
   private double maxSpeedDefault;
   private double desiredEngageTimeDefault;
   private double toleranceDefault;
+  private double pConstantInitialDefault;
+
+  private int state;
+  private double epsilonRollRate;
+  private double epsilonRollRateDefault;
+  private final GenericEntry epsilonRollRateEntry;
 
   private final ShuffleboardTab tab;
   private final GenericEntry pConstantEntry;
@@ -38,6 +45,7 @@ public class AutoBalance extends CommandBase {
   private final GenericEntry toleranceEntry;
   private final GenericEntry maxSpeedEntry;
   private final GenericEntry desiredEngageTimeEntry;
+  private final GenericEntry pConstantInitialEntry;
 
   /** Creates a new AutoBalance. */
   public AutoBalance(DrivetrainSubsystem drivetrainSubsystem) {
@@ -49,6 +57,8 @@ public class AutoBalance extends CommandBase {
     toleranceDefault = 2.5;
     maxSpeedDefault = 0.5;
     desiredEngageTimeDefault = 1;
+    pConstantInitialDefault = 0.2;
+    epsilonRollRateDefault = 2;
 
     timer = new Timer();
     timer.stop();
@@ -66,12 +76,29 @@ public class AutoBalance extends CommandBase {
     orientation.addNumber("Pitch Rate", () -> drivetrainSubsystem.getPitchRate());
     orientation.addNumber("Roll Rate", () -> drivetrainSubsystem.getRollRate());
 
-    pConstantEntry = input.add("p Constant", pConstantDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
-    dConstantEntry = input.add("d Constant", dConstantDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
-    toleranceEntry = input.add("Tolerance", toleranceDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
-    maxSpeedEntry = input.add("Max Speed", maxSpeedDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+    pConstantEntry =
+        input.add("p Constant", pConstantDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+    dConstantEntry =
+        input.add("d Constant", dConstantDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+    toleranceEntry =
+        input.add("Tolerance", toleranceDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+    maxSpeedEntry =
+        input.add("Max Speed", maxSpeedDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
     desiredEngageTimeEntry =
-        input.add("Desired Engage Time", desiredEngageTimeDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+        input
+            .add("Desired Engage Time", desiredEngageTimeDefault)
+            .withWidget(BuiltInWidgets.kTextView)
+            .getEntry();
+    pConstantInitialEntry =
+        input
+            .add("Initial p Constant", pConstantInitialDefault)
+            .withWidget(BuiltInWidgets.kTextView)
+            .getEntry();
+    epsilonRollRateEntry =
+        input
+            .add("Epsilon Roll Rate Threshold", epsilonRollRateDefault)
+            .withWidget(BuiltInWidgets.kTextView)
+            .getEntry();
 
     addRequirements(drivetrainSubsystem);
   }
@@ -79,14 +106,23 @@ public class AutoBalance extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    state = 0;
     desiredEngageTime = desiredEngageTimeEntry.getDouble(desiredEngageTimeDefault); // in seconds
     maxSpeed = maxSpeedEntry.getDouble(maxSpeedDefault);
     pConstant = pConstantEntry.getDouble(pConstantDefault);
     dConstant = dConstantEntry.getDouble(dConstantDefault);
     tolerance = toleranceEntry.getDouble(toleranceDefault); // in degrees
+    pConstantInitial = pConstantInitialEntry.getDouble(pConstantInitialDefault);
+    epsilonRollRate = epsilonRollRateEntry.getDouble(epsilonRollRateDefault);
     System.out.printf(
-        "max = %f, p Constant = %f, d Constant = %f, tolerance = %f, Desired Engage Time = %f",
-        maxSpeed, pConstant, dConstant, tolerance, desiredEngageTime);
+        "max = %f, p Constant = %f, d Constant = %f, tolerance = %f, Desired Engage Time = %f, Initial p Constant = %f, Epsilon Roll Rate Threshold = %f",
+        maxSpeed,
+        pConstant,
+        dConstant,
+        tolerance,
+        desiredEngageTime,
+        pConstantInitial,
+        epsilonRollRate);
 
     timer.reset();
     timer.stop();
@@ -100,7 +136,19 @@ public class AutoBalance extends CommandBase {
 
     double error = currentAngle - 0;
 
-    double speed = error * pConstant + currentDPS * dConstant;
+    double speed = 0;
+
+    if (Math.abs(currentDPS) >= Math.abs(epsilonRollRate)) {
+      state = 1;
+    }
+
+    if (state == 0) {
+      speed = Math.copySign(pConstantInitial, error);
+    }
+
+    if (state == 1) {
+      speed = error * pConstant + currentDPS * dConstant;
+    }
 
     if (speed > maxSpeed) {
       speed = maxSpeed;
