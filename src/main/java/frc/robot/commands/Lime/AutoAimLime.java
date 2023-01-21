@@ -34,17 +34,20 @@ public class AutoAimLime extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // if (limeLight.getTx() < 0) {
+    //   while (limeLight.getTx() < targetX) {
+    //     drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(10)));
+    //   }
+    // } else {
+    //   while (Math.abs(limeLight.getTx()) > targetX) {
+    //     drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(-10)));
+    //   }
+    // }
+    // drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(0)));
+    // done = true;
     if (limeLight.getTx() < 0) {
-      while (limeLight.getTx() < targetX) {
-        drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(10)));
-      }
-    } else {
-      while (Math.abs(limeLight.getTx()) > targetX) {
-        drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(-10)));
-      }
+      drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(10)));
     }
-    drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(0)));
-    done = true;
   }
 
   // Called once the command ends or is interrupted.
@@ -54,6 +57,10 @@ public class AutoAimLime extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return done;
+    if (limeLight.getTx() > 0) {
+      drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(0)));
+      return true;
+    }
+    return false;
   }
 }

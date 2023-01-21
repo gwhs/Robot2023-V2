@@ -48,6 +48,7 @@ public class RobotContainer {
 
   // change to hana or spring depending on robot
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("spring");
+  private final AutoAimLime autoAimLime = new AutoAimLime(drivetrainSubsystem, limeLightSub);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
 
@@ -136,7 +137,7 @@ public class RobotContainer {
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    controller.b().onTrue(new AutoAimLime(drivetrainSubsystem, limeLightSub));
+    controller.b().onTrue(autoAimLime);
 
     controller.start().toggleOnTrue(fieldHeadingDriveCommand);
 
