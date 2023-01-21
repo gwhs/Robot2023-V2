@@ -55,6 +55,7 @@ public class LimeLightSub extends SubsystemBase {
     SmartDashboard.putNumber("ta", ta.getDouble(0));
     SmartDashboard.putNumber("theta", getTheta());
     SmartDashboard.putNumber("distance", getDistance());
+
     // This method will be called once per scheduler run
   }
 

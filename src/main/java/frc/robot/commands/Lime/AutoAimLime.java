@@ -29,15 +29,16 @@ public class AutoAimLime extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    while (limeLight.getTx() > targetX) {
+    while (limeLight.getTx() < targetX) {
       drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(10)));
     }
-    drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(0)));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(0)));
+  }
 
   // Called once the command ends or is interrupted.
   @Override

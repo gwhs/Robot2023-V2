@@ -54,8 +54,6 @@ public class RobotContainer {
   private final ChaseTagCommand chaseTagCommand =
       new ChaseTagCommand(photonCamera, drivetrainSubsystem, poseEstimator::getCurrentPose);
 
-  private final AutoAimLime autoAimLime = new AutoAimLime(drivetrainSubsystem, limeLightSub);
-
   VisGraph AStarMap = new VisGraph();
   final Node finalNode = new Node(4, 4, Rotation2d.fromDegrees(180));
   // final List<Obstacle> obstacles = new ArrayList<Obstacle>();
@@ -138,7 +136,7 @@ public class RobotContainer {
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    // controller.b().whileTrue(chaseTagCommand);
+    controller.b().onTrue(new AutoAimLime(drivetrainSubsystem, limeLightSub));
 
     controller.start().toggleOnTrue(fieldHeadingDriveCommand);
 
