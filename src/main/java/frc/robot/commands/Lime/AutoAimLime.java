@@ -4,18 +4,11 @@
 
 package frc.robot.commands.Lime;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.DriveTrainConstants;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.LimeVision.LimeLightComms;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import java.lang.Math;
 
 public class AutoAimLime extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
@@ -24,7 +17,6 @@ public class AutoAimLime extends CommandBase {
   private double yDegToTarget;
   private double targetX = 1;
   private double targetY = LimeLightConstants.MAX_LIMELIGHT_ERROR_DEGREES;
-
 
   /** Creates a new AutoAimLime. */
   public AutoAimLime(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {
@@ -37,10 +29,10 @@ public class AutoAimLime extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    while(limeLight.getTx()> targetX){
-      drivetrainSubsystem.drive(new ChassisSpeeds(0,0,Math.toRadians(10)));
-  }
-  drivetrainSubsystem.drive(new ChassisSpeeds(0,0,Math.toRadians(0)));
+    while (limeLight.getTx() > targetX) {
+      drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(10)));
+    }
+    drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(0)));
   }
 
   // Called every time the scheduler runs while the command is scheduled.

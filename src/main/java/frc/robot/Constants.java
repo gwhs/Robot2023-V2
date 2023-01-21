@@ -541,7 +541,9 @@ public final class Constants {
       }
     }
   }
-  public static final class LimeLightConstants{
-        public static final double MAX_LIMELIGHT_ERROR_DEGREES = 5;// limelight max degrees off, max degrees error
+
+  public static final class LimeLightConstants {
+    public static final double MAX_LIMELIGHT_ERROR_DEGREES =
+        5; // limelight max degrees off, max degrees error
   }
 }

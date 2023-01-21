@@ -3,21 +3,21 @@
 // the WPILib BSD license file in the root directory of this project.
 
 /*
- * Copied from 
+ * Copied from
  * https://github.com/FRC6854/VIKING/blob/87d32f06d99d272e8859735a67003e81cb4eae8b/src/main/java/viking/vision/limelight/LimelightComm.java
- * All of this code are getters and setters for the 
+ * All of this code are getters and setters for the
  */
 
 package frc.robot.subsystems.LimeVision;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class LimeLightComms{
+public class LimeLightComms {
   private String networkTableName;
 
   public LimeLightComms(String llNetworkTableName) {
-		networkTableName = llNetworkTableName;
-	}
+    networkTableName = llNetworkTableName;
+  }
 
   /*
   These are possible entries to ***GET***
@@ -41,99 +41,91 @@ public class LimeLightComms{
   camtran 	Camera transform in target space of primary apriltag or solvepnp target. NumberArray: Translation (x,y,z) Rotation(pitch,yaw,roll)
    */
 
+  public double get_entry_double(String entry_name) {
+    return NetworkTableInstance.getDefault()
+        .getTable(networkTableName)
+        .getEntry(entry_name)
+        .getDouble(0);
+  }
 
-	public double get_entry_double(String entry_name) {
-		return NetworkTableInstance.getDefault()
-			.getTable(networkTableName)
-			.getEntry(entry_name)
-			.getDouble(0);
-	}
+  public Number get_entry_number(String entry_name) {
+    return NetworkTableInstance.getDefault()
+        .getTable(networkTableName)
+        .getEntry(entry_name)
+        .getNumber(0);
+  }
 
-	public Number get_entry_number(String entry_name) {
-		return NetworkTableInstance.getDefault() 
-			.getTable(networkTableName)            
-			.getEntry(entry_name)                  
-			.getNumber(0);            
-	}
+  public double[] get_entry_double_array(String entry_name) {
+    return NetworkTableInstance.getDefault()
+        .getTable(networkTableName)
+        .getEntry(entry_name)
+        .getDoubleArray(new double[0]);
+  }
 
-	public double[] get_entry_double_array(String entry_name) {
-		return NetworkTableInstance.getDefault()
-			.getTable(networkTableName)
-			.getEntry(entry_name)
-			.getDoubleArray(new double[0]);
-	}
-
-	public Number[] get_entry_number_array(String entry_name) {
-		return NetworkTableInstance.getDefault()
-			.getTable(networkTableName)
-			.getEntry(entry_name)
-			.getNumberArray(new Number[0]);
-	}
-
+  public Number[] get_entry_number_array(String entry_name) {
+    return NetworkTableInstance.getDefault()
+        .getTable(networkTableName)
+        .getEntry(entry_name)
+        .getNumberArray(new Number[0]);
+  }
 
   /*
-   * Possible things to set:
-   * ledMode 	Sets limelight’s LED state
-    0 	use the LED Mode set in the current pipeline
-    1 	force off
-    2 	force blink
-    3 	force on
+  * Possible things to set:
+  * ledMode 	Sets limelight’s LED state
+   0 	use the LED Mode set in the current pipeline
+   1 	force off
+   2 	force blink
+   3 	force on
 
-    camMode 	Sets limelight’s operation mode
-    0 	Vision processor
-    1 	Driver Camera (Increases exposure, disables vision processing)
+   camMode 	Sets limelight’s operation mode
+   0 	Vision processor
+   1 	Driver Camera (Increases exposure, disables vision processing)
 
-    pipeline 	Sets limelight’s current pipeline
-    0 .. 9 	Select pipeline 0..9
+   pipeline 	Sets limelight’s current pipeline
+   0 .. 9 	Select pipeline 0..9
 
-    stream 	Sets limelight’s streaming mode
-    0 	Standard - Side-by-side streams if a webcam is attached to Limelight
-    1 	PiP Main - The secondary camera stream is placed in the lower-right corner of the primary camera stream
-    2 	PiP Secondary - The primary camera stream is placed in the lower-right corner of the secondary camera stream
+   stream 	Sets limelight’s streaming mode
+   0 	Standard - Side-by-side streams if a webcam is attached to Limelight
+   1 	PiP Main - The secondary camera stream is placed in the lower-right corner of the primary camera stream
+   2 	PiP Secondary - The primary camera stream is placed in the lower-right corner of the secondary camera stream
 
-    snapshot 	Allows users to take snapshots during a match
-    0 	Reset snapshot mode
-    1 	Take exactly one snapshot
+   snapshot 	Allows users to take snapshots during a match
+   0 	Reset snapshot mode
+   1 	Take exactly one snapshot
 
-    crop 	Sets the crop rectangle. The pipeline must utilize the default crop rectangle in the web interface. The array must have exactly 4 entries.
-    [0] 	X0 - Min or Max X value of crop rectangle (-1 to 1)
-    [1] 	X1 - Min or Max X value of crop rectangle (-1 to 1)
-    [2] 	Y0 - Min or Max Y value of crop rectangle (-1 to 1)
-    [3] 	Y1 - Min or Max Y value of crop rectangle (-1 to 1)
-   * 
-   */
+   crop 	Sets the crop rectangle. The pipeline must utilize the default crop rectangle in the web interface. The array must have exactly 4 entries.
+   [0] 	X0 - Min or Max X value of crop rectangle (-1 to 1)
+   [1] 	X1 - Min or Max X value of crop rectangle (-1 to 1)
+   [2] 	Y0 - Min or Max Y value of crop rectangle (-1 to 1)
+   [3] 	Y1 - Min or Max Y value of crop rectangle (-1 to 1)
+  *
+  */
 
-	public void set_entry_double(String entry_name, double value) {
-		NetworkTableInstance.getDefault()
-			.getTable(networkTableName)
-			.getEntry(entry_name)
-			.setDouble(value);
-	}
+  public void set_entry_double(String entry_name, double value) {
+    NetworkTableInstance.getDefault()
+        .getTable(networkTableName)
+        .getEntry(entry_name)
+        .setDouble(value);
+  }
 
-	public void set_entry_number(String entry_name, Number value) {
-		NetworkTableInstance.getDefault()
-			.getTable(networkTableName)
-			.getEntry(entry_name)
-			.setNumber(value);
-	}
+  public void set_entry_number(String entry_name, Number value) {
+    NetworkTableInstance.getDefault()
+        .getTable(networkTableName)
+        .getEntry(entry_name)
+        .setNumber(value);
+  }
 
-	public void set_entry_double_array(String entry_name, double[] array) {
-		NetworkTableInstance.getDefault()
-			.getTable(networkTableName)
-			.getEntry(entry_name)
-			.setDoubleArray(array);
-	}
+  public void set_entry_double_array(String entry_name, double[] array) {
+    NetworkTableInstance.getDefault()
+        .getTable(networkTableName)
+        .getEntry(entry_name)
+        .setDoubleArray(array);
+  }
 
-	public void set_entry_number_array(String entry_name, Number[] array) {
-		NetworkTableInstance.getDefault()
-			.getTable(networkTableName)
-			.getEntry(entry_name)
-			.getNumberArray(new Number[0]);
-	}
+  public void set_entry_number_array(String entry_name, Number[] array) {
+    NetworkTableInstance.getDefault()
+        .getTable(networkTableName)
+        .getEntry(entry_name)
+        .getNumberArray(new Number[0]);
+  }
 }
-
-
-
-
-
-	
