@@ -92,6 +92,7 @@ public class RobotContainer {
                     * drivetrainAmplificationScale(),
             () ->
                 modifyAxis(controller.getRightX())
+                    * drivetrainAmplificationScaleRotation()
                     * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
                     / 2));
 
@@ -122,11 +123,18 @@ public class RobotContainer {
   }
 
   private GenericEntry maxSpeedAdjustment;
+  private GenericEntry maxRotationSpeedAdjustment;
 
   private void configureDashboard() {
     maxSpeedAdjustment =
         Shuffleboard.getTab("Drive")
             .add("Max Speed", 1)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 1)) // specify widget properties here
+            .getEntry();
+    maxRotationSpeedAdjustment =
+        Shuffleboard.getTab("Drive")
+            .add("Max Rotation Speed", 1)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 1)) // specify widget properties here
             .getEntry();
@@ -137,6 +145,13 @@ public class RobotContainer {
     // 1 = full speed forward, 0.5 is half speed.
     return maxSpeedAdjustment.getDouble(1);
   }
+
+  private double drivetrainAmplificationScaleRotation() {
+    // This fun ction multiplies the controller input to reduce the maximum speed,
+    // 1 = full speed, 0.5 = speed
+    return maxRotationSpeedAdjustment.getDouble(1);
+  }
+
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
