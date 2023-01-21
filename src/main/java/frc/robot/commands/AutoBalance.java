@@ -17,14 +17,11 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class AutoBalance extends CommandBase {
   private final DrivetrainSubsystem drivetrainSubsystem;
+  
+  private Timer timer;
 
-  private double currentAngle;
-  private double currentDPS;
-  private double speed;
   private double pConstant;
   private double dConstant;
-  private Timer timer;
-  private double error;
   private double tolerance;
   private double desiredEngageTime; // in seconds
   private double maxSpeed;
@@ -98,12 +95,12 @@ public class AutoBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    currentAngle = drivetrainSubsystem.getRoll();
-    currentDPS = drivetrainSubsystem.getRollRate();
+    double currentAngle = drivetrainSubsystem.getRoll();
+    double currentDPS = drivetrainSubsystem.getRollRate();
 
-    error = currentAngle - 0;
+    double error = currentAngle - 0;
 
-    speed = error * pConstant + currentDPS * dConstant;
+    double speed = error * pConstant + currentDPS * dConstant;
 
     if (speed > maxSpeed) {
       speed = maxSpeed;
