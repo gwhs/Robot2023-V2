@@ -548,8 +548,6 @@ public final class Constants {
     public static final double CAMERA_HEIGHT = 5;
     public static final double TARGET_HEIGHT = 5;
     public static final double MOUNTING_ANGLE = 5;
-  
-  
-  
+    public static final double MORE_DEGREES_TO_SHOOT = 5;
       }
 }

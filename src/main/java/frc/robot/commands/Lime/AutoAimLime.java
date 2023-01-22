@@ -44,6 +44,11 @@ public class AutoAimLime extends CommandBase {
       pos = false;
       drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(20)));
     }
+    if (limeLight.getTy() > LimeLightConstants.MOUNTING_ANGLE + LimeLightConstants.MORE_DEGREES_TO_SHOOT){
+      drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(20)));
+    } else{
+
+    }
   }
 
   // Called once the command ends or is interrupted.
