@@ -9,6 +9,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.LimeLightConstants;
 
 public class LimeLightSub extends SubsystemBase {
 
@@ -29,8 +30,8 @@ public class LimeLightSub extends SubsystemBase {
   NetworkTableEntry ta = networkTable.getEntry("ta"); // Target Area (0% of image to 100% of image)
   NetworkTableEntry ts = networkTable.getEntry("ts"); // Skew or rotation (-90 degrees to 0 degrees)
 
-  private double kCameraHeight = 5; // LimelightConstants.kCameraHeight;
-  private double kTargetHeight = 5; // LimelightConstants.kTargetHeight;
+  private double kCameraHeight = LimeLightConstants.CAMERA_HEIGHT; // LimelightConstants.kCameraHeight;
+  private double kTargetHeight = LimeLightConstants.TARGET_HEIGHT; // LimelightConstants.kTargetHeight;
 
   private double theta;
   private double distance;
@@ -47,7 +48,7 @@ public class LimeLightSub extends SubsystemBase {
   public void periodic() {
     distance =
         (kTargetHeight - kCameraHeight)
-            / (Math.tan(Math.toRadians(getTy() + 5)) // LimelightConstants.mountingAngle))
+            / (Math.tan(Math.toRadians(getTy() +  LimeLightConstants.MOUNTING_ANGLE)) 
                 * (Math.cos(Math.toRadians(getTx()))));
     SmartDashboard.putNumber("tv", tv.getDouble(0));
     SmartDashboard.putNumber("tx", tx.getDouble(0));

@@ -35,6 +35,8 @@ public class AutoAimLime extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
+    // BETTER TO PUT A PID LOOP ON THIS THING!
     if (limeLight.getTx() >= 0){
       pos = true;
       drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(-20)));
