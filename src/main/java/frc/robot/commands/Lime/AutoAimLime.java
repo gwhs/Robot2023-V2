@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
+import frc.robot.Constants;
 
 public class AutoAimLime extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
@@ -53,7 +54,7 @@ public class AutoAimLime extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if ((pos && limeLight.getTx() < 0) || (!pos && limeLight.getTx() > 0)) {
+    if (limeLight.getTx() >= -LimeLightConstants.MAX_LIMELIGHT_ERROR_DEGREES && limeLight.getTx() <= LimeLightConstants.MAX_LIMELIGHT_ERROR_DEGREES) {
       drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(0)));
       return true;
     }
