@@ -52,13 +52,13 @@ public class AutoBalance extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
 
-    pConstantDefault = 0.004;
-    dConstantDefault = -0.001;
+    pConstantDefault = 0.0045;
+    dConstantDefault = -0.0012;
     toleranceDefault = 2.5;
     maxSpeedDefault = 0.5;
-    desiredEngageTimeDefault = 1;
-    pConstantInitialDefault = 0.2;
-    epsilonRollRateDefault = 2;
+    desiredEngageTimeDefault = 0.5;
+    pConstantInitialDefault = 0.5;
+    epsilonRollRateDefault = 25;
 
     timer = new Timer();
     timer.stop();
