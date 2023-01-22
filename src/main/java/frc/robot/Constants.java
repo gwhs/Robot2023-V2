@@ -68,7 +68,6 @@ public final class Constants {
      */
     public static final double MAX_VELOCITY_METERS_PER_SECOND =
         638.0
-            * 5
             / 60.0
             * // was 6380.0 / 60.0
             ModuleConfiguration.MK4I_L2.getDriveReduction()
