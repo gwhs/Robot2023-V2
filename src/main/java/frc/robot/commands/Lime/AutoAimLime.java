@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
-import frc.robot.Constants;
 
 public class AutoAimLime extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
@@ -29,25 +28,25 @@ public class AutoAimLime extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
     // BETTER TO PUT A PID LOOP ON THIS THING!
-    if (limeLight.getTx() >= 0){
+    if (limeLight.getTx() >= 0) {
       pos = true;
       drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(-20)));
-    } else{
+    } else {
       pos = false;
       drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(20)));
     }
-    //this one will cancel out the other one, work on it, right now easier to do separate command
-    if (limeLight.getTy() > LimeLightConstants.MOUNTING_ANGLE + LimeLightConstants.MORE_DEGREES_TO_SHOOT){
+    // this one will cancel out the other one, work on it, right now easier to do separate command
+    if (limeLight.getTy()
+        > LimeLightConstants.MOUNTING_ANGLE + LimeLightConstants.MORE_DEGREES_TO_SHOOT) {
       drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(20)));
-    } else{
+    } else {
 
     }
   }
@@ -55,18 +54,19 @@ public class AutoAimLime extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putNumber("Final X-error" ,limeLight.getTx());
+    SmartDashboard.putNumber("Final X-error", limeLight.getTx());
     SmartDashboard.putNumber("Final Y-error", limeLight.getTy());
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (limeLight.getTx() >= -LimeLightConstants.MAX_LIMELIGHT_ERROR_DEGREES && limeLight.getTx() <= LimeLightConstants.MAX_LIMELIGHT_ERROR_DEGREES) {
+    if (limeLight.getTx() >= -LimeLightConstants.MAX_LIMELIGHT_ERROR_DEGREES
+        && limeLight.getTx() <= LimeLightConstants.MAX_LIMELIGHT_ERROR_DEGREES) {
       drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(0)));
       return true;
     }
-    
+
     return false;
   }
 }
