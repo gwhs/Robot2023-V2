@@ -9,6 +9,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.LimeLightConstants;
 
 public class LimeLightSub extends SubsystemBase {
@@ -78,5 +79,24 @@ public class LimeLightSub extends SubsystemBase {
 
   public double getYDistance() {
     return Math.tan(Math.toRadians(getTx())) * getXDistance();
+  }
+
+  public double[] chassisValuesLower() {
+    /*
+    [1,2,3]
+    1 is x velocity
+    2 is y velocity
+    3 is degrees rotation
+    */
+    double[] x = new double[3];
+    double angle = Math.atan2(getXDistance(), getYDistance());
+    x[1] = Math.cos(angle) * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND;
+    x[2] = Math.sin(angle) * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND;
+    if (angle > 0) {
+      x[3] = Math.toRadians(-20);
+    } else {
+      x[3] = Math.toRadians(20);
+    }
+    return x;
   }
 }

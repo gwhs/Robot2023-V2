@@ -43,8 +43,7 @@ public class AutoAimLime extends CommandBase {
       drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(20)));
     }
     // this one will cancel out the other one, work on it, right now easier to do separate command
-    if (limeLight.getTy()
-        > LimeLightConstants.MOUNTING_ANGLE + LimeLightConstants.MORE_DEGREES_TO_SHOOT) {
+    if (limeLight.getTy() > LimeLightConstants.MOUNTING_ANGLE) {
       drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(20)));
     } else {
 
