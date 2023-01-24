@@ -35,19 +35,23 @@ public class AutoAimLime extends CommandBase {
   public void execute() {
 
     // BETTER TO PUT A PID LOOP ON THIS THING!
-    if (limeLight.getTx() >= 0) {
-      pos = true;
-      drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(-20)));
-    } else {
-      pos = false;
-      drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(20)));
-    }
-    // this one will cancel out the other one, work on it, right now easier to do separate command
-    if (limeLight.getTy() > LimeLightConstants.MOUNTING_ANGLE) {
-      drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(20)));
-    } else {
+    
 
-    }
+
+
+    // if (limeLight.getTx() >= 0) {
+    //   pos = true;
+    //   drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(-20)));
+    // } else {
+    //   pos = false;
+    //   drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(20)));
+    // }
+    // // this one will cancel out the other one, work on it, right now easier to do separate command
+    // if (limeLight.getTy() > LimeLightConstants.MOUNTING_ANGLE) {
+    //   drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(20)));
+    // } else {
+
+    // }
   }
 
   // Called once the command ends or is interrupted.

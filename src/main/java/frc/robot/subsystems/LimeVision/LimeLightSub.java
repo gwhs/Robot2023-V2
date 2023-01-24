@@ -87,6 +87,9 @@ public class LimeLightSub extends SubsystemBase {
     1 is x velocity
     2 is y velocity
     3 is degrees rotation
+    get the angle using atan2, it returns radians
+    use sin and cos to get values to reach max speed
+    not really sure about the angle yet.
     */
     double[] x = new double[3];
     double angle = Math.atan2(getXDistance(), getYDistance());
