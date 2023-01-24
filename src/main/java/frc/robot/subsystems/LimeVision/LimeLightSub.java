@@ -57,7 +57,12 @@ public class LimeLightSub extends SubsystemBase {
     SmartDashboard.putNumber("theta", getTheta());
     SmartDashboard.putNumber("X-Distance", getXDistance());
     SmartDashboard.putNumber("Y-Distance", getYDistance());
+    SmartDashboard.putNumber("AngleToTarget", getAngle());
     // This method will be called once per scheduler run
+  }
+
+  public double getTv() {
+    return tv.getDouble(0);
   }
 
   public double getTx() {
@@ -81,6 +86,10 @@ public class LimeLightSub extends SubsystemBase {
     return Math.tan(Math.toRadians(getTx())) * getXDistance();
   }
 
+  public double getAngle() {
+    return Math.atan2(getXDistance(), getYDistance());
+  }
+
   public double[] chassisValuesLower() {
     /*
     [1,2,3]
@@ -92,14 +101,12 @@ public class LimeLightSub extends SubsystemBase {
     not really sure about the angle yet.
     */
     double[] x = new double[3];
-    double angle = Math.atan2(getXDistance(), getYDistance());
-    x[1] = Math.cos(angle) * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND;
-    x[2] = Math.sin(angle) * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND;
-    if (angle > 0) {
-      x[3] = Math.toRadians(-20);
-    } else {
-      x[3] = Math.toRadians(20);
-    }
+    x[0] = Math.cos(getAngle()) * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND;
+    x[1] = Math.sin(getAngle()) * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND;
+    x[2] =
+        getAngle()
+            / ((Math.sqrt(Math.pow(x[0], 2) + Math.pow(x[1], 2))
+                / DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND));
     return x;
   }
 }

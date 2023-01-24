@@ -14,8 +14,9 @@ import frc.robot.subsystems.LimeVision.LimeLightSub;
 public class AutoAimLime extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private LimeLightSub limeLight;
-  private boolean pos;
-  private double targetX = 1;
+  private double[] values;
+  private boolean Xdone = false;
+  private boolean angleDone = false;
   private double targetY = LimeLightConstants.MAX_LIMELIGHT_ERROR_DEGREES;
 
   /** Creates a new AutoAimLime. */
@@ -28,16 +29,24 @@ public class AutoAimLime extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    values = limeLight.chassisValuesLower();
+    if (limeLight.getTv() > .8) {
+      drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[3]));
+    }
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (limeLight.getXDistance() < LimeLightConstants.LOWER_DISTANCE_SHOOT) {
+      Xdone = true;
+    }
+    if (Math.abs(limeLight.getAngle()) < 2) {
+      angleDone = false;
+    }
 
     // BETTER TO PUT A PID LOOP ON THIS THING!
-    
-
-
 
     // if (limeLight.getTx() >= 0) {
     //   pos = true;
@@ -46,7 +55,8 @@ public class AutoAimLime extends CommandBase {
     //   pos = false;
     //   drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(20)));
     // }
-    // // this one will cancel out the other one, work on it, right now easier to do separate command
+    // // this one will cancel out the other one, work on it, right now easier to do separate
+    // command
     // if (limeLight.getTy() > LimeLightConstants.MOUNTING_ANGLE) {
     //   drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(20)));
     // } else {
@@ -64,12 +74,10 @@ public class AutoAimLime extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (limeLight.getTx() >= -LimeLightConstants.MAX_LIMELIGHT_ERROR_DEGREES
-        && limeLight.getTx() <= LimeLightConstants.MAX_LIMELIGHT_ERROR_DEGREES) {
-      drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, Math.toRadians(0)));
+
+    if (Xdone && angleDone) {
       return true;
     }
-
     return false;
   }
 }
