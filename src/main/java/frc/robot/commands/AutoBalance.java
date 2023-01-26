@@ -13,29 +13,30 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.GyroMoment.WrappedGyro;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class AutoBalance extends CommandBase {
   private final DrivetrainSubsystem drivetrainSubsystem;
 
-  private Timer engageTimer; //timer that counts how long the robot is 'engaged'
+  private Timer engageTimer; // timer that counts how long the robot is 'engaged'
 
-  private double pConstant; //proportional constant in pid thing
-  private double dConstant; //derivative constant in pid thing
-  private double tolerance; //degrees within 0 to count the robot as being 'engaged'
-  private double desiredEngageTime; //how many seconds to be engaged before stopping command
-  private double maxSpeed; //the fastest the robot can go (idk the units)
-  private double initialSpeed; //speed of the robot in its 1st state
+  private double pConstant; // proportional constant in pid thing
+  private double dConstant; // derivative constant in pid thing
+  private double tolerance; // degrees within 0 to count the robot as being 'engaged'
+  private double desiredEngageTime; // how many seconds to be engaged before stopping command
+  private double maxSpeed; // the fastest the robot can go (idk the units)
+  private double initialSpeed; // speed of the robot in its 1st state
 
-  private double pConstantDefault; 
-  private double dConstantDefault; 
-  private double maxSpeedDefault; 
+  private double pConstantDefault;
+  private double dConstantDefault;
+  private double maxSpeedDefault;
   private double desiredEngageTimeDefault;
   private double toleranceDefault;
   private double initialSpeedDefault;
 
-  private int state; //state of the robot; 0 or 1
-  private double epsilonRollRate;  //degrees per second threshold to switch from state 0 to 1
+  private int state; // state of the robot; 0 or 1
+  private double epsilonRollRate; // degrees per second threshold to switch from state 0 to 1
   private double epsilonRollRateDefault;
   private final GenericEntry epsilonRollRateEntry;
 
@@ -52,7 +53,7 @@ public class AutoBalance extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
 
-    pConstantDefault = 0.0045; //these are the default values set on the robot and shuffleboard
+    pConstantDefault = 0.0045; // these are the default values set on the robot and shuffleboard
     dConstantDefault = -0.0012;
     toleranceDefault = 2.5;
     maxSpeedDefault = 0.5;
@@ -69,12 +70,13 @@ public class AutoBalance extends CommandBase {
     ShuffleboardLayout input =
         tab.getLayout("Constant Inputs", BuiltInLayouts.kList).withSize(2, 4).withPosition(2, 0);
 
-    orientation.addNumber("Yaw", () -> drivetrainSubsystem.getYaw());
-    orientation.addNumber("Pitch", () -> drivetrainSubsystem.getPitch());
-    orientation.addNumber("Roll", () -> drivetrainSubsystem.getRoll());
-    orientation.addNumber("Yaw Rate", () -> drivetrainSubsystem.getYawRate());
-    orientation.addNumber("Pitch Rate", () -> drivetrainSubsystem.getPitchRate());
-    orientation.addNumber("Roll Rate", () -> drivetrainSubsystem.getRollRate());
+    WrappedGyro gryo = drivetrainSubsystem.getGyro();
+    orientation.addNumber("Yaw", () -> gryo.getYaw());
+    orientation.addNumber("Pitch", () -> gryo.getPitch());
+    orientation.addNumber("Roll", () -> gryo.getRoll());
+    orientation.addNumber("Yaw Rate", () -> gryo.getYawRate());
+    orientation.addNumber("Pitch Rate", () -> gryo.getPitchRate());
+    orientation.addNumber("Roll Rate", () -> gryo.getRollRate());
 
     pConstantEntry =
         input.add("p Constant", pConstantDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
@@ -107,15 +109,16 @@ public class AutoBalance extends CommandBase {
   @Override
   public void initialize() {
     state = 0;
-    //each time the command is activated, it takes the values from the shuffleboard---easier to test values
-    desiredEngageTime = desiredEngageTimeEntry.getDouble(desiredEngageTimeDefault); 
+    // each time the command is activated, it takes the values from the shuffleboard---easier to
+    // test values
+    desiredEngageTime = desiredEngageTimeEntry.getDouble(desiredEngageTimeDefault);
     maxSpeed = maxSpeedEntry.getDouble(maxSpeedDefault);
     pConstant = pConstantEntry.getDouble(pConstantDefault);
     dConstant = dConstantEntry.getDouble(dConstantDefault);
-    tolerance = toleranceEntry.getDouble(toleranceDefault); 
+    tolerance = toleranceEntry.getDouble(toleranceDefault);
     initialSpeed = initialSpeedEntry.getDouble(initialSpeedDefault);
     epsilonRollRate = epsilonRollRateEntry.getDouble(epsilonRollRateDefault);
-    //prints values used in autobalance in the console
+    // prints values used in autobalance in the console
     System.out.printf(
         "max = %f, p Constant = %f, d Constant = %f, tolerance = %f, Desired Engage Time = %f, Initial p Constant = %f, Epsilon Roll Rate Threshold = %f",
         maxSpeed,
@@ -133,14 +136,15 @@ public class AutoBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double currentAngle = drivetrainSubsystem.getRoll();
-    double currentDPS = drivetrainSubsystem.getRollRate();
+    WrappedGyro gyro = drivetrainSubsystem.getGyro();
+    double currentAngle = gyro.getRoll();
+    double currentDPS = gyro.getRollRate();
 
     double error = currentAngle - 0;
 
     double speed = 0;
 
-    //sometimes currentDPS spikes because it reads somehting weirdly do this later
+    // sometimes currentDPS spikes because it reads somehting weirdly do this later
     if (Math.abs(currentDPS) >= Math.abs(epsilonRollRate)) {
       state = 1;
     }
