@@ -77,6 +77,7 @@ public class AutoAimLime extends CommandBase {
   public void end(boolean interrupted) {
     SmartDashboard.putNumber("Final Horiz-error", limeLight.getTx());
     SmartDashboard.putNumber("Final Vert-error", limeLight.getTy());
+    drivetrainSubsystem.drive(new ChassisSpeeds(0,0,0));
   }
 
   // Returns true when the command should end.
