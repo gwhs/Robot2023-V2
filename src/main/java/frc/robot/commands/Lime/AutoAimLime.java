@@ -15,7 +15,7 @@ public class AutoAimLime extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private LimeLightSub limeLight;
   private double[] values;
-  private boolean Xdone = false;
+  private boolean horizDone = false;
   private boolean angleDone = false;
   private double targetY = LimeLightConstants.MAX_LIMELIGHT_ERROR_DEGREES;
 
@@ -30,7 +30,7 @@ public class AutoAimLime extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Xdone = false;
+    horizDone = false;
     angleDone = false;
   }
 
@@ -41,16 +41,17 @@ public class AutoAimLime extends CommandBase {
     if (limeLight.getTv() > .8) {
       drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
     } else {
-      // Xdone = true;
-      // angleDone = true;
       System.out.println("NO TARGET FOUND BY LIMELIGHT");
     }
     if (Math.abs(limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT) < 2) {
-      Xdone = true;
-      values[0] = 0;
+      horizDone = true;
+    } else {
+      horizDone = false;
     }
     if (Math.abs(limeLight.getTx()) < 2) {
       angleDone = true;
+    } else {
+      angleDone = false;
     }
 
     // BETTER TO PUT A PID LOOP ON THIS THING!
@@ -74,14 +75,14 @@ public class AutoAimLime extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putNumber("Final X-error", limeLight.getTx());
-    SmartDashboard.putNumber("Final Y-error", limeLight.getTy());
+    SmartDashboard.putNumber("Final Horiz-error", limeLight.getTx());
+    SmartDashboard.putNumber("Final Vert-error", limeLight.getTy());
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     // && angleDone
-    return angleDone && Xdone;
+    return angleDone && horizDone;
   }
 }
