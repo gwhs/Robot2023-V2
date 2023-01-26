@@ -108,11 +108,11 @@ public class AutoBalance extends CommandBase {
   public void initialize() {
     state = 0;
     //each time the command is activated, it takes the values from the shuffleboard---easier to test values
-    desiredEngageTime = desiredEngageTimeEntry.getDouble(desiredEngageTimeDefault); // in seconds
+    desiredEngageTime = desiredEngageTimeEntry.getDouble(desiredEngageTimeDefault); 
     maxSpeed = maxSpeedEntry.getDouble(maxSpeedDefault);
     pConstant = pConstantEntry.getDouble(pConstantDefault);
     dConstant = dConstantEntry.getDouble(dConstantDefault);
-    tolerance = toleranceEntry.getDouble(toleranceDefault); // in degrees
+    tolerance = toleranceEntry.getDouble(toleranceDefault); 
     initialSpeed = initialSpeedEntry.getDouble(initialSpeedDefault);
     epsilonRollRate = epsilonRollRateEntry.getDouble(epsilonRollRateDefault);
     //prints values used in autobalance in the console
