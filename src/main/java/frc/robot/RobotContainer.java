@@ -43,7 +43,7 @@ public class RobotContainer {
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
 
-  private final PhotonCamera photonCamera = new PhotonCamera("photonvision");
+  private final PhotonCamera photonCamera = null; // new PhotonCamera("photonvision");
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
   // change to hana or spring depending on robot
@@ -137,7 +137,7 @@ public class RobotContainer {
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    controller.b().onTrue(autoAimLime);
+    controller.b().onTrue(autoAimLime.withTimeout(3));
 
     controller.start().toggleOnTrue(fieldHeadingDriveCommand);
 

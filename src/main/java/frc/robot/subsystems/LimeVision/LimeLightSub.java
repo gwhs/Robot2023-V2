@@ -9,7 +9,6 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.LimeLightConstants;
 
 public class LimeLightSub extends SubsystemBase {
@@ -87,7 +86,7 @@ public class LimeLightSub extends SubsystemBase {
   }
 
   public double getAngle() {
-    return Math.atan2(getXDistance(), getYDistance());
+    return Math.toRadians(-getTx());
   }
 
   public double[] chassisValuesLower() {
@@ -100,13 +99,14 @@ public class LimeLightSub extends SubsystemBase {
     use sin and cos to get values to reach max speed
     not really sure about the angle yet.
     */
+    double distanceError = getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
     double[] x = new double[3];
-    x[0] = Math.cos(getAngle()) * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND;
-    x[1] = Math.sin(getAngle()) * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND;
-    x[2] =
-        getAngle()
-            / ((Math.sqrt(Math.pow(x[0], 2) + Math.pow(x[1], 2))
-                / DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND));
+    x[0] = distanceError;
+    x[1] = 0;
+    x[2] = -getTx();
+    // getAngle()
+    //     / (((Math.sqrt(x[0] * x[0]) + x[1] * x[1]))
+    //         / DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);
     return x;
   }
 }

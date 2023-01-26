@@ -30,20 +30,27 @@ public class AutoAimLime extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    values = limeLight.chassisValuesLower();
-    if (limeLight.getTv() > .8) {
-      drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[3]));
-    }
+    Xdone = false;
+    angleDone = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (limeLight.getXDistance() < LimeLightConstants.LOWER_DISTANCE_SHOOT) {
-      Xdone = true;
+    values = limeLight.chassisValuesLower();
+    if (limeLight.getTv() > .8) {
+      drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
+    } else {
+      // Xdone = true;
+      // angleDone = true;
+      System.out.println("NO TARGET FOUND BY LIMELIGHT");
     }
-    if (Math.abs(limeLight.getAngle()) < 2) {
-      angleDone = false;
+    if (Math.abs(limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT) < 2) {
+      Xdone = true;
+      values[0] = 0;
+    }
+    if (Math.abs(limeLight.getTx()) < 2) {
+      angleDone = true;
     }
 
     // BETTER TO PUT A PID LOOP ON THIS THING!
@@ -74,10 +81,7 @@ public class AutoAimLime extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
-    if (Xdone && angleDone) {
-      return true;
-    }
-    return false;
+    // && angleDone
+    return angleDone && Xdone;
   }
 }
