@@ -18,6 +18,7 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.commands.ChaseTagCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
+import frc.robot.commands.Lime.AutoAimLime;
 import frc.robot.commands.WPIAStar;
 import frc.robot.commands.autonomous.TestAutonomous;
 import frc.robot.pathfind.Edge;
@@ -25,6 +26,7 @@ import frc.robot.pathfind.Node;
 import frc.robot.pathfind.Obstacle;
 import frc.robot.pathfind.VisGraph;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.List;
 import org.photonvision.PhotonCamera;
@@ -41,10 +43,12 @@ public class RobotContainer {
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
 
-  private final PhotonCamera photonCamera = new PhotonCamera("photonvision");
+  private final PhotonCamera photonCamera = null; // new PhotonCamera("photonvision");
+  private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
   // change to hana or spring depending on robot
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("spring");
+  private final AutoAimLime autoAimLime = new AutoAimLime(drivetrainSubsystem, limeLightSub);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
 
@@ -133,7 +137,7 @@ public class RobotContainer {
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    // controller.b().whileTrue(chaseTagCommand);
+    controller.b().onTrue(autoAimLime.withTimeout(3));
 
     controller.start().toggleOnTrue(fieldHeadingDriveCommand);
 
