@@ -224,6 +224,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // return Rotation2d.fromDegrees(360.0 - navx.getYaw());
   }
 
+  public WrappedGyro getGyro()
+  {
+    return gyro;
+  }
+
   public void setGyroscopeRotation(double angleDeg) {
     gyro.setYaw(angleDeg);
   }

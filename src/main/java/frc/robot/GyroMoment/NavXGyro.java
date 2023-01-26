@@ -64,7 +64,7 @@ public class NavXGyro extends AbstractGyro {
 
   @Override
   public void setYaw(double yaw) {
-    // ignored
+    ahrs.setAngleAdjustment(yaw);
   }
 
   @Override

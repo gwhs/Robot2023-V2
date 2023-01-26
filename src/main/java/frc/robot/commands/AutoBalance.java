@@ -18,24 +18,24 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class AutoBalance extends CommandBase {
   private final DrivetrainSubsystem drivetrainSubsystem;
 
-  private Timer timer;
+  private Timer engageTimer; //timer that counts how long the robot is 'engaged'
 
-  private double pConstant;
-  private double dConstant;
-  private double tolerance;
-  private double desiredEngageTime; // in seconds
-  private double maxSpeed;
-  private double pConstantInitial;
+  private double pConstant; //proportional constant in pid thing
+  private double dConstant; //derivative constant in pid thing
+  private double tolerance; //degrees within 0 to count the robot as being 'engaged'
+  private double desiredEngageTime; //how many seconds to be engaged before stopping command
+  private double maxSpeed; //the fastest the robot can go (idk the units)
+  private double initialSpeed; //speed of the robot in its 1st state
 
-  private double pConstantDefault;
-  private double dConstantDefault;
-  private double maxSpeedDefault;
+  private double pConstantDefault; 
+  private double dConstantDefault; 
+  private double maxSpeedDefault; 
   private double desiredEngageTimeDefault;
   private double toleranceDefault;
-  private double pConstantInitialDefault;
+  private double initialSpeedDefault;
 
-  private int state;
-  private double epsilonRollRate;
+  private int state; //state of the robot; 0 or 1
+  private double epsilonRollRate;  //degrees per second threshold to switch from state 0 to 1
   private double epsilonRollRateDefault;
   private final GenericEntry epsilonRollRateEntry;
 
@@ -45,23 +45,23 @@ public class AutoBalance extends CommandBase {
   private final GenericEntry toleranceEntry;
   private final GenericEntry maxSpeedEntry;
   private final GenericEntry desiredEngageTimeEntry;
-  private final GenericEntry pConstantInitialEntry;
+  private final GenericEntry initialSpeedEntry;
 
   /** Creates a new AutoBalance. */
   public AutoBalance(DrivetrainSubsystem drivetrainSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
 
-    pConstantDefault = 0.0045;
+    pConstantDefault = 0.0045; //these are the default values set on the robot and shuffleboard
     dConstantDefault = -0.0012;
     toleranceDefault = 2.5;
     maxSpeedDefault = 0.5;
     desiredEngageTimeDefault = 0.5;
-    pConstantInitialDefault = 0.5;
+    initialSpeedDefault = 0.5;
     epsilonRollRateDefault = 25;
 
-    timer = new Timer();
-    timer.stop();
+    engageTimer = new Timer();
+    engageTimer.stop();
     tab = Shuffleboard.getTab("Auto Balance");
 
     ShuffleboardLayout orientation =
@@ -89,9 +89,9 @@ public class AutoBalance extends CommandBase {
             .add("Desired Engage Time", desiredEngageTimeDefault)
             .withWidget(BuiltInWidgets.kTextView)
             .getEntry();
-    pConstantInitialEntry =
+    initialSpeedEntry =
         input
-            .add("Initial p Constant", pConstantInitialDefault)
+            .add("Initial State Speed", initialSpeedDefault)
             .withWidget(BuiltInWidgets.kTextView)
             .getEntry();
     epsilonRollRateEntry =
@@ -107,13 +107,15 @@ public class AutoBalance extends CommandBase {
   @Override
   public void initialize() {
     state = 0;
+    //each time the command is activated, it takes the values from the shuffleboard---easier to test values
     desiredEngageTime = desiredEngageTimeEntry.getDouble(desiredEngageTimeDefault); // in seconds
     maxSpeed = maxSpeedEntry.getDouble(maxSpeedDefault);
     pConstant = pConstantEntry.getDouble(pConstantDefault);
     dConstant = dConstantEntry.getDouble(dConstantDefault);
     tolerance = toleranceEntry.getDouble(toleranceDefault); // in degrees
-    pConstantInitial = pConstantInitialEntry.getDouble(pConstantInitialDefault);
+    initialSpeed = initialSpeedEntry.getDouble(initialSpeedDefault);
     epsilonRollRate = epsilonRollRateEntry.getDouble(epsilonRollRateDefault);
+    //prints values used in autobalance in the console
     System.out.printf(
         "max = %f, p Constant = %f, d Constant = %f, tolerance = %f, Desired Engage Time = %f, Initial p Constant = %f, Epsilon Roll Rate Threshold = %f",
         maxSpeed,
@@ -121,11 +123,11 @@ public class AutoBalance extends CommandBase {
         dConstant,
         tolerance,
         desiredEngageTime,
-        pConstantInitial,
+        initialSpeed,
         epsilonRollRate);
 
-    timer.reset();
-    timer.stop();
+    engageTimer.reset();
+    engageTimer.stop();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -144,7 +146,7 @@ public class AutoBalance extends CommandBase {
     }
 
     if (state == 0) {
-      speed = Math.copySign(pConstantInitial, error);
+      speed = Math.copySign(initialSpeed, error);
     }
 
     if (state == 1) {
@@ -158,10 +160,10 @@ public class AutoBalance extends CommandBase {
     }
 
     if (Math.abs(error) <= tolerance) {
-      timer.start();
+      engageTimer.start();
     } else {
-      timer.stop();
-      timer.reset();
+      engageTimer.stop();
+      engageTimer.reset();
     }
 
     drivetrainSubsystem.drive(new ChassisSpeeds(speed, 0.0, 0.0));
@@ -176,6 +178,6 @@ public class AutoBalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.hasElapsed(desiredEngageTime);
+    return engageTimer.hasElapsed(desiredEngageTime);
   }
 }

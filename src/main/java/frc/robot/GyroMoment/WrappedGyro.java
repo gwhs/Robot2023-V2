@@ -23,8 +23,6 @@ public class WrappedGyro {
         gyro = new PigeonGyro();
       } else if (type == GyroType.NAVX) {
         gyro = new NavXGyro();
-      } else {
-        gyro = new FakeGyro();
       }
     }
   }
