@@ -34,6 +34,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.DriveTrainConstants;
+import frc.robot.GyroMoment.WrappedGyro;
+import frc.robot.GyroMoment.WrappedGyro.GyroType;
 import frc.robot.swerve.ModuleConfiguration;
 import frc.robot.swerve.SwerveModule;
 import frc.robot.swerve.SwerveSpeedController;
@@ -45,15 +47,16 @@ import java.util.stream.IntStream;
 public class DrivetrainSubsystem extends SubsystemBase {
 
   // private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(PIGEON_ID);
-  private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
+  // private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
+  private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON);
   private final SwerveModule[] swerveModules;
 
   private ChassisSpeeds desiredChassisSpeeds;
 
   public DrivetrainSubsystem(String robotName) {
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
-    // pigeon.configMountPoseRoll(0);
-    // pigeon.configMountPoseYaw(0);
+    gyro.configMountPoseRoll(0);
+    gyro.configMountPoseYaw(0);
 
     ShuffleboardLayout frontLeftLayout = null;
     ShuffleboardLayout frontRightLayout = null;
@@ -265,15 +268,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public Rotation2d getGyroscopeRotation() {
-    return navx.getRotation2d();
+    return gyro.getRotation2d();
     // We have to invert the angle of the NavX so that rotating the robot counter-clockwise makes
     // the angle increase.
     // return Rotation2d.fromDegrees(360.0 - navx.getYaw());
   }
 
-  public void setGyroscopeRotation(double angleDeg) {
+  public WrappedGyro getGyro() {
+    return gyro;
+  }
 
-    navx.setAngleAdjustment(angleDeg);
+  public void setGyroscopeRotation(double angleDeg) {
+    gyro.setYaw(angleDeg);
   }
 
   public void resetGyro() {
