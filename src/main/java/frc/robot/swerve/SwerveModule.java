@@ -1,7 +1,6 @@
 package frc.robot.swerve;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -10,13 +9,15 @@ public class SwerveModule {
   private final SwerveSpeedController driveController;
   private final SwerveSteerController steerController;
 
-  public SwerveModule(SwerveSpeedController driveController, SwerveSteerController steerController) {
+  public SwerveModule(
+      SwerveSpeedController driveController, SwerveSteerController steerController) {
     this.driveController = driveController;
     this.steerController = steerController;
   }
 
   /**
    * Returns the drive velocity in meters per second
+   *
    * @return drive velocity in meters per second
    */
   public double getDriveVelocity() {
@@ -43,6 +44,7 @@ public class SwerveModule {
 
   /**
    * Sets the neutral mode for the drive and steer motors
+   *
    * @param neutralMode neutral mode
    */
   public void setNeutralMode(NeutralMode neutralMode) {
@@ -50,12 +52,8 @@ public class SwerveModule {
     driveController.setNeutralMode(neutralMode);
   }
 
-  
-  /**
-   * Reseeds to Talon FX motor offset from the CANCoder. Workaround for "dead wheel"
-   */
+  /** Reseeds to Talon FX motor offset from the CANCoder. Workaround for "dead wheel" */
   public void reseedSteerMotorOffset() {
     steerController.configMotorOffset(false);
   }
-
 }
