@@ -138,6 +138,7 @@ public class AutoBalance extends CommandBase {
 
     double speed = 0;
 
+    //sometimes currentDPS spikes because it reads somehting weirdly do this later
     if (Math.abs(currentDPS) >= Math.abs(epsilonRollRate)) {
       state = 1;
     }
