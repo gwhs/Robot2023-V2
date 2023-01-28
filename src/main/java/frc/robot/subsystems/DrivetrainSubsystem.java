@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import static frc.robot.Constants.AutoConstants.THETA_CONSTRAINTS;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
@@ -19,6 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -85,9 +87,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if (robotName.equals("spring")) {
       swerveModules =
           swerveModuleSpring(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
-    } else {
+    } else if (robotName.equals("hana")) {
       swerveModules =
           swerveModuleHana(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
+    } else {
+      swerveModules =
+          swerveModuleCalliope(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
     }
 
     // Put the motors in brake mode when enabled, coast mode when disabled
@@ -189,6 +194,51 @@ public class DrivetrainSubsystem extends SubsystemBase {
               driveTrain.BACK_RIGHT_MODULE_STEER_ENCODER,
               driveTrain.BACK_RIGHT_MODULE_STEER_OFFSET)
         };
+
+    return swerveModules;
+  }
+
+  private SwerveModule[] swerveModuleCalliope(
+      ShuffleboardLayout frontLeftLayout,
+      ShuffleboardLayout frontRightLayout,
+      ShuffleboardLayout backLeftLayout,
+      ShuffleboardLayout backRightLayout) {
+    /*
+     * Specific to the calliope drivetrain(just the offset)
+     */
+    DriveTrainConstants driveTrain = DriveTrainConstants.calliope;
+    SwerveModule[] swerveModules =
+        new SwerveModule[] {
+          createSwerveModule(
+              frontLeftLayout,
+              ModuleConfiguration.MK4I_L2,
+              driveTrain.FRONT_LEFT_MODULE_DRIVE_MOTOR,
+              driveTrain.FRONT_LEFT_MODULE_STEER_MOTOR,
+              driveTrain.FRONT_LEFT_MODULE_STEER_ENCODER,
+              driveTrain.FRONT_LEFT_MODULE_STEER_OFFSET),
+          createSwerveModule(
+              frontRightLayout,
+              ModuleConfiguration.MK4I_L2,
+              driveTrain.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
+              driveTrain.FRONT_RIGHT_MODULE_STEER_MOTOR,
+              driveTrain.FRONT_RIGHT_MODULE_STEER_ENCODER,
+              driveTrain.FRONT_RIGHT_MODULE_STEER_OFFSET),
+          createSwerveModule(
+              backLeftLayout,
+              ModuleConfiguration.MK4I_L2,
+              driveTrain.BACK_LEFT_MODULE_DRIVE_MOTOR,
+              driveTrain.BACK_LEFT_MODULE_STEER_MOTOR,
+              driveTrain.BACK_LEFT_MODULE_STEER_ENCODER,
+              driveTrain.BACK_LEFT_MODULE_STEER_OFFSET),
+          createSwerveModule(
+              backRightLayout,
+              ModuleConfiguration.MK4I_L2,
+              driveTrain.BACK_RIGHT_MODULE_DRIVE_MOTOR,
+              driveTrain.BACK_RIGHT_MODULE_STEER_MOTOR,
+              driveTrain.BACK_RIGHT_MODULE_STEER_ENCODER,
+              driveTrain.BACK_RIGHT_MODULE_STEER_OFFSET)
+        };
+
     return swerveModules;
   }
 
