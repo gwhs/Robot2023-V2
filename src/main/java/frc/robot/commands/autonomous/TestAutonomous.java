@@ -15,11 +15,10 @@ import java.util.List;
 
 public class TestAutonomous extends SequentialCommandGroup {
   /** Creates a new TestAutonomous. */
-  public TestAutonomous(
-      DrivetrainSubsystem drivetrain, PoseEstimatorSubsystem poseEstimatorSystem) {
+  public TestAutonomous(DrivetrainSubsystem drivetrain, PoseEstimatorSubsystem poseEstimatorSystem) {
+    
+    List<PathPlannerTrajectory> trajectories = PathPlanner.loadPathGroup("8 go straight", new PathConstraints(2, 3));
 
-    List<PathPlannerTrajectory> trajectories =
-        PathPlanner.loadPathGroup("forward 1 m", new PathConstraints(2, 3));
 
     PPSwerveControllerCommand drive =
         DrivetrainSubsystem.followTrajectory(drivetrain, poseEstimatorSystem, trajectories.get(0));
