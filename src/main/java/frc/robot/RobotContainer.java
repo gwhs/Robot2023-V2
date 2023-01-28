@@ -8,20 +8,26 @@ import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.commands.AutoBalance;
 import frc.robot.commands.ChaseTagCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
+import frc.robot.commands.Lime.AutoAimLime;
+import frc.robot.commands.WPIAStar;
 import frc.robot.commands.autonomous.TestAutonomous;
 import frc.robot.pathfind.Edge;
 import frc.robot.pathfind.Node;
 import frc.robot.pathfind.Obstacle;
 import frc.robot.pathfind.VisGraph;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.List;
 import org.photonvision.PhotonCamera;
@@ -38,12 +44,16 @@ public class RobotContainer {
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
 
-  private final PhotonCamera photonCamera = new PhotonCamera("photonvision");
+  private final PhotonCamera photonCamera = null; // new PhotonCamera("photonvision");
+  private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
   // change to hana or spring depending on robot
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("Robot_V1");
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("spring");
+  private final AutoAimLime autoAimLime = new AutoAimLime(drivetrainSubsystem, limeLightSub);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
+
+  private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
 
   private final ChaseTagCommand chaseTagCommand =
       new ChaseTagCommand(photonCamera, drivetrainSubsystem, poseEstimator::getCurrentPose);
@@ -59,10 +69,10 @@ public class RobotContainer {
           () -> poseEstimator.getCurrentPose().getRotation(),
           () ->
               -modifyAxis(controller.getLeftY())
-                  * Constants.DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
+                  * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
           () ->
               -modifyAxis(controller.getLeftX())
-                  * Constants.DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
+                  * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
           () -> -controller.getRightY(),
           () -> -controller.getRightX());
 
@@ -75,13 +85,14 @@ public class RobotContainer {
             () -> poseEstimator.getCurrentPose().getRotation(),
             () ->
                 -modifyAxis(controller.getLeftY())
-                    * Constants.DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
+                    * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
             () ->
                 -modifyAxis(controller.getLeftX())
-                    * Constants.DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
+                    * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
             () ->
                 modifyAxis(controller.getRightX())
-                    * Constants.DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
+                    * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
+                    / 2));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -129,18 +140,26 @@ public class RobotContainer {
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    // controller.b().whileTrue(chaseTagCommand);
+    controller.b().onTrue(autoAimLime.withTimeout(3));
 
     controller.start().toggleOnTrue(fieldHeadingDriveCommand);
+
+    controller.x().toggleOnTrue(autoBalance);
 
     controller
         .a()
         .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
 
-    // controller.y()
-    //     .whileTrue(new WPIAStar(drivetrainSubsystem, poseEstimator,
-    //     new TrajectoryConfig(2, 2),
-    //     finalNode, obstacles, AStarMap));
+    controller
+        .y()
+        .whileTrue(
+            new WPIAStar(
+                drivetrainSubsystem,
+                poseEstimator,
+                new TrajectoryConfig(2, 2),
+                finalNode,
+                obstacles,
+                AStarMap));
     // controller.x().whileTrue(new DriveWithPathPlanner(drivetrainSubsystem,
     // poseEstimator, new PathConstraints(2, 2),
     // new PathPoint(new Translation2d(2.33, 2.03),
@@ -166,7 +185,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return new TestAutonomous(drivetrainSubsystem, poseEstimator);
-    // An ExampleCommand will run in autonomous
   }
 
   private static double modifyAxis(double value) {

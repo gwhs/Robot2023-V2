@@ -5,10 +5,8 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Constants.AutoConstants.THETA_CONSTRAINTS;
-import static frc.robot.Constants.DrivetrainConstants.PIGEON_ID;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
@@ -34,6 +32,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.DriveTrainConstants;
+import frc.robot.GyroMoment.WrappedGyro;
+import frc.robot.GyroMoment.WrappedGyro.GyroType;
 import frc.robot.swerve.ModuleConfiguration;
 import frc.robot.swerve.SwerveModule;
 import frc.robot.swerve.SwerveSpeedController;
@@ -44,16 +44,17 @@ import java.util.stream.IntStream;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
-  private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(PIGEON_ID);
+  // private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(PIGEON_ID);
   // private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
+  private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON);
   private final SwerveModule[] swerveModules;
 
   private ChassisSpeeds desiredChassisSpeeds;
 
   public DrivetrainSubsystem(String robotName) {
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
-    pigeon.configMountPoseRoll(0);
-    pigeon.configMountPoseYaw(0);
+    gyro.configMountPoseRoll(0);
+    gyro.configMountPoseYaw(0);
 
     ShuffleboardLayout frontLeftLayout = null;
     ShuffleboardLayout frontRightLayout = null;
@@ -80,14 +81,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
               .withPosition(6, 0);
     }
 
-    // change method we add hana, right now only does spring
+    // change method we add hana, right now only does spring.
     if (robotName.equals("spring")) {
       swerveModules =
           swerveModuleSpring(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
-    } else if (robotName.equals("Robot_V1")) {
-
-      swerveModules =
-          swerveModuleCali(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
     } else {
       swerveModules =
           swerveModuleHana(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
@@ -195,49 +192,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return swerveModules;
   }
 
-  private SwerveModule[] swerveModuleCali(
-      ShuffleboardLayout frontLeftLayout,
-      ShuffleboardLayout frontRightLayout,
-      ShuffleboardLayout backLeftLayout,
-      ShuffleboardLayout backRightLayout) {
-    /*
-     * Specific to the springtrap drivetrain(just the offset)
-     */
-    DriveTrainConstants driveTrain = DriveTrainConstants.Robot_V1;
-    SwerveModule[] swerveModules =
-        new SwerveModule[] {
-          createSwerveModule(
-              frontLeftLayout,
-              ModuleConfiguration.MK4I_L2,
-              driveTrain.FRONT_LEFT_MODULE_DRIVE_MOTOR,
-              driveTrain.FRONT_LEFT_MODULE_STEER_MOTOR,
-              driveTrain.FRONT_LEFT_MODULE_STEER_ENCODER,
-              driveTrain.FRONT_LEFT_MODULE_STEER_OFFSET),
-          createSwerveModule(
-              frontRightLayout,
-              ModuleConfiguration.MK4I_L2,
-              driveTrain.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
-              driveTrain.FRONT_RIGHT_MODULE_STEER_MOTOR,
-              driveTrain.FRONT_RIGHT_MODULE_STEER_ENCODER,
-              driveTrain.FRONT_RIGHT_MODULE_STEER_OFFSET),
-          createSwerveModule(
-              backLeftLayout,
-              ModuleConfiguration.MK4I_L2,
-              driveTrain.BACK_LEFT_MODULE_DRIVE_MOTOR,
-              driveTrain.BACK_LEFT_MODULE_STEER_MOTOR,
-              driveTrain.BACK_LEFT_MODULE_STEER_ENCODER,
-              driveTrain.BACK_LEFT_MODULE_STEER_OFFSET),
-          createSwerveModule(
-              backRightLayout,
-              ModuleConfiguration.MK4I_L2,
-              driveTrain.BACK_RIGHT_MODULE_DRIVE_MOTOR,
-              driveTrain.BACK_RIGHT_MODULE_STEER_MOTOR,
-              driveTrain.BACK_RIGHT_MODULE_STEER_ENCODER,
-              driveTrain.BACK_RIGHT_MODULE_STEER_OFFSET)
-        };
-    return swerveModules;
-  }
-
   /**
    * Creates a server module instance
    *
@@ -264,14 +218,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public Rotation2d getGyroscopeRotation() {
-    return pigeon.getRotation2d();
+    return gyro.getRotation2d();
     // We have to invert the angle of the NavX so that rotating the robot counter-clockwise makes
     // the angle increase.
     // return Rotation2d.fromDegrees(360.0 - navx.getYaw());
   }
 
+  public WrappedGyro getGyro() {
+    return gyro;
+  }
+
   public void setGyroscopeRotation(double angleDeg) {
-    pigeon.setYaw(angleDeg);
+    gyro.setYaw(angleDeg);
   }
 
   public void resetGyro() {
