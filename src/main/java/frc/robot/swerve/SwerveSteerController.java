@@ -12,16 +12,15 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class SwerveSteerController {
 
@@ -35,7 +34,7 @@ public class SwerveSteerController {
   private final double motorEncoderPositionCoefficient;
   private final double motorEncoderVelocityCoefficient;
   private final CANCoder encoder;
-  
+
   // Not sure what these represent, but smaller is faster
   private final double motionMagicVelocityConstant = .125;
   private final double motionMagicAccelerationConstant = .0625;
@@ -50,7 +49,7 @@ public class SwerveSteerController {
       int motorPort,
       int canCoderPort,
       double canCoderOffset,
-      ShuffleboardContainer container, 
+      ShuffleboardContainer container,
       ModuleConfiguration moduleConfiguration) {
 
     CANCoderConfiguration config = new CANCoderConfiguration();
@@ -59,16 +58,19 @@ public class SwerveSteerController {
     config.sensorDirection = false;
     config.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
 
-    encoder = new CANCoder(canCoderPort,CANIVORE_NAME);
-    CtreUtils.checkCtreError(encoder.configAllSettings(config, 250), "Failed to configure CANCoder");
-    CtreUtils.checkCtreError(encoder.setPositionToAbsolute(250), "Failed to set CANCoder to absolute");
+    encoder = new CANCoder(canCoderPort, CANIVORE_NAME);
+    CtreUtils.checkCtreError(
+        encoder.configAllSettings(config, 250), "Failed to configure CANCoder");
+    CtreUtils.checkCtreError(
+        encoder.setPositionToAbsolute(250), "Failed to set CANCoder to absolute");
 
     CtreUtils.checkCtreError(
         encoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 100, 250),
         "Failed to configure CANCoder update rate");
 
     // Configure Motor
-    motorEncoderPositionCoefficient = 2.0 * Math.PI / TICKS_PER_ROTATION * moduleConfiguration.getSteerReduction();
+    motorEncoderPositionCoefficient =
+        2.0 * Math.PI / TICKS_PER_ROTATION * moduleConfiguration.getSteerReduction();
     motorEncoderVelocityCoefficient = motorEncoderPositionCoefficient * 10.0;
 
     TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
@@ -76,36 +78,43 @@ public class SwerveSteerController {
     motorConfiguration.slot0.kI = STEER_kI;
     motorConfiguration.slot0.kD = STEER_kD;
 
-    motorConfiguration.slot0.kF = (1023.0 * motorEncoderVelocityCoefficient / 12) * motionMagicVelocityConstant;
-    motorConfiguration.motionCruiseVelocity = 2.0 / motionMagicVelocityConstant / motorEncoderVelocityCoefficient;
-    motorConfiguration.motionAcceleration = (8.0 - 2.0) / motionMagicAccelerationConstant / motorEncoderVelocityCoefficient;
+    motorConfiguration.slot0.kF =
+        (1023.0 * motorEncoderVelocityCoefficient / 12) * motionMagicVelocityConstant;
+    motorConfiguration.motionCruiseVelocity =
+        2.0 / motionMagicVelocityConstant / motorEncoderVelocityCoefficient;
+    motorConfiguration.motionAcceleration =
+        (8.0 - 2.0) / motionMagicAccelerationConstant / motorEncoderVelocityCoefficient;
 
     motorConfiguration.voltageCompSaturation = 12;
     motorConfiguration.supplyCurrLimit.currentLimit = 20;
     motorConfiguration.supplyCurrLimit.enable = true;
 
-    motor = new WPI_TalonFX(motorPort,CANIVORE_NAME);
-    CtreUtils.checkCtreError(motor.configAllSettings(motorConfiguration, CAN_TIMEOUT_MS),
+    motor = new WPI_TalonFX(motorPort, CANIVORE_NAME);
+    CtreUtils.checkCtreError(
+        motor.configAllSettings(motorConfiguration, CAN_TIMEOUT_MS),
         "Failed to configure Falcon 500 settings");
 
     CtreUtils.checkCtreError(
-        motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, CAN_TIMEOUT_MS),
+        motor.configSelectedFeedbackSensor(
+            TalonFXFeedbackDevice.IntegratedSensor, 0, CAN_TIMEOUT_MS),
         "Failed to set Falcon 500 feedback sensor");
     motor.enableVoltageCompensation(true);
     motor.setSensorPhase(true);
     motor.setInverted(
-        moduleConfiguration.isSteerInverted() ? TalonFXInvertType.CounterClockwise : TalonFXInvertType.Clockwise);
+        moduleConfiguration.isSteerInverted()
+            ? TalonFXInvertType.CounterClockwise
+            : TalonFXInvertType.Clockwise);
     motor.setNeutralMode(NeutralMode.Coast);
 
     configMotorOffset(true);
 
     // Reduce CAN status frame rates
     CtreUtils.checkCtreError(
-        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
+        motor.setStatusFramePeriod(
+            StatusFrameEnhanced.Status_1_General, STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
         "Failed to configure Falcon status frame period");
-    
-    addDashboardEntries(container);
 
+    addDashboardEntries(container);
   }
 
   private void addDashboardEntries(ShuffleboardContainer container) {
@@ -117,9 +126,10 @@ public class SwerveSteerController {
   }
 
   /**
-   * Configures the motor offset from the CANCoder's abosolute position. In an ideal state, this only needs to happen
-   * once. However, sometime it fails and we end up with a wheel that isn't in the right position.
-   * See https://www.chiefdelphi.com/t/official-sds-mk3-mk4-code/397109/99
+   * Configures the motor offset from the CANCoder's abosolute position. In an ideal state, this
+   * only needs to happen once. However, sometime it fails and we end up with a wheel that isn't in
+   * the right position. See https://www.chiefdelphi.com/t/official-sds-mk3-mk4-code/397109/99
+   *
    * @return the absolute angle
    */
   public double configMotorOffset(boolean logErrors) {
@@ -129,15 +139,20 @@ public class SwerveSteerController {
     if ((angleErrorCode != ErrorCode.OK) && logErrors) {
       // If this happens, we will have a misaligned wheel
       DriverStation.reportError(
-        "Failed to configure swerve module position. CANCoder ID: " + encoder.getDeviceID(), false);
-      } else {
-        var positionErrorCode = motor.setSelectedSensorPosition(angle / motorEncoderPositionCoefficient, 0, CAN_TIMEOUT_MS);
-        if (logErrors) {
-          CtreUtils.checkCtreError(
-              positionErrorCode, "Failed to set Falcon 500 encoder position. ID: " + motor.getDeviceID());
-        }
-        motorOffsetConfigured = 
-            motorOffsetConfigured || ((angleErrorCode == ErrorCode.OK) && (positionErrorCode == ErrorCode.OK));
+          "Failed to configure swerve module position. CANCoder ID: " + encoder.getDeviceID(),
+          false);
+    } else {
+      var positionErrorCode =
+          motor.setSelectedSensorPosition(
+              angle / motorEncoderPositionCoefficient, 0, CAN_TIMEOUT_MS);
+      if (logErrors) {
+        CtreUtils.checkCtreError(
+            positionErrorCode,
+            "Failed to set Falcon 500 encoder position. ID: " + motor.getDeviceID());
+      }
+      motorOffsetConfigured =
+          motorOffsetConfigured
+              || ((angleErrorCode == ErrorCode.OK) && (positionErrorCode == ErrorCode.OK));
     }
     return angle;
   }
@@ -156,12 +171,15 @@ public class SwerveSteerController {
 
   public void setDesiredRotation(Rotation2d desiredRotation) {
     var desiredAngleRadians = desiredRotation.getRadians();
-    double currentAngleRadians = motor.getSelectedSensorPosition() * motorEncoderPositionCoefficient;
+    double currentAngleRadians =
+        motor.getSelectedSensorPosition() * motorEncoderPositionCoefficient;
 
     // Reset the Falcon's encoder periodically when the module is not rotating.
-    // Sometimes (~5% of the time) when we initialize, the absolute encoder isn't fully set up, and we don't
+    // Sometimes (~5% of the time) when we initialize, the absolute encoder isn't fully set up, and
+    // we don't
     // end up getting a good reading. If we reset periodically this won't matter anymore.
-    if (motor.getSelectedSensorVelocity() * motorEncoderVelocityCoefficient < ENCODER_RESET_MAX_ANGULAR_VELOCITY) {
+    if (motor.getSelectedSensorVelocity() * motorEncoderVelocityCoefficient
+        < ENCODER_RESET_MAX_ANGULAR_VELOCITY) {
       if (++resetIteration >= ENCODER_RESET_ITERATIONS || !motorOffsetConfigured) {
         resetIteration = 0;
         currentAngleRadians = configMotorOffset(false);
@@ -177,13 +195,16 @@ public class SwerveSteerController {
 
     // The reference angle has the range [0, 2pi) but the Falcon's encoder can go
     // above that
-    double adjustedReferenceAngleRadians = desiredAngleRadians + currentAngleRadians - currentAngleRadiansMod;
+    double adjustedReferenceAngleRadians =
+        desiredAngleRadians + currentAngleRadians - currentAngleRadiansMod;
     if (desiredAngleRadians - currentAngleRadiansMod > Math.PI) {
       adjustedReferenceAngleRadians -= 2.0 * Math.PI;
     } else if (desiredAngleRadians - currentAngleRadiansMod < -Math.PI) {
       adjustedReferenceAngleRadians += 2.0 * Math.PI;
     }
-    motor.set(TalonFXControlMode.MotionMagic, adjustedReferenceAngleRadians / motorEncoderPositionCoefficient);
+    motor.set(
+        TalonFXControlMode.MotionMagic,
+        adjustedReferenceAngleRadians / motorEncoderPositionCoefficient);
 
     this.desiredAngleRadians = desiredAngleRadians;
   }
@@ -200,10 +221,10 @@ public class SwerveSteerController {
 
   /**
    * Sets the neutral mode for the steer motor
+   *
    * @param neutralMode neutral mode
    */
   public void setNeutralMode(NeutralMode neutralMode) {
     motor.setNeutralMode(neutralMode);
   }
-
 }
