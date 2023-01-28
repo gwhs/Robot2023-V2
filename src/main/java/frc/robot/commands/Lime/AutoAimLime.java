@@ -38,7 +38,7 @@ public class AutoAimLime extends CommandBase {
   @Override
   public void execute() {
 
-    //add pids
+    // add pids
     values = limeLight.chassisValuesLower();
     if (limeLight.getTv() > .8) {
       drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
@@ -55,7 +55,6 @@ public class AutoAimLime extends CommandBase {
     } else {
       angleDone = false;
     }
-
   }
 
   // Called once the command ends or is interrupted.
@@ -63,7 +62,7 @@ public class AutoAimLime extends CommandBase {
   public void end(boolean interrupted) {
     SmartDashboard.putNumber("Final Horiz-error", limeLight.getTx());
     SmartDashboard.putNumber("Final Vert-error", limeLight.getTy());
-    drivetrainSubsystem.drive(new ChassisSpeeds(0,0,0));
+    drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, 0));
   }
 
   // Returns true when the command should end.
