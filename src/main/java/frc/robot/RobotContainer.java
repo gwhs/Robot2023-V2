@@ -98,10 +98,10 @@ public class RobotContainer {
                     * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
                     * drivetrainAmplificationScale(),
             () ->
-                modifyAxis(controller.getLeftTriggerAxis() - controller.getRightTriggerAxis())
+                -modifyAxis(controller.getLeftTriggerAxis() - controller.getRightTriggerAxis())
                     * drivetrainAmplificationScaleRotation()
                     * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
-                    /2 ));
+                    / 2));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -181,13 +181,13 @@ public class RobotContainer {
 
     controller.b().onTrue(autoAimLime.withTimeout(3));
 
-    controller.start().toggleOnTrue(fieldHeadingDriveCommand);
+    controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
     controller.x().toggleOnTrue(autoBalance);
 
-    controller
-        .a()
-        .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
+    // controller
+    //     .a()
+    //     .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
 
     controller
         .y()
