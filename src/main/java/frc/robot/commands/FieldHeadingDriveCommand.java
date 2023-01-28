@@ -41,6 +41,7 @@ public class FieldHeadingDriveCommand extends CommandBase {
   private final DoubleSupplier ySupplier;
   private final DoubleSupplier omegaXSupplier;
   private final DoubleSupplier omegaYSupplier;
+  private final DoubleSupplier rotationSupplier;
 
   private final SlewRateLimiter translateXRateLimiter = new SlewRateLimiter(X_RATE_LIMIT);
   private final SlewRateLimiter translateYRateLimiter = new SlewRateLimiter(Y_RATE_LIMIT);
@@ -71,6 +72,33 @@ public class FieldHeadingDriveCommand extends CommandBase {
     this.ySupplier = translationYSupplier;
     this.omegaXSupplier = omegaXSupplier;
     this.omegaYSupplier = omegaYSupplier;
+    this.rotationSupplier = null;
+
+    addRequirements(drivetrainSubsystem);
+
+    TrapezoidProfile.Constraints kThetaControllerConstraints =
+        new TrapezoidProfile.Constraints(HEADING_MAX_VELOCITY, HEADING_MAX_ACCELERATION);
+
+    thetaController =
+        new ProfiledPIDController(HEADING_kP, HEADING_kI, HEADING_kD, kThetaControllerConstraints);
+    thetaController.enableContinuousInput(-PI, PI);
+    thetaController.setTolerance(Units.degreesToRadians(HEADING_TOLERANCE));
+  }
+
+  public FieldHeadingDriveCommand(
+      DrivetrainSubsystem drivetrainSubsystem,
+      Supplier<Rotation2d> robotAngleSupplier,
+      DoubleSupplier translationXSupplier,
+      DoubleSupplier translationYSupplier,
+      DoubleSupplier rotationSupplier) {
+
+    this.drivetrainSubsystem = drivetrainSubsystem;
+    this.robotAngleSupplier = robotAngleSupplier;
+    this.xSupplier = translationXSupplier;
+    this.ySupplier = translationYSupplier;
+    this.omegaXSupplier = null;
+    this.omegaYSupplier = null;
+    this.rotationSupplier = rotationSupplier;
 
     addRequirements(drivetrainSubsystem);
 
@@ -107,11 +135,10 @@ public class FieldHeadingDriveCommand extends CommandBase {
 
   @Override
   public void execute() {
-    final var omegaX = omegaXSupplier.getAsDouble();
-    final var omegaY = omegaYSupplier.getAsDouble();
-    final var centered =
-        MathUtil.applyDeadband(omegaX, DEADBAND) == 0
-            && MathUtil.applyDeadband(omegaY, DEADBAND) == 0;
+    final var rotation = rotationSupplier.getAsDouble();
+    final var centered = MathUtil.applyDeadband(rotation, DEADBAND) == 0;
+    // MathUtil.applyDeadband(omegaX, DEADBAND) == 0
+    //     && MathUtil.applyDeadband(omegaY, DEADBAND) == 0;
 
     Rotation2d heading;
     if (centered) {
@@ -119,7 +146,7 @@ public class FieldHeadingDriveCommand extends CommandBase {
       heading = robotAngleSupplier.get();
     } else {
       // Calculate heading from Y-Axis to X, Y coordinates
-      heading = new Rotation2d(omegaX, omegaY);
+      heading = new Rotation2d(rotation);
     }
 
     // Calculate the angular rate for the robot to turn
@@ -136,7 +163,7 @@ public class FieldHeadingDriveCommand extends CommandBase {
             omega,
             robotAngleSupplier.get()));
   }
-
+  
   @Override
   public void end(boolean interrupted) {
     drivetrainSubsystem.stop();

@@ -73,8 +73,9 @@ public class RobotContainer {
           () ->
               -modifyAxis(controller.getLeftX())
                   * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
-          () -> -controller.getRightY(),
-          () -> -controller.getRightX());
+          () ->
+              modifyAxis(controller.getLeftTriggerAxis() - controller.getRightTriggerAxis())
+                  * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
