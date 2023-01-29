@@ -49,7 +49,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON);
   private final SwerveModule[] swerveModules;
   private final ProfiledPIDController thetaController = new ProfiledPIDController( -AutoConstants.THETA_kP, AutoConstants.THETA_kI, AutoConstants.THETA_kD,THETA_CONSTRAINTS);
-
+  private final PIDController thetaControllerPID = new PIDController( -AutoConstants.THETA_kP, AutoConstants.THETA_kI, AutoConstants.THETA_kD);
 
   private ChassisSpeeds desiredChassisSpeeds;
 
@@ -309,7 +309,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    *
    * @param states array of states. Must be ordered frontLeft, frontRight, backLeft, backRight
    */
-  private void setModuleStates(SwerveModuleState[] states) {
+  public void setModuleStates(SwerveModuleState[] states) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);
     IntStream.range(0, swerveModules.length)
@@ -344,8 +344,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return swerveControllerCommand;
   }
 
-  public ProfiledPIDController gethetaController(){
-    return thetaController;
+  public PIDController getThetaController(){
+    return thetaControllerPID;
   }
 
   public static PPSwerveControllerCommand followTrajectory(
