@@ -45,13 +45,22 @@ public final class Constants {
      *
      * <p>Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.5715;
+    public static final double SPRINGTRAP_DRIVETRAIN_TRACKWIDTH_METERS = 0.5715;
     /**
      * The front-to-back distance between the drivetrain wheels.
      *
      * <p>Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.5715;
+    public static final double SPRINGTRAP_DRIVETRAIN_WHEELBASE_METERS = 0.5715;
+
+    public static final double CALLIOPE_DRIVETRAIN_WHEELBASE_METERS = 0.5715;
+    public static final double CALLIOPE_DRIVETRAIN_TRACKWIDTH_METERS = 0.5715;
+
+    public static final double DONALD_DRIVETRAIN_WHEELBASE_METERS = 0.5715;
+    public static final double DONALD_DRIVETRAIN_TRACKWIDTH_METERS = 0.5715;
+
+    public static final double HANA_DRIVETRAIN_WHEELBASE_METERS = 0.5715;
+    public static final double HANA_DRIVETRAIN_TRACKWIDTH_METERS = 0.5715;
 
     // Pick the longest side of the robot for this and measure outside bumper to outside bumper
     public static final double ROBOT_LENGTH_WIDTH = 0.698;
@@ -67,7 +76,7 @@ public final class Constants {
      * <p>This is a measure of how fast the robot should be able to drive in a straight line.
      */
     public static final double MAX_VELOCITY_METERS_PER_SECOND =
-        6380.0
+        638.0
             / 60.0
             * // was 6380.0 / 60.0
             ModuleConfiguration.MK4I_L2.getDriveReduction()
@@ -83,22 +92,85 @@ public final class Constants {
     // measured amount.
     public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND =
         (DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
-            / Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0));
+            / Math.hypot(
+                SPRINGTRAP_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                SPRINGTRAP_DRIVETRAIN_WHEELBASE_METERS / 2.0));
 
-    public static final SwerveDriveKinematics KINEMATICS =
+    public static final SwerveDriveKinematics SPRINGTRAP_KINEMATICS =
         new SwerveDriveKinematics(
             // Front left
             new Translation2d(
-                DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
+                SPRINGTRAP_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                SPRINGTRAP_DRIVETRAIN_WHEELBASE_METERS / 2.0),
             // Front right
             new Translation2d(
-                DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0),
+                SPRINGTRAP_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                -SPRINGTRAP_DRIVETRAIN_WHEELBASE_METERS / 2.0),
             // Back left
             new Translation2d(
-                -DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
+                -SPRINGTRAP_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                SPRINGTRAP_DRIVETRAIN_WHEELBASE_METERS / 2.0),
             // Back right
             new Translation2d(
-                -DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0));
+                -SPRINGTRAP_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                -SPRINGTRAP_DRIVETRAIN_WHEELBASE_METERS / 2.0));
+
+    public static final SwerveDriveKinematics CALLIOPE_KINEMATICS =
+        new SwerveDriveKinematics(
+            // Front left
+            new Translation2d(
+                CALLIOPE_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                CALLIOPE_DRIVETRAIN_WHEELBASE_METERS / 2.0),
+            // Front right
+            new Translation2d(
+                CALLIOPE_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                -CALLIOPE_DRIVETRAIN_WHEELBASE_METERS / 2.0),
+            // Back left
+            new Translation2d(
+                -CALLIOPE_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                CALLIOPE_DRIVETRAIN_WHEELBASE_METERS / 2.0),
+            // Back right
+            new Translation2d(
+                -CALLIOPE_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                -CALLIOPE_DRIVETRAIN_WHEELBASE_METERS / 2.0));
+
+    public static final SwerveDriveKinematics DONALD_KINEMATICS =
+        new SwerveDriveKinematics(
+            // Front left
+            new Translation2d(
+                DONALD_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                DONALD_DRIVETRAIN_WHEELBASE_METERS / 2.0),
+            // Front right
+            new Translation2d(
+                DONALD_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                -DONALD_DRIVETRAIN_WHEELBASE_METERS / 2.0),
+            // Back left
+            new Translation2d(
+                -DONALD_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                DONALD_DRIVETRAIN_WHEELBASE_METERS / 2.0),
+            // Back right
+            new Translation2d(
+                -DONALD_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                -DONALD_DRIVETRAIN_WHEELBASE_METERS / 2.0));
+
+    public static final SwerveDriveKinematics HANA_KINEMATICS =
+                new SwerveDriveKinematics(
+                    // Front left
+                    new Translation2d(
+                        HANA_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                        HANA_DRIVETRAIN_WHEELBASE_METERS / 2.0),
+                    // Front right
+                    new Translation2d(
+                        HANA_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                        -HANA_DRIVETRAIN_WHEELBASE_METERS / 2.0),
+                    // Back left
+                    new Translation2d(
+                        -HANA_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                        HANA_DRIVETRAIN_WHEELBASE_METERS / 2.0),
+                    // Back right
+                    new Translation2d(
+                        -HANA_DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                        -HANA_DRIVETRAIN_WHEELBASE_METERS / 2.0));
 
     /** Voltage needed to overcome the motor’s static friction. kS */
     public static final double DRIVE_kS = 0.6716;

@@ -67,7 +67,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
     poseEstimator =
         new SwerveDrivePoseEstimator(
-            DrivetrainConstants.KINEMATICS,
+            DrivetrainConstants.SPRINGTRAP_KINEMATICS,
             drivetrainSubsystem.getGyroscopeRotation(),
             drivetrainSubsystem.getModulePositions(),
             new Pose2d(),

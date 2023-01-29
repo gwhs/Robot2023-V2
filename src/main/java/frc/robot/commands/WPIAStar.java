@@ -37,7 +37,7 @@ public class WPIAStar extends CommandBase {
       VisGraph AStarMap) {
     this.driveSystem = d;
     this.poseEstimatorSystem = p;
-    this.config = config.setKinematics(DrivetrainConstants.KINEMATICS);
+    this.config = config.setKinematics(DrivetrainConstants.SPRINGTRAP_KINEMATICS);
     this.obstacles = obstacles;
     this.finalPosition = finalPosition;
     this.AStarMap = AStarMap;

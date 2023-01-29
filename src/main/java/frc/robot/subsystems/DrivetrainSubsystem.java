@@ -48,6 +48,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   // private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
   private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON);
   private final SwerveModule[] swerveModules;
+  private static SwerveDriveKinematics kinematics;
 
   private ChassisSpeeds desiredChassisSpeeds;
 
@@ -83,14 +84,25 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     // change method we add hana, right now only does spring.
     if (robotName.equals("spring")) {
+      kinematics = Constants.DrivetrainConstants.SPRINGTRAP_KINEMATICS;
       swerveModules =
           swerveModuleSpring(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
     } else if (robotName.equals("hana")) {
+      kinematics = Constants.DrivetrainConstants.HANA_KINEMATICS;
       swerveModules =
           swerveModuleHana(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
-    } else {
+    } else if (robotName.equals("calliope")) {
+      kinematics = Constants.DrivetrainConstants.CALLIOPE_KINEMATICS;
       swerveModules =
           swerveModuleCalliope(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
+    } else if (robotName.equals("donald")) {
+      kinematics = Constants.DrivetrainConstants.DONALD_KINEMATICS;
+      swerveModules =
+          swerveModuleDonald(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
+    } else {
+      kinematics = Constants.DrivetrainConstants.SPRINGTRAP_KINEMATICS;
+      swerveModules =
+          swerveModuleSpring(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
     }
 
     // Put the motors in brake mode when enabled, coast mode when disabled
@@ -240,6 +252,50 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return swerveModules;
   }
 
+  private SwerveModule[] swerveModuleDonald(
+    ShuffleboardLayout frontLeftLayout,
+    ShuffleboardLayout frontRightLayout,
+    ShuffleboardLayout backLeftLayout,
+    ShuffleboardLayout backRightLayout) {
+  /*
+   * Specific to the calliope drivetrain(just the offset)
+   */
+  DriveTrainConstants driveTrain = DriveTrainConstants.calliope;
+  SwerveModule[] swerveModules =
+      new SwerveModule[] {
+        createSwerveModule(
+            frontLeftLayout,
+            ModuleConfiguration.MK4I_L2,
+            driveTrain.FRONT_LEFT_MODULE_DRIVE_MOTOR,
+            driveTrain.FRONT_LEFT_MODULE_STEER_MOTOR,
+            driveTrain.FRONT_LEFT_MODULE_STEER_ENCODER,
+            driveTrain.FRONT_LEFT_MODULE_STEER_OFFSET),
+        createSwerveModule(
+            frontRightLayout,
+            ModuleConfiguration.MK4I_L2,
+            driveTrain.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
+            driveTrain.FRONT_RIGHT_MODULE_STEER_MOTOR,
+            driveTrain.FRONT_RIGHT_MODULE_STEER_ENCODER,
+            driveTrain.FRONT_RIGHT_MODULE_STEER_OFFSET),
+        createSwerveModule(
+            backLeftLayout,
+            ModuleConfiguration.MK4I_L2,
+            driveTrain.BACK_LEFT_MODULE_DRIVE_MOTOR,
+            driveTrain.BACK_LEFT_MODULE_STEER_MOTOR,
+            driveTrain.BACK_LEFT_MODULE_STEER_ENCODER,
+            driveTrain.BACK_LEFT_MODULE_STEER_OFFSET),
+        createSwerveModule(
+            backRightLayout,
+            ModuleConfiguration.MK4I_L2,
+            driveTrain.BACK_RIGHT_MODULE_DRIVE_MOTOR,
+            driveTrain.BACK_RIGHT_MODULE_STEER_MOTOR,
+            driveTrain.BACK_RIGHT_MODULE_STEER_ENCODER,
+            driveTrain.BACK_RIGHT_MODULE_STEER_OFFSET)
+      };
+
+  return swerveModules;
+}
+
   /**
    * Creates a server module instance
    *
@@ -304,14 +360,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return actual chassis speeds
    */
   public ChassisSpeeds getChassisSpeeds() {
-    return DrivetrainConstants.KINEMATICS.toChassisSpeeds(getModuleStates());
+    return DrivetrainConstants.SPRINGTRAP_KINEMATICS.toChassisSpeeds(getModuleStates());
   }
 
   @Override
   public void periodic() {
     // Set the swerve module states
     if (desiredChassisSpeeds != null) {
-      var desiredStates = DrivetrainConstants.KINEMATICS.toSwerveModuleStates(desiredChassisSpeeds);
+      var desiredStates =
+          DrivetrainConstants.SPRINGTRAP_KINEMATICS.toSwerveModuleStates(desiredChassisSpeeds);
       if (desiredChassisSpeeds.vxMetersPerSecond == 0.0
           && desiredChassisSpeeds.vyMetersPerSecond == 0.0
           && desiredChassisSpeeds.omegaRadiansPerSecond == 0.0) {
@@ -388,7 +445,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         new SwerveControllerCommand(
             trajectory,
             poseSupplier,
-            DrivetrainConstants.KINEMATICS,
+            DrivetrainConstants.SPRINGTRAP_KINEMATICS,
             new PIDController(AutoConstants.X_kP, AutoConstants.X_kI, AutoConstants.X_kD),
             new PIDController(AutoConstants.Y_kP, AutoConstants.Y_kI, AutoConstants.Y_kD),
             thetaController,
@@ -402,7 +459,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return new PPSwerveControllerCommand(
         traj,
         s::getCurrentPose,
-        Constants.DrivetrainConstants.KINEMATICS,
+        Constants.DrivetrainConstants.SPRINGTRAP_KINEMATICS,
         Constants.AutoConstants.m_translationController,
         Constants.AutoConstants.m_strafeController,
         Constants.AutoConstants.m_thetaController,
