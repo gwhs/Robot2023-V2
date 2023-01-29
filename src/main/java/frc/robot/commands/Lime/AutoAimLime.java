@@ -84,7 +84,7 @@ public class AutoAimLime extends CommandBase {
     */
     double distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
     double[] x = new double[3];
-    x[0] = distanceError;
+    x[0] = distanceError / 10;
     x[1] = 0;
     x[2] = -limeLight.getTx();
     // getAngle()

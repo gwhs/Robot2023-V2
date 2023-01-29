@@ -9,12 +9,16 @@ import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.commands.AutoBalance;
 import frc.robot.commands.ChaseTagCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
@@ -29,6 +33,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.List;
+import java.util.Map;
 import org.photonvision.PhotonCamera;
 
 /**
@@ -52,6 +57,8 @@ public class RobotContainer {
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
 
+  private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
+
   private final ChaseTagCommand chaseTagCommand =
       new ChaseTagCommand(photonCamera, drivetrainSubsystem, poseEstimator::getCurrentPose);
 
@@ -66,10 +73,12 @@ public class RobotContainer {
           () -> poseEstimator.getCurrentPose().getRotation(),
           () ->
               -modifyAxis(controller.getLeftY())
-                  * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
+                  * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
+                  * drivetrainAmplificationScale(),
           () ->
               -modifyAxis(controller.getLeftX())
-                  * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
+                  * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
+                  * drivetrainAmplificationScale(),
           () -> -controller.getRightY(),
           () -> -controller.getRightX());
 
@@ -82,12 +91,15 @@ public class RobotContainer {
             () -> poseEstimator.getCurrentPose().getRotation(),
             () ->
                 -modifyAxis(controller.getLeftY())
-                    * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
+                    * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
+                    * drivetrainAmplificationScale(),
             () ->
                 -modifyAxis(controller.getLeftX())
-                    * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
+                    * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
+                    * drivetrainAmplificationScale(),
             () ->
-                modifyAxis(controller.getRightX())
+                modifyAxis(controller.getLeftTriggerAxis() - controller.getRightTriggerAxis())
+                    * drivetrainAmplificationScaleRotation()
                     * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
                     / 2));
 
@@ -117,7 +129,35 @@ public class RobotContainer {
 
   }
 
-  private void configureDashboard() {}
+  private GenericEntry maxSpeedAdjustment;
+  private GenericEntry maxRotationSpeedAdjustment;
+
+  private void configureDashboard() {
+    maxSpeedAdjustment =
+        Shuffleboard.getTab("Drive")
+            .add("Max Speed", 0.2)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 1)) // specify widget properties here
+            .getEntry();
+    maxRotationSpeedAdjustment =
+        Shuffleboard.getTab("Drive")
+            .add("Max Rotation Speed", 0.2)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 1)) // specify widget properties here
+            .getEntry();
+  }
+
+  private double drivetrainAmplificationScale() {
+    // This function multiplies the controller input to reduce the maximum speed,
+    // 1 = full speed forward, 0.5 is half speed.
+    return maxSpeedAdjustment.getDouble(0.2);
+  }
+
+  private double drivetrainAmplificationScaleRotation() {
+    // This fun ction multiplies the controller input to reduce the maximum speed,
+    // 1 = full speed, 0.5 = speed
+    return maxRotationSpeedAdjustment.getDouble(0.2);
+  }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -126,6 +166,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem);
+    Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem);
     // Start button reseeds the steer motors to fix dead wheel
     controller
         .start()
@@ -140,6 +182,8 @@ public class RobotContainer {
     controller.b().onTrue(autoAimLime.withTimeout(3));
 
     controller.start().toggleOnTrue(fieldHeadingDriveCommand);
+
+    controller.x().toggleOnTrue(autoBalance);
 
     controller
         .a()

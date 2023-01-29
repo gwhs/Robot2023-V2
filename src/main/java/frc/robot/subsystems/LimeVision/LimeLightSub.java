@@ -9,7 +9,6 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.LimeLightConstants;
 
 public class LimeLightSub extends SubsystemBase {
@@ -58,7 +57,6 @@ public class LimeLightSub extends SubsystemBase {
     SmartDashboard.putNumber("X-Distance", getXDistance());
     SmartDashboard.putNumber("Y-Distance", getYDistance());
     SmartDashboard.putNumber("AngleToTarget", getAngle());
-    System.out.println(DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);
     // This method will be called once per scheduler run
   }
 

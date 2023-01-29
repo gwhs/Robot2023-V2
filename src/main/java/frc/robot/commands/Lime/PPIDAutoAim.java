@@ -29,7 +29,7 @@ public class PPIDAutoAim extends CommandBase {
       new Constraints(
           DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
           DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
-  private ProfiledPIDController pid = new ProfiledPIDController(1, 0, 0, constraints);
+  private ProfiledPIDController pid = new ProfiledPIDController(3, 0, .01, constraints);
 
   /** Creates a new AutoAimLime. */
   public PPIDAutoAim(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {
@@ -104,10 +104,10 @@ public class PPIDAutoAim extends CommandBase {
 
     double distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
     double[] x = new double[3];
-    x[0] = distanceError;
+    x[0] = 0;
     x[1] = 0;
     // calculate is overloaded, second parameter is angle goal if it changes
-    x[2] = Math.toRadians(pid.calculate(limeLight.getTx()));
+    x[2] = (pid.calculate(Math.toRadians(limeLight.getTx())));
 
     // getAngle()
     //     / (((Math.sqrt(x[0] * x[0]) + x[1] * x[1]))
