@@ -8,6 +8,7 @@ import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -47,7 +48,7 @@ public class RobotContainer {
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
   // change to hana or spring depending on robot
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("spring");
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("calliope");
   private final AutoAimLime autoAimLime = new AutoAimLime(drivetrainSubsystem, limeLightSub);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
@@ -184,10 +185,6 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return new TestAutonomous(drivetrainSubsystem, poseEstimator);
-<<<<<<< HEAD
-    // An ExampleCommand will run in autonomous
-=======
->>>>>>> f0ba127951169667eecb7a5d5a705bb3d2437052
   }
 
   private static double modifyAxis(double value) {
