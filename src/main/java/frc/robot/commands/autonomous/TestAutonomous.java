@@ -8,7 +8,6 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DrivetrainConstants;
@@ -23,19 +22,19 @@ public class TestAutonomous extends SequentialCommandGroup {
 
     List<PathPlannerTrajectory> trajectories =
         PathPlanner.loadPathGroup("8 go straight", new PathConstraints(3, 2));
-        PathPlannerTrajectory path = PathPlanner.loadPath("8 go straight", 3, 2);
+    PathPlannerTrajectory path = PathPlanner.loadPath("8 go straight", 3, 2);
 
-    PPSwerveControllerCommand drive = new PPSwerveControllerCommand(
-      path, 
-      poseEstimatorSystem::getCurrentPose, 
-      DrivetrainConstants.KINEMATICS, 
-      new PIDController(1, 0, 0),  
-      new PIDController(1, 0, 0), 
-      drivetrain.getThetaController(), 
-      drivetrain::setModuleStates,
-      drivetrain);
-        //DrivetrainSubsystem.followTrajectory(drivetrain, poseEstimatorSystem, trajectories.get(0));
-    
+    PPSwerveControllerCommand drive =
+        new PPSwerveControllerCommand(
+            path,
+            poseEstimatorSystem::getCurrentPose,
+            DrivetrainConstants.KINEMATICS,
+            new PIDController(1, 0, 0),
+            new PIDController(1, 0, 0),
+            drivetrain.getThetaController(),
+            drivetrain::setModuleStates,
+            drivetrain);
+    // DrivetrainSubsystem.followTrajectory(drivetrain, poseEstimatorSystem, trajectories.get(0));
 
     addCommands(drive);
   }
