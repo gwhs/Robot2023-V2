@@ -4,26 +4,39 @@
 
 package frc.robot.commands.Lime;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 
-public class AutoAimLime extends CommandBase {
+public class PPIDAutoAim extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private LimeLightSub limeLight;
   private double[] values;
   private boolean horizDone = false;
   private boolean angleDone = false;
+  private double angleGoal = 0;
+  private double initAngle;
   private double targetY = LimeLightConstants.MAX_LIMELIGHT_ERROR_DEGREES;
+  // second param on constraints is estimated, should be max accel, not max speed, but lets say it
+  // gets there in a second
+  private Constraints constraints =
+      new Constraints(
+          DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+          DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
+  private ProfiledPIDController pid = new ProfiledPIDController(1, 0, 0, constraints);
 
   /** Creates a new AutoAimLime. */
-  public AutoAimLime(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {
+  public PPIDAutoAim(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLight = limeLightSub;
     this.drivetrainSubsystem = drivetrainSubsystem;
+    pid.setTolerance(Math.toRadians(1));
     addRequirements(drivetrainSubsystem);
   }
 
@@ -32,6 +45,10 @@ public class AutoAimLime extends CommandBase {
   public void initialize() {
     horizDone = false;
     angleDone = false;
+    initAngle = limeLight.hasTarget() ? limeLight.getTx() : 0;
+
+    // goal velocity is 0 (overloaded constructor)
+    pid.setGoal(Math.toRadians(angleGoal));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -50,7 +67,7 @@ public class AutoAimLime extends CommandBase {
     } else {
       horizDone = false;
     }
-    if (Math.abs(limeLight.getTx()) < 2) {
+    if (pid.atGoal()) {
       angleDone = true;
     } else {
       angleDone = false;
@@ -82,11 +99,16 @@ public class AutoAimLime extends CommandBase {
     use sin and cos to get values to reach max speed
     not really sure about the angle yet.
     */
+
+    // motor.set(controller.calculate(encoder.getDistance(), goal));
+
     double distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
     double[] x = new double[3];
     x[0] = distanceError;
     x[1] = 0;
-    x[2] = -limeLight.getTx();
+    // calculate is overloaded, second parameter is angle goal if it changes
+    x[2] = Math.toRadians(pid.calculate(limeLight.getTx()));
+
     // getAngle()
     //     / (((Math.sqrt(x[0] * x[0]) + x[1] * x[1]))
     //         / DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);

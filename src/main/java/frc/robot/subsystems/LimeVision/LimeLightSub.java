@@ -62,8 +62,8 @@ public class LimeLightSub extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public double getTv() {
-    return tv.getDouble(0);
+  public boolean hasTarget() {
+    return Math.abs(tv.getDouble(0) - 1) <= .3;
   }
 
   public double getTx() {
@@ -89,26 +89,5 @@ public class LimeLightSub extends SubsystemBase {
 
   public double getAngle() {
     return Math.toRadians(-getTx());
-  }
-
-  public double[] chassisValuesLower() {
-    /*
-    [1,2,3]
-    1 is x velocity
-    2 is y velocity
-    3 is degrees rotation
-    get the angle using atan2, it returns radians
-    use sin and cos to get values to reach max speed
-    not really sure about the angle yet.
-    */
-    double distanceError = getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
-    double[] x = new double[3];
-    x[0] = distanceError;
-    x[1] = 0;
-    x[2] = -getTx();
-    // getAngle()
-    //     / (((Math.sqrt(x[0] * x[0]) + x[1] * x[1]))
-    //         / DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);
-    return x;
   }
 }

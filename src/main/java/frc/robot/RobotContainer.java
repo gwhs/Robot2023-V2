@@ -18,7 +18,7 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.commands.ChaseTagCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
-import frc.robot.commands.Lime.AutoAimLime;
+import frc.robot.commands.Lime.PPIDAutoAim;
 import frc.robot.commands.WPIAStar;
 import frc.robot.commands.autonomous.TestAutonomous;
 import frc.robot.pathfind.Edge;
@@ -48,7 +48,7 @@ public class RobotContainer {
 
   // change to hana or spring depending on robot
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("spring");
-  private final AutoAimLime autoAimLime = new AutoAimLime(drivetrainSubsystem, limeLightSub);
+  private final PPIDAutoAim autoAimLime = new PPIDAutoAim(drivetrainSubsystem, limeLightSub);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
 
