@@ -48,6 +48,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   // private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
   private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON);
   private final SwerveModule[] swerveModules;
+  private final ProfiledPIDController thetaController = new ProfiledPIDController( -AutoConstants.THETA_kP, AutoConstants.THETA_kI, AutoConstants.THETA_kD,THETA_CONSTRAINTS);
+
 
   private ChassisSpeeds desiredChassisSpeeds;
 
@@ -328,14 +330,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return command that will run the trajectory
    */
   public Command createCommandForTrajectory(Trajectory trajectory, Supplier<Pose2d> poseSupplier) {
-    var thetaController =
-        new ProfiledPIDController(
-            -AutoConstants.THETA_kP,
-            AutoConstants.THETA_kI,
-            AutoConstants.THETA_kD,
-            THETA_CONSTRAINTS);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
     SwerveControllerCommand swerveControllerCommand =
         new SwerveControllerCommand(
             trajectory,
@@ -347,6 +342,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
             this::setModuleStates);
 
     return swerveControllerCommand;
+  }
+
+  public ProfiledPIDController gethetaController(){
+    return thetaController;
   }
 
   public static PPSwerveControllerCommand followTrajectory(
