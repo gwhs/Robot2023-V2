@@ -5,10 +5,8 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Constants.AutoConstants.THETA_CONSTRAINTS;
-import static frc.robot.Constants.DrivetrainConstants.PIGEON_ID;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
@@ -34,6 +32,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.DriveTrainConstants;
+import frc.robot.GyroMoment.WrappedGyro;
+import frc.robot.GyroMoment.WrappedGyro.GyroType;
 import frc.robot.swerve.ModuleConfiguration;
 import frc.robot.swerve.SwerveModule;
 import frc.robot.swerve.SwerveSpeedController;
@@ -44,16 +44,25 @@ import java.util.stream.IntStream;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
-  private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(PIGEON_ID);
+  // private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(PIGEON_ID);
   // private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
+  private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON);
   private final SwerveModule[] swerveModules;
+  private final ProfiledPIDController thetaController =
+      new ProfiledPIDController(
+          -AutoConstants.THETA_kP,
+          AutoConstants.THETA_kI,
+          AutoConstants.THETA_kD,
+          THETA_CONSTRAINTS);
+  private final PIDController thetaControllerPID =
+      new PIDController(-AutoConstants.THETA_kP, AutoConstants.THETA_kI, AutoConstants.THETA_kD);
 
   private ChassisSpeeds desiredChassisSpeeds;
 
   public DrivetrainSubsystem(String robotName) {
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
-    pigeon.configMountPoseRoll(0);
-    pigeon.configMountPoseYaw(0);
+    gyro.configMountPoseRoll(0);
+    gyro.configMountPoseYaw(0);
 
     ShuffleboardLayout frontLeftLayout = null;
     ShuffleboardLayout frontRightLayout = null;
@@ -217,14 +226,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public Rotation2d getGyroscopeRotation() {
-    return pigeon.getRotation2d();
+    return gyro.getRotation2d();
     // We have to invert the angle of the NavX so that rotating the robot counter-clockwise makes
     // the angle increase.
     // return Rotation2d.fromDegrees(360.0 - navx.getYaw());
   }
 
+  public WrappedGyro getGyro() {
+    return gyro;
+  }
+
   public void setGyroscopeRotation(double angleDeg) {
-    pigeon.setYaw(angleDeg);
+    gyro.setYaw(angleDeg);
   }
 
   public void resetGyro() {
@@ -302,7 +315,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    *
    * @param states array of states. Must be ordered frontLeft, frontRight, backLeft, backRight
    */
-  private void setModuleStates(SwerveModuleState[] states) {
+  public void setModuleStates(SwerveModuleState[] states) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);
     IntStream.range(0, swerveModules.length)
@@ -323,14 +336,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return command that will run the trajectory
    */
   public Command createCommandForTrajectory(Trajectory trajectory, Supplier<Pose2d> poseSupplier) {
-    var thetaController =
-        new ProfiledPIDController(
-            -AutoConstants.THETA_kP,
-            AutoConstants.THETA_kI,
-            AutoConstants.THETA_kD,
-            THETA_CONSTRAINTS);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
     SwerveControllerCommand swerveControllerCommand =
         new SwerveControllerCommand(
             trajectory,
@@ -342,6 +348,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
             this::setModuleStates);
 
     return swerveControllerCommand;
+  }
+
+  public PIDController getThetaController() {
+    return thetaControllerPID;
   }
 
   public static PPSwerveControllerCommand followTrajectory(

@@ -57,7 +57,7 @@ public final class Constants {
     public static final double ROBOT_LENGTH_WIDTH = 0.698;
 
     // "rio" for springtrap, "CAN_Network" for hana
-    public static final String CANIVORE_NAME = "CAN_Network";
+    public static final String CANIVORE_NAME = "rio";
 
     public static final int PIGEON_ID = 30;
 
@@ -67,7 +67,8 @@ public final class Constants {
      * <p>This is a measure of how fast the robot should be able to drive in a straight line.
      */
     public static final double MAX_VELOCITY_METERS_PER_SECOND =
-        10 // chris why 45
+        638.0
+            / 60.0
             * // was 6380.0 / 60.0
             ModuleConfiguration.MK4I_L2.getDriveReduction()
             * ModuleConfiguration.MK4I_L2.getWheelDiameter()
@@ -539,5 +540,15 @@ public final class Constants {
         return pose;
       }
     }
+  }
+
+  public static final class LimeLightConstants {
+    public static final double MAX_LIMELIGHT_ERROR_DEGREES =
+        1; // limelight max degrees off, max degrees error
+    public static final double CAMERA_HEIGHT = 22.5;
+    public static final double TARGET_HEIGHT = 105.7;
+    public static final double MOUNTING_ANGLE = 47.7;
+    public static final double LOWER_DISTANCE_SHOOT = 120;
+    public static final double UPPER_ANGLE_SHOOT = 2;
   }
 }
