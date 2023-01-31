@@ -52,7 +52,7 @@ public class RobotContainer {
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
   // change to hana or spring depending on robot
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("colliope");
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("spring");
   private final AutoAimLime autoAimLime = new AutoAimLime(drivetrainSubsystem, limeLightSub);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
