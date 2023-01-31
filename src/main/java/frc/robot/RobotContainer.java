@@ -102,7 +102,7 @@ public class RobotContainer {
                     * drivetrainAmplificationScaleRotation()
                     * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
                     / 2));
-      drivetrainSubsystem.reseedSteerMotorOffsets();
+    drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
     configureButtonBindings();
     configureDashboard();
