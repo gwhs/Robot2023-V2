@@ -93,8 +93,9 @@ public class PPIDAutoAim extends CommandBase {
     }
     System.out.printf("X equals %f PID moves %f%n", limeLight.getTx(), values[2]);
     System.out.println();
-    //atgoal is not working
-    if (pid.atGoal()) {
+    //atgoal is not working, it needs it to be == setpoint and be in setpoint. 
+    //setpoint just makes sure it's in the tolerance
+    if (pid.atSetpoint()) {
       angleDone = true;
     } else {
       angleDone = false;
