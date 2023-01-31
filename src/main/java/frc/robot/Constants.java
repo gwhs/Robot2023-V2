@@ -165,11 +165,11 @@ public final class Constants {
     public static double THETA_kD = 0.0;
 
     public static double X_kP = 0.1;
-    public static double X_kI = 0.0;
+    public static double X_kI = 1.0;
     public static double X_kD = 0.0;
 
     public static double Y_kP = 0.004;
-    public static double Y_kI = 0.0;
+    public static double Y_kI = 1.0;
     public static double Y_kD = 0.0;
 
     public static PIDController m_translationController =
