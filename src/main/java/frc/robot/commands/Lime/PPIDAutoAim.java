@@ -34,15 +34,16 @@ public class PPIDAutoAim extends CommandBase {
   private double targetY = LimeLightConstants.MAX_LIMELIGHT_ERROR_DEGREES;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
-  private Constraints constraints =
+  private Constraints angleConstraints =
       new Constraints(
           DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
           DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
+
   private double p = 3;
   private double i = 0;
   private double d = .1;
   private final ShuffleboardTab tab;
-  private ProfiledPIDController pid = new ProfiledPIDController(p, i, d, constraints);
+  private ProfiledPIDController pid = new ProfiledPIDController(p, i, d, angleConstraints);
 
   /** Creates a new AutoAimLime. */
   public PPIDAutoAim(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {
