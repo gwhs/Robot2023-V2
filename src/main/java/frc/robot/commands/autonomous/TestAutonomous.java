@@ -8,11 +8,9 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.List;
@@ -36,9 +34,8 @@ public class TestAutonomous extends SequentialCommandGroup {
         //     drivetrain.getThetaController(),
         //     drivetrain::setModuleStates,
         //     drivetrain);
-    DrivetrainSubsystem.followTrajectory(drivetrain, poseEstimatorSystem, trajectories.get(0));
+        DrivetrainSubsystem.followTrajectory(drivetrain, poseEstimatorSystem, trajectories.get(0));
 
-    addCommands(drive, 
-    new InstantCommand(() -> drivetrain.drive(new ChassisSpeeds(0, 0 ,0))));
+    addCommands(drive, new InstantCommand(() -> drivetrain.drive(new ChassisSpeeds(0, 0, 0))));
   }
 }
