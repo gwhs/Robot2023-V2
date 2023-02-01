@@ -189,16 +189,16 @@ public class RobotContainer {
         .a()
         .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
 
-    controller
-        .y()
-        .whileTrue(
-            new WPIAStar(
-                drivetrainSubsystem,
-                poseEstimator,
-                new TrajectoryConfig(2, 2),
-                finalNode,
-                obstacles,
-                AStarMap));
+    // controller
+    //     .y()
+    //     .whileTrue(
+    //         new WPIAStar(
+    //             drivetrainSubsystem,
+    //             poseEstimator,
+    //             new TrajectoryConfig(2, 2),
+    //             finalNode,
+    //             obstacles,
+    //             AStarMap));
     // controller.x().whileTrue(new DriveWithPathPlanner(drivetrainSubsystem,
     // poseEstimator, new PathConstraints(2, 2),
     // new PathPoint(new Translation2d(2.33, 2.03),
