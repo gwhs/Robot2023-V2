@@ -52,7 +52,7 @@ public class RobotContainer {
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
   // change to hana or spring depending on robot
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("spring");
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("fjld");
   private final AutoAimLime autoAimLime = new AutoAimLime(drivetrainSubsystem, limeLightSub);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
@@ -102,7 +102,7 @@ public class RobotContainer {
                     * drivetrainAmplificationScaleRotation()
                     * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
                     / 2));
-
+    drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
     configureButtonBindings();
     configureDashboard();
@@ -166,8 +166,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem);
-    Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem);
     // Start button reseeds the steer motors to fix dead wheel
     controller
         .start()
@@ -181,13 +179,13 @@ public class RobotContainer {
 
     controller.b().onTrue(autoAimLime.withTimeout(3));
 
-    controller.start().toggleOnTrue(fieldHeadingDriveCommand);
+    controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
     controller.x().toggleOnTrue(autoBalance);
 
-    controller
-        .a()
-        .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
+    // controller
+    //     .a()
+    //     .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
 
     // controller
     //     .y()
