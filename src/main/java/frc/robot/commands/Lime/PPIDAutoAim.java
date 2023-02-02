@@ -105,7 +105,7 @@ public class PPIDAutoAim extends CommandBase {
     } else {
       System.out.println("NO TARGET FOUND BY LIMELIGHT");
     }
-    System.out.printf("X equals %f PID moves %f%n", limeLight.getTx(), values[2]);
+    System.out.printf("X equals %.2f PID moves %.2f%n", limeLight.getTx(), values[2]);
     System.out.println();
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
     // setpoint just makes sure it's in the tolerance
