@@ -32,6 +32,7 @@ public class PPIDAutoAim extends CommandBase {
   private final GenericEntry dentry;
   private final GenericEntry ientry;
   private double initAngle;
+  private double distanceError;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
   private Constraints angleConstraints =
@@ -89,8 +90,9 @@ public class PPIDAutoAim extends CommandBase {
     anglePid.setGoal(Math.toRadians(angleGoal));
     anglePid.setTolerance(Math.toRadians(2));
 
-    positionPid.reset(limeLight.hasTarget() ? limeLight.getXDistance(): LimeLightConstants.LOWER_DISTANCE_SHOOT);
-    positionPid.setGoal(LimeLightConstants.LOWER_DISTANCE_SHOOT);
+    positionPid.reset(
+        limeLight.hasTarget() ? limeLight.getXDistance() : 0);
+    positionPid.setGoal(0);
     positionPid.setTolerance(5);
   }
 
@@ -99,6 +101,7 @@ public class PPIDAutoAim extends CommandBase {
   public void execute() {
 
     // add pids
+    distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
     values = chassisValuesLower();
     if (limeLight.hasTarget()) {
       drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
@@ -115,10 +118,10 @@ public class PPIDAutoAim extends CommandBase {
       angleDone = false;
     }
 
-    if (Math.abs(limeLight.getXDistance()) - positionGoal < 5) {
+    if (Math.abs(distanceError) < 5) {
       horizDone = true;
     }
-    System.out.println(angleDone + "hi" + horizDone);
+    System.out.printf("angle done? %s distance %s %n", angleDone, horizDone);
   }
 
   // Called once the command ends or is interrupted.
@@ -149,11 +152,12 @@ public class PPIDAutoAim extends CommandBase {
 
     // motor.set(controller.calculate(encoder.getDistance(), goal));
     double[] x = new double[3];
-    x[0] = horizDone ? (positionPid.calculate(limeLight.getXDistance())) : 0;
-    System.out.printf("forward velocity %.2f, distance error %.1f", x[0], LimeLightConstants.LOWER_DISTANCE_SHOOT - limeLight.getXDistance());
+    double d = horizDone ? 0 : (positionPid.calculate(distanceError));
+    x[0] = distanceError / 100;
+    System.out.printf("forward velocity %.2f, distance error %.1f %n", x[0], d);
     x[1] = 0;
     // calculate is overloaded, second parameter is angle goal if it changes
-    x[2] = angleDone ? (anglePid.calculate(Math.toRadians(limeLight.getTx()))) : 0;
+    x[2] = angleDone ? 0 : (anglePid.calculate(Math.toRadians(limeLight.getTx())));
 
     // getAngle()
     //     / (((Math.sqrt(x[0] * x[0]) + x[1] * x[1]))
