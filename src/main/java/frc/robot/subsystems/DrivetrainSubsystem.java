@@ -48,15 +48,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   // private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
   private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON);
   private final SwerveModule[] swerveModules;
-  private final ProfiledPIDController thetaController =
-      new ProfiledPIDController(
-          -AutoConstants.THETA_kP,
-          AutoConstants.THETA_kI,
-          AutoConstants.THETA_kD,
-          THETA_CONSTRAINTS);
 
-  private final PIDController thetaControllerPID =
-      new PIDController(-AutoConstants.THETA_kP, AutoConstants.THETA_kI, AutoConstants.THETA_kD);
   private final double[] offsets = new double[4];
   private final DriveTrainConstants driveTrain;
 
@@ -279,6 +271,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void setModuleStates(SwerveModuleState[] states) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);
+    System.out.println("module speed = " + swerveModules[0].getDriveVelocity());
     IntStream.range(0, swerveModules.length)
         .forEach(i -> swerveModules[i].setDesiredState(states[i]));
   }
@@ -297,6 +290,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return command that will run the trajectory
    */
   public Command createCommandForTrajectory(Trajectory trajectory, Supplier<Pose2d> poseSupplier) {
+    ProfiledPIDController thetaController =
+        new ProfiledPIDController(
+            -AutoConstants.THETA_kP,
+            AutoConstants.THETA_kI,
+            AutoConstants.THETA_kD,
+            THETA_CONSTRAINTS);
+
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     SwerveControllerCommand swerveControllerCommand =
         new SwerveControllerCommand(
@@ -311,12 +311,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return swerveControllerCommand;
   }
 
-  public PIDController getThetaController() {
-    return thetaControllerPID;
-  }
-
   public PPSwerveControllerCommand followTrajectory(
       PoseEstimatorSubsystem s, PathPlannerTrajectory traj) {
+    PIDController thetaControllerPID =
+        new PIDController(-AutoConstants.THETA_kP, AutoConstants.THETA_kI, AutoConstants.THETA_kD);
+
+    thetaControllerPID.enableContinuousInput(-Math.PI, Math.PI);
     return new PPSwerveControllerCommand(
         traj,
         s::getCurrentPose,
