@@ -62,7 +62,7 @@ public class DriveWithPathPlanner extends CommandBase {
     }
 
     pathDrivingCommand =
-        DrivetrainSubsystem.followTrajectory(driveSystem, poseEstimatorSystem, trajectory);
+        driveSystem.followTrajectory(poseEstimatorSystem, trajectory);
     pathDrivingCommand.schedule();
   }
 

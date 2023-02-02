@@ -100,7 +100,7 @@ public class PPAStar extends CommandBase {
     // constructor.
     trajectory = PathPlanner.generatePath(constraints, Arrays.asList(fullPathPoints));
     pathDrivingCommand =
-        DrivetrainSubsystem.followTrajectory(driveSystem, poseEstimatorSystem, trajectory);
+        driveSystem.followTrajectory(poseEstimatorSystem, trajectory);
     pathDrivingCommand.schedule();
   }
 

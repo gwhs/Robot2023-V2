@@ -34,7 +34,7 @@ public class TestAutonomous extends SequentialCommandGroup {
         //     drivetrain.getThetaController(),
         //     drivetrain::setModuleStates,
         //     drivetrain);
-        DrivetrainSubsystem.followTrajectory(drivetrain, poseEstimatorSystem, trajectories.get(0));
+        drivetrain.followTrajectory(poseEstimatorSystem, trajectories.get(0));
 
     addCommands(drive, new InstantCommand(() -> drivetrain.drive(new ChassisSpeeds(0, 0, 0))));
   }
