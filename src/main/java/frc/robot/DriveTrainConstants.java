@@ -30,7 +30,7 @@ public class DriveTrainConstants {
   // hana drivemotors are inverted, steer motors are not
   public static DriveTrainConstants hana = new DriveTrainConstants(336.6, 321.05, 75.9, 358.5);
 
-  public static DriveTrainConstants calliope = new DriveTrainConstants(283.0957, 118.5, 491.5, 287);
+  public static DriveTrainConstants calliope = new DriveTrainConstants(284.4, 304.1, 314.2, 284.5);
 
   public DriveTrainConstants(
       double FRONT_LEFT_MODULE_STEER_OFFSET,
