@@ -23,14 +23,14 @@ import frc.robot.subsystems.LimeVision.LimeLightSub;
 public class PPIDAutoAim extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private LimeLightSub limeLight;
-  private double[] values;
+  private double[] values = {0,0,0};
   private boolean horizDone = false;
   private boolean angleDone = false;
   private double angleGoal = 0;
   private double positionGoal = LimeLightConstants.LOWER_DISTANCE_SHOOT;
-  private final GenericEntry pentry;
-  private final GenericEntry dentry;
-  private final GenericEntry ientry;
+  // private final GenericEntry pentry;
+  // private final GenericEntry dentry;
+  // private final GenericEntry ientry;
   private double initAngle;
   private double distanceError;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
@@ -50,7 +50,7 @@ public class PPIDAutoAim extends CommandBase {
   private double angleP = 3;
   private double angleI = 0;
   private double angleD = .1;
-  private final ShuffleboardTab tab;
+  //private final ShuffleboardTab tab;
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
 
@@ -67,12 +67,12 @@ public class PPIDAutoAim extends CommandBase {
     this.drivetrainSubsystem = drivetrainSubsystem;
 
     addRequirements(drivetrainSubsystem);
-    tab = Shuffleboard.getTab("limepid");
-    ShuffleboardLayout input =
-        tab.getLayout("Constant Inputs", BuiltInLayouts.kList).withSize(2, 4).withPosition(2, 0);
-    pentry = input.add("p Constant", angleP).withWidget(BuiltInWidgets.kTextView).getEntry();
-    dentry = input.add("d Constant", angleI).withWidget(BuiltInWidgets.kTextView).getEntry();
-    ientry = input.add("i constant", angleD).withWidget(BuiltInWidgets.kTextView).getEntry();
+    // tab = Shuffleboard.getTab("limepid");
+    // ShuffleboardLayout input =
+    //     tab.getLayout("Constant Inputs", BuiltInLayouts.kList).withSize(2, 4).withPosition(2, 0);
+    // pentry = input.add("p Constant", angleP).withWidget(BuiltInWidgets.kTextView).getEntry();
+    // dentry = input.add("d Constant", angleI).withWidget(BuiltInWidgets.kTextView).getEntry();
+    // ientry = input.add("i constant", angleD).withWidget(BuiltInWidgets.kTextView).getEntry();
   }
 
   // Called when the command is initially scheduled.
@@ -80,18 +80,17 @@ public class PPIDAutoAim extends CommandBase {
   public void initialize() {
     horizDone = false;
     angleDone = false;
-
-    initAngle = limeLight.hasTarget() ? limeLight.getTx() : 0;
-    anglePid.reset(Math.toRadians(initAngle));
-    angleP = pentry.getDouble(angleP);
-    angleD = dentry.getDouble(angleD);
-    angleI = ientry.getDouble(angleI);
+    distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
+    // angleP = pentry.getDouble(angleP);
+    // angleD = dentry.getDouble(angleD);
+    // angleI = ientry.getDouble(angleI);
     // goal velocity is 0 (overloaded constructor)
+    anglePid.reset(Math.toRadians(limeLight.hasTarget() ? limeLight.getTx() : 0));
     anglePid.setGoal(Math.toRadians(angleGoal));
     anglePid.setTolerance(Math.toRadians(2));
 
     positionPid.reset(
-        limeLight.hasTarget() ? limeLight.getXDistance() : 0);
+        limeLight.hasTarget() ? distanceError : 0);
     positionPid.setGoal(0);
     positionPid.setTolerance(5);
   }
@@ -102,16 +101,15 @@ public class PPIDAutoAim extends CommandBase {
 
     // add pids
     distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
-    values = chassisValuesLower();
     if (limeLight.hasTarget()) {
+      values = chassisValuesLower();
       drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
     } else {
       System.out.println("NO TARGET FOUND BY LIMELIGHT");
     }
     System.out.printf("X equals %.2f PID moves %.2f%n", limeLight.getTx(), values[2]);
-    System.out.println();
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
-    // setpoint just makes sure it's in the tolerance
+    // setpoint just makes sure it's in the tolerance, doesn't work
     if (Math.abs(limeLight.getTx()) - angleGoal < 2) {
       angleDone = true;
     } else {
@@ -120,6 +118,8 @@ public class PPIDAutoAim extends CommandBase {
 
     if (Math.abs(distanceError) < 5) {
       horizDone = true;
+    } else{
+      horizDone = false;
     }
     System.out.printf("angle done? %s distance %s %n", angleDone, horizDone);
   }
