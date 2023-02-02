@@ -8,6 +8,7 @@ import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -22,6 +23,7 @@ import frc.robot.commands.ChaseTagCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.Lime.AutoAimLime;
+import frc.robot.commands.WPIAStar;
 import frc.robot.commands.autonomous.TestAutonomous;
 import frc.robot.pathfind.Edge;
 import frc.robot.pathfind.Node;
@@ -61,7 +63,7 @@ public class RobotContainer {
       new ChaseTagCommand(photonCamera, drivetrainSubsystem, poseEstimator::getCurrentPose);
 
   VisGraph AStarMap = new VisGraph();
-  final Node finalNode = new Node(4, 4, Rotation2d.fromDegrees(180));
+  final Node finalNode = new Node(2, 2, Rotation2d.fromDegrees(0));
   // final List<Obstacle> obstacles = new ArrayList<Obstacle>();
   final List<Obstacle> obstacles = Constants.FieldConstants.obstacles;
 
@@ -185,16 +187,16 @@ public class RobotContainer {
     //     .a()
     //     .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
 
-    // controller
-    //     .y()
-    //     .whileTrue(
-    //         new WPIAStar(
-    //             drivetrainSubsystem,
-    //             poseEstimator,
-    //             new TrajectoryConfig(2, 2),
-    //             finalNode,
-    //             obstacles,
-    //             AStarMap));
+    controller
+        .y()
+        .whileTrue(
+            new WPIAStar(
+                drivetrainSubsystem,
+                poseEstimator,
+                new TrajectoryConfig(2, 2),
+                finalNode,
+                obstacles,
+                AStarMap));
     // controller.x().whileTrue(new DriveWithPathPlanner(drivetrainSubsystem,
     // poseEstimator, new PathConstraints(2, 2),
     // new PathPoint(new Translation2d(2.33, 2.03),
@@ -208,7 +210,7 @@ public class RobotContainer {
     // controller.x().
     //     whileTrue(new PPAStar(drivetrainSubsystem, poseEstimator,
     //         new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
-    controller.y().onTrue(new TestAutonomous(drivetrainSubsystem, poseEstimator));
+    // controller.y().onTrue(new TestAutonomous(drivetrainSubsystem, poseEstimator));
   }
 
   /**
