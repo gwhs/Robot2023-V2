@@ -106,8 +106,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     poseEstimator.update(
         drivetrainSubsystem.getGyroscopeRotation(), drivetrainSubsystem.getModulePositions());
 
-    System.out.println(
-        this.getFormattedPose());
+    System.out.println(this.getFormattedPose());
 
     field2d.setRobotPose(getCurrentPose());
   }
