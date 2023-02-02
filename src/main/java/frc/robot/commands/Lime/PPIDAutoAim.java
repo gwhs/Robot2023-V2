@@ -27,6 +27,7 @@ public class PPIDAutoAim extends CommandBase {
   private boolean horizDone = false;
   private boolean angleDone = false;
   private double angleGoal = 0;
+  private double positionGoal = LimeLightConstants.LOWER_DISTANCE_SHOOT;
   private final GenericEntry pentry;
   private final GenericEntry dentry;
   private final GenericEntry ientry;
@@ -42,8 +43,8 @@ public class PPIDAutoAim extends CommandBase {
   // gets there in a second
   private Constraints positionConstraints =
       new Constraints(
-          DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND,
-          DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);
+          DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5,
+          DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5);
 
   private double angleP = 3;
   private double angleI = 0;
@@ -52,9 +53,9 @@ public class PPIDAutoAim extends CommandBase {
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
 
-  private double positionP = 3;
+  private double positionP = .5;
   private double positionI = 0;
-  private double positionD = 0;
+  private double positionD = .1;
   private ProfiledPIDController positionPid =
       new ProfiledPIDController(positionP, positionI, positionD, positionConstraints);
 
@@ -86,11 +87,11 @@ public class PPIDAutoAim extends CommandBase {
     angleI = ientry.getDouble(angleI);
     // goal velocity is 0 (overloaded constructor)
     anglePid.setGoal(Math.toRadians(angleGoal));
-    anglePid.setTolerance(Math.toRadians(10));
+    anglePid.setTolerance(Math.toRadians(2));
 
-    positionPid.reset(limeLight.getXDistance());
+    positionPid.reset(limeLight.hasTarget() ? limeLight.getXDistance(): LimeLightConstants.LOWER_DISTANCE_SHOOT);
     positionPid.setGoal(LimeLightConstants.LOWER_DISTANCE_SHOOT);
-    positionPid.setTolerance(3);
+    positionPid.setTolerance(5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -104,20 +105,20 @@ public class PPIDAutoAim extends CommandBase {
     } else {
       System.out.println("NO TARGET FOUND BY LIMELIGHT");
     }
-    if (Math.abs(limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT) < 2) {
-      horizDone = true;
-    } else {
-      horizDone = false;
-    }
     System.out.printf("X equals %f PID moves %f%n", limeLight.getTx(), values[2]);
     System.out.println();
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
     // setpoint just makes sure it's in the tolerance
-    if (anglePid.atSetpoint()) {
+    if (Math.abs(limeLight.getTx()) - angleGoal < 2) {
       angleDone = true;
     } else {
       angleDone = false;
     }
+
+    if (Math.abs(limeLight.getXDistance()) - positionGoal < 5) {
+      horizDone = true;
+    }
+    System.out.println(angleDone + "hi" + horizDone);
   }
 
   // Called once the command ends or is interrupted.
@@ -132,7 +133,7 @@ public class PPIDAutoAim extends CommandBase {
   @Override
   public boolean isFinished() {
     // && angleDone
-    return angleDone;
+    return angleDone && horizDone;
   }
 
   public double[] chassisValuesLower() {
@@ -147,13 +148,12 @@ public class PPIDAutoAim extends CommandBase {
     */
 
     // motor.set(controller.calculate(encoder.getDistance(), goal));
-
-    double distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
     double[] x = new double[3];
-    x[0] = (positionPid.calculate(limeLight.getXDistance())) / 10;
+    x[0] = horizDone ? (positionPid.calculate(limeLight.getXDistance())) : 0;
+    System.out.printf("forward velocity %.2f, distance error %.1f", x[0], LimeLightConstants.LOWER_DISTANCE_SHOOT - limeLight.getXDistance());
     x[1] = 0;
     // calculate is overloaded, second parameter is angle goal if it changes
-    x[2] = (anglePid.calculate(Math.toRadians(limeLight.getTx())));
+    x[2] = angleDone ? (anglePid.calculate(Math.toRadians(limeLight.getTx()))) : 0;
 
     // getAngle()
     //     / (((Math.sqrt(x[0] * x[0]) + x[1] * x[1]))
