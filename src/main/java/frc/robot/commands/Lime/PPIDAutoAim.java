@@ -12,7 +12,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.LimeVision.LimeLightSub;
+import frc.robot.subsystems.LimeVision.*;
+
 
 public class PPIDAutoAim extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
@@ -105,7 +106,7 @@ public class PPIDAutoAim extends CommandBase {
     // setpoint just makes sure it's in the tolerance, doesn't work
     if (Math.abs(limeLight.getTx()) - angleGoal < 2) {
       angleDone = true;
-    } else {
+    } else {  
       angleDone = false;
     }
 
