@@ -132,7 +132,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
         newPose);
   }
 
-  public double getAngle(){
+  public double getAngle() {
     Pose2d pose = getCurrentPose();
     return pose.getRotation().getDegrees();
   }

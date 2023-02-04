@@ -14,15 +14,13 @@ import frc.robot.Constants.LimeLightConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
-import frc.robot.LimelightHelpers;
-
 
 public class PPIDAutoAim extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private PoseEstimatorSubsystem poseEstimatorSubsystem;
   private LimeLightSub limeLight;
   private double[] values = {0, 0, 0};
-  private boolean horizDone = false;
+  private boolean sidewaysDone = false;
   private boolean angleDone = false;
   private double angleGoal = 0;
   // private final GenericEntry pentry;
@@ -44,53 +42,47 @@ public class PPIDAutoAim extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5,
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5);
 
-  private double angleP = 3;
+  private double angleP = 5;
   private double angleI = 0;
-  private double angleD = .1;
+  private double angleD = 0;
   // private final ShuffleboardTab tab;
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
 
-  private double positionP = .5;
-  private double positionI = 0;
-  private double positionD = .1;
-  private ProfiledPIDController positionPid =
-      new ProfiledPIDController(positionP, positionI, positionD, positionConstraints);
+  private double sidewaysP = .5;
+  private double sidewaysI = 0;
+  private double sidewaysD = 0;
+  private ProfiledPIDController sidewaysPid =
+      new ProfiledPIDController(sidewaysP, sidewaysI, sidewaysD, positionConstraints);
 
   /** Creates a new AutoAimLime. */
-  public PPIDAutoAim(DrivetrainSubsystem drivetrainSubsystem, PoseEstimatorSubsystem poseEstimatorSubsystem, LimeLightSub limeLightSub) {
+  public PPIDAutoAim(
+      DrivetrainSubsystem drivetrainSubsystem,
+      PoseEstimatorSubsystem poseEstimatorSubsystem,
+      LimeLightSub limeLightSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLight = limeLightSub;
     this.poseEstimatorSubsystem = poseEstimatorSubsystem;
     this.drivetrainSubsystem = drivetrainSubsystem;
 
     addRequirements(drivetrainSubsystem);
-    // tab = Shuffleboard.getTab("limepid");
-    // ShuffleboardLayout input =
-    //     tab.getLayout("Constant Inputs", BuiltInLayouts.kList).withSize(2, 4).withPosition(2, 0);
-    // pentry = input.add("p Constant", angleP).withWidget(BuiltInWidgets.kTextView).getEntry();
-    // dentry = input.add("d Constant", angleI).withWidget(BuiltInWidgets.kTextView).getEntry();
-    // ientry = input.add("i constant", angleD).withWidget(BuiltInWidgets.kTextView).getEntry();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    horizDone = false;
     angleDone = false;
-    distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
-    // angleP = pentry.getDouble(angleP);
-    // angleD = dentry.getDouble(angleD);
-    // angleI = ientry.getDouble(angleI);
-    // goal velocity is 0 (overloaded constructor)
+    sidewaysDone= false;
+
+    //rotating to align
     anglePid.reset(Math.toRadians(poseEstimatorSubsystem.getAngle()));
     anglePid.setGoal(Math.toRadians(0));
-    anglePid.setTolerance(Math.toRadians(2));
+    anglePid.setTolerance(Math.toRadians(.5));
 
-    positionPid.reset(limeLight.hasTarget() ? distanceError : 0);
-    positionPid.setGoal(0);
-    positionPid.setTolerance(5);
-  
+    //moving to align
+    sidewaysPid.reset(limeLight.hasTarget() ? distanceError : 0);
+    sidewaysPid.setGoal(0);
+    sidewaysPid.setTolerance(3);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -99,27 +91,24 @@ public class PPIDAutoAim extends CommandBase {
 
     // add pids
     distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
-    if (limeLight.hasTarget()) {
-      values = chassisValuesLower();
-      drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
-    } else {
-      System.out.println("NO TARGET FOUND BY LIMELIGHT");
-    }
-    System.out.printf("X equals %.2f PID moves %.2f%n", limeLight.getTx(), values[2]);
+    values = chassisValuesLower();
+    drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
+    System.out.printf(
+        "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
     // setpoint just makes sure it's in the tolerance, doesn't work
-    if (Math.abs(limeLight.getTx()) - angleGoal < 2) {
+    if (Math.abs(poseEstimatorSubsystem.getAngle()) < .5) {
       angleDone = true;
-    } else {  
+    } else {
       angleDone = false;
     }
 
-    if (Math.abs(distanceError) < 5) {
-      horizDone = true;
-    } else {
-      horizDone = false;
-    }
-    System.out.printf("angle done? %s distance %s %n", angleDone, horizDone);
+    // if (Math.abs(distanceError) < 5) {
+    //   horizDone = true;
+    // } else {
+    //   horizDone = false;
+    // }
+    // System.out.printf("angle done? %s distance %s %n", angleDone, horizDone);
   }
 
   // Called once the command ends or is interrupted.
@@ -134,7 +123,7 @@ public class PPIDAutoAim extends CommandBase {
   @Override
   public boolean isFinished() {
     // && angleDone
-    return angleDone && horizDone;
+    return angleDone;
   }
 
   public double[] chassisValuesLower() {
@@ -150,12 +139,12 @@ public class PPIDAutoAim extends CommandBase {
 
     // motor.set(controller.calculate(encoder.getDistance(), goal));
     double[] x = new double[3];
-    double d = horizDone ? 0 : (positionPid.calculate(distanceError));
-    x[0] = distanceError / 100;
+    double d = sidewaysDone ? 0 : (sidewaysPid.calculate(distanceError));
+    x[0] = 0;
     System.out.printf("forward velocity %.2f, distance error %.1f %n", x[0], d);
     x[1] = 0;
     // calculate is overloaded, second parameter is angle goal if it changes
-    x[2] = angleDone ? 0 : (anglePid.calculate(Math.toRadians(limeLight.getTx())));
+    x[2] = angleDone ? 0 : (anglePid.calculate(Math.toRadians(poseEstimatorSubsystem.getAngle())));
 
     // getAngle()
     //     / (((Math.sqrt(x[0] * x[0]) + x[1] * x[1]))

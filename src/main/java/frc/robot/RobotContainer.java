@@ -55,7 +55,8 @@ public class RobotContainer {
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("spring");
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
-  private final PPIDAutoAim autoAimLime = new PPIDAutoAim(drivetrainSubsystem, poseEstimator, limeLightSub);
+  private final PPIDAutoAim autoAimLime =
+      new PPIDAutoAim(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
 
