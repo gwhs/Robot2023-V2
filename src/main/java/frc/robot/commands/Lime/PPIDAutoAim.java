@@ -25,7 +25,6 @@ public class PPIDAutoAim extends CommandBase {
   private boolean horizDone = false;
   private boolean angleDone = false;
   private double angleGoal = 0;
-  private double positionGoal = LimeLightConstants.LOWER_DISTANCE_SHOOT;
   // private final GenericEntry pentry;
   // private final GenericEntry dentry;
   // private final GenericEntry ientry;
@@ -84,13 +83,14 @@ public class PPIDAutoAim extends CommandBase {
     // angleD = dentry.getDouble(angleD);
     // angleI = ientry.getDouble(angleI);
     // goal velocity is 0 (overloaded constructor)
-    anglePid.reset(Math.toRadians(limeLight.hasTarget() ? limeLight.getTx() : 0));
-    anglePid.setGoal(Math.toRadians(angleGoal));
+    anglePid.reset(Math.toRadians(poseEstimatorSubsystem.getAngle()));
+    anglePid.setGoal(Math.toRadians(0));
     anglePid.setTolerance(Math.toRadians(2));
 
     positionPid.reset(limeLight.hasTarget() ? distanceError : 0);
     positionPid.setGoal(0);
     positionPid.setTolerance(5);
+  
   }
 
   // Called every time the scheduler runs while the command is scheduled.
