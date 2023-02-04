@@ -7,12 +7,6 @@ package frc.robot.commands.Lime;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
@@ -23,7 +17,7 @@ import frc.robot.subsystems.LimeVision.LimeLightSub;
 public class PPIDAutoAim extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private LimeLightSub limeLight;
-  private double[] values = {0,0,0};
+  private double[] values = {0, 0, 0};
   private boolean horizDone = false;
   private boolean angleDone = false;
   private double angleGoal = 0;
@@ -50,7 +44,7 @@ public class PPIDAutoAim extends CommandBase {
   private double angleP = 3;
   private double angleI = 0;
   private double angleD = .1;
-  //private final ShuffleboardTab tab;
+  // private final ShuffleboardTab tab;
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
 
@@ -89,8 +83,7 @@ public class PPIDAutoAim extends CommandBase {
     anglePid.setGoal(Math.toRadians(angleGoal));
     anglePid.setTolerance(Math.toRadians(2));
 
-    positionPid.reset(
-        limeLight.hasTarget() ? distanceError : 0);
+    positionPid.reset(limeLight.hasTarget() ? distanceError : 0);
     positionPid.setGoal(0);
     positionPid.setTolerance(5);
   }
@@ -118,7 +111,7 @@ public class PPIDAutoAim extends CommandBase {
 
     if (Math.abs(distanceError) < 5) {
       horizDone = true;
-    } else{
+    } else {
       horizDone = false;
     }
     System.out.printf("angle done? %s distance %s %n", angleDone, horizDone);
