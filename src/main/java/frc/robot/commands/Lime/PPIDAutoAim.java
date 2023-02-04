@@ -12,11 +12,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.LimeVision.*;
+import frc.robot.subsystems.LimeVision.LimeLightSub;
+import frc.robot.subsystems.PoseEstimatorSubsystem;
+import frc.robot.LimelightHelpers;
 
 
 public class PPIDAutoAim extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
+  private PoseEstimatorSubsystem poseEstimatorSubsystem;
   private LimeLightSub limeLight;
   private double[] values = {0, 0, 0};
   private boolean horizDone = false;
@@ -56,9 +59,10 @@ public class PPIDAutoAim extends CommandBase {
       new ProfiledPIDController(positionP, positionI, positionD, positionConstraints);
 
   /** Creates a new AutoAimLime. */
-  public PPIDAutoAim(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {
+  public PPIDAutoAim(DrivetrainSubsystem drivetrainSubsystem, PoseEstimatorSubsystem poseEstimatorSubsystem, LimeLightSub limeLightSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLight = limeLightSub;
+    this.poseEstimatorSubsystem = poseEstimatorSubsystem;
     this.drivetrainSubsystem = drivetrainSubsystem;
 
     addRequirements(drivetrainSubsystem);

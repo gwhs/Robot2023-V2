@@ -132,6 +132,11 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
         newPose);
   }
 
+  public double getCurve(Pose2d newPose){
+    Pose2d pose = getCurrentPose();
+    return pose.getRotation().getRadians();
+  }
+
   /**
    * Resets the position on the field to 0,0 0-degrees, with forward being downfield. This resets
    * what "forward" is for field oriented driving.
