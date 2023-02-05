@@ -39,13 +39,10 @@ public class toPole extends CommandBase {
   private double I = 0;
   private double D = 0;
   // private final ShuffleboardTab tab;
-  private ProfiledPIDController Pid =
-      new ProfiledPIDController(P, I, D,Constraints);
+  private ProfiledPIDController Pid = new ProfiledPIDController(P, I, D, Constraints);
 
   /** Creates a new AutoAimLime. */
-  public toPole(
-      DrivetrainSubsystem drivetrainSubsystem,
-      LimeLightSub limeLightSub) {
+  public toPole(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLight = limeLightSub;
     this.drivetrainSubsystem = drivetrainSubsystem;
@@ -70,12 +67,13 @@ public class toPole extends CommandBase {
   public void execute() {
 
     // add pids
-    if (limeLight.hasTarget()){
-        values = chassisValuesLower();
-        drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
-        System.out.printf( "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
+    if (limeLight.hasTarget()) {
+      values = chassisValuesLower();
+      drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
+      System.out.printf(
+          "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     }
-    
+
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
     // setpoint just makes sure it's in the tolerance, doesn't work
     if (Math.abs(limeLight.getTx()) < 2) {
@@ -109,7 +107,8 @@ public class toPole extends CommandBase {
 
     // motor.set(controller.calculate(encoder.getDistance(), goal));
     double[] x = new double[3];
-    x[0] = Pid.calculate(limeLight.getXDistance());;
+    x[0] = Pid.calculate(limeLight.getXDistance());
+    ;
     // calculate is overloaded, second parameter is angle goal if it changes
     x[1] = 0;
     x[2] = 0;
