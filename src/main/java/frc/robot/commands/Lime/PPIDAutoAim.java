@@ -39,8 +39,8 @@ public class PPIDAutoAim extends CommandBase {
   // gets there in a second
   private Constraints positionConstraints =
       new Constraints(
-          DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5,
-          DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5);
+          DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50,
+          DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
   private double angleP = 5;
   private double angleI = 0;
@@ -49,11 +49,11 @@ public class PPIDAutoAim extends CommandBase {
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
 
-  private double sidewaysP = .5;
-  private double sidewaysI = 0;
-  private double sidewaysD = 0;
-  private ProfiledPIDController sidewaysPid =
-      new ProfiledPIDController(sidewaysP, sidewaysI, sidewaysD, positionConstraints);
+  private double positionP = .025;
+  private double positionI = 0;
+  private double positionD = 0;
+  private ProfiledPIDController positionPid =
+      new ProfiledPIDController(positionP, positionI, positionD, positionConstraints);
 
   /** Creates a new AutoAimLime. */
   public PPIDAutoAim(
@@ -72,17 +72,18 @@ public class PPIDAutoAim extends CommandBase {
   @Override
   public void initialize() {
     angleDone = false;
-    sidewaysDone= false;
+    sidewaysDone = false;
+    distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
 
-    //rotating to align
-    anglePid.reset(Math.toRadians(poseEstimatorSubsystem.getAngle()));
+    // rotating to align
+    anglePid.reset(Math.toRadians(limeLight.getAngle()));
     anglePid.setGoal(Math.toRadians(0));
-    anglePid.setTolerance(Math.toRadians(.5));
+    anglePid.setTolerance(Math.toRadians(1));
 
-    //moving to align
-    sidewaysPid.reset(limeLight.hasTarget() ? distanceError : 0);
-    sidewaysPid.setGoal(0);
-    sidewaysPid.setTolerance(3);
+    // moving to align
+    positionPid.reset(limeLight.hasTarget() ? distanceError : 0);
+    positionPid.setGoal(0);
+    positionPid.setTolerance(5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -90,25 +91,26 @@ public class PPIDAutoAim extends CommandBase {
   public void execute() {
 
     // add pids
-    distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
     values = chassisValuesLower();
-    drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
-    System.out.printf(
-        "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
+    if (limeLight.hasTarget()) {
+      drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
+    }
+    // System.out.printf(
+    // "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
     // setpoint just makes sure it's in the tolerance, doesn't work
-    if (Math.abs(poseEstimatorSubsystem.getAngle()) < .5) {
+    if (Math.abs(limeLight.getAngle()) < 1) {
       angleDone = true;
     } else {
       angleDone = false;
     }
-
-    // if (Math.abs(distanceError) < 5) {
-    //   horizDone = true;
-    // } else {
-    //   horizDone = false;
-    // }
-    // System.out.printf("angle done? %s distance %s %n", angleDone, horizDone);
+    // System.out.println(distanceError);
+    if (Math.abs(distanceError) < 2) {
+      sidewaysDone = true;
+    } else {
+      sidewaysDone = false;
+    }
+    // System.out.printf("angle done? %s distance %s %n", angleDone, sidewaysDone);
   }
 
   // Called once the command ends or is interrupted.
@@ -123,7 +125,7 @@ public class PPIDAutoAim extends CommandBase {
   @Override
   public boolean isFinished() {
     // && angleDone
-    return angleDone;
+    return angleDone && sidewaysDone;
   }
 
   public double[] chassisValuesLower() {
@@ -136,15 +138,20 @@ public class PPIDAutoAim extends CommandBase {
     use sin and cos to get values to reach max speed
     not really sure about the angle yet.
     */
-
+    double holder = 0;
     // motor.set(controller.calculate(encoder.getDistance(), goal));
+    distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
     double[] x = new double[3];
-    double d = sidewaysDone ? 0 : (sidewaysPid.calculate(distanceError));
-    x[0] = 0;
-    System.out.printf("forward velocity %.2f, distance error %.1f %n", x[0], d);
+    // double d = sidewaysDone ? 0 : (positionPid.calculate(distanceError));
+    double d = (positionP) * distanceError;
+    // System.out.printf(distanceError + "d" + d);
+
+    x[0] = d;
+    System.out.printf("forward velocity %.2f, distance error %.1f %n", d, distanceError);
+
     x[1] = 0;
     // calculate is overloaded, second parameter is angle goal if it changes
-    x[2] = angleDone ? 0 : (anglePid.calculate(Math.toRadians(poseEstimatorSubsystem.getAngle())));
+    x[2] = angleDone ? 0 : (anglePid.calculate(limeLight.getAngle()));
 
     // getAngle()
     //     / (((Math.sqrt(x[0] * x[0]) + x[1] * x[1]))

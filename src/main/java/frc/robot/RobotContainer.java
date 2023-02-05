@@ -23,6 +23,7 @@ import frc.robot.commands.ChaseTagCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.Lime.PPIDAutoAim;
+import frc.robot.commands.Lime.Rotate;
 import frc.robot.commands.WPIAStar;
 import frc.robot.commands.autonomous.TestAutonomous;
 import frc.robot.pathfind.Edge;
@@ -57,6 +58,8 @@ public class RobotContainer {
       new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
   private final PPIDAutoAim autoAimLime =
       new PPIDAutoAim(drivetrainSubsystem, poseEstimator, limeLightSub);
+
+  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
 
@@ -188,6 +191,7 @@ public class RobotContainer {
     //     .a()
     //     .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
 
+    controller.rightBumper().onTrue(rotate);
     controller
         .y()
         .whileTrue(

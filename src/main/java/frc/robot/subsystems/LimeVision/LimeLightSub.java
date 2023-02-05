@@ -57,11 +57,12 @@ public class LimeLightSub extends SubsystemBase {
     SmartDashboard.putNumber("X-Distance", getXDistance());
     SmartDashboard.putNumber("Y-Distance", getYDistance());
     SmartDashboard.putNumber("AngleToTarget", getAngle());
+    SmartDashboard.putNumber("error", getXDistance() - 120);
     // This method will be called once per scheduler run
   }
 
   public boolean hasTarget() {
-    return Math.abs(tv.getDouble(0) - 1) <= .3;
+    return tv.getDouble(0) >= .9;
   }
 
   public double getTx() {
@@ -86,6 +87,6 @@ public class LimeLightSub extends SubsystemBase {
   }
 
   public double getAngle() {
-    return Math.toRadians(-getTx());
+    return Math.toRadians(getTx());
   }
 }
