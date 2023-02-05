@@ -20,31 +20,27 @@ public class Sideways extends CommandBase {
   private LimeLightSub limeLight;
   private double[] values = {0, 0, 0};
   private boolean sidewaysDone = false;
-  private boolean angleDone = false;
+  private boolean done = false;
   // private final GenericEntry pentry;
   // private final GenericEntry dentry;
   // private final GenericEntry ientry;
   private double sideWaysError;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
-  private Constraints angleConstraints =
-      new Constraints(
-          DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-          DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
 
   //// second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
-  private Constraints positionConstraints =
+  private Constraints Constraints =
       new Constraints(
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5,
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5);
 
-  private double angleP = 5;
-  private double angleI = 0;
-  private double angleD = 0;
+  private double P = 5;
+  private double I = 0;
+  private double D = 0;
   // private final ShuffleboardTab tab;
-  private ProfiledPIDController anglePid =
-      new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
+  private ProfiledPIDController Pid =
+      new ProfiledPIDController(P, I, D,Constraints);
 
   /** Creates a new AutoAimLime. */
   public Sideways(
@@ -52,7 +48,6 @@ public class Sideways extends CommandBase {
       LimeLightSub limeLightSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLight = limeLightSub;
-    this.poseEstimatorSubsystem = poseEstimatorSubsystem;
     this.drivetrainSubsystem = drivetrainSubsystem;
 
     addRequirements(drivetrainSubsystem);
@@ -61,13 +56,13 @@ public class Sideways extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    angleDone = false;
+    done = false;
     sidewaysDone = false;
 
     // rotating to align
-    anglePid.reset(Math.toRadians(poseEstimatorSubsystem.getAngle()));
-    anglePid.setGoal(Math.toRadians(0));
-    anglePid.setTolerance(Math.toRadians(.5));
+    Pid.reset(limeLight.getTx());
+    Pid.setGoal(Math.toRadians(0));
+    Pid.setTolerance(Math.toRadians(.5));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -75,16 +70,18 @@ public class Sideways extends CommandBase {
   public void execute() {
 
     // add pids
-    values = chassisValuesLower();
-    drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
-    System.out.printf(
-        "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
+    if (limeLight.hasTarget()){
+        values = chassisValuesLower();
+        drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
+        System.out.printf( "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
+    }
+    
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
     // setpoint just makes sure it's in the tolerance, doesn't work
-    if (Math.abs(poseEstimatorSubsystem.getAngle()) < .5) {
-      angleDone = true;
+    if (Math.abs(limeLight.getTx()) < .5) {
+      done = true;
     } else {
-      angleDone = false;
+      done = false;
     }
   }
 
@@ -99,7 +96,7 @@ public class Sideways extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return angleDone;
+    return done;
   }
 
   public double[] chassisValuesLower() {
@@ -114,7 +111,8 @@ public class Sideways extends CommandBase {
     double[] x = new double[3];
     x[0] = 0;
     // calculate is overloaded, second parameter is angle goal if it changes
-    x[2] = angleDone ? 0 : (anglePid.calculate(Math.toRadians(poseEstimatorSubsystem.getAngle())));
+    x[1] = Pid.calculate(limeLight.getTx());
+    x[2] = 0;
     return x;
   }
 }

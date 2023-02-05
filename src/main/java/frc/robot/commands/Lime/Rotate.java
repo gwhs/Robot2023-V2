@@ -114,6 +114,7 @@ public class Rotate extends CommandBase {
     // motor.set(controller.calculate(encoder.getDistance(), goal));
     double[] x = new double[3];
     x[0] = 0;
+    x[1] = 0;
     // calculate is overloaded, second parameter is angle goal if it changes
     x[2] = angleDone ? 0 : (anglePid.calculate(Math.toRadians(poseEstimatorSubsystem.getAngle())));
     return x;
