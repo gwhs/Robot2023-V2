@@ -48,8 +48,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
   // private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
   private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON);
   private final SwerveModule[] swerveModules;
-  private final ProfiledPIDController thetaController = new ProfiledPIDController( -AutoConstants.THETA_kP, AutoConstants.THETA_kI, AutoConstants.THETA_kD,THETA_CONSTRAINTS);
-  private final PIDController thetaControllerPID = new PIDController( -AutoConstants.THETA_kP, AutoConstants.THETA_kI, AutoConstants.THETA_kD);
+  private final ProfiledPIDController thetaController =
+      new ProfiledPIDController(
+          -AutoConstants.THETA_kP,
+          AutoConstants.THETA_kI,
+          AutoConstants.THETA_kD,
+          THETA_CONSTRAINTS);
+  private final PIDController thetaControllerPID =
+      new PIDController(-AutoConstants.THETA_kP, AutoConstants.THETA_kI, AutoConstants.THETA_kD);
 
   private ChassisSpeeds desiredChassisSpeeds;
 
@@ -344,7 +350,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return swerveControllerCommand;
   }
 
-  public PIDController getThetaController(){
+  public PIDController getThetaController() {
     return thetaControllerPID;
   }
 

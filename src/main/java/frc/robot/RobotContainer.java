@@ -22,10 +22,12 @@ import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.Lime.AutoAimLime;
 import frc.robot.commands.WPIAStar;
 import frc.robot.commands.autonomous.TestAutonomous;
+import frc.robot.commands.move;
 import frc.robot.pathfind.Edge;
 import frc.robot.pathfind.Node;
 import frc.robot.pathfind.Obstacle;
 import frc.robot.pathfind.VisGraph;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
@@ -43,6 +45,8 @@ public class RobotContainer {
   private final CommandXboxController controller = new CommandXboxController(0);
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
+
+  private final Arm armsub = new Arm(5);
 
   private final PhotonCamera photonCamera = null; // new PhotonCamera("photonvision");
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
@@ -140,7 +144,7 @@ public class RobotContainer {
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    controller.b().onTrue(autoAimLime.withTimeout(3));
+    controller.b().onTrue(new move(armsub, 1));
 
     controller.start().toggleOnTrue(fieldHeadingDriveCommand);
 

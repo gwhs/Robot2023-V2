@@ -4,7 +4,6 @@
 
 package frc.robot.GyroMoment;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 /** Add your docs here. */
@@ -35,5 +34,4 @@ public abstract class AbstractGyro {
   public abstract double getPitchRate();
 
   public abstract double getRollRate();
-
 }

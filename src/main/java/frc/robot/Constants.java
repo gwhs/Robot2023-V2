@@ -551,4 +551,12 @@ public final class Constants {
     public static final double LOWER_DISTANCE_SHOOT = 120;
     public static final double UPPER_ANGLE_SHOOT = 2;
   }
+  public static final class Arm{
+    public static final int kSlotIdx = 0;
+    public static final int kPIDLoopIdx = 0;
+    public static final int kTimeoutMs = 30;
+    public static final Gains kGains = new Gains(0.2, 0.0, 0.0, 0.2, 0, 1.0);
+    public static final int FALCON_TICKS = 2048;
+    public static final int GEAR_RATIO = 64;
+  }
 }
