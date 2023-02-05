@@ -14,7 +14,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 
-public class Rotate extends CommandBase {
+public class Sideways extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private PoseEstimatorSubsystem poseEstimatorSubsystem;
   private LimeLightSub limeLight;
@@ -47,9 +47,8 @@ public class Rotate extends CommandBase {
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
 
   /** Creates a new AutoAimLime. */
-  public Rotate(
+  public Sideways(
       DrivetrainSubsystem drivetrainSubsystem,
-      PoseEstimatorSubsystem poseEstimatorSubsystem,
       LimeLightSub limeLightSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLight = limeLightSub;
