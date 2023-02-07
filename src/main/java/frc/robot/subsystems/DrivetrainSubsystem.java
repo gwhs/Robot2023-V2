@@ -48,7 +48,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   // private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
   private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON);
   private final SwerveModule[] swerveModules;
-  private final double[] offsets = new double[4];
   private final DriveTrainConstants driveTrain;
 
   private ChassisSpeeds desiredChassisSpeeds;
