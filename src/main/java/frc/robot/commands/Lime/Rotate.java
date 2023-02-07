@@ -33,11 +33,10 @@ public class Rotate extends CommandBase {
   private double angleP = 5;
   private double angleI = 0;
   private double angleD = 0;
-  // private final ShuffleboardTab tab;
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
 
-  /** Creates a new AutoAimLime. */
+  /** Creates a new Rotate. */
   public Rotate(
       DrivetrainSubsystem drivetrainSubsystem,
       PoseEstimatorSubsystem poseEstimatorSubsystem,
@@ -47,6 +46,8 @@ public class Rotate extends CommandBase {
     this.poseEstimatorSubsystem = poseEstimatorSubsystem;
     this.drivetrainSubsystem = drivetrainSubsystem;
 
+    addRequirements(limeLight);
+    addRequirements(poseEstimatorSubsystem);
     addRequirements(drivetrainSubsystem);
   }
 
@@ -55,7 +56,7 @@ public class Rotate extends CommandBase {
   public void initialize() {
     angleDone = false;
 
-    // rotating to align
+    // configure rotation pid
     anglePid.reset(Math.toRadians(poseEstimatorSubsystem.getAngle()));
     anglePid.setGoal(Math.toRadians(0));
     anglePid.setTolerance(Math.toRadians(.5));
@@ -64,14 +65,12 @@ public class Rotate extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    // add pids
+    // gets drive values to align to 0 degrees, field oriented.
     values = chassisValuesLower();
     drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
     System.out.printf(
         "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
-    // atgoal is not working, it needs it to be == setpoint and be in setpoint.
-    // setpoint just makes sure it's in the tolerance, doesn't work
+    // setpoint and atgoal don't work, just brute forced.
     if (Math.abs(poseEstimatorSubsystem.getAngle()) < .5) {
       angleDone = true;
     } else {
@@ -101,11 +100,9 @@ public class Rotate extends CommandBase {
     3 is degrees rotation
     */
 
-    // motor.set(controller.calculate(encoder.getDistance(), goal));
     double[] x = new double[3];
     x[0] = 0;
     x[1] = 0;
-    // calculate is overloaded, second parameter is angle goal if it changes
     x[2] = angleDone ? 0 : (anglePid.calculate(Math.toRadians(poseEstimatorSubsystem.getAngle())));
     return x;
   }
