@@ -24,6 +24,7 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.Lime.PPIDAutoAim;
 import frc.robot.commands.Lime.Rotate;
+import frc.robot.commands.Lime.Sideways;
 import frc.robot.commands.WPIAStar;
 import frc.robot.commands.autonomous.TestAutonomous;
 import frc.robot.pathfind.Edge;
@@ -60,6 +61,7 @@ public class RobotContainer {
       new PPIDAutoAim(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub);
+  private final Sideways sideways = new Sideways(drivetrainSubsystem, limeLightSub);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
 
@@ -182,6 +184,8 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
     controller.b().onTrue(autoAimLime.withTimeout(3));
+    controller.rightBumper().onTrue(sideways);
+    controller.leftBumper().onTrue(sideways);
 
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
@@ -191,7 +195,6 @@ public class RobotContainer {
     //     .a()
     //     .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
 
-    controller.rightBumper().onTrue(rotate);
     controller
         .y()
         .whileTrue(

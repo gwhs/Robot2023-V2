@@ -19,15 +19,12 @@ public class Sideways extends CommandBase {
   private PoseEstimatorSubsystem poseEstimatorSubsystem;
   private LimeLightSub limeLight;
   private double[] values = {0, 0, 0};
-  private boolean sidewaysDone = false;
-  private boolean done = false;
+  private boolean angleDone = false;
   // private final GenericEntry pentry;
   // private final GenericEntry dentry;
   // private final GenericEntry ientry;
-  private double sideWaysError;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
-
   //// second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
   private Constraints Constraints =
@@ -35,14 +32,16 @@ public class Sideways extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5,
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5);
 
-  private double P = 5;
-  private double I = 0;
-  private double D = 0;
+  private double angleP = .5;
+  private double angleI = 0;
+  private double angleD = 0;
   // private final ShuffleboardTab tab;
-  private ProfiledPIDController Pid = new ProfiledPIDController(P, I, D, Constraints);
+  private ProfiledPIDController anglePid =
+      new ProfiledPIDController(angleP, angleI, angleD, Constraints);
 
   /** Creates a new AutoAimLime. */
   public Sideways(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {
+
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLight = limeLightSub;
     this.drivetrainSubsystem = drivetrainSubsystem;
@@ -53,13 +52,12 @@ public class Sideways extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    done = false;
-    sidewaysDone = false;
+    angleDone = false;
 
     // rotating to align
-    Pid.reset(limeLight.getTx());
-    Pid.setGoal(Math.toRadians(0));
-    Pid.setTolerance(Math.toRadians(.5));
+    anglePid.reset(Math.toRadians(poseEstimatorSubsystem.getAngle()));
+    anglePid.setGoal(Math.toRadians(0));
+    anglePid.setTolerance(Math.toRadians(.5));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -67,19 +65,16 @@ public class Sideways extends CommandBase {
   public void execute() {
 
     // add pids
-    if (limeLight.hasTarget()) {
-      values = chassisValuesLower();
-      drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
-      System.out.printf(
-          "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
-    }
-
+    values = chassisValuesLower();
+    drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
+    System.out.printf(
+        "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
     // setpoint just makes sure it's in the tolerance, doesn't work
     if (Math.abs(limeLight.getTx()) < .5) {
-      done = true;
+      angleDone = true;
     } else {
-      done = false;
+      angleDone = false;
     }
   }
 
@@ -94,7 +89,7 @@ public class Sideways extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return done;
+    return angleDone;
   }
 
   public double[] chassisValuesLower() {
@@ -108,8 +103,8 @@ public class Sideways extends CommandBase {
     // motor.set(controller.calculate(encoder.getDistance(), goal));
     double[] x = new double[3];
     x[0] = 0;
+    x[1] = angleDone ? 0 : anglePid.calculate(limeLight.getTx());
     // calculate is overloaded, second parameter is angle goal if it changes
-    x[1] = Pid.calculate(limeLight.getTx());
     x[2] = 0;
     return x;
   }
