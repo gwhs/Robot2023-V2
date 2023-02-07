@@ -151,7 +151,7 @@ public class PPIDAutoAim extends CommandBase {
 
     x[1] = 0;
     // calculate is overloaded, second parameter is angle goal if it changes
-    x[2] = angleDone ? 0 : (anglePid.calculate(limeLight.getAngle()));
+    x[2] = anglePid.calculate(limeLight.getAngle());
 
     // getAngle()
     //     / (((Math.sqrt(x[0] * x[0]) + x[1] * x[1]))
