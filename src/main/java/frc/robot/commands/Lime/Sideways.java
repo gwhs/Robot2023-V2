@@ -18,33 +18,20 @@ public class Sideways extends CommandBase {
   private LimeLightSub limeLight;
   private double[] values = {0, 0, 0};
   private boolean angleDone = false;
-  private double distanceError;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
-  private Constraints angleConstraints =
-      new Constraints(
-          DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-          DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
-
   //// second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
-  private Constraints positionConstraints =
+  private Constraints constraints =
       new Constraints(
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50,
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
-  private double angleP = 5;
-  private double angleI = 0;
-  private double angleD = 0;
-  // private final ShuffleboardTab tab;
-  private ProfiledPIDController anglePid =
-      new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
-
-  private double positionP = .025;
-  private double positionI = 0;
-  private double positionD = 0;
-  private ProfiledPIDController positionPid =
-      new ProfiledPIDController(positionP, positionI, positionD, positionConstraints);
+  private double P = .025;
+  private double I = 0;
+  private double D = 0;
+  private ProfiledPIDController Pid =
+      new ProfiledPIDController(P, I, D, constraints);
 
   /** Creates a new AutoAimLime. */
   public Sideways(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {
@@ -60,9 +47,9 @@ public class Sideways extends CommandBase {
   public void initialize() {
     angleDone = false;
     // rotating to align
-    anglePid.reset(Math.toRadians(limeLight.getTx()));
-    anglePid.setGoal(Math.toRadians(0));
-    anglePid.setTolerance(Math.toRadians(1));
+    Pid.reset(Math.toRadians(limeLight.getTx()));
+    Pid.setGoal(Math.toRadians(0));
+    Pid.setTolerance(Math.toRadians(1));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -72,10 +59,8 @@ public class Sideways extends CommandBase {
     // add pids
     values = chassisValuesLower();
     if (limeLight.hasTarget()) {
-      drivetrainSubsystem.drive(new ChassisSpeeds(.01, values[1], .001));
+      drivetrainSubsystem.drive(new ChassisSpeeds(.00001, values[1], .00001));
     }
-    // System.out.printf(
-    // "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
     // setpoint just makes sure it's in the tolerance, doesn't work
     if (Math.abs(limeLight.getTx()) < 1) {
@@ -83,7 +68,6 @@ public class Sideways extends CommandBase {
     } else {
       angleDone = false;
     }
-    // System.out.printf("angle done? %s distance %s %n", angleDone, sidewaysDone);
   }
 
   // Called once the command ends or is interrupted.
@@ -97,7 +81,6 @@ public class Sideways extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // && angleDone
     return angleDone;
   }
 
@@ -113,17 +96,10 @@ public class Sideways extends CommandBase {
     */
     double[] x = new double[3];
 
-    // System.out.printf(distanceError + "d" + d);
-
     x[0] = 0;
-
-    x[1] = positionPid.calculate(limeLight.getTx());
-    // calculate is overloaded, second parameter is angle goal if it changes
+    x[1] = Pid.calculate(limeLight.getTx());
     x[2] = 0;
 
-    // getAngle()
-    //     / (((Math.sqrt(x[0] * x[0]) + x[1] * x[1]))
-    //         / DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);
     return x;
   }
 }
