@@ -22,34 +22,33 @@ public class PPIDAutoAim extends CommandBase {
   private boolean sidewaysDone = false;
   private boolean angleDone = false;
   private double distanceError;
-  // second param on constraints is estimated, should be max accel, not max speed, but lets say it
-  // gets there in a second
+  // second param on constraints is estimated, should be max accel, not max speed, but lets say it gets there in a second
   private Constraints angleConstraints =
       new Constraints(
           DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
           DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
 
-  //// second param on constraints is estimated, should be max accel, not max speed, but lets say it
-  // gets there in a second
+  // second param on constraints is estimated, should be max accel, not max speed, but lets say it gets there in a second
   private Constraints positionConstraints =
       new Constraints(
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50,
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
+  // pid for angle
   private double angleP = 5;
   private double angleI = 0;
   private double angleD = 0;
-  // private final ShuffleboardTab tab;
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
 
+  // pid for position(forwards and backwards)
   private double positionP = .025;
   private double positionI = 0;
   private double positionD = 0;
   private ProfiledPIDController positionPid =
       new ProfiledPIDController(positionP, positionI, positionD, positionConstraints);
 
-  /** Creates a new AutoAimLime. */
+  /** Creates a new PPIDAutoAim. */
   public PPIDAutoAim(
       DrivetrainSubsystem drivetrainSubsystem,
       PoseEstimatorSubsystem poseEstimatorSubsystem,
@@ -67,14 +66,15 @@ public class PPIDAutoAim extends CommandBase {
   public void initialize() {
     angleDone = false;
     sidewaysDone = false;
+    //calculates how far it is from target
     distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
 
-    // rotating to align
+    // configuring rotation pid
     anglePid.reset(Math.toRadians(limeLight.getAngle()));
     anglePid.setGoal(Math.toRadians(0));
     anglePid.setTolerance(Math.toRadians(1));
 
-    // moving to align
+    // configureing movement(forwards and back) pid
     positionPid.reset(limeLight.hasTarget() ? distanceError : 0);
     positionPid.setGoal(0);
     positionPid.setTolerance(5);
@@ -83,28 +83,25 @@ public class PPIDAutoAim extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    // add pids
-    values = chassisValuesLower();
     if (limeLight.hasTarget()) {
+      //calculates drive values, pid.calculate called in this function
+      values = chassisValuesLower();
+      //makes it drive!
       drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
     }
-    // System.out.printf(
-    // "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
-    // atgoal is not working, it needs it to be == setpoint and be in setpoint.
-    // setpoint just makes sure it's in the tolerance, doesn't work
+    // atgoal and setpoint do not work, so we just brute force it.
     if (Math.abs(limeLight.getAngle()) < 1) {
       angleDone = true;
     } else {
+      //sets it to false if position not there yet
       angleDone = false;
     }
-    // System.out.println(distanceError);
     if (Math.abs(distanceError) < 2) {
       sidewaysDone = true;
     } else {
+      //sets to false if angle not there yet
       sidewaysDone = false;
     }
-    // System.out.printf("angle done? %s distance %s %n", angleDone, sidewaysDone);
   }
 
   // Called once the command ends or is interrupted.
@@ -118,7 +115,6 @@ public class PPIDAutoAim extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // && angleDone
     return angleDone && sidewaysDone;
   }
 
@@ -135,12 +131,8 @@ public class PPIDAutoAim extends CommandBase {
     distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
     double[] x = new double[3];
     double d = (positionP) * distanceError;
-
     x[0] = d;
-    System.out.printf("forward velocity %.2f, distance error %.1f %n", d, distanceError);
-
     x[1] = 0;
-    // calculate is overloaded, second parameter is angle goal if it changes
     x[2] = anglePid.calculate(limeLight.getAngle());
     return x;
   }
