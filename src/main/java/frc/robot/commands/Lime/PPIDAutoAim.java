@@ -17,16 +17,10 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 
 public class PPIDAutoAim extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
-  private PoseEstimatorSubsystem poseEstimatorSubsystem;
   private LimeLightSub limeLight;
   private double[] values = {0, 0, 0};
   private boolean sidewaysDone = false;
   private boolean angleDone = false;
-  private double angleGoal = 0;
-  // private final GenericEntry pentry;
-  // private final GenericEntry dentry;
-  // private final GenericEntry ientry;
-  private double initAngle;
   private double distanceError;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
@@ -62,9 +56,9 @@ public class PPIDAutoAim extends CommandBase {
       LimeLightSub limeLightSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLight = limeLightSub;
-    this.poseEstimatorSubsystem = poseEstimatorSubsystem;
     this.drivetrainSubsystem = drivetrainSubsystem;
 
+    addRequirements(limeLight);
     addRequirements(drivetrainSubsystem);
   }
 
@@ -138,13 +132,9 @@ public class PPIDAutoAim extends CommandBase {
     use sin and cos to get values to reach max speed
     not really sure about the angle yet.
     */
-    double holder = 0;
-    // motor.set(controller.calculate(encoder.getDistance(), goal));
     distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
     double[] x = new double[3];
-    // double d = sidewaysDone ? 0 : (positionPid.calculate(distanceError));
     double d = (positionP) * distanceError;
-    // System.out.printf(distanceError + "d" + d);
 
     x[0] = d;
     System.out.printf("forward velocity %.2f, distance error %.1f %n", d, distanceError);
@@ -152,10 +142,6 @@ public class PPIDAutoAim extends CommandBase {
     x[1] = 0;
     // calculate is overloaded, second parameter is angle goal if it changes
     x[2] = anglePid.calculate(limeLight.getAngle());
-
-    // getAngle()
-    //     / (((Math.sqrt(x[0] * x[0]) + x[1] * x[1]))
-    //         / DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);
     return x;
   }
 }

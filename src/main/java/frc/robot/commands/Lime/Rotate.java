@@ -19,12 +19,7 @@ public class Rotate extends CommandBase {
   private PoseEstimatorSubsystem poseEstimatorSubsystem;
   private LimeLightSub limeLight;
   private double[] values = {0, 0, 0};
-  private boolean sidewaysDone = false;
   private boolean angleDone = false;
-  // private final GenericEntry pentry;
-  // private final GenericEntry dentry;
-  // private final GenericEntry ientry;
-  private double sideWaysError;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
   private Constraints angleConstraints =
@@ -34,10 +29,6 @@ public class Rotate extends CommandBase {
 
   //// second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
-  private Constraints positionConstraints =
-      new Constraints(
-          DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5,
-          DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5);
 
   private double angleP = 5;
   private double angleI = 0;
@@ -63,7 +54,6 @@ public class Rotate extends CommandBase {
   @Override
   public void initialize() {
     angleDone = false;
-    sidewaysDone = false;
 
     // rotating to align
     anglePid.reset(Math.toRadians(poseEstimatorSubsystem.getAngle()));

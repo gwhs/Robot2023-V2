@@ -19,12 +19,7 @@ public class toPole extends CommandBase {
   private PoseEstimatorSubsystem poseEstimatorSubsystem;
   private LimeLightSub limeLight;
   private double[] values = {0, 0, 0};
-  private boolean sidewaysDone = false;
   private boolean done = false;
-  // private final GenericEntry pentry;
-  // private final GenericEntry dentry;
-  // private final GenericEntry ientry;
-  private double sideWaysError;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
 
@@ -54,7 +49,6 @@ public class toPole extends CommandBase {
   @Override
   public void initialize() {
     done = false;
-    sidewaysDone = false;
 
     // rotating to align
     Pid.reset(limeLight.getXDistance());
