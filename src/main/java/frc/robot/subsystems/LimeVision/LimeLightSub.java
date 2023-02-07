@@ -35,9 +35,6 @@ public class LimeLightSub extends SubsystemBase {
   private double kTargetHeight =
       LimeLightConstants.TARGET_HEIGHT; // LimelightConstants.kTargetHeight;
 
-  private double theta;
-  private double distance;
-
   private LimeLightComms limelight_comm;
 
   /** Creates a new LimeLightSub. */

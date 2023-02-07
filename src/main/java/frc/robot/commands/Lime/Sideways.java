@@ -30,8 +30,7 @@ public class Sideways extends CommandBase {
   private double P = .025;
   private double I = 0;
   private double D = 0;
-  private ProfiledPIDController Pid =
-      new ProfiledPIDController(P, I, D, constraints);
+  private ProfiledPIDController Pid = new ProfiledPIDController(P, I, D, constraints);
 
   /** Creates a new AutoAimLime. */
   public Sideways(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {

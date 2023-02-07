@@ -22,13 +22,15 @@ public class PPIDAutoAim extends CommandBase {
   private boolean sidewaysDone = false;
   private boolean angleDone = false;
   private double distanceError;
-  // second param on constraints is estimated, should be max accel, not max speed, but lets say it gets there in a second
+  // second param on constraints is estimated, should be max accel, not max speed, but lets say it
+  // gets there in a second
   private Constraints angleConstraints =
       new Constraints(
           DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
           DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
 
-  // second param on constraints is estimated, should be max accel, not max speed, but lets say it gets there in a second
+  // second param on constraints is estimated, should be max accel, not max speed, but lets say it
+  // gets there in a second
   private Constraints positionConstraints =
       new Constraints(
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50,
@@ -66,7 +68,7 @@ public class PPIDAutoAim extends CommandBase {
   public void initialize() {
     angleDone = false;
     sidewaysDone = false;
-    //calculates how far it is from target
+    // calculates how far it is from target
     distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
 
     // configuring rotation pid
@@ -84,22 +86,22 @@ public class PPIDAutoAim extends CommandBase {
   @Override
   public void execute() {
     if (limeLight.hasTarget()) {
-      //calculates drive values, pid.calculate called in this function
+      // calculates drive values, pid.calculate called in this function
       values = chassisValuesLower();
-      //makes it drive!
+      // makes it drive!
       drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
     }
     // atgoal and setpoint do not work, so we just brute force it.
     if (Math.abs(limeLight.getAngle()) < 1) {
       angleDone = true;
     } else {
-      //sets it to false if position not there yet
+      // sets it to false if position not there yet
       angleDone = false;
     }
     if (Math.abs(distanceError) < 2) {
       sidewaysDone = true;
     } else {
-      //sets to false if angle not there yet
+      // sets to false if angle not there yet
       sidewaysDone = false;
     }
   }
