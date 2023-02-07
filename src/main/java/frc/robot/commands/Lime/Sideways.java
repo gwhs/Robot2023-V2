@@ -10,7 +10,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.LimeLightConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 
@@ -18,13 +17,7 @@ public class Sideways extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private LimeLightSub limeLight;
   private double[] values = {0, 0, 0};
-  private boolean sidewaysDone = false;
   private boolean angleDone = false;
-  private double angleGoal = 0;
-  // private final GenericEntry pentry;
-  // private final GenericEntry dentry;
-  // private final GenericEntry ientry;
-  private double initAngle;
   private double distanceError;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
@@ -66,18 +59,10 @@ public class Sideways extends CommandBase {
   @Override
   public void initialize() {
     angleDone = false;
-    sidewaysDone = false;
-    distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
-
     // rotating to align
     anglePid.reset(Math.toRadians(limeLight.getTx()));
     anglePid.setGoal(Math.toRadians(0));
     anglePid.setTolerance(Math.toRadians(1));
-
-    // moving to align
-    positionPid.reset(limeLight.hasTarget() ? distanceError : 0);
-    positionPid.setGoal(0);
-    positionPid.setTolerance(5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -93,16 +78,10 @@ public class Sideways extends CommandBase {
     // "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
     // setpoint just makes sure it's in the tolerance, doesn't work
-    if (Math.abs(limeLight.getAngle()) < 1) {
+    if (Math.abs(limeLight.getTx()) < 1) {
       angleDone = true;
     } else {
       angleDone = false;
-    }
-    // System.out.println(distanceError);
-    if (Math.abs(distanceError) < 2) {
-      sidewaysDone = true;
-    } else {
-      sidewaysDone = false;
     }
     // System.out.printf("angle done? %s distance %s %n", angleDone, sidewaysDone);
   }
@@ -119,7 +98,7 @@ public class Sideways extends CommandBase {
   @Override
   public boolean isFinished() {
     // && angleDone
-    return Math.abs(limeLight.getTx()) < 1;
+    return angleDone;
   }
 
   public double[] chassisValuesLower() {
