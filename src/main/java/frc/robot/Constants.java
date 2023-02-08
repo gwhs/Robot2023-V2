@@ -45,19 +45,19 @@ public final class Constants {
      *
      * <p>Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.635;
+    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.508;
     /**
      * The front-to-back distance between the drivetrain wheels.
      *
      * <p>Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.635;
+    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.508;
 
     // Pick the longest side of the robot for this and measure outside bumper to outside bumper
     public static final double ROBOT_LENGTH_WIDTH = 0.698;
 
     // "rio" for springtrap, "CAN_Network" for hana
-    public static final String CANIVORE_NAME = "rio";
+    public static final String CANIVORE_NAME = "CAN_Network";
 
     public static final int PIGEON_ID = 30;
 
