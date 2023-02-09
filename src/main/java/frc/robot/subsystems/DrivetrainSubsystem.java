@@ -48,6 +48,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   // private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
   private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON);
   private final SwerveModule[] swerveModules;
+  private final double[] offsets = new double[4];
+  private final DriveTrainConstants driveTrain;
 
   private ChassisSpeeds desiredChassisSpeeds;
 
@@ -60,6 +62,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
     ShuffleboardLayout frontRightLayout = null;
     ShuffleboardLayout backLeftLayout = null;
     ShuffleboardLayout backRightLayout = null;
+
+    if (robotName.equals("hana")) {
+      driveTrain = DriveTrainConstants.hana;
+    } else if (robotName.equals("spring")) {
+      driveTrain = DriveTrainConstants.spring;
+    } else {
+      driveTrain = DriveTrainConstants.calliope;
+    }
 
     if (DrivetrainConstants.ADD_TO_DASHBOARD) {
       frontLeftLayout =
@@ -282,7 +292,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
               driveTrain.BACK_RIGHT_MODULE_STEER_ENCODER,
               driveTrain.BACK_RIGHT_MODULE_STEER_OFFSET)
         };
-
     return swerveModules;
   }
 

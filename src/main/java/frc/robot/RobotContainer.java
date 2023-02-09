@@ -98,11 +98,11 @@ public class RobotContainer {
                     * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
                     * drivetrainAmplificationScale(),
             () ->
-                modifyAxis(controller.getRightX())
+                -modifyAxis(controller.getLeftTriggerAxis() - controller.getRightTriggerAxis())
                     * drivetrainAmplificationScaleRotation()
                     * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
                     / 2));
-
+    drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
     configureButtonBindings();
     configureDashboard();
@@ -135,13 +135,13 @@ public class RobotContainer {
   private void configureDashboard() {
     maxSpeedAdjustment =
         Shuffleboard.getTab("Drive")
-            .add("Max Speed", 1)
+            .add("Max Speed", 0.2)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 1)) // specify widget properties here
             .getEntry();
     maxRotationSpeedAdjustment =
         Shuffleboard.getTab("Drive")
-            .add("Max Rotation Speed", 1)
+            .add("Max Rotation Speed", 0.2)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 1)) // specify widget properties here
             .getEntry();
@@ -150,13 +150,13 @@ public class RobotContainer {
   private double drivetrainAmplificationScale() {
     // This function multiplies the controller input to reduce the maximum speed,
     // 1 = full speed forward, 0.5 is half speed.
-    return maxSpeedAdjustment.getDouble(1);
+    return maxSpeedAdjustment.getDouble(0.2);
   }
 
   private double drivetrainAmplificationScaleRotation() {
     // This fun ction multiplies the controller input to reduce the maximum speed,
     // 1 = full speed, 0.5 = speed
-    return maxRotationSpeedAdjustment.getDouble(1);
+    return maxRotationSpeedAdjustment.getDouble(0.2);
   }
 
   /**
@@ -166,8 +166,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem);
-    Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem);
     // Start button reseeds the steer motors to fix dead wheel
     controller
         .start()
@@ -181,13 +179,13 @@ public class RobotContainer {
 
     controller.b().onTrue(autoAimLime.withTimeout(3));
 
-    controller.start().toggleOnTrue(fieldHeadingDriveCommand);
+    controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
     controller.x().toggleOnTrue(autoBalance);
 
-    controller
-        .a()
-        .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
+    // controller
+    //     .a()
+    //     .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
 
     controller
         .y()
