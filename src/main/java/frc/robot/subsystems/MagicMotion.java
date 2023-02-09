@@ -95,4 +95,8 @@ public class MagicMotion extends SubsystemBase {
   public double getAng(){
     return testTalon.getSelectedSensorPosition();
   }
+
+  public double getAngDegrees(){
+	return getAng() / (Constants.Arm.FALCON_TICKS * Constants.Arm.GEAR_RATIO) * 360;
+  }
 }
