@@ -67,6 +67,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
       driveTrain = DriveTrainConstants.hana;
     } else if (robotName.equals("spring")) {
       driveTrain = DriveTrainConstants.spring;
+    } else if (robotName.equals("chris")) {
+      driveTrain = DriveTrainConstants.chris;
     } else {
       driveTrain = DriveTrainConstants.calliope;
     }
