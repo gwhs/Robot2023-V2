@@ -33,13 +33,13 @@ public class DriveTrainConstants {
   public static DriveTrainConstants calliope = new DriveTrainConstants(284.4, 304.1, 314.2, 284.5);
 
   public static DriveTrainConstants chris =
-      new DriveTrainConstants(173.783, 99.0855, 2.6988, 57.4136);
+      new DriveTrainConstants(185.661, 231.828, 293.234, 60.836);
 
   public DriveTrainConstants(
-      double FRONT_LEFT_MODULE_STEER_OFFSET,
-      double FRONT_RIGHT_MODULE_STEER_OFFSET,
-      double BACK_LEFT_MODULE_STEER_OFFSET,
-      double BACK_RIGHT_MODULE_STEER_OFFSET) {
+      double frontLeftOffset,
+      double frontRightOffset,
+      double backLeftOffset,
+      double backRightOffset) {
     this.FRONT_LEFT_MODULE_STEER_OFFSET = -toRadians(FRONT_LEFT_MODULE_STEER_OFFSET);
     this.FRONT_RIGHT_MODULE_STEER_OFFSET = -toRadians(FRONT_RIGHT_MODULE_STEER_OFFSET);
     this.BACK_LEFT_MODULE_STEER_OFFSET = -toRadians(BACK_LEFT_MODULE_STEER_OFFSET);
