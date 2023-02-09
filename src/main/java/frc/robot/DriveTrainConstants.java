@@ -32,6 +32,9 @@ public class DriveTrainConstants {
 
   public static DriveTrainConstants calliope = new DriveTrainConstants(284.4, 304.1, 314.2, 284.5);
 
+  public static DriveTrainConstants chris =
+      new DriveTrainConstants(173.783, 99.0855, 2.6988, 57.4136);
+
   public DriveTrainConstants(
       double FRONT_LEFT_MODULE_STEER_OFFSET,
       double FRONT_RIGHT_MODULE_STEER_OFFSET,
