@@ -67,8 +67,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
       driveTrain = DriveTrainConstants.hana;
     } else if (robotName.equals("spring")) {
       driveTrain = DriveTrainConstants.spring;
-    } else if (robotName.equals("chris")) {
-      driveTrain = DriveTrainConstants.chris;
     } else {
       driveTrain = DriveTrainConstants.calliope;
     }
@@ -180,28 +178,28 @@ public class DrivetrainSubsystem extends SubsystemBase {
         new SwerveModule[] {
           createSwerveModule(
               frontLeftLayout,
-              ModuleConfiguration.MK4I_L2,
+              ModuleConfiguration.MK4II_L3,
               driveTrain.FRONT_LEFT_MODULE_DRIVE_MOTOR,
               driveTrain.FRONT_LEFT_MODULE_STEER_MOTOR,
               driveTrain.FRONT_LEFT_MODULE_STEER_ENCODER,
               driveTrain.FRONT_LEFT_MODULE_STEER_OFFSET),
           createSwerveModule(
               frontRightLayout,
-              ModuleConfiguration.MK4I_L2,
+              ModuleConfiguration.MK4II_L3,
               driveTrain.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
               driveTrain.FRONT_RIGHT_MODULE_STEER_MOTOR,
               driveTrain.FRONT_RIGHT_MODULE_STEER_ENCODER,
               driveTrain.FRONT_RIGHT_MODULE_STEER_OFFSET),
           createSwerveModule(
               backLeftLayout,
-              ModuleConfiguration.MK4I_L2,
+              ModuleConfiguration.MK4II_L3,
               driveTrain.BACK_LEFT_MODULE_DRIVE_MOTOR,
               driveTrain.BACK_LEFT_MODULE_STEER_MOTOR,
               driveTrain.BACK_LEFT_MODULE_STEER_ENCODER,
               driveTrain.BACK_LEFT_MODULE_STEER_OFFSET),
           createSwerveModule(
               backRightLayout,
-              ModuleConfiguration.MK4I_L2,
+              ModuleConfiguration.MK4II_L3,
               driveTrain.BACK_RIGHT_MODULE_DRIVE_MOTOR,
               driveTrain.BACK_RIGHT_MODULE_STEER_MOTOR,
               driveTrain.BACK_RIGHT_MODULE_STEER_ENCODER,
