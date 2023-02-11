@@ -27,7 +27,7 @@ public class Sideways extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50,
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
-  private double P = .025;
+  private double P = -.025;
   private double I = 0;
   private double D = 0;
   private ProfiledPIDController Pid = new ProfiledPIDController(P, I, D, constraints);
@@ -80,6 +80,7 @@ public class Sideways extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println("SidewaysDone!");
     return angleDone;
   }
 
@@ -96,7 +97,7 @@ public class Sideways extends CommandBase {
     double[] x = new double[3];
 
     x[0] = 0;
-    x[1] = Pid.calculate(-limeLight.getTx());
+    x[1] = Pid.calculate(limeLight.getTx());
     x[2] = 0;
 
     return x;

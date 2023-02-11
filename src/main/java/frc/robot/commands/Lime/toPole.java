@@ -30,11 +30,13 @@ public class toPole extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5,
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5);
 
-  private double P = 5;
+  private double P = -.003;
   private double I = 0;
   private double D = 0;
+  private double distanceError;
   // private final ShuffleboardTab tab;
-  private ProfiledPIDController Pid = new ProfiledPIDController(P, I, D, Constraints);
+  //pid is broken
+  // private ProfiledPIDController Pid = new ProfiledPIDController(P, I, D, Constraints);
 
   /** Creates a new AutoAimLime. */
   public toPole(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {
@@ -48,29 +50,30 @@ public class toPole extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("working!");
     done = false;
+    distanceError = limeLight.getXDistance() - 150;
 
     // rotating to align
-    Pid.reset(limeLight.getXDistance());
-    Pid.setGoal(0);
-    Pid.setTolerance(3);
+    // Pid.reset(distanceError);
+    // Pid.setGoal(0);
+    // Pid.setTolerance(3);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
+    System.out.println(distanceError);
     // add pids
     if (limeLight.hasTarget()) {
       values = chassisValuesLower();
       drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
-      System.out.printf(
-          "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     }
 
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
     // setpoint just makes sure it's in the tolerance, doesn't work
-    if (Math.abs(limeLight.getTx()) < 2) {
+    if (Math.abs(distanceError) < 2) {
       done = true;
     } else {
       done = false;
@@ -99,10 +102,10 @@ public class toPole extends CommandBase {
     3 is degrees rotation
     */
 
-    // motor.set(controller.calculate(encoder.getDistance(), goal));
+    distanceError = limeLight.getXDistance() - 150;
+    //pid is broken, so we just do the proportional by self.
     double[] x = new double[3];
-    x[0] = Pid.calculate(limeLight.getXDistance());
-    ;
+    x[0] = P * distanceError;
     // calculate is overloaded, second parameter is angle goal if it changes
     x[1] = 0;
     x[2] = 0;
