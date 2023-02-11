@@ -58,7 +58,7 @@ public enum ModuleConfiguration {
       (14.0 / 50.0) * (28.0 / 16.0) * (15.0 / 45.0),
       false,
       (15.0 / 32.0) * (10.0 / 60.0),
-      false);
+      true);
 
   private final double wheelDiameter;
   private final double driveReduction;
