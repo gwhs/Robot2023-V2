@@ -5,20 +5,12 @@
 package frc.robot.commands.Arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.MagicMotion;
- 
-public class magicPosReset extends CommandBase {
-  private MagicMotion motor;
-  // private double offset; // motor keeps moving after end, so we get an offset to make sure the
-  // motor returns to the same position each time
-  // private boolean ran; // ensures the motor shoots, otherwise, it will not run after one shot,
-  // needed for isFinished
-  // private double returnSpeed;
-  // private double amps;
-  private double angle;
-  private boolean isInterrupted;
+import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 
-  public magicPosReset(MagicMotion moto) {
+public class MagicPosReset extends CommandBase {
+  private MagicMotion motor;
+
+  public MagicPosReset(MagicMotion moto) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.motor = moto;
 
@@ -28,15 +20,12 @@ public class magicPosReset extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Testing");
-    isInterrupted = false;
+    motor.resetPosition();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    motor.resetPosition();
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -45,6 +34,6 @@ public class magicPosReset extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
