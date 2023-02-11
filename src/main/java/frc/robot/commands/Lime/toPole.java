@@ -47,7 +47,7 @@ public class toPole extends CommandBase {
     addRequirements(drivetrainSubsystem);
   }
 
-  // Called when the command is initially scheduled.
+  // Calle d when the command is initially scheduled.
   @Override
   public void initialize() {
     done = false;
@@ -89,6 +89,7 @@ public class toPole extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println("YAAAYY");
     return done;
   }
 

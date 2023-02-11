@@ -7,7 +7,6 @@ package frc.robot.commands.Lime;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -81,8 +80,7 @@ public class Rotate extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putNumber("Final Horiz-error", limeLight.getTx());
-    SmartDashboard.putNumber("Final Vert-error", limeLight.getTy());
+    System.out.println("Rotated done");
     drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, 0));
   }
 
