@@ -32,7 +32,7 @@ public class DriveTrainConstants {
 
   public static DriveTrainConstants calliope = new DriveTrainConstants(284.4, 304.1, 314.2, 284.5);
 
-  public static DriveTrainConstants chris = new DriveTrainConstants(8.846, 0, 0, 0);
+  public static DriveTrainConstants chris = new DriveTrainConstants(90, 0, 90, 0);
 
   public DriveTrainConstants(
       double frontLeftOffset,
