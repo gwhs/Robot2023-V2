@@ -21,6 +21,7 @@ public class PPIDAutoAim extends CommandBase {
   private double[] values = {0, 0, 0};
   private boolean sidewaysDone = false;
   private boolean angleDone = false;
+  private int noTargets = 0;
   private double distanceError;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
@@ -86,9 +87,12 @@ public class PPIDAutoAim extends CommandBase {
   public void execute() {
     if (limeLight.hasTarget()) {
       // calculates drive values, pid.calculate called in this function
+      noTargets=0;
       values = chassisValuesLower();
       // makes it drive!
       drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
+    } else{
+      noTargets ++;
     }
     // atgoal and setpoint do not work, so we just brute force it.
     if (Math.abs(limeLight.getAngle()) < 1) {
@@ -102,6 +106,11 @@ public class PPIDAutoAim extends CommandBase {
     } else {
       // sets to false if angle not there yet
       sidewaysDone = false;
+    }
+
+    if(noTargets > 10){
+      sidewaysDone = true;
+      angleDone = true;
     }
   }
 
