@@ -30,7 +30,7 @@ public class toPole extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5,
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5);
 
-  private double P = -.003;
+  private double P = .003;
   private double I = 0;
   private double D = 0;
   private double distanceError;

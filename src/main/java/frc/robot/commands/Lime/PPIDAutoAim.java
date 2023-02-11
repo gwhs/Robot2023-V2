@@ -38,13 +38,13 @@ public class PPIDAutoAim extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
   // pid for angle
-  private double angleP = 5;
+  private double angleP = 3;
   private double angleI = 0;
   private double angleD = 0;
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
 
-  private double positionP = -.025;
+  private double positionP = .005;
   private double positionI = 0;
   private double positionD = 0;
   private ProfiledPIDController positionPid =
@@ -79,7 +79,7 @@ public class PPIDAutoAim extends CommandBase {
     // configureing movement(forwards and back) pid
     positionPid.reset(limeLight.hasTarget() ? distanceError : 0);
     positionPid.setGoal(0);
-    positionPid.setTolerance(5);
+    positionPid.setTolerance(2);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -87,12 +87,12 @@ public class PPIDAutoAim extends CommandBase {
   public void execute() {
     if (limeLight.hasTarget()) {
       // calculates drive values, pid.calculate called in this function
-      noTargets=0;
+      noTargets = 0;
       values = chassisValuesLower();
       // makes it drive!
       drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
-    } else{
-      noTargets ++;
+    } else {
+      noTargets++;
     }
     // atgoal and setpoint do not work, so we just brute force it.
     if (Math.abs(limeLight.getAngle()) < 1) {
@@ -108,7 +108,7 @@ public class PPIDAutoAim extends CommandBase {
       sidewaysDone = false;
     }
 
-    if(noTargets > 10){
+    if (noTargets > 10) {
       sidewaysDone = true;
       angleDone = true;
     }
@@ -144,6 +144,15 @@ public class PPIDAutoAim extends CommandBase {
     x[0] = d;
     x[1] = 0;
     x[2] = anglePid.calculate(limeLight.getAngle());
+    System.out.println(
+        "Distance error: "
+            + distanceError
+            + " Velocity: "
+            + d
+            + "Angle error: "
+            + limeLight.getTx()
+            + "angleSpeed: "
+            + x[2]);
     return x;
   }
 }

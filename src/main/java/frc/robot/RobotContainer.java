@@ -56,7 +56,7 @@ public class RobotContainer {
 
   // change to hana or spring depending on robot
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
-    private final PoseEstimatorSubsystem poseEstimator =
+  private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
   private final PPIDAutoAim autoAimLime =
       new PPIDAutoAim(drivetrainSubsystem, poseEstimator, limeLightSub);
