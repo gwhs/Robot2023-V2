@@ -45,13 +45,13 @@ public final class Constants {
      *
      * <p>Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.5715;
+    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.508;
     /**
      * The front-to-back distance between the drivetrain wheels.
      *
      * <p>Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.5715;
+    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.508;
 
     // Pick the longest side of the robot for this and measure outside bumper to outside bumper
     public static final double ROBOT_LENGTH_WIDTH = 0.698;
