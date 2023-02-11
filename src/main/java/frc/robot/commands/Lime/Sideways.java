@@ -80,7 +80,6 @@ public class Sideways extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println("SidewaysDone!");
     return angleDone;
   }
 

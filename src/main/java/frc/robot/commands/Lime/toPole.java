@@ -4,12 +4,12 @@
 
 package frc.robot.commands.Lime;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.LimeLightConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
@@ -35,7 +35,7 @@ public class toPole extends CommandBase {
   private double D = 0;
   private double distanceError;
   // private final ShuffleboardTab tab;
-  //pid is broken
+  // pid is broken
   // private ProfiledPIDController Pid = new ProfiledPIDController(P, I, D, Constraints);
 
   /** Creates a new AutoAimLime. */
@@ -50,9 +50,8 @@ public class toPole extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("working!");
     done = false;
-    distanceError = limeLight.getXDistance() - 150;
+    distanceError = limeLight.getXDistance() - LimeLightConstants.TESTING_VALUE;
 
     // rotating to align
     // Pid.reset(distanceError);
@@ -64,7 +63,6 @@ public class toPole extends CommandBase {
   @Override
   public void execute() {
 
-    System.out.println(distanceError);
     // add pids
     if (limeLight.hasTarget()) {
       values = chassisValuesLower();
@@ -102,8 +100,8 @@ public class toPole extends CommandBase {
     3 is degrees rotation
     */
 
-    distanceError = limeLight.getXDistance() - 150;
-    //pid is broken, so we just do the proportional by self.
+    distanceError = limeLight.getXDistance() - LimeLightConstants.TESTING_VALUE;
+    // pid is broken, so we just do the proportional by self.
     double[] x = new double[3];
     x[0] = P * distanceError;
     // calculate is overloaded, second parameter is angle goal if it changes
