@@ -26,6 +26,8 @@ import frc.robot.commands.Lime.PPIDAutoAim;
 import frc.robot.commands.Lime.Rotate;
 import frc.robot.commands.Lime.Sideways;
 import frc.robot.commands.autonomous.TestAutonomous;
+import frc.robot.commands.WPIAStar;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import frc.robot.pathfind.Edge;
 import frc.robot.pathfind.Node;
 import frc.robot.pathfind.Obstacle;
@@ -185,9 +187,8 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
     controller.b().onTrue(autoAimLime.withTimeout(3));
-    controller.rightBumper().onTrue(rotate);
     controller.leftBumper().onTrue(sideways);
-    controller.y().onTrue(afterPPID);
+    controller.rightBumper().onTrue(afterPPID);
 
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
@@ -197,16 +198,16 @@ public class RobotContainer {
     //     .a()
     //     .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
 
-    // controller
-    //     .y()
-    //     .whileTrue(
-    //         new WPIAStar(
-    //             drivetrainSubsystem,
-    //             poseEstimator,
-    //             new TrajectoryConfig(2, 2),
-    //             finalNode,
-    //             obstacles,
-    //             AStarMap));
+    controller
+    .y()
+    .whileTrue(
+        new WPIAStar(
+            drivetrainSubsystem,
+            poseEstimator,
+            new TrajectoryConfig(2, 2),
+            finalNode,
+            obstacles,
+            AStarMap));
 
     // controller.x().whileTrue(new DriveWithPathPlanner(drivetrainSubsystem,
     // poseEstimator, new PathConstraints(2, 2),
