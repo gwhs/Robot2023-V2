@@ -96,9 +96,10 @@ public class Sideways extends CommandBase {
     double[] x = new double[3];
 
     x[0] = 0;
-    x[1] = Pid.calculate(limeLight.getTx());
+    x[1] = Pid.calculate(-limeLight.getTx());
     x[2] = 0;
 
     return x;
+    //d
   }
 }

@@ -43,8 +43,7 @@ public class PPIDAutoAim extends CommandBase {
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
 
-  // pid for position(forwards and backwards)
-  private double positionP = .025;
+  private double positionP = -.025;
   private double positionI = 0;
   private double positionD = 0;
   private ProfiledPIDController positionPid =
