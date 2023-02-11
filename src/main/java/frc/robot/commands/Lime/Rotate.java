@@ -56,6 +56,7 @@ public class Rotate extends CommandBase {
     angleDone = false;
 
     // configure rotation pid
+    System.out.println(poseEstimatorSubsystem.getAngle());
     anglePid.reset(Math.toRadians(poseEstimatorSubsystem.getAngle()));
     anglePid.setGoal(Math.toRadians(0));
     anglePid.setTolerance(Math.toRadians(.5));

@@ -8,7 +8,6 @@ import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -26,7 +25,6 @@ import frc.robot.commands.Lime.AfterPPID;
 import frc.robot.commands.Lime.PPIDAutoAim;
 import frc.robot.commands.Lime.Rotate;
 import frc.robot.commands.Lime.Sideways;
-import frc.robot.commands.WPIAStar;
 import frc.robot.commands.autonomous.TestAutonomous;
 import frc.robot.pathfind.Edge;
 import frc.robot.pathfind.Node;
@@ -188,7 +186,7 @@ public class RobotContainer {
 
     controller.b().onTrue(autoAimLime.withTimeout(3));
     controller.leftBumper().onTrue(sideways);
-    controller.rightBumper().onTrue(afterPPID);
+    controller.rightBumper().onTrue(rotate);
 
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
@@ -198,16 +196,16 @@ public class RobotContainer {
     //     .a()
     //     .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
 
-    controller
-        .y()
-        .whileTrue(
-            new WPIAStar(
-                drivetrainSubsystem,
-                poseEstimator,
-                new TrajectoryConfig(2, 2),
-                finalNode,
-                obstacles,
-                AStarMap));
+    // controller
+    //     .y()
+    //     .whileTrue(
+    //         new WPIAStar(
+    //             drivetrainSubsystem,
+    //             poseEstimator,
+    //             new TrajectoryConfig(2, 2),
+    //             finalNode,
+    //             obstacles,
+    //             AStarMap));
 
     // controller.x().whileTrue(new DriveWithPathPlanner(drivetrainSubsystem,
     // poseEstimator, new PathConstraints(2, 2),
