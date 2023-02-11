@@ -100,6 +100,6 @@ public class Sideways extends CommandBase {
     x[2] = 0;
 
     return x;
-    //d
+    // d
   }
 }

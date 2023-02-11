@@ -8,7 +8,6 @@ import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -22,10 +21,10 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.ChaseTagCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
+import frc.robot.commands.Lime.AfterPPID;
 import frc.robot.commands.Lime.PPIDAutoAim;
 import frc.robot.commands.Lime.Rotate;
 import frc.robot.commands.Lime.Sideways;
-import frc.robot.commands.WPIAStar;
 import frc.robot.commands.autonomous.TestAutonomous;
 import frc.robot.pathfind.Edge;
 import frc.robot.pathfind.Node;
@@ -62,6 +61,8 @@ public class RobotContainer {
 
   private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, limeLightSub);
+  private final AfterPPID afterPPID =
+      new AfterPPID(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
 
@@ -186,6 +187,7 @@ public class RobotContainer {
     controller.b().onTrue(autoAimLime.withTimeout(3));
     controller.rightBumper().onTrue(rotate);
     controller.leftBumper().onTrue(sideways);
+    controller.y().onTrue(afterPPID);
 
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
@@ -195,16 +197,17 @@ public class RobotContainer {
     //     .a()
     //     .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
 
-    controller
-        .y()
-        .whileTrue(
-            new WPIAStar(
-                drivetrainSubsystem,
-                poseEstimator,
-                new TrajectoryConfig(2, 2),
-                finalNode,
-                obstacles,
-                AStarMap));
+    // controller
+    //     .y()
+    //     .whileTrue(
+    //         new WPIAStar(
+    //             drivetrainSubsystem,
+    //             poseEstimator,
+    //             new TrajectoryConfig(2, 2),
+    //             finalNode,
+    //             obstacles,
+    //             AStarMap));
+
     // controller.x().whileTrue(new DriveWithPathPlanner(drivetrainSubsystem,
     // poseEstimator, new PathConstraints(2, 2),
     // new PathPoint(new Translation2d(2.33, 2.03),
