@@ -45,19 +45,19 @@ public final class Constants {
      *
      * <p>Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.5715;
+    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.508;
     /**
      * The front-to-back distance between the drivetrain wheels.
      *
      * <p>Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.5715;
+    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.508;
 
     // Pick the longest side of the robot for this and measure outside bumper to outside bumper
     public static final double ROBOT_LENGTH_WIDTH = 0.698;
 
     // "rio" for springtrap, "CAN_Network" for hana
-    public static final String CANIVORE_NAME = "rio";
+    public static final String CANIVORE_NAME = "CAN_Network";
 
     public static final int PIGEON_ID = 30;
 
@@ -67,7 +67,7 @@ public final class Constants {
      * <p>This is a measure of how fast the robot should be able to drive in a straight line.
      */
     public static final double MAX_VELOCITY_METERS_PER_SECOND =
-        638.0
+        6380.0
             / 60.0
             * // was 6380.0 / 60.0
             ModuleConfiguration.MK4I_L2.getDriveReduction()
@@ -545,13 +545,15 @@ public final class Constants {
   public static final class LimeLightConstants {
     public static final double MAX_LIMELIGHT_ERROR_DEGREES =
         1; // limelight max degrees off, max degrees error
-    public static final double CAMERA_HEIGHT = 22.5;
-    public static final double TARGET_HEIGHT = 105.7;
-    public static final double MOUNTING_ANGLE = 47.7;
-    public static final double LOWER_DISTANCE_SHOOT = 120;
+    public static final double CAMERA_HEIGHT = 87;
+    public static final double TARGET_HEIGHT = 61;
+    public static final double MOUNTING_ANGLE = -19;
+    public static final double LOWER_DISTANCE_SHOOT = 79;
+    public static final double TESTING_VALUE = 42;
     public static final double UPPER_ANGLE_SHOOT = 2;
   }
-  public static final class Arm{
+
+  public static final class Arm {
     public static final int kSlotIdx = 0;
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 30;

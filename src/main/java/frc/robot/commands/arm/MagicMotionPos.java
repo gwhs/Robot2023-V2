@@ -5,9 +5,7 @@
 package frc.robot.commands.Arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
-
 
 public class MagicMotionPos extends CommandBase {
   /** Creates a new mMPosUp. */
@@ -23,7 +21,7 @@ public class MagicMotionPos extends CommandBase {
   private double angleInDegrees;
   private double velocity;
   private double acceleration;
- 
+
   public MagicMotionPos(MagicMotion moto, double angle, double velocity, double acceleration) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.motor = moto;

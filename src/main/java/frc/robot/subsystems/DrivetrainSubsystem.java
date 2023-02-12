@@ -48,14 +48,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   // private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
   private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON);
   private final SwerveModule[] swerveModules;
-  private final ProfiledPIDController thetaController =
-      new ProfiledPIDController(
-          -AutoConstants.THETA_kP,
-          AutoConstants.THETA_kI,
-          AutoConstants.THETA_kD,
-          THETA_CONSTRAINTS);
   private final PIDController thetaControllerPID =
       new PIDController(-AutoConstants.THETA_kP, AutoConstants.THETA_kI, AutoConstants.THETA_kD);
+  private final DriveTrainConstants driveTrain;
 
   private ChassisSpeeds desiredChassisSpeeds;
 
@@ -68,6 +63,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
     ShuffleboardLayout frontRightLayout = null;
     ShuffleboardLayout backLeftLayout = null;
     ShuffleboardLayout backRightLayout = null;
+
+    if (robotName.equals("hana")) {
+      driveTrain = DriveTrainConstants.hana;
+    } else if (robotName.equals("spring")) {
+      driveTrain = DriveTrainConstants.spring;
+    } else if (robotName.equals("chris")) {
+      driveTrain = DriveTrainConstants.chris;
+    } else {
+      driveTrain = DriveTrainConstants.calliope;
+    }
 
     if (DrivetrainConstants.ADD_TO_DASHBOARD) {
       frontLeftLayout =
@@ -93,9 +98,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if (robotName.equals("spring")) {
       swerveModules =
           swerveModuleSpring(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
-    } else {
+    } else if (robotName.equals("hana")) {
       swerveModules =
           swerveModuleHana(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
+    } else if (robotName.equals("chris")) {
+      swerveModules =
+          swerveModuleChris(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
+    } else {
+      swerveModules =
+          swerveModuleCalliope(frontLeftLayout, frontRightLayout, backLeftLayout, backRightLayout);
     }
 
     // Put the motors in brake mode when enabled, coast mode when disabled
@@ -157,6 +168,49 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return swerveModules;
   }
 
+  private SwerveModule[] swerveModuleChris(
+      ShuffleboardLayout frontLeftLayout,
+      ShuffleboardLayout frontRightLayout,
+      ShuffleboardLayout backLeftLayout,
+      ShuffleboardLayout backRightLayout) {
+    /*
+     * Specific to the springtrap drivetrain(just the offset)
+     */
+    DriveTrainConstants driveTrain = DriveTrainConstants.chris;
+    SwerveModule[] swerveModules =
+        new SwerveModule[] {
+          createSwerveModule(
+              frontLeftLayout,
+              ModuleConfiguration.MK4II_L3,
+              driveTrain.FRONT_LEFT_MODULE_DRIVE_MOTOR,
+              driveTrain.FRONT_LEFT_MODULE_STEER_MOTOR,
+              driveTrain.FRONT_LEFT_MODULE_STEER_ENCODER,
+              driveTrain.FRONT_LEFT_MODULE_STEER_OFFSET),
+          createSwerveModule(
+              frontRightLayout,
+              ModuleConfiguration.MK4II_L3,
+              driveTrain.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
+              driveTrain.FRONT_RIGHT_MODULE_STEER_MOTOR,
+              driveTrain.FRONT_RIGHT_MODULE_STEER_ENCODER,
+              driveTrain.FRONT_RIGHT_MODULE_STEER_OFFSET),
+          createSwerveModule(
+              backLeftLayout,
+              ModuleConfiguration.MK4II_L3,
+              driveTrain.BACK_LEFT_MODULE_DRIVE_MOTOR,
+              driveTrain.BACK_LEFT_MODULE_STEER_MOTOR,
+              driveTrain.BACK_LEFT_MODULE_STEER_ENCODER,
+              driveTrain.BACK_LEFT_MODULE_STEER_OFFSET),
+          createSwerveModule(
+              backRightLayout,
+              ModuleConfiguration.MK4II_L3,
+              driveTrain.BACK_RIGHT_MODULE_DRIVE_MOTOR,
+              driveTrain.BACK_RIGHT_MODULE_STEER_MOTOR,
+              driveTrain.BACK_RIGHT_MODULE_STEER_ENCODER,
+              driveTrain.BACK_RIGHT_MODULE_STEER_OFFSET)
+        };
+    return swerveModules;
+  }
+
   private SwerveModule[] swerveModuleHana(
       ShuffleboardLayout frontLeftLayout,
       ShuffleboardLayout frontRightLayout,
@@ -166,6 +220,50 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * Specific to the hana drivetrain(just the offset)
      */
     DriveTrainConstants driveTrain = DriveTrainConstants.hana;
+    SwerveModule[] swerveModules =
+        new SwerveModule[] {
+          createSwerveModule(
+              frontLeftLayout,
+              ModuleConfiguration.MK4I_L2,
+              driveTrain.FRONT_LEFT_MODULE_DRIVE_MOTOR,
+              driveTrain.FRONT_LEFT_MODULE_STEER_MOTOR,
+              driveTrain.FRONT_LEFT_MODULE_STEER_ENCODER,
+              driveTrain.FRONT_LEFT_MODULE_STEER_OFFSET),
+          createSwerveModule(
+              frontRightLayout,
+              ModuleConfiguration.MK4I_L2,
+              driveTrain.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
+              driveTrain.FRONT_RIGHT_MODULE_STEER_MOTOR,
+              driveTrain.FRONT_RIGHT_MODULE_STEER_ENCODER,
+              driveTrain.FRONT_RIGHT_MODULE_STEER_OFFSET),
+          createSwerveModule(
+              backLeftLayout,
+              ModuleConfiguration.MK4I_L2,
+              driveTrain.BACK_LEFT_MODULE_DRIVE_MOTOR,
+              driveTrain.BACK_LEFT_MODULE_STEER_MOTOR,
+              driveTrain.BACK_LEFT_MODULE_STEER_ENCODER,
+              driveTrain.BACK_LEFT_MODULE_STEER_OFFSET),
+          createSwerveModule(
+              backRightLayout,
+              ModuleConfiguration.MK4I_L2,
+              driveTrain.BACK_RIGHT_MODULE_DRIVE_MOTOR,
+              driveTrain.BACK_RIGHT_MODULE_STEER_MOTOR,
+              driveTrain.BACK_RIGHT_MODULE_STEER_ENCODER,
+              driveTrain.BACK_RIGHT_MODULE_STEER_OFFSET)
+        };
+
+    return swerveModules;
+  }
+
+  private SwerveModule[] swerveModuleCalliope(
+      ShuffleboardLayout frontLeftLayout,
+      ShuffleboardLayout frontRightLayout,
+      ShuffleboardLayout backLeftLayout,
+      ShuffleboardLayout backRightLayout) {
+    /*
+     * Specific to the calliope drivetrain(just the offset)
+     */
+    DriveTrainConstants driveTrain = DriveTrainConstants.calliope;
     SwerveModule[] swerveModules =
         new SwerveModule[] {
           createSwerveModule(
@@ -336,6 +434,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return command that will run the trajectory
    */
   public Command createCommandForTrajectory(Trajectory trajectory, Supplier<Pose2d> poseSupplier) {
+    var thetaController =
+        new ProfiledPIDController(
+            -AutoConstants.THETA_kP,
+            AutoConstants.THETA_kI,
+            AutoConstants.THETA_kD,
+            THETA_CONSTRAINTS);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     SwerveControllerCommand swerveControllerCommand =
         new SwerveControllerCommand(

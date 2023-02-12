@@ -1,6 +1,7 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
+// Improved upon TechSupport's file
 
 package frc.robot.subsystems.LimeVision;
 
@@ -9,7 +10,6 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.LimeLightConstants;
 
 public class LimeLightSub extends SubsystemBase {
@@ -36,9 +36,6 @@ public class LimeLightSub extends SubsystemBase {
   private double kTargetHeight =
       LimeLightConstants.TARGET_HEIGHT; // LimelightConstants.kTargetHeight;
 
-  private double theta;
-  private double distance;
-
   private LimeLightComms limelight_comm;
 
   /** Creates a new LimeLightSub. */
@@ -58,12 +55,12 @@ public class LimeLightSub extends SubsystemBase {
     SmartDashboard.putNumber("X-Distance", getXDistance());
     SmartDashboard.putNumber("Y-Distance", getYDistance());
     SmartDashboard.putNumber("AngleToTarget", getAngle());
-    System.out.println(DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);
+    SmartDashboard.putNumber("error", getXDistance() - 120);
     // This method will be called once per scheduler run
   }
 
-  public double getTv() {
-    return tv.getDouble(0);
+  public boolean hasTarget() {
+    return tv.getDouble(0) >= .9;
   }
 
   public double getTx() {
@@ -88,27 +85,6 @@ public class LimeLightSub extends SubsystemBase {
   }
 
   public double getAngle() {
-    return Math.toRadians(-getTx());
-  }
-
-  public double[] chassisValuesLower() {
-    /*
-    [1,2,3]
-    1 is x velocity
-    2 is y velocity
-    3 is degrees rotation
-    get the angle using atan2, it returns radians
-    use sin and cos to get values to reach max speed
-    not really sure about the angle yet.
-    */
-    double distanceError = getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
-    double[] x = new double[3];
-    x[0] = distanceError;
-    x[1] = 0;
-    x[2] = -getTx();
-    // getAngle()
-    //     / (((Math.sqrt(x[0] * x[0]) + x[1] * x[1]))
-    //         / DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);
-    return x;
+    return Math.toRadians(getTx());
   }
 }

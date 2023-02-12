@@ -4,11 +4,9 @@
 
 package frc.robot.commands.Arm;
 
-import frc.robot.subsystems.ArmSubsystems.MagicMotion;
-import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import edu.wpi.first.wpilibj.Timer;
+import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
+import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 
 public class MagicMotionAbsoluteZero extends CommandBase {
   private MagicMotion motor;
@@ -29,14 +27,14 @@ public class MagicMotionAbsoluteZero extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-        motorAngle = motor.getAngDegrees();
-        System.out.println("Raw:" + rawAngle);
-        System.out.println("Motor Angle:" + motorAngle);
-        double difference = rawAngle - motorAngle;
-        System.out.println("Diff:" + difference);
-        rawAngle = encoder.getRaw() / 8192. * 360.;
-        motorAngle = motor.getAngDegrees();
-        motor.setAng(difference, velocity, acceleration);
+    motorAngle = motor.getAngDegrees();
+    System.out.println("Raw:" + rawAngle);
+    System.out.println("Motor Angle:" + motorAngle);
+    double difference = rawAngle - motorAngle;
+    System.out.println("Diff:" + difference);
+    rawAngle = encoder.getRaw() / 8192. * 360.;
+    motorAngle = motor.getAngDegrees();
+    motor.setAng(difference, velocity, acceleration);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

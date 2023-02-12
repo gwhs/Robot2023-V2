@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.Map;
 
@@ -29,24 +28,24 @@ public class BoreEncoder extends SubsystemBase {
   public BoreEncoder() {
 
     m_encoder.setSamplesToAverage(5);
-    m_encoder.setDistancePerPulse(1./256.);
-    //m_encoder.setDistancePerPulse(1.0 / 360.0 * 2.0 * Math.PI * 1.5);
+    m_encoder.setDistancePerPulse(1. / 256.);
+    // m_encoder.setDistancePerPulse(1.0 / 360.0 * 2.0 * Math.PI * 1.5);
     m_encoder.setMinRate(1.0);
   }
 
-  public double getDistance(){
+  public double getDistance() {
     return m_encoder.getDistance();
   }
 
-  public double getRaw(){
+  public double getRaw() {
     return m_encoder.getRaw();
   }
 
-  public void reset(){
+  public void reset() {
     m_encoder.reset();
   }
 
-  public boolean getStopped(){
+  public boolean getStopped() {
     return m_encoder.getStopped();
   }
 
