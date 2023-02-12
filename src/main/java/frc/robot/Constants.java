@@ -547,9 +547,9 @@ public final class Constants {
         1; // limelight max degrees off, max degrees error
     public static final double CAMERA_HEIGHT = 87;
     public static final double TARGET_HEIGHT = 60;
-    public static final double MOUNTING_ANGLE = -11;
+    public static final double MOUNTING_ANGLE = -19;
     public static final double LOWER_DISTANCE_SHOOT = 79;
-    public static final double TESTING_VALUE = 37;
+    public static final double TESTING_VALUE = 42;
     public static final double UPPER_ANGLE_SHOOT = 2;
   }
 }

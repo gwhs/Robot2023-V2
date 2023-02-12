@@ -25,6 +25,7 @@ import frc.robot.commands.Lime.AfterPPID;
 import frc.robot.commands.Lime.PPIDAutoAim;
 import frc.robot.commands.Lime.Rotate;
 import frc.robot.commands.Lime.Sideways;
+import frc.robot.commands.Lime.ToPole;
 import frc.robot.commands.autonomous.TestAutonomous;
 import frc.robot.pathfind.Edge;
 import frc.robot.pathfind.Node;
@@ -61,6 +62,7 @@ public class RobotContainer {
 
   private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, limeLightSub);
+  private final ToPole toPole = new ToPole(drivetrainSubsystem, limeLightSub);
   private final AfterPPID afterPPID =
       new AfterPPID(drivetrainSubsystem, poseEstimator, limeLightSub);
 
@@ -190,7 +192,7 @@ public class RobotContainer {
 
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    controller.x().toggleOnTrue(autoBalance);
+    controller.x().toggleOnTrue(toPole);
 
     // controller
     //     .a()

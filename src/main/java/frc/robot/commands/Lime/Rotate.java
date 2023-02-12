@@ -29,7 +29,7 @@ public class Rotate extends CommandBase {
   //// second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
 
-  private double angleP = 5;
+  private double angleP = 1;
   private double angleI = 0;
   private double angleD = 0;
   private ProfiledPIDController anglePid =

@@ -38,7 +38,7 @@ public class PPIDAutoAim extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
   // pid for angle
-  private double angleP = 3;
+  private double angleP = 1;
   private double angleI = 0;
   private double angleD = 0;
   private ProfiledPIDController anglePid =

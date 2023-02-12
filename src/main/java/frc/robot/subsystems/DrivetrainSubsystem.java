@@ -46,7 +46,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   // private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(PIGEON_ID);
   // private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
-  private final WrappedGyro gyro = new WrappedGyro(GyroType.NAVX);
+  private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON);
   private final SwerveModule[] swerveModules;
   private final DriveTrainConstants driveTrain;
 

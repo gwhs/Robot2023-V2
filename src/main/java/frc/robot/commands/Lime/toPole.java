@@ -14,7 +14,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 
-public class toPole extends CommandBase {
+public class ToPole extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private PoseEstimatorSubsystem poseEstimatorSubsystem;
   private LimeLightSub limeLight;
@@ -39,7 +39,7 @@ public class toPole extends CommandBase {
   // private ProfiledPIDController Pid = new ProfiledPIDController(P, I, D, Constraints);
 
   /** Creates a new AutoAimLime. */
-  public toPole(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {
+  public ToPole(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLight = limeLightSub;
     this.drivetrainSubsystem = drivetrainSubsystem;
