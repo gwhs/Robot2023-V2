@@ -8,7 +8,6 @@ import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -22,8 +21,11 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.ChaseTagCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
-import frc.robot.commands.Lime.AutoAimLime;
-import frc.robot.commands.WPIAStar;
+import frc.robot.commands.Lime.AfterPPID;
+import frc.robot.commands.Lime.PPIDAutoAim;
+import frc.robot.commands.Lime.Rotate;
+import frc.robot.commands.Lime.Sideways;
+import frc.robot.commands.Lime.ToPole;
 import frc.robot.commands.autonomous.TestAutonomous;
 import frc.robot.pathfind.Edge;
 import frc.robot.pathfind.Node;
@@ -53,9 +55,16 @@ public class RobotContainer {
 
   // change to hana or spring depending on robot
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
-  private final AutoAimLime autoAimLime = new AutoAimLime(drivetrainSubsystem, limeLightSub);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
+  private final PPIDAutoAim autoAimLime =
+      new PPIDAutoAim(drivetrainSubsystem, poseEstimator, limeLightSub);
+
+  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, 0);
+  private final Sideways sideways = new Sideways(drivetrainSubsystem, limeLightSub);
+  private final ToPole toPole = new ToPole(drivetrainSubsystem, limeLightSub);
+  private final AfterPPID afterPPID =
+      new AfterPPID(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
 
@@ -178,25 +187,28 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
     controller.b().onTrue(autoAimLime.withTimeout(3));
+    controller.leftBumper().onTrue(sideways);
+    controller.rightBumper().onTrue(rotate);
 
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    controller.x().toggleOnTrue(autoBalance);
+    controller.x().toggleOnTrue(toPole);
 
     // controller
     //     .a()
     //     .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
 
-    controller
-        .y()
-        .whileTrue(
-            new WPIAStar(
-                drivetrainSubsystem,
-                poseEstimator,
-                new TrajectoryConfig(2, 2),
-                finalNode,
-                obstacles,
-                AStarMap));
+    // controller
+    //     .y()
+    //     .whileTrue(
+    //         new WPIAStar(
+    //             drivetrainSubsystem,
+    //             poseEstimator,
+    //             new TrajectoryConfig(2, 2),
+    //             finalNode,
+    //             obstacles,
+    //             AStarMap));
+
     // controller.x().whileTrue(new DriveWithPathPlanner(drivetrainSubsystem,
     // poseEstimator, new PathConstraints(2, 2),
     // new PathPoint(new Translation2d(2.33, 2.03),
