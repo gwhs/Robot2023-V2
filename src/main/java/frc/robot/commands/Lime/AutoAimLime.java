@@ -39,12 +39,13 @@ public class AutoAimLime extends CommandBase {
   public void execute() {
 
     // add pids
-    values = limeLight.chassisValuesLower();
-    if (limeLight.getTv() > .8) {
-      drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
-    } else {
-      System.out.println("NO TARGET FOUND BY LIMELIGHT");
-    }
+    // Temp: comment out this code that does not compile
+    //    values = limeLight.chassisValuesLower();
+    //    if (limeLight.getTv() > .8) {
+    //      drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
+    //    } else {
+    //      System.out.println("NO TARGET FOUND BY LIMELIGHT");
+    //    }
     if (Math.abs(limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT) < 2) {
       horizDone = true;
     } else {

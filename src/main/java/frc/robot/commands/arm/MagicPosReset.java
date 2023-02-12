@@ -7,10 +7,10 @@ package frc.robot.commands.arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 
-public class MagicPosReset2 extends CommandBase {
+public class MagicPosReset extends CommandBase {
   private MagicMotion motor;
 
-  public MagicPosReset2(MagicMotion moto) {
+  public MagicPosReset(MagicMotion moto) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.motor = moto;
 
