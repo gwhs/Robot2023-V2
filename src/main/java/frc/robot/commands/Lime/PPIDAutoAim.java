@@ -45,10 +45,6 @@ public class PPIDAutoAim extends CommandBase {
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
 
   private double positionP = .005;
-  private double positionI = 0;
-  private double positionD = 0;
-  private ProfiledPIDController positionPid =
-      new ProfiledPIDController(positionP, positionI, positionD, positionConstraints);
 
   /** Creates a new PPIDAutoAim. */
   public PPIDAutoAim(
@@ -76,10 +72,6 @@ public class PPIDAutoAim extends CommandBase {
     anglePid.setGoal(Math.toRadians(0));
     anglePid.setTolerance(Math.toRadians(1));
 
-    // configureing movement(forwards and back) pid
-    positionPid.reset(limeLight.hasTarget() ? distanceError : 0);
-    positionPid.setGoal(0);
-    positionPid.setTolerance(2);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
