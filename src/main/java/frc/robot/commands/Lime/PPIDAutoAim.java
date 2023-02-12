@@ -71,7 +71,6 @@ public class PPIDAutoAim extends CommandBase {
     anglePid.reset(Math.toRadians(limeLight.getAngle()));
     anglePid.setGoal(Math.toRadians(0));
     anglePid.setTolerance(Math.toRadians(1));
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.

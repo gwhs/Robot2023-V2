@@ -69,7 +69,7 @@ public class ToPole extends CommandBase {
       noTarget = 0;
       values = chassisValuesLower();
       drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
-    } else{
+    } else {
       noTarget++;
     }
 
@@ -80,7 +80,7 @@ public class ToPole extends CommandBase {
     } else {
       done = false;
     }
-    if (noTarget >= 10){
+    if (noTarget >= 10) {
       done = true;
     }
   }

@@ -17,6 +17,7 @@ public class Rotate extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private PoseEstimatorSubsystem poseEstimatorSubsystem;
   private LimeLightSub limeLight;
+  private double degrees;
   private double[] values = {0, 0, 0};
   private boolean angleDone = false;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
@@ -37,11 +38,11 @@ public class Rotate extends CommandBase {
 
   /** Creates a new Rotate. */
   public Rotate(
-      DrivetrainSubsystem drivetrainSubsystem,
-      PoseEstimatorSubsystem poseEstimatorSubsystem) {
+      DrivetrainSubsystem drivetrainSubsystem, PoseEstimatorSubsystem poseEstimatorSubsystem, double degrees) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.poseEstimatorSubsystem = poseEstimatorSubsystem;
     this.drivetrainSubsystem = drivetrainSubsystem;
+    this.degrees = degrees;
 
     addRequirements(limeLight);
     addRequirements(poseEstimatorSubsystem);
@@ -56,7 +57,7 @@ public class Rotate extends CommandBase {
     // configure rotation pid
     System.out.println(poseEstimatorSubsystem.getAngle());
     anglePid.reset(Math.toRadians(poseEstimatorSubsystem.getAngle()));
-    anglePid.setGoal(Math.toRadians(0));
+    anglePid.setGoal(Math.toRadians(degrees));
     anglePid.setTolerance(Math.toRadians(.5));
   }
 

@@ -60,7 +60,7 @@ public class RobotContainer {
   private final PPIDAutoAim autoAimLime =
       new PPIDAutoAim(drivetrainSubsystem, poseEstimator, limeLightSub);
 
-  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator);
+  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, 0);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, limeLightSub);
   private final ToPole toPole = new ToPole(drivetrainSubsystem, limeLightSub);
   private final AfterPPID afterPPID =

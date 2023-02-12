@@ -30,7 +30,7 @@ public class Sideways extends CommandBase {
   private double P = .025;
   private double I = 0;
   private double D = 0;
-  private ProfiledPIDController Pid = new ProfiledPIDController(P, I, D, constraints);
+  private ProfiledPIDController pid = new ProfiledPIDController(P, I, D, constraints);
 
   /** Creates a new AutoAimLime. */
   public Sideways(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {
@@ -46,9 +46,9 @@ public class Sideways extends CommandBase {
   public void initialize() {
     angleDone = false;
     // rotating to align
-    Pid.reset(Math.toRadians(limeLight.getTx()));
-    Pid.setGoal(Math.toRadians(0));
-    Pid.setTolerance(Math.toRadians(1));
+    pid.reset(Math.toRadians(limeLight.getTx()));
+    pid.setGoal(Math.toRadians(0));
+    pid.setTolerance(Math.toRadians(1));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -60,8 +60,8 @@ public class Sideways extends CommandBase {
     if (limeLight.hasTarget()) {
       noTarget = 0;
       drivetrainSubsystem.drive(new ChassisSpeeds(.00001, values[1], .00001));
-    }else{
-      noTarget ++;
+    } else {
+      noTarget++;
     }
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
     // setpoint just makes sure it's in the tolerance, doesn't work
@@ -70,7 +70,7 @@ public class Sideways extends CommandBase {
     } else {
       angleDone = false;
     }
-    if (noTarget >= 10){
+    if (noTarget >= 10) {
       angleDone = true;
     }
   }
@@ -101,7 +101,7 @@ public class Sideways extends CommandBase {
     double[] x = new double[3];
 
     x[0] = 0;
-    x[1] = Pid.calculate(limeLight.getTx());
+    x[1] = pid.calculate(limeLight.getTx());
     x[2] = 0;
 
     return x;
