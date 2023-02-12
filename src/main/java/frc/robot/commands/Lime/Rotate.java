@@ -38,10 +38,8 @@ public class Rotate extends CommandBase {
   /** Creates a new Rotate. */
   public Rotate(
       DrivetrainSubsystem drivetrainSubsystem,
-      PoseEstimatorSubsystem poseEstimatorSubsystem,
-      LimeLightSub limeLightSub) {
+      PoseEstimatorSubsystem poseEstimatorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.limeLight = limeLightSub;
     this.poseEstimatorSubsystem = poseEstimatorSubsystem;
     this.drivetrainSubsystem = drivetrainSubsystem;
 
