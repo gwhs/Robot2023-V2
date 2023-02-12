@@ -2,15 +2,15 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Arm;
+package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 
-public class MagicPosReset extends CommandBase {
+public class MagicPosReset2 extends CommandBase {
   private MagicMotion motor;
 
-  public MagicPosReset(MagicMotion moto) {
+  public MagicPosReset2(MagicMotion moto) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.motor = moto;
 
