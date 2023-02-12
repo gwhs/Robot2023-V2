@@ -18,6 +18,7 @@ public class ToPole extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private PoseEstimatorSubsystem poseEstimatorSubsystem;
   private LimeLightSub limeLight;
+  private int noTarget = 0;
   private double[] values = {0, 0, 0};
   private boolean done = false;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
@@ -65,8 +66,11 @@ public class ToPole extends CommandBase {
 
     // add pids
     if (limeLight.hasTarget()) {
+      noTarget = 0;
       values = chassisValuesLower();
       drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
+    } else{
+      noTarget++;
     }
 
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
@@ -75,6 +79,9 @@ public class ToPole extends CommandBase {
       done = true;
     } else {
       done = false;
+    }
+    if (noTarget >= 10){
+      done = true;
     }
   }
 

@@ -108,7 +108,7 @@ public class PPIDAutoAim extends CommandBase {
       sidewaysDone = false;
     }
 
-    if (noTargets > 10) {
+    if (noTargets >= 10) {
       sidewaysDone = true;
       angleDone = true;
     }

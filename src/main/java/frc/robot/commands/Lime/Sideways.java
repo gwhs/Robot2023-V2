@@ -17,6 +17,7 @@ public class Sideways extends CommandBase {
   private LimeLightSub limeLight;
   private double[] values = {0, 0, 0};
   private boolean angleDone = false;
+  private int noTarget = 0;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
   //// second param on constraints is estimated, should be max accel, not max speed, but lets say it
@@ -57,7 +58,10 @@ public class Sideways extends CommandBase {
     // add pids
     values = chassisValuesLower();
     if (limeLight.hasTarget()) {
+      noTarget = 0;
       drivetrainSubsystem.drive(new ChassisSpeeds(.00001, values[1], .00001));
+    }else{
+      noTarget ++;
     }
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
     // setpoint just makes sure it's in the tolerance, doesn't work
@@ -65,6 +69,9 @@ public class Sideways extends CommandBase {
       angleDone = true;
     } else {
       angleDone = false;
+    }
+    if (noTarget >= 10){
+      angleDone = true;
     }
   }
 
