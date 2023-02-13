@@ -95,7 +95,7 @@ public class WPIAStar extends CommandBase {
             new Pose2d(finalPosition.getX(), finalPosition.getY(), finalPosition.getHolRot()),
             // Pass config
             config);
-    poseEstimatorSystem.addTrajectory(exampleTrajectory);
+    poseEstimatorSystem.addWTrajectory(exampleTrajectory);
     pathDrivingCommand =
         driveSystem.createCommandForTrajectory(
             exampleTrajectory, poseEstimatorSystem::getCurrentPose);
