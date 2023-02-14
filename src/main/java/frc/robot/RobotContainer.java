@@ -123,6 +123,8 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     configureDashboard();
+    mainArm.robotInit();
+    shaftEncoder.reset();
 
     AStarMap.addNode(finalNode);
     // SetUp AStar Map
