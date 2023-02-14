@@ -11,13 +11,17 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * the package after creating this p roject, you must also update the build.gradle file in the
  * project.
  */
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
 
-  private RobotContainer robotContainer;
+  private BaseContainer robotContainer;
+
+  private static final String CHRIS = "chris";
+  private static final String CALLIOPE = "calliope";
+  String container = CHRIS;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -27,7 +31,15 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    robotContainer = new RobotContainer();
+
+    switch (container) {
+      case CHRIS:
+        robotContainer = new ChrisContainer();
+        break;
+      case CALLIOPE:
+        robotContainer = new CalliopeContainer();
+        break;
+    }
   }
 
   /**
@@ -56,7 +68,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    autonomousCommand = robotContainer.getAutonomousCommand();
+    autonomousCommand = robotContainer.etAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {

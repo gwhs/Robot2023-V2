@@ -44,7 +44,7 @@ import org.photonvision.PhotonCamera;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
-public class CalliopeContainer implements BaseContainer {
+public class ChrisContainer implements BaseContainer {
 
   private final CommandXboxController controller = new CommandXboxController(0);
   // Set IP to 10.57.12.11
@@ -55,7 +55,7 @@ public class CalliopeContainer implements BaseContainer {
 
   // change to hana or spring depending on robot
   private final DrivetrainSubsystem drivetrainSubsystem =
-      new DrivetrainSubsystem("calliope", "CAN_Network");
+      new DrivetrainSubsystem("chris", "CAN_Network");
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
   private final PPIDAutoAim autoAimLime =
@@ -93,7 +93,7 @@ public class CalliopeContainer implements BaseContainer {
           () -> -controller.getRightX());
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public CalliopeContainer() {
+  public ChrisContainer() {
     // Set up the default command for the drivetrain.
     drivetrainSubsystem.setDefaultCommand(
         new DefaultDriveCommand(
@@ -194,7 +194,6 @@ public class CalliopeContainer implements BaseContainer {
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
     controller.x().toggleOnTrue(toPole);
-
     // controller
     //     .a()
     //     .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
