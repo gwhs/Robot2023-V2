@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
+import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.ChaseTagCommand;
 import frc.robot.commands.DefaultDriveCommand;
@@ -31,6 +33,8 @@ import frc.robot.pathfind.Edge;
 import frc.robot.pathfind.Node;
 import frc.robot.pathfind.Obstacle;
 import frc.robot.pathfind.VisGraph;
+import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
+import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
@@ -52,6 +56,10 @@ public class RobotContainer {
 
   private final PhotonCamera photonCamera = null; // new PhotonCamera("photonvision");
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
+
+  // Arm
+  private final MagicMotion mainArm = new MagicMotion(21, DrivetrainConstants.CANIVORE_NAME);
+  private final BoreEncoder shaftEncoder = new BoreEncoder();
 
   // change to hana or spring depending on robot
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
@@ -222,11 +230,20 @@ public class RobotContainer {
     // controller.x().
     //     whileTrue(new PPAStar(drivetrainSubsystem, poseEstimator,
     //         new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
-    controller.y().onTrue(new TestAutonomous(drivetrainSubsystem, poseEstimator));
+    // controller.y().onTrue(new TestAutonomous(drivetrainSubsystem, poseEstimator));
+
+    controller
+        .y()
+        .onTrue(
+            Commands.sequence(
+                new MagicMotionPos(mainArm, 20, 0, 0),
+                Commands.waitSeconds(.5),
+                new MagicMotionPos(mainArm, 0, 0, 0),
+                Commands.waitSeconds(.5),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
   }
 
   /**
-   * 
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous

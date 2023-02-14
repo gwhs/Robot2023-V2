@@ -14,8 +14,8 @@ import frc.robot.Constants;
 public class MagicMotion extends SubsystemBase {
   TalonFX testTalon;
   /** Creates a new MagicMotion. */
-  public MagicMotion(int id) {
-    testTalon = new TalonFX(id);
+  public MagicMotion(int id, String can) {
+    testTalon = new TalonFX(id, can);
     resetPosition();
   }
 
@@ -85,7 +85,8 @@ public class MagicMotion extends SubsystemBase {
     testTalon.configMotionAcceleration(10000, Constants.Arm.kTimeoutMs);
 
     testTalon.set(
-        ControlMode.MotionMagic, angle * Constants.Arm.FALCON_TICKS * Constants.Arm.GEAR_RATIO);
+        ControlMode.MotionMagic,
+        angle / 360.0 * Constants.Arm.FALCON_TICKS * Constants.Arm.GEAR_RATIO);
   }
 
   public void resetPosition() {

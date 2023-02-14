@@ -18,7 +18,6 @@ public class MagicMotionPos extends CommandBase {
   // private double amps;
   private double motorAng;
   private double angle;
-  private double angleInDegrees;
   private double velocity;
   private double acceleration;
 
@@ -26,7 +25,6 @@ public class MagicMotionPos extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     this.motor = moto;
     this.angle = angle;
-    this.angleInDegrees = angle * 360;
     this.velocity = velocity;
     this.acceleration = acceleration;
     addRequirements(moto);
@@ -51,6 +49,6 @@ public class MagicMotionPos extends CommandBase {
   @Override
   public boolean isFinished() {
     motorAng = motor.getAngDegrees();
-    return Math.abs(motorAng - angleInDegrees) < .5;
+    return Math.abs(motorAng - angle) < .5;
   }
 }
