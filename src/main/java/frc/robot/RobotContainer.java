@@ -54,7 +54,8 @@ public class RobotContainer {
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
   // change to hana or spring depending on robot
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
+  private final DrivetrainSubsystem drivetrainSubsystem =
+      new DrivetrainSubsystem("chris", "CAN_Network");
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
   private final PPIDAutoAim autoAimLime =
@@ -193,7 +194,6 @@ public class RobotContainer {
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
     controller.x().toggleOnTrue(toPole);
-
     // controller
     //     .a()
     //     .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
@@ -225,7 +225,6 @@ public class RobotContainer {
   }
 
   /**
-   * 
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous

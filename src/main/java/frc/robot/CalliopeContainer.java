@@ -54,7 +54,8 @@ public class CalliopeContainer {
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
   // change to hana or spring depending on robot
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
+  private final DrivetrainSubsystem drivetrainSubsystem =
+      new DrivetrainSubsystem("calliope", "CAN_Network");
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
   private final PPIDAutoAim autoAimLime =
@@ -225,7 +226,6 @@ public class CalliopeContainer {
   }
 
   /**
-   * 
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous

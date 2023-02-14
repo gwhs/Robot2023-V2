@@ -1,6 +1,5 @@
 package frc.robot.swerve;
 
-import static frc.robot.Constants.DrivetrainConstants.CANIVORE_NAME;
 import static frc.robot.Constants.DrivetrainConstants.DRIVE_kA;
 import static frc.robot.Constants.DrivetrainConstants.DRIVE_kD;
 import static frc.robot.Constants.DrivetrainConstants.DRIVE_kI;
@@ -35,7 +34,10 @@ public class SwerveSpeedController {
   private double referenceVelocity;
 
   public SwerveSpeedController(
-      int port, ModuleConfiguration moduleConfiguration, ShuffleboardContainer container) {
+      int port,
+      ModuleConfiguration moduleConfiguration,
+      ShuffleboardContainer container,
+      String CANIVORE_NAME) {
     sensorPositionCoefficient =
         Math.PI
             * moduleConfiguration.getWheelDiameter()

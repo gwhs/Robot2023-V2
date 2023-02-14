@@ -1,6 +1,5 @@
 package frc.robot.swerve;
 
-import static frc.robot.Constants.DrivetrainConstants.CANIVORE_NAME;
 import static frc.robot.Constants.DrivetrainConstants.STEER_kD;
 import static frc.robot.Constants.DrivetrainConstants.STEER_kI;
 import static frc.robot.Constants.DrivetrainConstants.STEER_kP;
@@ -50,7 +49,8 @@ public class SwerveSteerController {
       int canCoderPort,
       double canCoderOffset,
       ShuffleboardContainer container,
-      ModuleConfiguration moduleConfiguration) {
+      ModuleConfiguration moduleConfiguration,
+      String CANIVORE_NAME) {
 
     CANCoderConfiguration config = new CANCoderConfiguration();
     config.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;

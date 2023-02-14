@@ -57,7 +57,6 @@ public final class Constants {
     public static final double ROBOT_LENGTH_WIDTH = 0.698;
 
     // "rio" for springtrap, "CAN_Network" for hana
-    public static final String CANIVORE_NAME = "CAN_Network";
 
     public static final int PIGEON_ID = 30;
 
