@@ -54,7 +54,7 @@ public class RobotContainer {
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
   // change to hana or spring depending on robot
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("hana");
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
   private final PPIDAutoAim autoAimLime =
@@ -71,8 +71,8 @@ public class RobotContainer {
   private final ChaseTagCommand chaseTagCommand =
       new ChaseTagCommand(photonCamera, drivetrainSubsystem, poseEstimator::getCurrentPose);
 
-  final List<Obstacle> standardObstacles = FieldConstants.standardObstacles;
-  final List<Obstacle> cablePath = FieldConstants.cablePath;
+  final List<Obstacle> standardObstacles = Constants.FieldConstants.standardObstacles;
+  final List<Obstacle> cablePath = Constants.FieldConstants.cablePath;
   // final List<Obstacle> obstacles = new ArrayList<Obstacle>();
   // final List<Obstacle> obstacles = FieldConstants.obstacles;
 
@@ -213,7 +213,6 @@ public class RobotContainer {
   }
 
   /**
-   * 
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
