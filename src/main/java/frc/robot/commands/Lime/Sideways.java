@@ -65,7 +65,7 @@ public class Sideways extends CommandBase {
     }
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
     // setpoint just makes sure it's in the tolerance, doesn't work
-    if (Math.abs(limeLight.getTx()) < 1) {
+    if (Math.abs(limeLight.getTx()) < .5) {
       angleDone = true;
     } else {
       angleDone = false;
@@ -73,13 +73,14 @@ public class Sideways extends CommandBase {
     if (noTarget >= 10) {
       angleDone = true;
     }
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     System.out.println("Sideways done");
-    drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, 0));
+    drivetrainSubsystem.drive(new ChassisSpeeds(0.01, 0, 0));
   }
 
   // Returns true when the command should end.
