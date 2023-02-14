@@ -73,7 +73,6 @@ public class Sideways extends CommandBase {
     if (noTarget >= 10) {
       angleDone = true;
     }
-    
   }
 
   // Called once the command ends or is interrupted.
