@@ -38,13 +38,14 @@ public class Rotate extends CommandBase {
 
   /** Creates a new Rotate. */
   public Rotate(
-      DrivetrainSubsystem drivetrainSubsystem, PoseEstimatorSubsystem poseEstimatorSubsystem, double degrees) {
+      DrivetrainSubsystem drivetrainSubsystem,
+      PoseEstimatorSubsystem poseEstimatorSubsystem,
+      double degrees) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.poseEstimatorSubsystem = poseEstimatorSubsystem;
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.degrees = degrees;
 
-    addRequirements(limeLight);
     addRequirements(poseEstimatorSubsystem);
     addRequirements(drivetrainSubsystem);
   }
@@ -70,7 +71,7 @@ public class Rotate extends CommandBase {
     System.out.printf(
         "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // setpoint and atgoal don't work, just brute forced.
-    if (Math.abs(poseEstimatorSubsystem.getAngle()) < .5) {
+    if (Math.abs(poseEstimatorSubsystem.getAngle()) < .2) {
       angleDone = true;
     } else {
       angleDone = false;
@@ -81,7 +82,7 @@ public class Rotate extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     System.out.println("Rotated done");
-    drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, 0));
+    drivetrainSubsystem.drive(new ChassisSpeeds(.01, 0, 0));
   }
 
   // Returns true when the command should end.
