@@ -224,28 +224,28 @@ public class DrivetrainSubsystem extends SubsystemBase {
         new SwerveModule[] {
           createSwerveModule(
               frontLeftLayout,
-              ModuleConfiguration.MK4I_L2,
+              ModuleConfiguration.MK4_L3,
               driveTrain.FRONT_LEFT_MODULE_DRIVE_MOTOR,
               driveTrain.FRONT_LEFT_MODULE_STEER_MOTOR,
               driveTrain.FRONT_LEFT_MODULE_STEER_ENCODER,
               driveTrain.FRONT_LEFT_MODULE_STEER_OFFSET),
           createSwerveModule(
               frontRightLayout,
-              ModuleConfiguration.MK4I_L2,
+              ModuleConfiguration.MK4_L3,
               driveTrain.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
               driveTrain.FRONT_RIGHT_MODULE_STEER_MOTOR,
               driveTrain.FRONT_RIGHT_MODULE_STEER_ENCODER,
               driveTrain.FRONT_RIGHT_MODULE_STEER_OFFSET),
           createSwerveModule(
               backLeftLayout,
-              ModuleConfiguration.MK4I_L2,
+              ModuleConfiguration.MK4_L3,
               driveTrain.BACK_LEFT_MODULE_DRIVE_MOTOR,
               driveTrain.BACK_LEFT_MODULE_STEER_MOTOR,
               driveTrain.BACK_LEFT_MODULE_STEER_ENCODER,
               driveTrain.BACK_LEFT_MODULE_STEER_OFFSET),
           createSwerveModule(
               backRightLayout,
-              ModuleConfiguration.MK4I_L2,
+              ModuleConfiguration.MK4_L3,
               driveTrain.BACK_RIGHT_MODULE_DRIVE_MOTOR,
               driveTrain.BACK_RIGHT_MODULE_STEER_MOTOR,
               driveTrain.BACK_RIGHT_MODULE_STEER_ENCODER,
