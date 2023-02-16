@@ -58,7 +58,7 @@ public final class Constants {
 
     // "rio" for hana, "CAN_Network" for chris
 
-    public static final String CANIVORE_NAME = "CAN_Network";
+    public static final String CANIVORE_NAME = "rio";
 
     public static final int PIGEON_ID = 30;
 

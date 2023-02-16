@@ -51,7 +51,7 @@ public class RobotContainer {
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
   // TODO: change to hana or spring depending on robot
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("hana");
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
   private final PPIDAutoAim autoAimLime =
@@ -214,7 +214,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // return new TestAutonomous(drivetrainSubsystem, poseEstimator);
     return new PPSwerveFollower(
-        drivetrainSubsystem, poseEstimator, "StraightNoRotation", new PathConstraints(2, 1), true);
+        drivetrainSubsystem, poseEstimator, "D-F1E", new PathConstraints(2, 1), true);
   }
 
   private static double modifyAxis(double value) {
