@@ -46,8 +46,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   // private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(PIGEON_ID);
   // private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
-  private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON);
+  //  private final WrappedGyro gyro = new WrappedGyro(GyroType.NAVX); //hana
+  private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON); // chris
   private final SwerveModule[] swerveModules;
+  private final PIDController thetaControllerPID =
+      new PIDController(-AutoConstants.THETA_kP, AutoConstants.THETA_kI, AutoConstants.THETA_kD);
   private final DriveTrainConstants driveTrain;
 
   private ChassisSpeeds desiredChassisSpeeds;
@@ -66,6 +69,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
       driveTrain = DriveTrainConstants.hana;
     } else if (robotName.equals("spring")) {
       driveTrain = DriveTrainConstants.spring;
+    } else if (robotName.equals("chris")) {
+      driveTrain = DriveTrainConstants.chris;
     } else {
       driveTrain = DriveTrainConstants.calliope;
     }
@@ -220,28 +225,28 @@ public class DrivetrainSubsystem extends SubsystemBase {
         new SwerveModule[] {
           createSwerveModule(
               frontLeftLayout,
-              ModuleConfiguration.MK4I_L2,
+              ModuleConfiguration.MK4_L3,
               driveTrain.FRONT_LEFT_MODULE_DRIVE_MOTOR,
               driveTrain.FRONT_LEFT_MODULE_STEER_MOTOR,
               driveTrain.FRONT_LEFT_MODULE_STEER_ENCODER,
               driveTrain.FRONT_LEFT_MODULE_STEER_OFFSET),
           createSwerveModule(
               frontRightLayout,
-              ModuleConfiguration.MK4I_L2,
+              ModuleConfiguration.MK4_L3,
               driveTrain.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
               driveTrain.FRONT_RIGHT_MODULE_STEER_MOTOR,
               driveTrain.FRONT_RIGHT_MODULE_STEER_ENCODER,
               driveTrain.FRONT_RIGHT_MODULE_STEER_OFFSET),
           createSwerveModule(
               backLeftLayout,
-              ModuleConfiguration.MK4I_L2,
+              ModuleConfiguration.MK4_L3,
               driveTrain.BACK_LEFT_MODULE_DRIVE_MOTOR,
               driveTrain.BACK_LEFT_MODULE_STEER_MOTOR,
               driveTrain.BACK_LEFT_MODULE_STEER_ENCODER,
               driveTrain.BACK_LEFT_MODULE_STEER_OFFSET),
           createSwerveModule(
               backRightLayout,
-              ModuleConfiguration.MK4I_L2,
+              ModuleConfiguration.MK4_L3,
               driveTrain.BACK_RIGHT_MODULE_DRIVE_MOTOR,
               driveTrain.BACK_RIGHT_MODULE_STEER_MOTOR,
               driveTrain.BACK_RIGHT_MODULE_STEER_ENCODER,
@@ -409,7 +414,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    *
    * @param states array of states. Must be ordered frontLeft, frontRight, backLeft, backRight
    */
-  private void setModuleStates(SwerveModuleState[] states) {
+  public void setModuleStates(SwerveModuleState[] states) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);
     IntStream.range(0, swerveModules.length)
@@ -437,7 +442,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
             AutoConstants.THETA_kD,
             THETA_CONSTRAINTS);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
     SwerveControllerCommand swerveControllerCommand =
         new SwerveControllerCommand(
             trajectory,
@@ -449,6 +453,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
             this::setModuleStates);
 
     return swerveControllerCommand;
+  }
+
+  public PIDController getThetaController() {
+    return thetaControllerPID;
   }
 
   public static PPSwerveControllerCommand followTrajectory(

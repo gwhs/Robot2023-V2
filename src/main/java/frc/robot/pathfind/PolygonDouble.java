@@ -212,7 +212,8 @@ public class PolygonDouble implements Shape, Cloneable, Serializable {
     }
   }
 
-  /* get the associated {@link Polyline2D}.
+  /*
+   * get the associated {@link Polyline2D}.
    */
   public Polyline2D getPolyline2D() {
 
@@ -445,23 +446,23 @@ public class PolygonDouble implements Shape, Cloneable, Serializable {
 }
 
 /*
-
-Licensed to the Apache Software Foundation (ASF) under one or more
-contributor license agreements.  See the NOTICE file distributed with
-this work for additional information regarding copyright ownership.
-The ASF licenses this file to You under the Apache License, Version 2.0
-(the "License"); you may not use this file except in compliance with
-the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-*/
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements. See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 
 /**
  * This class has the same behavior than {@link Polygon2D}, except that the figure is not closed.
@@ -788,7 +789,8 @@ class Polyline2D implements Shape, Cloneable, Serializable {
     else return path.getPathIterator(at);
   }
 
-  /* get the associated {@link Polygon2D}.
+  /*
+   * get the associated {@link Polygon2D}.
    * This method take care that may be the last point can
    * be equal to the first. In that case it must not be included in the Polygon,
    * as polygons declare their first point only once.
