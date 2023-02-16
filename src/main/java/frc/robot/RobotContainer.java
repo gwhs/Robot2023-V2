@@ -20,7 +20,6 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalance;
-import frc.robot.commands.ChaseTagCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.Lime.AfterPPID;
@@ -40,7 +39,7 @@ import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.List;
 import java.util.Map;
-import org.photonvision.PhotonCamera;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -54,7 +53,7 @@ public class RobotContainer {
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
 
-  private final PhotonCamera photonCamera = null; // new PhotonCamera("photonvision");
+  
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
   // Arm
@@ -64,7 +63,7 @@ public class RobotContainer {
   // change to hana or spring depending on robot
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
   private final PoseEstimatorSubsystem poseEstimator =
-      new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
+      new PoseEstimatorSubsystem(drivetrainSubsystem);
   private final PPIDAutoAim autoAimLime =
       new PPIDAutoAim(drivetrainSubsystem, poseEstimator, limeLightSub);
 
@@ -75,9 +74,6 @@ public class RobotContainer {
       new AfterPPID(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
-
-  private final ChaseTagCommand chaseTagCommand =
-      new ChaseTagCommand(photonCamera, drivetrainSubsystem, poseEstimator::getCurrentPose);
 
   VisGraph AStarMap = new VisGraph();
   final Node finalNode = new Node(4, 4, Rotation2d.fromDegrees(180));
