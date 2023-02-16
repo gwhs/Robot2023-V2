@@ -22,7 +22,9 @@ public class VisGraph {
 
   // Add a node to the navigation mesh
   public void addNode(Node node) {
-    this.nodes.add(node);
+    if (!containsNode(node)) {
+      this.nodes.add(node);
+    }
   }
 
   public int getNodeSize() {
@@ -33,29 +35,42 @@ public class VisGraph {
     return nodes.get(index);
   }
 
+  public boolean containsNode(Node node) {
+    return this.nodes.contains(node);
+  }
+
   // Add an edge to the navigation mesh
   public boolean addEdge(Edge edge, List<Obstacle> obstacles) {
-    // Why not use the Line2D class' static method of .linesIntersect() ? I am just hold on
-    for (Obstacle obstacle : obstacles) {
-      PolygonDouble polygon = obstacle.polygon;
-      for (int i = 0; i < polygon.npoints; i++) {
-        int j = (i + 1) % polygon.npoints;
-        // Couldn't the mod be eliminated by starting the index i at 1 and manually checking the
-        // segment between the last vertex and first one before this? Well
-        double x1 = polygon.xpoints[i];
-        double y1 = polygon.ypoints[i];
-        double x2 = polygon.xpoints[j];
-        double y2 = polygon.ypoints[j];
-        if (Line2D.linesIntersect(
-            x1, y1, x2, y2, edge.start.x, edge.start.y, edge.end.x, edge.end.y)) {
-          return false;
+    if (!containsEdge(edge)) {
+      // Why not use the Line2D class' static method of .linesIntersect() ? I am just
+      // hold on
+      for (Obstacle obstacle : obstacles) {
+        PolygonDouble polygon = obstacle.polygon;
+        for (int i = 0; i < polygon.npoints; i++) {
+          int j = (i + 1) % polygon.npoints;
+          // Couldn't the mod be eliminated by starting the index i at 1 and manually
+          // checking the segment between the
+          // last vertex and first one before this? Well
+          double x1 = polygon.xpoints[i];
+          double y1 = polygon.ypoints[i];
+          double x2 = polygon.xpoints[j];
+          double y2 = polygon.ypoints[j];
+          if (Line2D.linesIntersect(
+              x1, y1, x2, y2, edge.start.x, edge.start.y, edge.end.x, edge.end.y)) {
+            return false;
+          }
         }
       }
+      this.edges.add(edge);
+      edge.start.addNeighbor(edge.end);
+      edge.end.addNeighbor(edge.start);
+      return true;
     }
-    this.edges.add(edge);
-    edge.start.addNeighbor(edge.end);
-    edge.end.addNeighbor(edge.start);
     return true;
+  }
+
+  public boolean containsEdge(Edge edge) {
+    return this.edges.contains(edge);
   }
 
   // Find a path through the navigation mesh from the start node to the goal node
@@ -85,7 +100,8 @@ public class VisGraph {
             cameFrom.put(neighbor, current);
             gScore.put(neighbor, tentativeGScore);
             fScore.put(neighbor, gScore.get(neighbor) + distance(neighbor, goal));
-            // No check needed, .add is a noop if it contains it. Sets don't allow duplicates
+            // No check needed, .add is a noop if it contains it. Sets don't allow
+            // duplicates
             openSet.add(neighbor);
           }
         }
