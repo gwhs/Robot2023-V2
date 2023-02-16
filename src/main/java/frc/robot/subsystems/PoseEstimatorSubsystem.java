@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -9,12 +10,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DrivetrainConstants;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class PoseEstimatorSubsystem extends SubsystemBase {
@@ -49,6 +53,9 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
   private final SwerveDrivePoseEstimator poseEstimator;
 
+  private final ArrayList<Double> xValues = new ArrayList<Double>();
+  private final ArrayList<Double> yValues = new ArrayList<Double>();
+
   private final Field2d field2d = new Field2d();
 
   private double previousPipelineTimestamp = 0;
@@ -72,7 +79,11 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     tab.add("Field", field2d).withPosition(2, 0).withSize(6, 4);
   }
 
-  public void addTrajectory(Trajectory traj) {
+  public void addWTrajectory(Trajectory traj) {
+    field2d.getObject("Trajectory").setTrajectory(traj);
+  }
+
+  public void addTrajectory(PathPlannerTrajectory traj) {
     field2d.getObject("Trajectory").setTrajectory(traj);
   }
 
@@ -84,7 +95,31 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     poseEstimator.update(
         drivetrainSubsystem.getGyroscopeRotation(), drivetrainSubsystem.getModulePositions());
 
-    field2d.setRobotPose(getCurrentPose());
+    // field2d.setRobotPose(getCurrentPose());
+    // Conversion so robot appears where it actually is on field instead of always
+    // on blue.
+    // xValues.add(getCurrentPose().getX());
+    // yValues.add(getCurrentPose().getY());
+    // double xAverage = xValues.stream().mapToDouble(a ->
+    // a).average().getAsDouble();
+    // double yAverage = yValues.stream().mapToDouble(a ->
+    // a).average().getAsDouble();
+    // double summation = 0.0;
+    // for (int i = 0; i < xValues.size(); i++) {
+    // summation += (Math.pow(xValues.get(i) - xAverage, 2) +
+    // Math.pow(yValues.get(i) - yAverage, 2));
+    // }
+    // double RMS = Math.sqrt((1.0 / (double) xValues.size() * summation));
+    // System.out.println("RMS: " + RMS);
+    if (DriverStation.getAlliance() == Alliance.Red) {
+      field2d.setRobotPose(
+          new Pose2d(
+              Constants.FieldConstants.fieldLength - getCurrentPose().getX(),
+              Constants.FieldConstants.fieldWidth - getCurrentPose().getY(),
+              new Rotation2d(getCurrentPose().getRotation().getRadians() + Math.PI)));
+    } else {
+      field2d.setRobotPose(getCurrentPose());
+    }
   }
 
   private String getFormattedPose() {
@@ -129,5 +164,19 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
         drivetrainSubsystem.getGyroscopeRotation(),
         drivetrainSubsystem.getModulePositions(),
         new Pose2d(getCurrentPose().getX(), getCurrentPose().getY(), Rotation2d.fromDegrees(0)));
+  }
+
+  /**
+   * Resets the holonomic rotation of the robot (gyro last year) This would be used if Apriltags are
+   * not getting accurate pose estimation
+   */
+  public void resetHolonomicRotation() {
+    poseEstimator.resetPosition(
+        Rotation2d.fromDegrees(0), drivetrainSubsystem.getModulePositions(), getCurrentPose());
+  }
+
+  public void resetPoseRating() {
+    xValues.clear();
+    yValues.clear();
   }
 }

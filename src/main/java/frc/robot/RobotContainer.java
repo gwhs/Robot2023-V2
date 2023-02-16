@@ -6,8 +6,8 @@ package frc.robot;
 
 import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
 
+import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
@@ -25,17 +26,15 @@ import frc.robot.commands.Lime.PPIDAutoAim;
 import frc.robot.commands.Lime.Rotate;
 import frc.robot.commands.Lime.Sideways;
 import frc.robot.commands.Lime.ToPole;
-import frc.robot.commands.autonomous.TestAutonomous;
-import frc.robot.pathfind.Edge;
-import frc.robot.pathfind.Node;
+import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
 import frc.robot.pathfind.VisGraph;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -49,10 +48,9 @@ public class RobotContainer {
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
 
-  
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
-  // change to hana or spring depending on robot
+  // TODO: change to hana or spring depending on robot
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
@@ -67,10 +65,18 @@ public class RobotContainer {
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
 
-  VisGraph AStarMap = new VisGraph();
-  final Node finalNode = new Node(4, 4, Rotation2d.fromDegrees(180));
+  final List<Obstacle> standardObstacles = Constants.FieldConstants.standardObstacles;
+  final List<Obstacle> cablePath = Constants.FieldConstants.cablePath;
   // final List<Obstacle> obstacles = new ArrayList<Obstacle>();
-  final List<Obstacle> obstacles = Constants.FieldConstants.obstacles;
+  // final List<Obstacle> obstacles = FieldConstants.obstacles;
+
+  // VisGraph AStarMap = new VisGraph();
+  // final Node finalNode = new Node(4, 4, Rotation2d.fromDegrees(180));
+  public MapCreator map = new MapCreator();
+  public VisGraph standardMap = new VisGraph();
+  public VisGraph cableMap = new VisGraph();
+
+  HashMap<String, Command> eventMap = new HashMap<>();
 
   private final FieldHeadingDriveCommand fieldHeadingDriveCommand =
       new FieldHeadingDriveCommand(
@@ -111,27 +117,6 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     configureDashboard();
-
-    AStarMap.addNode(finalNode);
-    // SetUp AStar Map
-
-    for (int i = 0; i < obstacles.size(); i++) {
-      System.out.println(obstacles.get(i));
-      Constants.FieldConstants.obstacles.get(i).offset(0.5).addNodes(AStarMap);
-    }
-
-    for (int i = 0; i < AStarMap.getNodeSize(); i++) {
-      Node startNode = AStarMap.getNode(i);
-      System.out.println("" + startNode.getX() + "," + startNode.getY());
-      for (int j = i + 1; j < AStarMap.getNodeSize(); j++) {
-        AStarMap.addEdge(new Edge(startNode, AStarMap.getNode(j)), obstacles);
-      }
-    }
-
-    // Obstacle o = new Obstacle(new double[]{ 0, 0, 4, 4}, new double[] {0, 4, 4, 0});
-    // Obstacle offset = o.offset(0.5f);
-    // offset.addNodes(AStarMap);
-
   }
 
   private GenericEntry maxSpeedAdjustment;
@@ -191,19 +176,20 @@ public class RobotContainer {
     controller.x().toggleOnTrue(toPole);
 
     // controller
-    //     .a()
-    //     .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0), drivetrainSubsystem));
+    // .a()
+    // .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0),
+    // drivetrainSubsystem));
 
     // controller
-    //     .y()
-    //     .whileTrue(
-    //         new WPIAStar(
-    //             drivetrainSubsystem,
-    //             poseEstimator,
-    //             new TrajectoryConfig(2, 2),
-    //             finalNode,
-    //             obstacles,
-    //             AStarMap));
+    // .y()
+    // .whileTrue(
+    // new WPIAStar(
+    // drivetrainSubsystem,
+    // poseEstimator,
+    // new TrajectoryConfig(2, 2),
+    // finalNode,
+    // obstacles,
+    // AStarMap));
 
     // controller.x().whileTrue(new DriveWithPathPlanner(drivetrainSubsystem,
     // poseEstimator, new PathConstraints(2, 2),
@@ -216,18 +202,19 @@ public class RobotContainer {
     // new PathPoint(new Translation2d(Units.inchesToMeters(200), 2.03),
     // drivetrainSubsystem.getGyroscopeRotation(), Rotation2d.fromDegrees(270))));
     // controller.x().
-    //     whileTrue(new PPAStar(drivetrainSubsystem, poseEstimator,
-    //         new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
+    // whileTrue(new PPAStar(drivetrainSubsystem, poseEstimator,
+    // new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
   }
 
   /**
-   * 
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new TestAutonomous(drivetrainSubsystem, poseEstimator);
+    // return new TestAutonomous(drivetrainSubsystem, poseEstimator);
+    return new PPSwerveFollower(
+        drivetrainSubsystem, poseEstimator, "StraightNoRotation", new PathConstraints(2, 1), true);
   }
 
   private static double modifyAxis(double value) {

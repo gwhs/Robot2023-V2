@@ -56,7 +56,8 @@ public final class Constants {
     // Pick the longest side of the robot for this and measure outside bumper to outside bumper
     public static final double ROBOT_LENGTH_WIDTH = 0.698;
 
-    // "rio" for springtrap, "CAN_Network" for hana
+    // "rio" for hana, "CAN_Network" for chris
+
     public static final String CANIVORE_NAME = "CAN_Network";
 
     public static final int PIGEON_ID = 30;
@@ -423,6 +424,21 @@ public final class Constants {
     //                 Units.inchesToMeters(42.19),
     //                 Units.inchesToMeters(18.22),
     //                 new Rotation3d()));
+
+    public static List<Obstacle> standardObstacles =
+        List.of(
+            // Charging Station
+            new Obstacle(
+                new double[] {2.48, 5.36, 5.36, 2.48}, new double[] {4.42, 4.42, 1.07, 1.07}),
+            new Obstacle(new double[] {3.84, 3.84, 1.26}, new double[] {6.23, 4.80, 5.52}));
+
+    // Forces robot to go over cable. In case of defense.
+    public static List<Obstacle> cablePath =
+        List.of(
+            // Charging Station
+            new Obstacle(
+                new double[] {2.48, 5.36, 5.36, 2.48}, new double[] {4.81, 4.81, 1.07, 1.07}),
+            new Obstacle(new double[] {3.84, 3.84, 1.26}, new double[] {6.23, 4.80, 5.52}));
 
     public static final Map<Integer, Pose3d> aprilTags =
         Map.of(
