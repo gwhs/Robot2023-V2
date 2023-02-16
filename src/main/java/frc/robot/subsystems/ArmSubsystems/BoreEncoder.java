@@ -12,11 +12,16 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.Map;
 import frc.robot.Constants.Arm;
+import java.util.Map;
 
 public class BoreEncoder extends SubsystemBase {
-  private final Encoder m_encoder = new Encoder(Arm.PWM_CHANNEL_ENCODER_1, Arm.PWM_CHANNEL_ENCODER_2, false, CounterBase.EncodingType.k4X);
+  private final Encoder m_encoder =
+      new Encoder(
+          Arm.PWM_CHANNEL_ENCODER_1,
+          Arm.PWM_CHANNEL_ENCODER_2,
+          false,
+          CounterBase.EncodingType.k4X);
 
   private ShuffleboardTab tab = Shuffleboard.getTab("Encoder");
   private GenericEntry encoderPosition = tab.add("Encoder Position", 0).getEntry();
