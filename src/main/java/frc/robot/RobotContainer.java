@@ -65,8 +65,8 @@ public class RobotContainer {
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
 
-  final List<Obstacle> standardObstacles = Constants.FieldConstants.standardObstacles;
-  final List<Obstacle> cablePath = Constants.FieldConstants.cablePath;
+  final List<Obstacle> standardObstacles = FieldConstants.standardObstacles;
+  final List<Obstacle> cablePath = FieldConstants.cablePath;
   // final List<Obstacle> obstacles = new ArrayList<Obstacle>();
   // final List<Obstacle> obstacles = FieldConstants.obstacles;
 
