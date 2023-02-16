@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.VisionConstants.CAMERA_TO_ROBOT;
-
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
@@ -9,7 +7,6 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
@@ -23,11 +20,9 @@ import frc.robot.Constants;
 import frc.robot.Constants.DrivetrainConstants;
 import java.util.ArrayList;
 import java.util.Map;
-import org.photonvision.PhotonCamera;
 
 public class PoseEstimatorSubsystem extends SubsystemBase {
 
-  private final PhotonCamera photonCamera;
   private final DrivetrainSubsystem drivetrainSubsystem;
 
   // Ordered list of target poses by ID (WPILib is adding some functionality for
@@ -65,9 +60,8 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
   private double previousPipelineTimestamp = 0;
 
-  public PoseEstimatorSubsystem(
-      PhotonCamera photonCamera, DrivetrainSubsystem drivetrainSubsystem) {
-    this.photonCamera = photonCamera;
+  public PoseEstimatorSubsystem(DrivetrainSubsystem drivetrainSubsystem) {
+
     this.drivetrainSubsystem = drivetrainSubsystem;
 
     ShuffleboardTab tab = Shuffleboard.getTab("Vision");
@@ -96,23 +90,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update pose estimator with the best visible target
-    var pipelineResult = photonCamera == null ? null : photonCamera.getLatestResult();
-    var resultTimestamp = pipelineResult == null ? 0.0 : pipelineResult.getTimestampSeconds();
-    if (resultTimestamp != previousPipelineTimestamp
-        && pipelineResult != null
-        && pipelineResult.hasTargets()) {
-      previousPipelineTimestamp = resultTimestamp;
-      var target = pipelineResult.getBestTarget();
-      var fiducialId = target.getFiducialId();
-      if (target.getPoseAmbiguity() <= .2 && fiducialId >= 0 && fiducialId < targetPoses.size()) {
-        var targetPose = targetPoses.get(fiducialId);
-        Transform3d camToTarget = target.getBestCameraToTarget();
-        Pose3d camPose = targetPose.transformBy(camToTarget.inverse());
 
-        var visionMeasurement = camPose.transformBy(CAMERA_TO_ROBOT);
-        poseEstimator.addVisionMeasurement(visionMeasurement.toPose2d(), resultTimestamp);
-      }
-    }
     // Update pose estimator with drivetrain sensors
     poseEstimator.update(
         drivetrainSubsystem.getGyroscopeRotation(), drivetrainSubsystem.getModulePositions());

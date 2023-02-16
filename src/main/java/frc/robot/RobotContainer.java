@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.AutoBalance;
-import frc.robot.commands.ChaseTagCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.Lime.AfterPPID;
@@ -36,7 +35,6 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.photonvision.PhotonCamera;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -50,13 +48,12 @@ public class RobotContainer {
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
 
-  private final PhotonCamera photonCamera = null; // new PhotonCamera("photonvision");
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
   // TODO: change to hana or spring depending on robot
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
   private final PoseEstimatorSubsystem poseEstimator =
-      new PoseEstimatorSubsystem(photonCamera, drivetrainSubsystem);
+      new PoseEstimatorSubsystem(drivetrainSubsystem);
   private final PPIDAutoAim autoAimLime =
       new PPIDAutoAim(drivetrainSubsystem, poseEstimator, limeLightSub);
 
@@ -67,9 +64,6 @@ public class RobotContainer {
       new AfterPPID(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
-
-  private final ChaseTagCommand chaseTagCommand =
-      new ChaseTagCommand(photonCamera, drivetrainSubsystem, poseEstimator::getCurrentPose);
 
   final List<Obstacle> standardObstacles = Constants.FieldConstants.standardObstacles;
   final List<Obstacle> cablePath = Constants.FieldConstants.cablePath;
