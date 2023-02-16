@@ -18,16 +18,15 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.auto.PPSwerveFollower;
-import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
-import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
-import frc.robot.commands.Lime.AfterPPID;
-import frc.robot.commands.Lime.PPIDAutoAim;
-import frc.robot.commands.Lime.Rotate;
-import frc.robot.commands.Lime.Sideways;
-import frc.robot.commands.Lime.ToPole;
+import frc.robot.commands.PlaceCone.AfterPPID;
+import frc.robot.commands.PlaceCone.PPIDAutoAim;
+import frc.robot.commands.PlaceCone.Rotate;
+import frc.robot.commands.PlaceCone.Sideways;
+import frc.robot.commands.PlaceCone.StraightWheel;
+import frc.robot.commands.PlaceCone.ToPole;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
 import frc.robot.pathfind.VisGraph;
@@ -70,6 +69,7 @@ public class RobotContainer {
   private final ToPole toPole = new ToPole(drivetrainSubsystem, limeLightSub);
   private final AfterPPID afterPPID =
       new AfterPPID(drivetrainSubsystem, poseEstimator, limeLightSub);
+  private final StraightWheel straightWheel = new StraightWheel(drivetrainSubsystem);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
   // Arm
@@ -216,15 +216,16 @@ public class RobotContainer {
     // whileTrue(new PPAStar(drivetrainSubsystem, poseEstimator,
     // new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
 
-    controller
-        .y()
-        .onTrue(
-            Commands.sequence(
-                new MagicMotionPos(mainArm, 210, 0, 0),
-                Commands.waitSeconds(.5),
-                new MagicMotionPos(mainArm, 0, 0, 0),
-                Commands.waitSeconds(.5),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
+    controller.y().onTrue(straightWheel);
+    // controller
+    //     .y()
+    //     .onTrue(
+    //         Commands.sequence(
+    //             new MagicMotionPos(mainArm, 210, 0, 0),
+    //             Commands.waitSeconds(.5),
+    //             new MagicMotionPos(mainArm, 0, 0, 0),
+    //             Commands.waitSeconds(.5),
+    //             new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
   }
 
   /**
