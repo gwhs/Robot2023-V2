@@ -46,14 +46,17 @@ public class Obstacle {
     List<Double> xPoints = new ArrayList<>();
     List<Double> yPoints = new ArrayList<>();
 
-    // Loop through all edges, checking if there's an intersection between any of them.
+    // Loop through all edges, checking if there's an intersection between any of
+    // them.
     // If an intersection does occur, cut the point off at that intersection,
-    // Creating a new point at the intersection, which should be the correct distance away.
+    // Creating a new point at the intersection, which should be the correct
+    // distance away.
     for (int i = 0; i < offsetEdges.size(); i++) {
       ObstacleEdge edge = offsetEdges.get(i);
       // Check against every other edge, including last -> first
       for (int j = i + 1; j <= offsetEdges.size(); j++) {
-        // Wrap edges back to beginning so the last edge can be checked against the first one
+        // Wrap edges back to beginning so the last edge can be checked against the
+        // first one
         ObstacleEdge otherEdge = offsetEdges.get(j % offsetEdges.size());
         Translation2d intersectionPoint = edge.findIntersectionPoint(otherEdge);
         if (intersectionPoint == null && !edge.hasBeenPlotted()) {
@@ -140,8 +143,8 @@ public class Obstacle {
       double s2_y = other.point2.getY() - other.point1.getY();
 
       double s, t;
-      // Denominator portion of below equations, split into variable because it's the same between
-      // the two
+      // Denominator portion of below equations, split into variable because it's the
+      // same between the two
       double d = -s2_x * s1_y + s1_x * s2_y;
 
       // Magical math that I need to look into how it works more
