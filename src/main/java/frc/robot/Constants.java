@@ -56,8 +56,9 @@ public final class Constants {
     // Pick the longest side of the robot for this and measure outside bumper to outside bumper
     public static final double ROBOT_LENGTH_WIDTH = 0.698;
 
-    // "rio" for springtrap, "CAN_Network" for hana
-    public static final String CANIVORE_NAME = "rio";
+    // "rio" for hana, "CAN_Network" for chris
+
+    public static final String CANIVORE_NAME = "CAN_Network";
 
     public static final int PIGEON_ID = 30;
 
