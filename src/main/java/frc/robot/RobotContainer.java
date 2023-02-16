@@ -36,7 +36,6 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -49,11 +48,10 @@ public class RobotContainer {
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
 
-  
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
   // change to hana or spring depending on robot
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("calliope");
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
   private final PPIDAutoAim autoAimLime =
@@ -189,6 +187,8 @@ public class RobotContainer {
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
     controller.x().toggleOnTrue(toPole);
+
+    controller.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
 
     // controller
     //     .a()

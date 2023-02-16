@@ -462,4 +462,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         Constants.AutoConstants.m_thetaController,
         d::setModuleStates);
   }
+
+  public Object getCurrentAngle() {
+    return null;
+  }
 }
