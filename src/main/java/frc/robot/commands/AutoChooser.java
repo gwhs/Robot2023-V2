@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.GyroMoment.WrappedGyro;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
-public class ShuffleBoardBen extends CommandBase {
+public class AutoChooser extends CommandBase {
   private final DrivetrainSubsystem drivetrainSubsystem;
 
   // private ShuffleboardTab tab = Shuffleboard.getTab("ShuffleBoardBen");
@@ -26,7 +26,7 @@ public class ShuffleBoardBen extends CommandBase {
   // angle bop
 
   /** Creates a new AutoBalance. */
-  public ShuffleBoardBen(DrivetrainSubsystem drivetrainSubsystem) {
+  public AutoChooser(DrivetrainSubsystem drivetrainSubsystem) {
 
     this.drivetrainSubsystem = drivetrainSubsystem;
     gyro = this.drivetrainSubsystem.getGyro();
@@ -41,6 +41,7 @@ public class ShuffleBoardBen extends CommandBase {
         tab.getLayout("Robot Orientation", BuiltInLayouts.kList).withSize(2, 4).withPosition(0, 0);
     ShuffleboardLayout input =
         tab.getLayout("Constant Inputs", BuiltInLayouts.kList).withSize(2, 4).withPosition(2, 0);
+    
 
     orientation.addNumber("Yaw", () -> gyro.getYaw()); // gets angle
 
@@ -51,6 +52,7 @@ public class ShuffleBoardBen extends CommandBase {
   public void initialize() {
     //  angleBen = angleEntry.getDouble(initialAngle);
     gyro.setYaw(angleEntry.getDouble(initialAngle));
+
   }
 
   @Override
