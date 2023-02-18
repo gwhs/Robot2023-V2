@@ -59,7 +59,7 @@ public class RobotContainer {
   private final BoreEncoder shaftEncoder = new BoreEncoder();
 
   // TODO: change to hana or spring depending on robot
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("hana");
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
   private final PPIDAutoAim autoAimLime =
@@ -178,7 +178,8 @@ public class RobotContainer {
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    controller.b().onTrue(autoAimLime.withTimeout(3));
+    // controller.b().onTrue(autoAimLime.withTimeout(3));
+    controller.b().onTrue(autoBalance);
     controller.leftBumper().onTrue(sideways);
     controller.rightBumper().onTrue(rotate);
 
@@ -237,7 +238,11 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // return new TestAutonomous(drivetrainSubsystem, poseEstimator);
     return new PPSwerveFollower(
-        drivetrainSubsystem, poseEstimator, "StraightNoRotation", new PathConstraints(2, 1), true);
+        drivetrainSubsystem,
+        poseEstimator,
+        "StraightWithRotation",
+        new PathConstraints(1, 1),
+        true);
   }
 
   private static double modifyAxis(double value) {

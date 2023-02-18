@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.AutoConstants.THETA_CONSTRAINTS;
-
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
@@ -46,8 +44,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   // private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(PIGEON_ID);
   // private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
-  private final WrappedGyro gyro = new WrappedGyro(GyroType.NAVX); // hana
-  // private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON); // chris
+  // private final WrappedGyro gyro = new WrappedGyro(GyroType.NAVX); // hana and calliope
+  private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON); // chris
   private final SwerveModule[] swerveModules;
   private final PIDController thetaControllerPID =
       new PIDController(-AutoConstants.THETA_kP, AutoConstants.THETA_kI, AutoConstants.THETA_kD);
@@ -440,7 +438,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             -AutoConstants.THETA_kP,
             AutoConstants.THETA_kI,
             AutoConstants.THETA_kD,
-            THETA_CONSTRAINTS);
+            Constants.AutoConstants.THETA_CONSTRAINTS);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
     SwerveControllerCommand swerveControllerCommand =
         new SwerveControllerCommand(
@@ -458,6 +456,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public PPSwerveControllerCommand followTrajectory(
       PoseEstimatorSubsystem s, PathPlannerTrajectory traj) {
+    Constants.AutoConstants.m_thetaController.enableContinuousInput(-Math.PI, Math.PI);
     return new PPSwerveControllerCommand(
         traj,
         s::getCurrentPose,
