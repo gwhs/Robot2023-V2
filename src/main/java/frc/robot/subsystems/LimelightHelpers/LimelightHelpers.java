@@ -685,7 +685,7 @@ public class LimelightHelpers {
     try {
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
       connection.setRequestMethod("GET");
-      if (snapshotName != null && snapshotName != "") {
+      if (snapshotName != null && !snapshotName.equals("")) {
         connection.setRequestProperty("snapname", snapshotName);
       }
 
