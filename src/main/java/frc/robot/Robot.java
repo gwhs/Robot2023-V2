@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -19,6 +21,11 @@ public class Robot extends TimedRobot {
 
   private RobotContainer robotContainer;
 
+  private AddressableLED m_led;
+  private AddressableLEDBuffer m_LedBuffer;
+  // Stores what the last hue of the first pixel is
+  private int m_RainbowFirstPixelHue;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -28,7 +35,25 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
+
+    m_led = new AddressableLED(9); // What does port mean
+    // Reuse buffer
+    // Default to a length of 60, start empty output
+    // Length is expensive to set, set only set it once, then just update data
+    m_LedBuffer = new AddressableLEDBuffer(60);
+    m_led.setLength(m_LedBuffer.getLength());
+
+    // Set the data
+    m_led.setData(m_LedBuffer);
+    m_led.start();
   }
+
+  // private void rainbow() {
+  // For every pixel
+  //   for (var i = 0; i < m_LedBuffer.getLength(); i++) {
+  //    final
+  //  }
+  // }
 
   /**
    * This function is called every robot packet, no matter the mode. Use this for items like
@@ -44,6 +69,11 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    // fill the buffer with a rainbow
+    //   rainbow();
+    // Set the LEDs
+    m_led.setData(m_LedBuffer);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
