@@ -214,7 +214,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // return new TestAutonomous(drivetrainSubsystem, poseEstimator);
     return new PPSwerveFollower(
-        drivetrainSubsystem, poseEstimator, "D-F1E", new PathConstraints(2, 1), true);
+        drivetrainSubsystem, poseEstimator, "StraightNoRotation", new PathConstraints(2, 1), true);
   }
 
   private static double modifyAxis(double value) {

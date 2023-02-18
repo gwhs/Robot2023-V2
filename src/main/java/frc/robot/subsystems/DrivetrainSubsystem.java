@@ -447,13 +447,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
             new PIDController(AutoConstants.X_kP, AutoConstants.X_kI, AutoConstants.X_kD),
             new PIDController(AutoConstants.Y_kP, AutoConstants.Y_kI, AutoConstants.Y_kD),
             thetaController,
-            this::setModuleStates);
+            this::setModuleStates,
+            this);
 
     return swerveControllerCommand;
   }
 
-  public static PPSwerveControllerCommand followTrajectory(
-      DrivetrainSubsystem d, PoseEstimatorSubsystem s, PathPlannerTrajectory traj) {
+  public PPSwerveControllerCommand followTrajectory(
+      PoseEstimatorSubsystem s, PathPlannerTrajectory traj) {
     return new PPSwerveControllerCommand(
         traj,
         s::getCurrentPose,
@@ -461,6 +462,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         Constants.AutoConstants.m_translationController,
         Constants.AutoConstants.m_strafeController,
         Constants.AutoConstants.m_thetaController,
-        d::setModuleStates);
+        this::setModuleStates,
+        this);
   }
 }
