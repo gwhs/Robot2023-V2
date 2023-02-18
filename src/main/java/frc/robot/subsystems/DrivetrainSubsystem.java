@@ -49,6 +49,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private final WrappedGyro gyro = new WrappedGyro(GyroType.NAVX); // hana
   // private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON); // chris
   private final SwerveModule[] swerveModules;
+  private final PIDController thetaControllerPID =
+      new PIDController(-AutoConstants.THETA_kP, AutoConstants.THETA_kI, AutoConstants.THETA_kD);
   private final DriveTrainConstants driveTrain;
 
   private ChassisSpeeds desiredChassisSpeeds;
@@ -67,6 +69,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
       driveTrain = DriveTrainConstants.hana;
     } else if (robotName.equals("spring")) {
       driveTrain = DriveTrainConstants.spring;
+    } else if (robotName.equals("chris")) {
+      driveTrain = DriveTrainConstants.chris;
     } else {
       driveTrain = DriveTrainConstants.calliope;
     }
@@ -410,7 +414,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    *
    * @param states array of states. Must be ordered frontLeft, frontRight, backLeft, backRight
    */
-  private void setModuleStates(SwerveModuleState[] states) {
+  public void setModuleStates(SwerveModuleState[] states) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);
     IntStream.range(0, swerveModules.length)
@@ -438,7 +442,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
             AutoConstants.THETA_kD,
             THETA_CONSTRAINTS);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
     SwerveControllerCommand swerveControllerCommand =
         new SwerveControllerCommand(
             trajectory,

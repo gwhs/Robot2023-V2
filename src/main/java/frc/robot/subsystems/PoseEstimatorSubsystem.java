@@ -16,8 +16,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.FieldConstants;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -27,7 +27,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
   // Ordered list of target poses by ID (WPILib is adding some functionality for
   // this)
-  private static final Map<Integer, Pose3d> targetPoses = Constants.FieldConstants.aprilTags;
+  private static final Map<Integer, Pose3d> targetPoses = FieldConstants.aprilTags;
 
   // Kalman Filter Configuration. These can be "tuned-to-taste" based on how much
   // you trust your various sensors. Smaller numbers will cause the filter to
@@ -114,8 +114,8 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     if (DriverStation.getAlliance() == Alliance.Red) {
       field2d.setRobotPose(
           new Pose2d(
-              Constants.FieldConstants.fieldLength - getCurrentPose().getX(),
-              Constants.FieldConstants.fieldWidth - getCurrentPose().getY(),
+              FieldConstants.fieldLength - getCurrentPose().getX(),
+              FieldConstants.fieldWidth - getCurrentPose().getY(),
               new Rotation2d(getCurrentPose().getRotation().getRadians() + Math.PI)));
     } else {
       field2d.setRobotPose(getCurrentPose());

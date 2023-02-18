@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.auto.PPSwerveFollower;
+import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
+import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
@@ -29,6 +31,8 @@ import frc.robot.commands.Lime.ToPole;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
 import frc.robot.pathfind.VisGraph;
+import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
+import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
@@ -50,6 +54,10 @@ public class RobotContainer {
 
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
+  // Arm
+  private final MagicMotion mainArm = new MagicMotion(21, DrivetrainConstants.CANIVORE_NAME);
+  private final BoreEncoder shaftEncoder = new BoreEncoder();
+
   // TODO: change to hana or spring depending on robot
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("hana");
   private final PoseEstimatorSubsystem poseEstimator =
@@ -64,9 +72,10 @@ public class RobotContainer {
       new AfterPPID(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
+  // Arm
 
-  final List<Obstacle> standardObstacles = Constants.FieldConstants.standardObstacles;
-  final List<Obstacle> cablePath = Constants.FieldConstants.cablePath;
+  final List<Obstacle> standardObstacles = FieldConstants.standardObstacles;
+  final List<Obstacle> cablePath = FieldConstants.cablePath;
   // final List<Obstacle> obstacles = new ArrayList<Obstacle>();
   // final List<Obstacle> obstacles = FieldConstants.obstacles;
 
@@ -117,6 +126,8 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     configureDashboard();
+    mainArm.robotInit();
+    shaftEncoder.reset();
   }
 
   private GenericEntry maxSpeedAdjustment;
@@ -204,6 +215,16 @@ public class RobotContainer {
     // controller.x().
     // whileTrue(new PPAStar(drivetrainSubsystem, poseEstimator,
     // new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
+
+    controller
+        .y()
+        .onTrue(
+            Commands.sequence(
+                new MagicMotionPos(mainArm, 210, 0, 0),
+                Commands.waitSeconds(.5),
+                new MagicMotionPos(mainArm, 0, 0, 0),
+                Commands.waitSeconds(.5),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
   }
 
   /**
@@ -211,6 +232,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+  private int autoPath = 1;
+
   public Command getAutonomousCommand() {
     // return new TestAutonomous(drivetrainSubsystem, poseEstimator);
     return new PPSwerveFollower(
