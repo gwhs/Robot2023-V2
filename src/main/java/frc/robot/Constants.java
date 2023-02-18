@@ -152,11 +152,11 @@ public final class Constants {
   public static class AutoConstants {
     public static TrapezoidProfile.Constraints THETA_CONSTRAINTS =
         new TrapezoidProfile.Constraints(PI, 2 / PI);
-    public static double THETA_kP = 1.2;
+    public static double THETA_kP = 1.2; // 1.2 original
     public static double THETA_kI = 0.0;
     public static double THETA_kD = 0.0;
 
-    public static double X_kP = 1.2;
+    public static double X_kP = 0.1; // 1.2 original
     public static double X_kI = 0.0;
     public static double X_kD = 0.0;
 

@@ -34,6 +34,7 @@ public class PPSwerveFollower extends CommandBase {
     this.pathName = pathName;
     this.constraints = constraints;
     this.resetOdom = resetOdom;
+    addRequirements(d);
   }
 
   @Override
@@ -48,8 +49,7 @@ public class PPSwerveFollower extends CommandBase {
 
     if (resetOdom) poseEstimatorSystem.setCurrentPose(alliancePath.getInitialHolonomicPose());
     poseEstimatorSystem.addTrajectory(alliancePath);
-    controllerCommand =
-        DrivetrainSubsystem.followTrajectory(driveSystem, poseEstimatorSystem, alliancePath);
+    controllerCommand = driveSystem.followTrajectory(poseEstimatorSystem, alliancePath);
     controllerCommand.initialize();
   }
 
