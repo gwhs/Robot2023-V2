@@ -34,9 +34,9 @@ public class ShuffleBoardBen extends CommandBase {
 
     final ShuffleboardTab tab = Shuffleboard.getTab("Drive");
 
-    initialAngle = 0.5;
+    initialAngle = 0;
 
-    Shuffleboard.selectTab("Angle Ben");
+    Shuffleboard.selectTab("Drive");
 
     ShuffleboardLayout orientation =
         tab.getLayout("Robot Orientation", BuiltInLayouts.kList).withSize(2, 4).withPosition(0, 0);
@@ -50,8 +50,8 @@ public class ShuffleBoardBen extends CommandBase {
 
   @Override
   public void initialize() {
-    angleBen = angleEntry.getDouble(initialAngle);
-    gyro.setYaw(angleBen + gyro.getAngle());
+    //  angleBen = angleEntry.getDouble(initialAngle);
+    gyro.setYaw(angleEntry.getDouble(initialAngle));
   }
 
   @Override
