@@ -62,7 +62,7 @@ public final class Constants {
         6380.0
             / 60.0
             * // was 6380.0 / 60.0
-            ModuleConfiguration.MK4II_L3.getDriveReduction()
+            ModuleConfiguration.MK4II_L3.getDriveReduction() // MK4II_L3 for chris
             * ModuleConfiguration.MK4II_L3.getWheelDiameter()
             * PI;
 
