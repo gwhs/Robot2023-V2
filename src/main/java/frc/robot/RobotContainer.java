@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -21,7 +23,6 @@ import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalance;
-import frc.robot.commands.AutoChooser;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.Lime.AfterPPID;
@@ -61,7 +62,7 @@ public class RobotContainer {
   private final BoreEncoder shaftEncoder = new BoreEncoder();
 
   // TODO: change to hana or spring depending on robot
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("calliope");
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
   private final PPIDAutoAim autoAimLime =
@@ -107,8 +108,6 @@ public class RobotContainer {
   private final ShuffleBoardBen angleBenCommand =
       new ShuffleBoardBen(drivetrainSubsystem); // add a button
 
-  private final AutoChooser pathChooserCommand = new AutoChooser();
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Set up the default command for the drivetrain.
@@ -136,6 +135,8 @@ public class RobotContainer {
     configureDashboard();
     mainArm.robotInit();
     shaftEncoder.reset();
+
+    setupPathChooser();
   }
 
   private GenericEntry maxSpeedAdjustment;
@@ -249,10 +250,26 @@ public class RobotContainer {
    */
   private int autoPath = 1;
 
+  SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  private void setupPathChooser() {
+    final ShuffleboardTab tab = Shuffleboard.getTab("Drive");
+
+    m_chooser.setDefaultOption("Straight No Rotation", "StraightNoRotation");
+    m_chooser.addOption("Straight With Rotation", "StragihtWithRotation");
+    m_chooser.addOption("FUN", "FUN");
+
+    tab.add(m_chooser);
+  }
+
   public Command getAutonomousCommand() {
     // return new TestAutonomous(drivetrainSubsystem, poseEstimator);
     return new PPSwerveFollower(
-        drivetrainSubsystem, poseEstimator, "StraightNoRotation", new PathConstraints(2, 1), true);
+        drivetrainSubsystem,
+        poseEstimator,
+        m_chooser.getSelected(),
+        new PathConstraints(2, 1),
+        true);
   }
 
   private static double modifyAxis(double value) {
