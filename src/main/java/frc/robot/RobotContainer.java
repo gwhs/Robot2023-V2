@@ -21,6 +21,7 @@ import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalance;
+import frc.robot.commands.AutoChooser;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.Lime.AfterPPID;
@@ -60,7 +61,7 @@ public class RobotContainer {
   private final BoreEncoder shaftEncoder = new BoreEncoder();
 
   // TODO: change to hana or spring depending on robot
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("calliope");
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
   private final PPIDAutoAim autoAimLime =
@@ -105,6 +106,8 @@ public class RobotContainer {
 
   private final ShuffleBoardBen angleBenCommand =
       new ShuffleBoardBen(drivetrainSubsystem); // add a button
+
+  private final AutoChooser pathChooserCommand = new AutoChooser();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
