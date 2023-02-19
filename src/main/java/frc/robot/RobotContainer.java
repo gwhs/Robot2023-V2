@@ -248,7 +248,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  private int autoPath = 1;
+
 
   SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -270,6 +270,8 @@ public class RobotContainer {
         m_chooser.getSelected(),
         new PathConstraints(2, 1),
         true);
+
+        // return Commands.print("Starting Command " + m_chooser.getSelected());
   }
 
   private static double modifyAxis(double value) {
