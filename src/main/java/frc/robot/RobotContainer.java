@@ -51,7 +51,7 @@ public class RobotContainer {
   // for ctrl+shift+f, hana, chris, calliope, spring
   // change robot name
   // change this to change robot -----------------v
-  private final RobotSetup robot = Constants.calliope;
+  private final RobotSetup robot = Constants.chris;
   private final CommandXboxController controller = new CommandXboxController(0);
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2

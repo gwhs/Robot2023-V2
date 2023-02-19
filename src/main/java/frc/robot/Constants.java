@@ -30,7 +30,7 @@ public final class Constants {
   public record RobotSetup(String name, String canivore_name, GyroType gyroType) {}
   // change in robotcontainer
   public static final RobotSetup chris = new RobotSetup("chris", "CAN_Network", GyroType.PIGEON);
-  public static final RobotSetup hana = new RobotSetup("hana", "CAN_Network", GyroType.PIGEON);
+  public static final RobotSetup hana = new RobotSetup("hana", "rio", GyroType.NAVX);
   public static final RobotSetup calliope =
       new RobotSetup("calliope", "CAN_Network", GyroType.NAVX);
   public static final RobotSetup spring = new RobotSetup("spring", "rio", GyroType.PIGEON);
