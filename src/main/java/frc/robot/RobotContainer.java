@@ -29,6 +29,7 @@ import frc.robot.commands.Lime.PPIDAutoAim;
 import frc.robot.commands.Lime.Rotate;
 import frc.robot.commands.Lime.Sideways;
 import frc.robot.commands.Lime.ToPole;
+import frc.robot.commands.ShuffleBoardBen;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
 import frc.robot.pathfind.VisGraph;
@@ -105,6 +106,9 @@ public class RobotContainer {
           () -> -controller.getRightY(),
           () -> -controller.getRightX());
 
+  private final ShuffleBoardBen angleBenCommand =
+      new ShuffleBoardBen(drivetrainSubsystem); // add a button
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Set up the default command for the drivetrain.
@@ -125,6 +129,7 @@ public class RobotContainer {
                     * drivetrainAmplificationScaleRotation()
                     * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
                     / 2));
+
     drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
     configureButtonBindings();
@@ -185,9 +190,16 @@ public class RobotContainer {
     controller.leftBumper().onTrue(sideways);
     controller.rightBumper().onTrue(rotate);
 
+    controller
+        .x // button
+        ()
+        .onTrue(angleBenCommand); // add a button
+
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    controller.x().toggleOnTrue(toPole);
+    //   controller.x().toggleOnTrue(toPole);
+
+    controller.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
 
     // controller
     // .a()
