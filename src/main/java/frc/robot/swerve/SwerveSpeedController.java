@@ -1,6 +1,5 @@
 package frc.robot.swerve;
 
-import static frc.robot.Constants.DrivetrainConstants.CANIVORE_NAME;
 import static frc.robot.Constants.DrivetrainConstants.DRIVE_kA;
 import static frc.robot.Constants.DrivetrainConstants.DRIVE_kD;
 import static frc.robot.Constants.DrivetrainConstants.DRIVE_kI;
@@ -35,7 +34,10 @@ public class SwerveSpeedController {
   private double referenceVelocity;
 
   public SwerveSpeedController(
-      int port, ModuleConfiguration moduleConfiguration, ShuffleboardContainer container) {
+      int port,
+      ModuleConfiguration moduleConfiguration,
+      ShuffleboardContainer container,
+      String canivoreName) {
     sensorPositionCoefficient =
         Math.PI
             * moduleConfiguration.getWheelDiameter()
@@ -53,7 +55,7 @@ public class SwerveSpeedController {
     motorConfiguration.slot0.kI = DRIVE_kI;
     motorConfiguration.slot0.kD = DRIVE_kD;
 
-    motor = new WPI_TalonFX(port, CANIVORE_NAME);
+    motor = new WPI_TalonFX(port, canivoreName);
     CtreUtils.checkCtreError(
         motor.configAllSettings(motorConfiguration), "Failed to configure Falcon 500");
     motor.enableVoltageCompensation(true);

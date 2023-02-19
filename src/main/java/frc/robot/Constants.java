@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import frc.robot.GyroMoment.WrappedGyro.GyroType;
 import frc.robot.swerve.ModuleConfiguration;
 
 /**
@@ -26,6 +27,13 @@ import frc.robot.swerve.ModuleConfiguration;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public record RobotSetup(String name, String canivore_name, GyroType gyroType) {}
+  // change in robotcontainer
+  public static final RobotSetup chris = new RobotSetup("chris", "CAN_Network", GyroType.PIGEON);
+  public static final RobotSetup hana = new RobotSetup("hana", "CAN_Network", GyroType.PIGEON);
+  public static final RobotSetup calliope =
+      new RobotSetup("calliope", "CAN_Network", GyroType.NAVX);
+  public static final RobotSetup spring = new RobotSetup("spring", "rio", GyroType.PIGEON);
 
   public static final class DrivetrainConstants {
 
@@ -47,9 +55,7 @@ public final class Constants {
     // Pick the longest side of the robot for this and measure outside bumper to outside bumper
     public static final double ROBOT_LENGTH_WIDTH = 0.698;
 
-    // "rio" for hana, "CAN_Network" for chris
-
-    public static final String CANIVORE_NAME = "rio";
+    // public static final String CANIVORE_NAME = "rio";
 
     public static final int PIGEON_ID = 30;
 
