@@ -238,9 +238,9 @@ public class RobotContainer {
         .y()
         .onTrue(
             Commands.sequence(
-                new MagicMotionPos(mainArm, 210, 0, 0),
-                Commands.waitSeconds(.5),
-                new MagicMotionPos(mainArm, 0, 0, 0),
+                new MagicMotionPos(mainArm, 100, 50000, 30000),
+                Commands.waitSeconds(.1),
+                new MagicMotionPos(mainArm, 2, 15000, 10000),
                 Commands.waitSeconds(.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
   }
