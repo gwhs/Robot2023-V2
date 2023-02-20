@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -27,6 +29,9 @@ import frc.robot.commands.Lime.Rotate;
 import frc.robot.commands.Lime.Sideways;
 import frc.robot.commands.Lime.ToPole;
 import frc.robot.commands.autonomous.TestAutoCommands;
+import frc.robot.commands.ShuffleBoardBen;
+import frc.robot.auto.PPSwerveFollower;
+import com.pathplanner.lib.PathConstraints;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
 import frc.robot.pathfind.VisGraph;
@@ -101,6 +106,9 @@ public class RobotContainer {
           () -> -controller.getRightY(),
           () -> -controller.getRightX());
 
+  private final ShuffleBoardBen angleBenCommand =
+      new ShuffleBoardBen(drivetrainSubsystem); // add a button
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Set up the default command for the drivetrain.
@@ -121,12 +129,15 @@ public class RobotContainer {
                     * drivetrainAmplificationScaleRotation()
                     * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
                     / 2));
+
     drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
     configureButtonBindings();
     configureDashboard();
     mainArm.robotInit();
     shaftEncoder.reset();
+
+    setupPathChooser();
   }
 
   private GenericEntry maxSpeedAdjustment;
@@ -182,9 +193,16 @@ public class RobotContainer {
     controller.leftBumper().onTrue(sideways);
     controller.rightBumper().onTrue(rotate);
 
+    controller
+        .x // button
+        ()
+        .onTrue(angleBenCommand); // add a button
+
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    controller.x().toggleOnTrue(toPole);
+    //   controller.x().toggleOnTrue(toPole);
+
+    controller.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
 
     // controller
     // .a()
@@ -232,16 +250,30 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  private int autoPath = 1;
+
+
+  SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  private void setupPathChooser() {
+    final ShuffleboardTab tab = Shuffleboard.getTab("Drive");
+
+    m_chooser.setDefaultOption("Straight No Rotation", "StraightNoRotation");
+    m_chooser.addOption("Straight With Rotation", "StragihtWithRotation");
+    m_chooser.addOption("FUN", "FUN");
+
+    tab.add(m_chooser);
+  }
 
   public Command getAutonomousCommand() {
-    return new TestAutoCommands(drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder);
-    /*return new PPSwerveFollower(
-    drivetrainSubsystem,
-    poseEstimator,
-    "StraightWithRotation",
-    new PathConstraints(1, 1),
-    true);*/
+    //return new TestAutoCommands(drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder);
+    return new PPSwerveFollower(
+        drivetrainSubsystem,
+        poseEstimator,
+        m_chooser.getSelected(),
+        new PathConstraints(2, 1),
+        true);
+
+        // return Commands.print("Starting Command " + m_chooser.getSelected());
   }
 
   private static double modifyAxis(double value) {
