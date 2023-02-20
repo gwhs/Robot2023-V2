@@ -243,25 +243,23 @@ public class RobotContainer {
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-
-
   SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private void setupPathChooser() {
     final ShuffleboardTab tab = Shuffleboard.getTab("Drive");
 
     m_chooser.setDefaultOption("Straight No Rotation", "StraightNoRotation");
-    m_chooser.addOption("Straight With Rotation", "StragihtWithRotation");
+    m_chooser.addOption("Straight With Rotation", "StraightWithRotation");
     m_chooser.addOption("FUN", "FUN");
 
     tab.add(m_chooser);
   }
 
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
   public Command getAutonomousCommand() {
     // return new TestAutonomous(drivetrainSubsystem, poseEstimator);
     return new PPSwerveFollower(
@@ -271,7 +269,7 @@ public class RobotContainer {
         new PathConstraints(2, 1),
         true);
 
-        // return Commands.print("Starting Command " + m_chooser.getSelected());
+    // return Commands.print("Starting Command " + m_chooser.getSelected());
   }
 
   private static double modifyAxis(double value) {
