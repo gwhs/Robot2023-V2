@@ -236,7 +236,6 @@ public class RobotContainer {
   private int autoPath = 1;
 
   public Command getAutonomousCommand() {
-    // return new TestAutonomous(drivetrainSubsystem, poseEstimator);
     return new PPSwerveFollower(
         drivetrainSubsystem,
         poseEstimator,

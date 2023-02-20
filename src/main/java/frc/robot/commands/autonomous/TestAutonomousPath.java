@@ -13,9 +13,9 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.List;
 
-public class TestAutonomous extends SequentialCommandGroup {
-  /** Creates a new TestAutonomous. */
-  public TestAutonomous(
+public class TestAutonomousPath extends SequentialCommandGroup {
+  /** Creates a new TestAutonomousPath. */
+  public TestAutonomousPath(
       DrivetrainSubsystem driveSystem, PoseEstimatorSubsystem poseEstimatorSystem) {
 
     List<PathPlannerTrajectory> trajectories =
