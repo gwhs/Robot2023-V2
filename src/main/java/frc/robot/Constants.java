@@ -56,7 +56,8 @@ public final class Constants {
     // Pick the longest side of the robot for this and measure outside bumper to outside bumper
     public static final double ROBOT_LENGTH_WIDTH = 0.698;
 
-    // "rio" for springtrap, "CAN_Network" for hana
+    // "rio" for hana, "CAN_Network" for chris
+
     public static final String CANIVORE_NAME = "CAN_Network";
 
     public static final int PIGEON_ID = 30;
@@ -120,8 +121,8 @@ public final class Constants {
 
     public static final double DEADBAND = 0.1;
 
-    public static final double X_RATE_LIMIT = 12.0;
-    public static final double Y_RATE_LIMIT = 12.0;
+    public static final double X_RATE_LIMIT = 6.0;
+    public static final double Y_RATE_LIMIT = 6.0;
     public static final double ROTATION_RATE_LIMIT = 5.0 * PI;
 
     public static final double HEADING_MAX_VELOCITY = PI * 2;
@@ -424,6 +425,21 @@ public final class Constants {
     //                 Units.inchesToMeters(18.22),
     //                 new Rotation3d()));
 
+    public static List<Obstacle> standardObstacles =
+        List.of(
+            // Charging Station
+            new Obstacle(
+                new double[] {2.48, 5.36, 5.36, 2.48}, new double[] {4.42, 4.42, 1.07, 1.07}),
+            new Obstacle(new double[] {3.84, 3.84, 1.26}, new double[] {6.23, 4.80, 5.52}));
+
+    // Forces robot to go over cable. In case of defense.
+    public static List<Obstacle> cablePath =
+        List.of(
+            // Charging Station
+            new Obstacle(
+                new double[] {2.48, 5.36, 5.36, 2.48}, new double[] {4.81, 4.81, 1.07, 1.07}),
+            new Obstacle(new double[] {3.84, 3.84, 1.26}, new double[] {6.23, 4.80, 5.52}));
+
     public static final Map<Integer, Pose3d> aprilTags =
         Map.of(
             1,
@@ -560,5 +576,7 @@ public final class Constants {
     public static final Gains kGains = new Gains(0.2, 0.0, 0.0, 0.2, 0, 1.0);
     public static final int FALCON_TICKS = 2048;
     public static final int GEAR_RATIO = 64;
+    public static final int PWM_CHANNEL_ENCODER_1 = 7;
+    public static final int PWM_CHANNEL_ENCODER_2 = 8;
   }
 }
