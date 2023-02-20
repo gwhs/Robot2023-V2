@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -133,6 +135,8 @@ public class RobotContainer {
     configureDashboard();
     mainArm.robotInit();
     shaftEncoder.reset();
+
+    setupPathChooser();
   }
 
   private GenericEntry maxSpeedAdjustment;
@@ -244,12 +248,30 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  private int autoPath = 1;
+
+
+  SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  private void setupPathChooser() {
+    final ShuffleboardTab tab = Shuffleboard.getTab("Drive");
+
+    m_chooser.setDefaultOption("Straight No Rotation", "StraightNoRotation");
+    m_chooser.addOption("Straight With Rotation", "StragihtWithRotation");
+    m_chooser.addOption("FUN", "FUN");
+
+    tab.add(m_chooser);
+  }
 
   public Command getAutonomousCommand() {
     // return new TestAutonomous(drivetrainSubsystem, poseEstimator);
     return new PPSwerveFollower(
-        drivetrainSubsystem, poseEstimator, "StraightNoRotation", new PathConstraints(2, 1), true);
+        drivetrainSubsystem,
+        poseEstimator,
+        m_chooser.getSelected(),
+        new PathConstraints(2, 1),
+        true);
+
+        // return Commands.print("Starting Command " + m_chooser.getSelected());
   }
 
   private static double modifyAxis(double value) {
