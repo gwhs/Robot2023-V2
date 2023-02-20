@@ -6,11 +6,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.lib2539.logging.Logger;
+// import frc.lib2539.logging.Logger;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -65,8 +64,8 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
-    Logger.log("/Robot/Battery Voltage", RobotController.getBatteryVoltage());
-    Logger.update();
+    // Logger.log("/Robot/Battery Voltage", RobotController.getBatteryVoltage());
+    // Logger.update();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

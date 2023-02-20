@@ -9,7 +9,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.LimeLightConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
@@ -42,17 +41,19 @@ public class PPIDAutoAim extends CommandBase {
   private double angleD = 0;
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
-
+  private double targetDistance = 0;
   private double positionP = .005;
 
   /** Creates a new PPIDAutoAim. */
   public PPIDAutoAim(
       DrivetrainSubsystem drivetrainSubsystem,
       PoseEstimatorSubsystem poseEstimatorSubsystem,
-      LimeLightSub limeLightSub) {
+      LimeLightSub limeLightSub,
+      double targetDistance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLight = limeLightSub;
     this.drivetrainSubsystem = drivetrainSubsystem;
+    this.targetDistance = targetDistance;
 
     addRequirements(limeLight);
     addRequirements(drivetrainSubsystem);
@@ -64,7 +65,7 @@ public class PPIDAutoAim extends CommandBase {
     angleDone = false;
     sidewaysDone = false;
     // calculates how far it is from target
-    distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
+    distanceError = limeLight.getXDistance() - targetDistance;
 
     // configuring rotation pid
     anglePid.reset(Math.toRadians(limeLight.getAngle()));
@@ -130,7 +131,7 @@ public class PPIDAutoAim extends CommandBase {
     use sin and cos to get values to reach max speed
     not really sure about the angle yet.
     */
-    distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
+    distanceError = limeLight.getXDistance() - targetDistance;
     double[] x = new double[3];
     if (!isFinished()) {
       double d = (positionP) * distanceError;
@@ -142,8 +143,6 @@ public class PPIDAutoAim extends CommandBase {
       x[1] = 0;
       x[2] = 0;
     }
-    System.out.println(
-        "Distance error: " + distanceError + "Dist: " + sidewaysDone + "angle: " + angleDone);
     return x;
   }
 }

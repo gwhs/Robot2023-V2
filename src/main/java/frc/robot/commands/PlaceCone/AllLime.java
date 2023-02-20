@@ -5,20 +5,29 @@
 package frc.robot.commands.PlaceCone;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.PoseEstimatorSubsystem;
-import frc.robot.subsystems.LimeVision.LimeLightSub;
-import frc.robot.subsystems.LimelightHelpers.LimelightHelpers;
-
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+
 public class AllLime extends SequentialCommandGroup {
   /** Creates a new AllLime. */
-  public AllLime(DrivetrainSubsystem drivetrainSubsystem, PoseEstimatorSubsystem poseEstimatorSubsystem, LimeLightSub limeLightSub) {
+  public AllLime(
+      PPIDAutoAim pPIDAutoAim1,
+      Rotate rotate,
+      StraightWheel straightWheel1,
+      Sideways sideways,
+      StraightWheel straightWheel2,
+      PPIDAutoAim pPIDAutoAim2) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-     
-    addCommands();
+    addCommands(
+        pPIDAutoAim1,
+        new WaitCommand(.5),
+        rotate,
+        straightWheel1,
+        sideways,
+        straightWheel2,
+        pPIDAutoAim2);
   }
 }

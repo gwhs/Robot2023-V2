@@ -188,8 +188,7 @@ public final class Constants {
     public static final double TARGET_HEIGHT = 61;
     public static final double MOUNTING_ANGLE = -19;
     public static final double LOWER_DISTANCE_SHOOT = 84;
-    public static final double TESTING_VALUE = 45;
-    public static final double UPPER_ANGLE_SHOOT = 2;
+    public static final double UPPER_DISTANCE_SHOOT = 45;
   }
 
   public static final class Arm {
