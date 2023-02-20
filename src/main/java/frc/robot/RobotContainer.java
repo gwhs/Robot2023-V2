@@ -30,7 +30,6 @@ import frc.robot.commands.Lime.PPIDAutoAim;
 import frc.robot.commands.Lime.Rotate;
 import frc.robot.commands.Lime.Sideways;
 import frc.robot.commands.Lime.ToPole;
-import frc.robot.commands.ShuffleBoardBen;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
 import frc.robot.pathfind.VisGraph;
@@ -105,8 +104,8 @@ public class RobotContainer {
           () -> -controller.getRightY(),
           () -> -controller.getRightX());
 
-  private final ShuffleBoardBen angleBenCommand =
-      new ShuffleBoardBen(drivetrainSubsystem); // add a button
+  // private final ShuffleBoardBen angleBenCommand =
+  // new ShuffleBoardBen(drivetrainSubsystem); // add a button + FIX CANT CHANGE TAB ON SHUFFLEBOARD
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -136,7 +135,7 @@ public class RobotContainer {
     mainArm.robotInit();
     shaftEncoder.reset();
 
-    setupPathChooser();
+    // setupPathChooser();
   }
 
   private GenericEntry maxSpeedAdjustment;
@@ -192,10 +191,10 @@ public class RobotContainer {
     controller.leftBumper().onTrue(sideways);
     controller.rightBumper().onTrue(rotate);
 
-    controller
-        .x // button
-        ()
-        .onTrue(angleBenCommand); // add a button
+    // controller
+    //     .x // button
+    //     ()
+    //     .onTrue(angleBenCommand); // add a button
 
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
@@ -251,6 +250,14 @@ public class RobotContainer {
 
     m_chooser.setDefaultOption("Straight No Rotation", "StraightNoRotation");
     m_chooser.addOption("Straight With Rotation", "StraightWithRotation");
+    m_chooser.addOption("D-F Place and engage", "D-F1E");
+    m_chooser.addOption("A 2 piece and engage", "A2E");
+    m_chooser.addOption("D place and hold", "D1+1");
+    m_chooser.addOption("F place and hold", "F1+1");
+    m_chooser.addOption("G 2 piece and engage", "G2E");
+    m_chooser.addOption("I 2 piece and hold", "I2+1");
+    m_chooser.addOption("I 2 piece engage and hold", "I2+1E");
+    m_chooser.addOption("I 3 piece", "I3");
     m_chooser.addOption("FUN", "FUN");
 
     tab.add(m_chooser);
@@ -261,7 +268,14 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // return new TestAutoCommands(drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder);
+    // use return TestAutoCommands when using chris
+    // return new TestAutoCommands(
+    //     drivetrainSubsystem,
+    //     poseEstimator,
+    //     mainArm,
+    //     shaftEncoder,
+    //     autoBalance,
+    //     m_chooser.getSelected());
     return new PPSwerveFollower(
         drivetrainSubsystem,
         poseEstimator,
