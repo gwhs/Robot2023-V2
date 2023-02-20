@@ -682,10 +682,13 @@ public class LimelightHelpers {
 
   private static boolean SYNCH_TAKESNAPSHOT(String tableName, String snapshotName) {
     URL url = getLimelightURLString(tableName, "capturesnapshot");
+    if (url == null) {
+      return false;
+    }
     try {
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
       connection.setRequestMethod("GET");
-      if (snapshotName != null && snapshotName != "") {
+      if (snapshotName != null && !snapshotName.equals("")) {
         connection.setRequestProperty("snapname", snapshotName);
       }
 

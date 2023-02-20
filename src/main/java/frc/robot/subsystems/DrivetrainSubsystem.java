@@ -46,8 +46,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   // private final WPI_Pigeon2 pigeon = new WPI_Pigeon2(PIGEON_ID);
   // private final AHRS navx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
-  //  private final WrappedGyro gyro = new WrappedGyro(GyroType.NAVX); //hana
-  private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON); // chris
+  private final WrappedGyro gyro = new WrappedGyro(GyroType.NAVX); // hana
+  // private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON); // chris
   private final SwerveModule[] swerveModules;
   private final PIDController thetaControllerPID =
       new PIDController(-AutoConstants.THETA_kP, AutoConstants.THETA_kI, AutoConstants.THETA_kD);
@@ -450,17 +450,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
             new PIDController(AutoConstants.X_kP, AutoConstants.X_kI, AutoConstants.X_kD),
             new PIDController(AutoConstants.Y_kP, AutoConstants.Y_kI, AutoConstants.Y_kD),
             thetaController,
-            this::setModuleStates);
+            this::setModuleStates,
+            this);
 
     return swerveControllerCommand;
   }
 
-  public PIDController getThetaController() {
-    return thetaControllerPID;
-  }
-
-  public static PPSwerveControllerCommand followTrajectory(
-      DrivetrainSubsystem d, PoseEstimatorSubsystem s, PathPlannerTrajectory traj) {
+  public PPSwerveControllerCommand followTrajectory(
+      PoseEstimatorSubsystem s, PathPlannerTrajectory traj) {
     return new PPSwerveControllerCommand(
         traj,
         s::getCurrentPose,
@@ -468,6 +465,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         Constants.AutoConstants.m_translationController,
         Constants.AutoConstants.m_strafeController,
         Constants.AutoConstants.m_thetaController,
-        d::setModuleStates);
+        this::setModuleStates,
+        this);
   }
 }
