@@ -7,7 +7,6 @@ package frc.robot.commands.PlaceCone;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.LimeLightConstants;
@@ -76,6 +75,7 @@ public class PPIDAutoAim extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println(limeLight.getXDistance());
     if (limeLight.hasTarget()) {
       // calculates drive values, pid.calculate called in this function
       noTargets = 0;
@@ -102,14 +102,15 @@ public class PPIDAutoAim extends CommandBase {
     if (noTargets >= 10) {
       sidewaysDone = true;
       angleDone = true;
+      System.out.println("target is gone!");
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putNumber("Final Horiz-error", limeLight.getTx());
-    SmartDashboard.putNumber("Final Vert-error", limeLight.getTy());
+    System.out.println(
+        "Distance error: " + distanceError + "Dist: " + sidewaysDone + "angle: " + angleDone);
     drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, 0));
   }
 
@@ -131,19 +132,18 @@ public class PPIDAutoAim extends CommandBase {
     */
     distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
     double[] x = new double[3];
-    double d = (positionP) * distanceError;
-    x[0] = d;
-    x[1] = 0;
-    x[2] = anglePid.calculate(limeLight.getAngle());
+    if (!isFinished()) {
+      double d = (positionP) * distanceError;
+      x[0] = d;
+      x[1] = 0;
+      x[2] = anglePid.calculate(limeLight.getAngle());
+    } else {
+      x[0] = 0;
+      x[1] = 0;
+      x[2] = 0;
+    }
     System.out.println(
-        "Distance error: "
-            + distanceError
-            + " Velocity: "
-            + d
-            + "Angle error: "
-            + limeLight.getTx()
-            + "angleSpeed: "
-            + x[2]);
+        "Distance error: " + distanceError + "Dist: " + sidewaysDone + "angle: " + angleDone);
     return x;
   }
 }

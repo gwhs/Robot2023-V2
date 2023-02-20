@@ -178,7 +178,7 @@ public class RobotContainer {
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    controller.b().onTrue(autoAimLime.withTimeout(3));
+    controller.b().onTrue(autoAimLime.withTimeout(7));
     controller.leftBumper().onTrue(sideways);
     controller.rightBumper().onTrue(rotate);
 

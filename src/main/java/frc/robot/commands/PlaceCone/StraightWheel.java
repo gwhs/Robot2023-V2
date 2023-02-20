@@ -14,7 +14,7 @@ public class StraightWheel extends CommandBase {
   /** Creates a new StraightWheel. */
   private DrivetrainSubsystem drivetrainSubsystem;
 
-  private boolean x = false;
+  private int counter = 0;
   private SwerveModulePosition[] positions;
   private SwerveModuleState[] swervemodule = new SwerveModuleState[4];
 
@@ -31,7 +31,7 @@ public class StraightWheel extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    x = false;
+    counter = 0;
     drivetrainSubsystem.setModuleStates(swervemodule);
   }
 
@@ -40,6 +40,7 @@ public class StraightWheel extends CommandBase {
   public void execute() {
     positions = drivetrainSubsystem.getModulePositions();
     drivetrainSubsystem.setModuleStates(swervemodule);
+    counter++;
   }
 
   // Called once the command ends or is interrupted.
@@ -49,6 +50,6 @@ public class StraightWheel extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return x;
+    return counter > 10;
   }
 }
