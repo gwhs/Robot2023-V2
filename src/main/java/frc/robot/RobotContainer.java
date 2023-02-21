@@ -62,14 +62,14 @@ public class RobotContainer {
   private final BoreEncoder shaftEncoder = new BoreEncoder();
 
   // TODO: change to hana or spring depending on robot
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("calliope");
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
   private final PPIDAutoAim autoAimLime =
       new PPIDAutoAim(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, 0);
-  private final Sideways sideways = new Sideways(drivetrainSubsystem, limeLightSub);
+  private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
   private final ToPole toPole = new ToPole(drivetrainSubsystem, limeLightSub);
   private final AfterPPID afterPPID =
       new AfterPPID(drivetrainSubsystem, poseEstimator, limeLightSub);
@@ -198,6 +198,7 @@ public class RobotContainer {
 
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
+    controller.b().onTrue(sideways);
     //   controller.x().toggleOnTrue(toPole);
 
     controller.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
