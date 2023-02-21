@@ -45,7 +45,7 @@ public class ToPole extends CommandBase {
     this.limeLight = limeLightSub;
     this.drivetrainSubsystem = drivetrainSubsystem;
 
-    addRequirements(drivetrainSubsystem);
+    addRequirements(drivetrainSubsystem, limeLight);
   }
 
   // Calle d when the command is initially scheduled.

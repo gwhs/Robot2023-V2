@@ -33,6 +33,7 @@ public class Rotate extends CommandBase {
   private double angleP = 1;
   private double angleI = 0;
   private double angleD = 0;
+
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
 
@@ -46,8 +47,8 @@ public class Rotate extends CommandBase {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.degrees = degrees;
 
-    addRequirements(poseEstimatorSubsystem);
-    addRequirements(drivetrainSubsystem);
+    addRequirements(poseEstimatorSubsystem, drivetrainSubsystem);
+    // addRequirements(drivetrainSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -68,8 +69,8 @@ public class Rotate extends CommandBase {
     // gets drive values to align to 0 degrees, field oriented.
     values = chassisValuesLower();
     drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
-    System.out.printf(
-        "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
+    // System.out.printf(
+    //     "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // setpoint and atgoal don't work, just brute forced.
     if (Math.abs(poseEstimatorSubsystem.getAngle()) < .2) {
       angleDone = true;
@@ -82,7 +83,7 @@ public class Rotate extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     System.out.println("Rotated done");
-    drivetrainSubsystem.drive(new ChassisSpeeds(.01, 0, 0));
+    drivetrainSubsystem.drive(new ChassisSpeeds(.001, 0, 0));
   }
 
   // Returns true when the command should end.
@@ -100,8 +101,8 @@ public class Rotate extends CommandBase {
     */
 
     double[] x = new double[3];
-    x[0] = 0;
-    x[1] = 0;
+    x[0] = 0.00001;
+    x[1] =0;
     x[2] = angleDone ? 0 : (anglePid.calculate(Math.toRadians(poseEstimatorSubsystem.getAngle())));
     return x;
   }

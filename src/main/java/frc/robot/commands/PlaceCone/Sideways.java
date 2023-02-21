@@ -27,9 +27,13 @@ public class Sideways extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50,
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
-  private double P = .01;
+  private double P = .005;
   private double I = 0;
   private double D = 0;
+  
+  private double angleP = 1;
+  private double angleI = 0;
+  private double angleD = 0;
   private ProfiledPIDController pid = new ProfiledPIDController(P, I, D, constraints);
 
   /** Creates a new AutoAimLime. */
@@ -38,7 +42,7 @@ public class Sideways extends CommandBase {
     this.limeLight = limeLightSub;
     this.drivetrainSubsystem = drivetrainSubsystem;
 
-    addRequirements(drivetrainSubsystem);
+    addRequirements(drivetrainSubsystem, limeLightSub);
   }
 
   // Called when the command is initially scheduled.

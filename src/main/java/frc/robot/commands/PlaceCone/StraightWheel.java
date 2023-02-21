@@ -26,6 +26,8 @@ public class StraightWheel extends CommandBase {
     swervemodule[2] = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
     swervemodule[3] = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
     // Use addRequirements() here to declare subsystem dependencies.
+
+    addRequirements(drivetrainSubsystem);
   }
 
   // Called when the command is initially scheduled.

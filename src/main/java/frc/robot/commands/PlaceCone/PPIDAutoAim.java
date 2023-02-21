@@ -42,7 +42,7 @@ public class PPIDAutoAim extends CommandBase {
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
   private double targetDistance = 0;
-  private double positionP = .005;
+  private double positionP = .01;
 
   /** Creates a new PPIDAutoAim. */
   public PPIDAutoAim(
@@ -55,8 +55,8 @@ public class PPIDAutoAim extends CommandBase {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.targetDistance = targetDistance;
 
-    addRequirements(limeLight);
-    addRequirements(drivetrainSubsystem);
+    addRequirements(limeLight, drivetrainSubsystem, poseEstimatorSubsystem);
+    // addRequirements(drivetrainSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -76,7 +76,7 @@ public class PPIDAutoAim extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println(limeLight.getXDistance());
+
     if (limeLight.hasTarget()) {
       // calculates drive values, pid.calculate called in this function
       noTargets = 0;
@@ -133,11 +133,13 @@ public class PPIDAutoAim extends CommandBase {
     */
     distanceError = limeLight.getXDistance() - targetDistance;
     double[] x = new double[3];
+
     if (!isFinished()) {
       double d = (positionP) * distanceError;
       x[0] = d;
       x[1] = 0;
       x[2] = anglePid.calculate(limeLight.getAngle());
+      System.out.println(distanceError + "velo" + d);
     } else {
       x[0] = 0;
       x[1] = 0;
