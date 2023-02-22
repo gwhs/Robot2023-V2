@@ -56,6 +56,7 @@ public class RobotContainer {
   // change this to change robot -----------------v
   private final RobotSetup robot = Constants.chris;
   private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController controllertwo = new CommandXboxController(1);
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
 
@@ -185,6 +186,11 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
 
+    controllertwo
+        .start()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+
     // Back button resets the robot pose
     controller
         .back()
@@ -194,6 +200,10 @@ public class RobotContainer {
     controller.leftBumper().onTrue(sideways);
     controller.rightBumper().onTrue(rotate);
 
+    controllertwo.b().onTrue(autoAimLime.withTimeout(3));
+    controllertwo.leftBumper().onTrue(sideways);
+    controllertwo.rightBumper().onTrue(rotate);
+
     controller
         .x // button
         ()
@@ -201,9 +211,18 @@ public class RobotContainer {
 
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    //   controller.x().toggleOnTrue(toPole);
+    controllertwo
+        .x // button
+        ()
+        .onTrue(angleBenCommand); // add a button
+
+    controllertwo.a().toggleOnTrue(fieldHeadingDriveCommand);
+
+    // controller.x().toggleOnTrue(toPole);
 
     controller.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
+
+    controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
 
     // controller
     // .a()
@@ -236,6 +255,16 @@ public class RobotContainer {
     // new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
 
     controller
+        .y()
+        .onTrue(
+            Commands.sequence(
+                new MagicMotionPos(mainArm, 210, 0, 0),
+                Commands.waitSeconds(.5),
+                new MagicMotionPos(mainArm, 0, 0, 0),
+                Commands.waitSeconds(.5),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
+
+    controllertwo
         .y()
         .onTrue(
             Commands.sequence(
