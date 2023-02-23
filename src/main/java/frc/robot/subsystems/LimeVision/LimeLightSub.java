@@ -42,7 +42,6 @@ public class LimeLightSub extends SubsystemBase {
   public LimeLightSub(String limelight_networktable_name) {
     limelight_comm = new LimeLightComms(limelight_networktable_name);
     limelight_comm.set_entry_double("ledMode", 3);
-    limelight_comm.set_entry_double("pipeline", 1);
   }
 
   @Override
@@ -94,7 +93,7 @@ public class LimeLightSub extends SubsystemBase {
     return limelight_comm.get_entry_double("pipeline");
   }
 
-  public void setPipeline(double pipeline) {
-    limelight_comm.set_entry_double("pipeline", pipeline);
+  public void setPipeline(double pipelinem) {
+    limelight_comm.set_entry_number("pipeline", pipelinem);
   }
 }
