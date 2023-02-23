@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.RobotSetup;
+import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalance;
@@ -48,7 +50,10 @@ import java.util.Map;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-
+  // for ctrl+shift+f, hana, chris, calliope, spring
+  // change robot name
+  // change this to change robot -----------------v
+  private final RobotSetup robot = Constants.chris;
   private final CommandXboxController controller = new CommandXboxController(0);
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
@@ -56,11 +61,10 @@ public class RobotContainer {
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
   // Arm
-  private final MagicMotion mainArm = new MagicMotion(21, DrivetrainConstants.CANIVORE_NAME);
+  private final MagicMotion mainArm = new MagicMotion(21, robot.canivore_name());
   private final BoreEncoder shaftEncoder = new BoreEncoder();
 
-  // TODO: change to hana or spring depending on robot
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
   private final PPIDAutoAim autoAimLime =
@@ -282,6 +286,7 @@ public class RobotContainer {
     //     new PathConstraints(2, 1),
     //     true);
 
+    // return Commands.print("Starting Command " + m_chooser.getSelected());
     // return Commands.print("Starting Command " + m_chooser.getSelected());
   }
 

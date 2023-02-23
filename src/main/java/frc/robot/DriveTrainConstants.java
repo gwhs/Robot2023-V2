@@ -27,7 +27,6 @@ public class DriveTrainConstants {
 
   public static DriveTrainConstants spring = new DriveTrainConstants(231.55, 306.4, 315, 160.5);
 
-  // hana drivemotors are inverted, steer motors are not
   public static DriveTrainConstants hana = new DriveTrainConstants(155, 138, 254, 35);
 
   public static DriveTrainConstants calliope = new DriveTrainConstants(284.4, 304.1, 314.2, 284.5);
