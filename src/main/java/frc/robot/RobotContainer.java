@@ -257,7 +257,7 @@ public class RobotContainer {
     final ShuffleboardTab tab = Shuffleboard.getTab("Drive");
 
     m_chooser.setDefaultOption("Straight No Rotation", "StraightNoRotation");
-    m_chooser.addOption("Straight With Rotation", "StragihtWithRotation");
+    m_chooser.addOption("Straight With Rotation", "StraightWithRotation");
     m_chooser.addOption("FUN", "FUN");
 
     tab.add(m_chooser);
