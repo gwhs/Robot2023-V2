@@ -131,7 +131,7 @@ public class RobotContainer {
     drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
     configureButtonBindings();
-    configureDashboard();
+     configureDashboard();
     mainArm.robotInit();
     shaftEncoder.reset();
 
