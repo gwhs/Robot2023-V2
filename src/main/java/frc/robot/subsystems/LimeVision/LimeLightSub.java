@@ -87,4 +87,12 @@ public class LimeLightSub extends SubsystemBase {
   public double getAngle() {
     return Math.toRadians(getTx());
   }
+
+  public double getPipeline(){
+    return limelight_comm.get_entry_double("pipeline");
+  }
+
+  public void setPipeline(double pipeline){
+    limelight_comm.set_entry_double("pipeline", pipeline);
+  }
 }
