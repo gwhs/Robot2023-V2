@@ -81,13 +81,8 @@ public class MagicMotion extends SubsystemBase {
     // System.out.println("Velocity: " + velocity);
     // System.out.println("Acceleration: " + acceleration);
 
-<<<<<<< HEAD
     testTalon.configMotionCruiseVelocity(vel, Constants.Arm.kTimeoutMs);
     testTalon.configMotionAcceleration(accel, Constants.Arm.kTimeoutMs);
-=======
-    testTalon.configMotionCruiseVelocity(20000, Constants.Arm.kTimeoutMs);
-    testTalon.configMotionAcceleration(20000, Constants.Arm.kTimeoutMs);
->>>>>>> 2b6731b731eacc57b68d32d05bc95de564fedd2f
 
     testTalon.set(
         ControlMode.MotionMagic,

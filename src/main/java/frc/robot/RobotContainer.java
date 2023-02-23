@@ -128,30 +128,6 @@ public class RobotContainer {
     configureDashboard();
     mainArm.robotInit();
     shaftEncoder.reset();
-<<<<<<< HEAD
-
-    AStarMap.addNode(finalNode);
-    // SetUp AStar Map
-
-    for (int i = 0; i < obstacles.size(); i++) {
-      System.out.println(obstacles.get(i));
-      Constants.FieldConstants.obstacles.get(i).offset(0.5).addNodes(AStarMap);
-    }
-
-    for (int i = 0; i < AStarMap.getNodeSize(); i++) {
-      Node startNode = AStarMap.getNode(i);
-      System.out.println("" + startNode.getX() + "," + startNode.getY());
-      for (int j = i + 1; j < AStarMap.getNodeSize(); j++) {
-        AStarMap.addEdge(new Edge(startNode, AStarMap.getNode(j)), obstacles);
-      }
-    }
-
-    // Obstacle o = new Obstacle(new double[]{ 0, 0, 4, 4}, new double[] {0, 4, 4, 0});
-    // Obstacle offset = o.offset(0.5f);
-    // offset.addNodes(AStarMap);
-
-=======
->>>>>>> 2b6731b731eacc57b68d32d05bc95de564fedd2f
   }
 
   private GenericEntry maxSpeedAdjustment;
@@ -244,15 +220,9 @@ public class RobotContainer {
         .y()
         .onTrue(
             Commands.sequence(
-<<<<<<< HEAD
                 new MagicMotionPos(mainArm, 100, 50000, 30000),
                 Commands.waitSeconds(.1),
                 new MagicMotionPos(mainArm, 2, 15000, 10000),
-=======
-                new MagicMotionPos(mainArm, 210, 0, 0),
-                Commands.waitSeconds(.5),
-                new MagicMotionPos(mainArm, 0, 0, 0),
->>>>>>> 2b6731b731eacc57b68d32d05bc95de564fedd2f
                 Commands.waitSeconds(.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
   }
