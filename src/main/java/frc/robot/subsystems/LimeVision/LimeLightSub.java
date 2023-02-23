@@ -30,7 +30,7 @@ public class LimeLightSub extends SubsystemBase {
   // LL2: -24.85 to 24.85 degrees)
   NetworkTableEntry ta = networkTable.getEntry("ta"); // Target Area (0% of image to 100% of image)
   NetworkTableEntry ts = networkTable.getEntry("ts"); // Skew or rotation (-90 degrees to 0 degrees)
-
+  NetworkTableEntry pipe = networkTable.getEntry("getpipe");
   private double kCameraHeight =
       LimeLightConstants.CAMERA_HEIGHT; // LimelightConstants.kCameraHeight;
   private double kTargetHeight =
@@ -42,6 +42,7 @@ public class LimeLightSub extends SubsystemBase {
   public LimeLightSub(String limelight_networktable_name) {
     limelight_comm = new LimeLightComms(limelight_networktable_name);
     limelight_comm.set_entry_double("ledMode", 3);
+    limelight_comm.set_entry_double("pipeline", 1);
   }
 
   @Override
@@ -56,6 +57,7 @@ public class LimeLightSub extends SubsystemBase {
     SmartDashboard.putNumber("Y-Distance", getYDistance());
     SmartDashboard.putNumber("AngleToTarget", getAngle());
     SmartDashboard.putNumber("error", getXDistance() - 120);
+    SmartDashboard.putNumber("pipe", pipe.getDouble(0));
     // This method will be called once per scheduler run
   }
 
@@ -88,11 +90,11 @@ public class LimeLightSub extends SubsystemBase {
     return Math.toRadians(getTx());
   }
 
-  public double getPipeline(){
+  public double getPipeline() {
     return limelight_comm.get_entry_double("pipeline");
   }
 
-  public void setPipeline(double pipeline){
+  public void setPipeline(double pipeline) {
     limelight_comm.set_entry_double("pipeline", pipeline);
   }
 }
