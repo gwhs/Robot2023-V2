@@ -66,65 +66,37 @@ public class TestAutoCommands extends SequentialCommandGroup {
       addCommands(
           Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
           new PPSwerveFollower(
-              driveSystem,
-              poseEstimatorSystem,
-              "A2E",
-              new PathConstraints(1, 1),
-              true));
+              driveSystem, poseEstimatorSystem, "A2E", new PathConstraints(1, 1), true));
     } else if (path.equals("D1+1")) {
       addCommands(
           Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
           new PPSwerveFollower(
-              driveSystem,
-              poseEstimatorSystem,
-              "D1+1",
-              new PathConstraints(1, 1),
-              true));
+              driveSystem, poseEstimatorSystem, "D1+1", new PathConstraints(1, 1), true));
     } else if (path.equals("F1+1")) {
       addCommands(
-        Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
-        new PPSwerveFollower(
-            driveSystem,
-            poseEstimatorSystem,
-            "F1+1",
-            new PathConstraints(1, 1),
-            true));
+          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "F1+1", new PathConstraints(1, 1), true));
     } else if (path.equals("G2E")) {
       addCommands(
-        Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
-        new PPSwerveFollower(
-            driveSystem,
-            poseEstimatorSystem,
-            "G2E",
-            new PathConstraints(1, 1),
-            true));
+          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "G2E", new PathConstraints(1, 1), true));
     } else if (path.equals("I2+1")) {
       addCommands(
-        Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
-        new PPSwerveFollower(
-            driveSystem,
-            poseEstimatorSystem,
-            "I2+1",
-            new PathConstraints(1, 1),
-            true));
+          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "I2+1", new PathConstraints(1, 1), true));
     } else if (path.equals("I2+1E")) {
       addCommands(
-        Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
-        new PPSwerveFollower(
-            driveSystem,
-            poseEstimatorSystem,
-            "I2+1E",
-            new PathConstraints(1, 1),
-            true));
+          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "I2+1E", new PathConstraints(1, 1), true));
     } else if (path.equals("I3")) {
       addCommands(
-        Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
-        new PPSwerveFollower(
-            driveSystem,
-            poseEstimatorSystem,
-            "I3",
-            new PathConstraints(1, 1),
-            true));
+          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "I3", new PathConstraints(1, 1), true));
     }
   }
 }
