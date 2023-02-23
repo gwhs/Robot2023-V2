@@ -1,12 +1,12 @@
 package frc.robot.commands.autonomous;
 
 import com.pathplanner.lib.PathConstraints;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
-import frc.robot.commands.AutoBalance;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -18,20 +18,18 @@ public class TestAutoCommands extends SequentialCommandGroup {
   private PoseEstimatorSubsystem poseEstimatorSystem;
   private MagicMotion mainArm;
   private BoreEncoder shaftEncoder;
-  private AutoBalance autoBalance;
 
   public TestAutoCommands(
       DrivetrainSubsystem d,
       PoseEstimatorSubsystem poseEstimatorSystem,
       MagicMotion m,
       BoreEncoder b,
-      AutoBalance autoBalance,
+      Command autoBalance,
       String path) {
     this.driveSystem = d;
     this.poseEstimatorSystem = poseEstimatorSystem;
     this.mainArm = m;
     this.shaftEncoder = b;
-    this.autoBalance = autoBalance;
 
     if (path.equals("StraightNoRotation")) {
       addCommands(
@@ -41,7 +39,8 @@ public class TestAutoCommands extends SequentialCommandGroup {
               poseEstimatorSystem,
               "StraightNoRotation",
               new PathConstraints(2, 2),
-              true));
+              true),
+          autoBalance);
     } else if (path.equals("StraightWithRotation")) {
       addCommands(
           Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),

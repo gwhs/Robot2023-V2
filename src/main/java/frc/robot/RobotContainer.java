@@ -6,6 +6,7 @@ package frc.robot;
 
 import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
 
+import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -20,9 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.RobotSetup;
 import frc.robot.auto.PPSwerveFollower;
-import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
-import frc.robot.commands.Arm.MagicMotionPos;
-import frc.robot.commands.AutoBalance;
+import frc.robot.commands.AutoBalanceFast;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.Lime.AfterPPID;
@@ -76,7 +75,7 @@ public class RobotContainer {
   private final AfterPPID afterPPID =
       new AfterPPID(drivetrainSubsystem, poseEstimator, limeLightSub);
 
-  private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
+  private final AutoBalanceFast autoBalance = new AutoBalanceFast(drivetrainSubsystem);
   // Arm
 
   final List<Obstacle> standardObstacles = FieldConstants.standardObstacles;
@@ -135,11 +134,11 @@ public class RobotContainer {
     drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
     configureButtonBindings();
-     configureDashboard();
+    configureDashboard();
     mainArm.robotInit();
     shaftEncoder.reset();
 
-    setupPathChooser();
+    // setupPathChooser();
   }
 
   private GenericEntry maxSpeedAdjustment;
@@ -239,11 +238,23 @@ public class RobotContainer {
         .y()
         .onTrue(
             Commands.sequence(
-                new MagicMotionPos(mainArm, 210, 0, 0),
-                Commands.waitSeconds(.5),
-                new MagicMotionPos(mainArm, 0, 0, 0),
-                Commands.waitSeconds(.5),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
+                new PPSwerveFollower(
+                    drivetrainSubsystem,
+                    poseEstimator,
+                    "StraightNoRotation",
+                    new PathConstraints(2, 2),
+                    true),
+                autoBalance));
+
+    // controller
+    //     .y()
+    //     .onTrue(
+    //         Commands.sequence(
+    //             new MagicMotionPos(mainArm, 210, 0, 0),
+    //             Commands.waitSeconds(.5),
+    //             new MagicMotionPos(mainArm, 0, 0, 0),
+    //             Commands.waitSeconds(.5),
+    //             new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
   }
 
   SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -272,19 +283,20 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // use return TestAutoCommands when using chris
+    // return new TestAutoCommands(
+    //     drivetrainSubsystem,
+    //     poseEstimator,
+    //     mainArm,
+    //     shaftEncoder,
+    //     autoBalance,
+    //     m_chooser.getSelected());
     return new TestAutoCommands(
         drivetrainSubsystem,
         poseEstimator,
         mainArm,
         shaftEncoder,
         autoBalance,
-        m_chooser.getSelected());
-    // return new PPSwerveFollower(
-    //     drivetrainSubsystem,
-    //     poseEstimator,
-    //     m_chooser.getSelected(),
-    //     new PathConstraints(2, 1),
-    //     true);
+        "StraightNoRotation");
 
     // return Commands.print("Starting Command " + m_chooser.getSelected());
     // return Commands.print("Starting Command " + m_chooser.getSelected());
