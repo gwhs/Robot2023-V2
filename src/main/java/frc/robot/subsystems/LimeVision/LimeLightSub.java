@@ -93,7 +93,7 @@ public class LimeLightSub extends SubsystemBase {
     return limelight_comm.get_entry_double("pipeline");
   }
 
-  public void setPipeline(double pipelinem) {
-    limelight_comm.set_entry_number("pipeline", pipelinem);
+  public void setPipeline(double pipeline) {
+    limelight_comm.set_entry_number("pipeline", pipeline);
   }
 }
