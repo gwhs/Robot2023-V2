@@ -4,13 +4,19 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.lib2539.logging.Logger;
+import frc.robot.Constants.RobotSetup;
+import java.util.ArrayList;
+import java.util.List;
+// import frc.lib2539.logging.Logger;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -18,8 +24,9 @@ import frc.lib2539.logging.Logger;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
   private Command autonomousCommand;
+  private final RobotSetup robot = Constants.hana;
 
   private RobotContainer robotContainer;
 
@@ -34,17 +41,42 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
 
     // Disable default NetworkTables logging
-    DataLogManager.logNetworkTables(false);
+    // DataLogManager.logNetworkTables(false);
 
     // Begin controller inputs
-    if (isReal()) {
-      DriverStation.startDataLog(DataLogManager.getLog());
+    // if (isReal()) {
+    //   DriverStation.startDataLog(DataLogManager.getLog());
+    // }
+
+    Logger logger = Logger.getInstance();
+
+    // Record metadata
+    logger.recordMetadata("RuntimeType", getRuntimeType().toString());
+    logger.recordMetadata("Robot", robot.name());
+
+    String logfolder = "/home/lvuser";
+    logger.addDataReceiver(new WPILOGWriter(logfolder));
+    logger.addDataReceiver(new NT4Publisher());
+
+    switch (robot.name()) {
+      case "hana":
+        LoggedPowerDistribution.getInstance(0, ModuleType.kCTRE);
+        break;
+      case "chris":
+        LoggedPowerDistribution.getInstance(0, ModuleType.kRev);
+        break;
+      case "calliope":
+        LoggedPowerDistribution.getInstance(0, ModuleType.kRev);
+        break;
+      default:
+        LoggedPowerDistribution.getInstance(0, ModuleType.kCTRE);
+        break;
     }
 
+    setUseTiming(true);
+    logger.start();
+
     robotContainer = new RobotContainer();
-    // Prevents the logging of many errors with controllers
-    // may not be necessary
-    DriverStation.silenceJoystickConnectionWarning(true);
   }
 
   /**
@@ -65,8 +97,21 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
-    Logger.log("/Robot/Battery Voltage", RobotController.getBatteryVoltage());
-    Logger.update();
+    // Log list of NT clients
+    List<String> clientNames = new ArrayList<>();
+    List<String> clientAddresses = new ArrayList<>();
+    for (var client : NetworkTableInstance.getDefault().getConnections()) {
+      clientNames.add(client.remote_id);
+      clientAddresses.add(client.remote_ip);
+    }
+    Logger.getInstance()
+        .recordOutput("NTClients/Names", clientNames.toArray(new String[clientNames.size()]));
+    Logger.getInstance()
+        .recordOutput(
+            "NTClients/Addresses", clientAddresses.toArray(new String[clientAddresses.size()]));
+
+    // Logger.log("/Robot/Battery Voltage", RobotController.getBatteryVoltage());
+    // Logger.update();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
