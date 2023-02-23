@@ -6,7 +6,6 @@ package frc.robot;
 
 import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
 
-import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -19,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalance;
@@ -30,6 +28,7 @@ import frc.robot.commands.Lime.PPIDAutoAim;
 import frc.robot.commands.Lime.Rotate;
 import frc.robot.commands.Lime.Sideways;
 import frc.robot.commands.Lime.ToPole;
+import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
 import frc.robot.pathfind.VisGraph;
@@ -104,8 +103,9 @@ public class RobotContainer {
           () -> -controller.getRightY(),
           () -> -controller.getRightX());
 
-  // private final ShuffleBoardBen angleBenCommand =
-  // new ShuffleBoardBen(drivetrainSubsystem); // add a button + FIX CANT CHANGE TAB ON SHUFFLEBOARD
+  //   private final ShuffleBoardBen angleBenCommand =
+  //       new ShuffleBoardBen(
+  //           drivetrainSubsystem); // add a button + FIX CANT CHANGE TAB ON SHUFFLEBOARD
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -135,7 +135,7 @@ public class RobotContainer {
     mainArm.robotInit();
     shaftEncoder.reset();
 
-    // setupPathChooser();
+    setupPathChooser();
   }
 
   private GenericEntry maxSpeedAdjustment;
@@ -190,7 +190,6 @@ public class RobotContainer {
     controller.b().onTrue(autoBalance);
     controller.leftBumper().onTrue(sideways);
     controller.rightBumper().onTrue(rotate);
-
     // controller
     //     .x // button
     //     ()
@@ -269,19 +268,19 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // use return TestAutoCommands when using chris
-    // return new TestAutoCommands(
-    //     drivetrainSubsystem,
-    //     poseEstimator,
-    //     mainArm,
-    //     shaftEncoder,
-    //     autoBalance,
-    //     m_chooser.getSelected());
-    return new PPSwerveFollower(
+    return new TestAutoCommands(
         drivetrainSubsystem,
         poseEstimator,
-        m_chooser.getSelected(),
-        new PathConstraints(2, 1),
-        true);
+        mainArm,
+        shaftEncoder,
+        autoBalance,
+        m_chooser.getSelected());
+    // return new PPSwerveFollower(
+    //     drivetrainSubsystem,
+    //     poseEstimator,
+    //     m_chooser.getSelected(),
+    //     new PathConstraints(2, 1),
+    //     true);
 
     // return Commands.print("Starting Command " + m_chooser.getSelected());
   }

@@ -35,14 +35,16 @@ public class TestAutoCommands extends SequentialCommandGroup {
 
     if (path.equals("StraightNoRotation")) {
       addCommands(
+          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
           new PPSwerveFollower(
               driveSystem,
               poseEstimatorSystem,
               "StraightNoRotation",
-              new PathConstraints(1, 1),
+              new PathConstraints(2, 2),
               true));
     } else if (path.equals("StraightWithRotation")) {
       addCommands(
+          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
           new PPSwerveFollower(
               driveSystem,
               poseEstimatorSystem,
@@ -51,28 +53,78 @@ public class TestAutoCommands extends SequentialCommandGroup {
               true));
     } else if (path.equals("D-F1E")) {
       addCommands(
+          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
           new MagicMotionPos(mainArm, 210, 0, 0),
           Commands.waitSeconds(.5),
-          new MagicMotionPos(mainArm, 10, 0, 0),
+          new MagicMotionPos(mainArm, 3, 0, 0),
           Commands.waitSeconds(.5),
           new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
           new PPSwerveFollower(
-              driveSystem, poseEstimatorSystem, "D-F1E", new PathConstraints(1, 1), true),
+              driveSystem, poseEstimatorSystem, "D-F1E", new PathConstraints(2, 2), true),
           autoBalance);
     } else if (path.equals("A2E")) {
-
+      addCommands(
+          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
+          new PPSwerveFollower(
+              driveSystem,
+              poseEstimatorSystem,
+              "A2E",
+              new PathConstraints(1, 1),
+              true));
     } else if (path.equals("D1+1")) {
-
+      addCommands(
+          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
+          new PPSwerveFollower(
+              driveSystem,
+              poseEstimatorSystem,
+              "D1+1",
+              new PathConstraints(1, 1),
+              true));
     } else if (path.equals("F1+1")) {
-
+      addCommands(
+        Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
+        new PPSwerveFollower(
+            driveSystem,
+            poseEstimatorSystem,
+            "F1+1",
+            new PathConstraints(1, 1),
+            true));
     } else if (path.equals("G2E")) {
-
+      addCommands(
+        Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
+        new PPSwerveFollower(
+            driveSystem,
+            poseEstimatorSystem,
+            "G2E",
+            new PathConstraints(1, 1),
+            true));
     } else if (path.equals("I2+1")) {
-
+      addCommands(
+        Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
+        new PPSwerveFollower(
+            driveSystem,
+            poseEstimatorSystem,
+            "I2+1",
+            new PathConstraints(1, 1),
+            true));
     } else if (path.equals("I2+1E")) {
-
+      addCommands(
+        Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
+        new PPSwerveFollower(
+            driveSystem,
+            poseEstimatorSystem,
+            "I2+1E",
+            new PathConstraints(1, 1),
+            true));
     } else if (path.equals("I3")) {
-
+      addCommands(
+        Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
+        new PPSwerveFollower(
+            driveSystem,
+            poseEstimatorSystem,
+            "I3",
+            new PathConstraints(1, 1),
+            true));
     }
   }
 }
