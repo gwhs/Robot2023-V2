@@ -202,7 +202,7 @@ public class RobotContainer {
             Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
 
     // Back button resets the robot pose
-   
+
     // Auto aim
     controller.b().onTrue(autoAimLime.withTimeout(3));
     // rotate
@@ -290,7 +290,7 @@ public class RobotContainer {
   }
 
   private void configureLimelightBindings() {
-this.startAndBackButton();
+    this.startAndBackButton();
     controller.x().onTrue(sideways);
     controller.y().onTrue(sideways);
     controller.a().onTrue(sideways);
