@@ -20,8 +20,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.RobotSetup;
 import frc.robot.Constants.LimeLightConstants;
+import frc.robot.Constants.RobotSetup;
 import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
@@ -90,8 +90,7 @@ public class RobotContainer {
 
   private final StraightWheel straightWheel1 = new StraightWheel(drivetrainSubsystem);
   private final StraightWheel straightWheel2 = new StraightWheel(drivetrainSubsystem);
-  private final AllLime allLime =
-      new AllLime(autoAimLime1, rotate, straightWheel1, sideways, straightWheel2, autoAimLime2);
+  private final AllLime allLime = new AllLime(drivetrainSubsystem, poseEstimator, limeLightSub);
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
   // Arm
 
@@ -207,22 +206,13 @@ public class RobotContainer {
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    controller.b().onTrue(allLime.withTimeout(15));
-    controller.leftBumper().onTrue(sideways);
-    controller.rightBumper().onTrue(rotate);
-
-    controller
-        .x // button
-        ()
-        .onTrue(angleBenCommand); // add a button
-
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    controller.b().onTrue(sideways);
-    //   controller.x().toggleOnTrue(toPole);
+    controller.x().onTrue(sideways);
+    controller.b().onTrue(rotate);
+    controller.y().onTrue(autoAimLime1);
 
-    controller.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
-
+    
     // controller
     // .a()
     // .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0),
@@ -263,6 +253,7 @@ public class RobotContainer {
                 new MagicMotionPos(mainArm, 0, 0, 0),
                 Commands.waitSeconds(.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
+    
   }
 
   /**

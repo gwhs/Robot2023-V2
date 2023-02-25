@@ -39,7 +39,7 @@ public class Sideways extends CommandBase {
   private double D = 0;
 
   private boolean angleDone = false;
-  private double angleP = 1;
+  private double angleP = .5;
   private double angleI = 0;
   private double angleD = 0;
   private ProfiledPIDController pid = new ProfiledPIDController(P, I, D, constraints);
@@ -84,7 +84,7 @@ public class Sideways extends CommandBase {
     values = chassisValuesLower();
     if (limeLight.hasTarget()) {
       noTarget = 0;
-      drivetrainSubsystem.drive(new ChassisSpeeds(.00001, values[1], .00001));
+      drivetrainSubsystem.drive(new ChassisSpeeds(.00001, values[1], values[2]));
     } else {
       noTarget++;
     }

@@ -102,7 +102,7 @@ public class Rotate extends CommandBase {
 
     double[] x = new double[3];
     x[0] = 0.00001;
-    x[1] =0;
+    x[1] = 0;
     x[2] = angleDone ? 0 : (anglePid.calculate(Math.toRadians(poseEstimatorSubsystem.getAngle())));
     return x;
   }
