@@ -56,7 +56,7 @@ public class RobotContainer {
   // change robot name
   // change this to change robot -----------------v
   // change the same in Robot.java
-  private final RobotSetup robot = Constants.hana;
+  private final RobotSetup robot = Constants.chris;
   private final CommandXboxController controller = new CommandXboxController(0);
   private final CommandXboxController controllertwo = new CommandXboxController(1);
   // Set IP to 10.57.12.11
@@ -140,6 +140,9 @@ public class RobotContainer {
     // Configure the button bindings
 
     configureButtonBindings();
+    // configureArmBindings();
+    // configureLimelightBindings();
+    // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
     shaftEncoder.reset();
