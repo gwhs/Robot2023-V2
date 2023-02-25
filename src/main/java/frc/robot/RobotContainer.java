@@ -44,6 +44,7 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -55,8 +56,10 @@ public class RobotContainer {
   // for ctrl+shift+f, hana, chris, calliope, spring
   // change robot name
   // change this to change robot -----------------v
-  private final RobotSetup robot = Constants.calliope;
+  // change the same in Robot.java
+  private final RobotSetup robot = Constants.chris;
   private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController controllertwo = new CommandXboxController(1);
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
 
@@ -114,6 +117,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    Logger logger = Logger.getInstance();
     // Set up the default command for the drivetrain.
     drivetrainSubsystem.setDefaultCommand(
         new DefaultDriveCommand(
@@ -135,7 +139,11 @@ public class RobotContainer {
 
     drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
+
     configureButtonBindings();
+    // configureArmBindings();
+    // configureLimelightBindings();
+    // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
     shaftEncoder.reset();
@@ -173,13 +181,7 @@ public class RobotContainer {
     return maxRotationSpeedAdjustment.getDouble(0.2);
   }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
+  public void startAndBackButton() {
     // Start button reseeds the steer motors to fix dead wheel
     controller
         .start()
@@ -190,22 +192,59 @@ public class RobotContainer {
     controller
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
+  }
 
+  /**
+   * Use this method to define your button->command mappings. Buttons can be created by
+   * instantiating a {@link GenericHID} or one of its subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   */
+  private void configureButtonBindings() {
+    // Start button reseeds the steer motors to fix dead wheel
+    this.startAndBackButton();
+
+    controllertwo
+        .start()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+
+    // Back button resets the robot pose
+
+    // Auto aim
     controller.b().onTrue(autoAimLime.withTimeout(3));
+    // rotate
     controller.leftBumper().onTrue(sideways);
-    controller.rightBumper().onTrue(rotate);
+    // rotate
+    controller.rightBumper().onTrue(rotate); //
+
+    controllertwo
+        .back()
+        .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
     controller
+        // Place mid
         .x // button
         ()
         .onTrue(angleBenCommand); // add a button
-
+    // place low
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
     controller.b().onTrue(new ChangePipeline(limeLightSub));
     //   controller.x().toggleOnTrue(toPole);
 
     controller.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
+
+    controllertwo
+        .x // button
+        ()
+        .onTrue(angleBenCommand); // add a button
+    // place low
+    controllertwo.a().toggleOnTrue(fieldHeadingDriveCommand);
+
+    // controller.x().toggleOnTrue(toPole);
+
+    controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
 
     // controller
     // .a()
@@ -238,6 +277,7 @@ public class RobotContainer {
     // new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
 
     controller
+        // Place high
         .y()
         .onTrue(
             Commands.sequence(
@@ -246,6 +286,40 @@ public class RobotContainer {
                 new MagicMotionPos(mainArm, 0, 0, 0),
                 Commands.waitSeconds(.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
+
+    controllertwo
+        .y()
+        .onTrue(
+            Commands.sequence(
+                new MagicMotionPos(mainArm, 210, 0, 0),
+                Commands.waitSeconds(.5),
+                new MagicMotionPos(mainArm, 0, 0, 0),
+                Commands.waitSeconds(.5),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
+  }
+
+  private void configureLimelightBindings() {
+    this.startAndBackButton();
+    controller.x().onTrue(sideways);
+    controller.y().onTrue(sideways);
+    controller.a().onTrue(sideways);
+    controller.b().onTrue(sideways);
+  }
+
+  private void configureAutoBalanceBindings() {
+    this.startAndBackButton();
+    controller.x().onTrue(sideways);
+    controller.y().onTrue(sideways);
+    controller.a().onTrue(sideways);
+    controller.b().onTrue(sideways);
+  }
+
+  private void configureArmBindings() {
+    this.startAndBackButton();
+    controller.x().onTrue(sideways);
+    controller.y().onTrue(sideways);
+    controller.a().onTrue(sideways);
+    controller.b().onTrue(sideways);
   }
 
   /**
@@ -259,7 +333,7 @@ public class RobotContainer {
     final ShuffleboardTab tab = Shuffleboard.getTab("Drive");
 
     m_chooser.setDefaultOption("Straight No Rotation", "StraightNoRotation");
-    m_chooser.addOption("Straight With Rotation", "StragihtWithRotation");
+    m_chooser.addOption("Straight With Rotation", "StraightWithRotation");
     m_chooser.addOption("FUN", "FUN");
 
     tab.add(m_chooser);
