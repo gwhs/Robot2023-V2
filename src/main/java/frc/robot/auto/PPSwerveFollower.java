@@ -10,6 +10,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.autonomous.TrajectoryCommands;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 
@@ -49,7 +50,8 @@ public class PPSwerveFollower extends CommandBase {
 
     if (resetOdom) poseEstimatorSystem.setCurrentPose(alliancePath.getInitialHolonomicPose());
     poseEstimatorSystem.addTrajectory(alliancePath);
-    controllerCommand = driveSystem.followTrajectory(poseEstimatorSystem, alliancePath);
+    controllerCommand =
+        TrajectoryCommands.followTrajectory(poseEstimatorSystem, alliancePath, driveSystem);
     controllerCommand.initialize();
   }
 
