@@ -43,6 +43,7 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -54,7 +55,8 @@ public class RobotContainer {
   // for ctrl+shift+f, hana, chris, calliope, spring
   // change robot name
   // change this to change robot -----------------v
-  private final RobotSetup robot = Constants.chris;
+  // change the same in Robot.java
+  private final RobotSetup robot = Constants.hana;
   private final CommandXboxController controller = new CommandXboxController(0);
   private final CommandXboxController controllertwo = new CommandXboxController(1);
   // Set IP to 10.57.12.11
@@ -114,6 +116,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    Logger logger = Logger.getInstance();
     // Set up the default command for the drivetrain.
     drivetrainSubsystem.setDefaultCommand(
         new DefaultDriveCommand(
@@ -135,6 +138,7 @@ public class RobotContainer {
 
     drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
+
     configureButtonBindings();
     configureDashboard();
     mainArm.robotInit();
