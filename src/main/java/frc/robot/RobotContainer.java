@@ -173,6 +173,19 @@ public class RobotContainer {
     return maxRotationSpeedAdjustment.getDouble(0.2);
   }
 
+  public void startAndBackButton() {
+    // Start button reseeds the steer motors to fix dead wheel
+    controller
+        .start()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+
+    // Back button resets the robot pose
+    controller
+        .back()
+        .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
+  }
+
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -282,16 +295,7 @@ public class RobotContainer {
   }
 
   private void configureLimelightBindings() {
-    // Start button reseeds the steer motors to fix dead wheel
-    controller
-        .start()
-        .onTrue(
-            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
-
-    // Back button resets the robot pose
-    controller
-        .back()
-        .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
+this.startAndBackButton();
     controller.x().onTrue(sideways);
     controller.y().onTrue(sideways);
     controller.a().onTrue(sideways);
@@ -299,16 +303,7 @@ public class RobotContainer {
   }
 
   private void configureAutoBalanceBindings() {
-    // Start button reseeds the steer motors to fix dead wheel
-    controller
-        .start()
-        .onTrue(
-            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
-
-    // Back button resets the robot pose
-    controller
-        .back()
-        .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
+    this.startAndBackButton();
     controller.x().onTrue(sideways);
     controller.y().onTrue(sideways);
     controller.a().onTrue(sideways);
@@ -316,16 +311,7 @@ public class RobotContainer {
   }
 
   private void configureArmBindings() {
-    // Start button reseeds the steer motors to fix dead wheel
-    controller
-        .start()
-        .onTrue(
-            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
-
-    // Back button resets the robot pose
-    controller
-        .back()
-        .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
+    this.startAndBackButton();
     controller.x().onTrue(sideways);
     controller.y().onTrue(sideways);
     controller.a().onTrue(sideways);
