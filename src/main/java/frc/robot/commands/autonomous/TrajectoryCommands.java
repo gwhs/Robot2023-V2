@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 public class TrajectoryCommands {
   public static PPSwerveControllerCommand followTrajectory(
-      PoseEstimatorSubsystem s, PathPlannerTrajectory traj, DrivetrainSubsystem kitkat) {
+      PoseEstimatorSubsystem s, PathPlannerTrajectory traj, DrivetrainSubsystem drivetrainsubsystem) {
     return new PPSwerveControllerCommand(
         traj,
         s::getCurrentPose,
@@ -25,8 +25,8 @@ public class TrajectoryCommands {
         Constants.AutoConstants.m_translationController,
         Constants.AutoConstants.m_strafeController,
         Constants.AutoConstants.m_thetaController,
-        kitkat::setModuleStates,
-        kitkat);
+        drivetrainsubsystem::setModuleStates,
+        drivetrainsubsystem);
   }
   /**
    * Creates a command to follow a Trajectory on the drivetrain.
@@ -35,7 +35,7 @@ public class TrajectoryCommands {
    * @return command that will run the trajectory
    */
   public static Command createCommandForTrajectory(
-      Trajectory trajectory, Supplier<Pose2d> poseSupplier, DrivetrainSubsystem kitkat) {
+      Trajectory trajectory, Supplier<Pose2d> poseSupplier, DrivetrainSubsystem drivetrainsubsystem) {
     var thetaController =
         new ProfiledPIDController(
             -AutoConstants.THETA_kP,
@@ -51,8 +51,8 @@ public class TrajectoryCommands {
             new PIDController(AutoConstants.X_kP, AutoConstants.X_kI, AutoConstants.X_kD),
             new PIDController(AutoConstants.Y_kP, AutoConstants.Y_kI, AutoConstants.Y_kD),
             thetaController,
-            kitkat::setModuleStates,
-            kitkat);
+            drivetrainsubsystem::setModuleStates,
+            drivetrainsubsystem);
 
     return swerveControllerCommand;
   }
