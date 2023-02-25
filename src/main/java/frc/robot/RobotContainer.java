@@ -27,6 +27,7 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.Lime.AfterPPID;
+import frc.robot.commands.Lime.ChangePipeline;
 import frc.robot.commands.Lime.PPIDAutoAim;
 import frc.robot.commands.Lime.Rotate;
 import frc.robot.commands.Lime.Sideways;
@@ -62,7 +63,7 @@ public class RobotContainer {
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
 
-  private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
+  private final LimeLightSub limeLightSub = new LimeLightSub("limelight");
 
   // Arm
   private final MagicMotion mainArm = new MagicMotion(21, robot.canivore_name());
@@ -229,7 +230,7 @@ public class RobotContainer {
     // place low
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    controller.b().onTrue(sideways);
+    controller.b().onTrue(new ChangePipeline(limeLightSub));
     //   controller.x().toggleOnTrue(toPole);
 
     controller.leftStick().toggleOnTrue(fieldHeadingDriveCommand);

@@ -30,6 +30,7 @@ public class LimeLightSub extends SubsystemBase {
   // LL2: -24.85 to 24.85 degrees)
   NetworkTableEntry ta = networkTable.getEntry("ta"); // Target Area (0% of image to 100% of image)
   NetworkTableEntry ts = networkTable.getEntry("ts"); // Skew or rotation (-90 degrees to 0 degrees)
+  NetworkTableEntry pipe = networkTable.getEntry("getpipe");
 
   private double kCameraHeight =
       LimeLightConstants.CAMERA_HEIGHT; // LimelightConstants.kCameraHeight;
