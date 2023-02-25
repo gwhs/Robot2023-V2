@@ -17,7 +17,9 @@ import java.util.function.Supplier;
 
 public class TrajectoryCommands {
   public static PPSwerveControllerCommand followTrajectory(
-      PoseEstimatorSubsystem s, PathPlannerTrajectory traj, DrivetrainSubsystem drivetrainsubsystem) {
+      PoseEstimatorSubsystem s,
+      PathPlannerTrajectory traj,
+      DrivetrainSubsystem drivetrainsubsystem) {
     return new PPSwerveControllerCommand(
         traj,
         s::getCurrentPose,
@@ -35,7 +37,9 @@ public class TrajectoryCommands {
    * @return command that will run the trajectory
    */
   public static Command createCommandForTrajectory(
-      Trajectory trajectory, Supplier<Pose2d> poseSupplier, DrivetrainSubsystem drivetrainsubsystem) {
+      Trajectory trajectory,
+      Supplier<Pose2d> poseSupplier,
+      DrivetrainSubsystem drivetrainsubsystem) {
     var thetaController =
         new ProfiledPIDController(
             -AutoConstants.THETA_kP,
