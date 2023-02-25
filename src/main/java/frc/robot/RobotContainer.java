@@ -195,32 +195,37 @@ public class RobotContainer {
     controller
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
-
+    // Auto aim
     controller.b().onTrue(autoAimLime.withTimeout(3));
+    // rotate
     controller.leftBumper().onTrue(sideways);
-    controller.rightBumper().onTrue(rotate);
+    // rotate
+    controller.rightBumper().onTrue(rotate); //
 
-    controllertwo.b().onTrue(autoAimLime.withTimeout(3));
-    controllertwo.leftBumper().onTrue(sideways);
-    controllertwo.rightBumper().onTrue(rotate);
+    controllertwo
+        .back()
+        .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
     controller
+        // Place mid
         .x // button
         ()
         .onTrue(angleBenCommand); // add a button
-
+    // place low
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
+
+    // controller.x().toggleOnTrue(toPole);
+
+    controller.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
 
     controllertwo
         .x // button
         ()
         .onTrue(angleBenCommand); // add a button
-
+    // place low
     controllertwo.a().toggleOnTrue(fieldHeadingDriveCommand);
 
     // controller.x().toggleOnTrue(toPole);
-
-    controller.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
 
     controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
 
@@ -255,6 +260,7 @@ public class RobotContainer {
     // new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
 
     controller
+        // Place high
         .y()
         .onTrue(
             Commands.sequence(
@@ -281,30 +287,15 @@ public class RobotContainer {
         .start()
         .onTrue(
             Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+
     // Back button resets the robot pose
     controller
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
-     // 
-    controller
-        .x()
-        .onTrue(
-            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
-     // 
-    controller
-        .y()
-        .onTrue(
-            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
-    // 
-    controller
-        .a()
-        .onTrue(
-            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
-     // 
-    controller
-        .b()
-        .onTrue(
-            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+    controller.x().onTrue(sideways);
+    controller.y().onTrue(sideways);
+    controller.a().onTrue(sideways);
+    controller.b().onTrue(sideways);
   }
 
   private void configureAutoBalanceBindings() {
@@ -313,30 +304,15 @@ public class RobotContainer {
         .start()
         .onTrue(
             Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+
     // Back button resets the robot pose
     controller
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
-     // 
-    controller
-        .x()
-        .onTrue(
-            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
-     // 
-    controller
-        .y()
-        .onTrue(
-            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
-    // 
-    controller
-        .a()
-        .onTrue(
-            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
-     // 
-    controller
-        .b()
-        .onTrue(
-            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+    controller.x().onTrue(sideways);
+    controller.y().onTrue(sideways);
+    controller.a().onTrue(sideways);
+    controller.b().onTrue(sideways);
   }
 
   private void configureArmBindings() {
@@ -345,32 +321,16 @@ public class RobotContainer {
         .start()
         .onTrue(
             Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+
     // Back button resets the robot pose
     controller
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
-     // 
-    controller
-        .x()
-        .onTrue(
-            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
-     // 
-    controller
-        .y()
-        .onTrue(
-            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
-    // 
-    controller
-        .a()
-        .onTrue(
-            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
-     // 
-    controller
-        .b()
-        .onTrue(
-            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+    controller.x().onTrue(sideways);
+    controller.y().onTrue(sideways);
+    controller.a().onTrue(sideways);
+    controller.b().onTrue(sideways);
   }
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
