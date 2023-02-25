@@ -22,7 +22,7 @@ public class AfterPPID extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, 0),
-        new Sideways(drivetrainSubsystem, limeLightSub),
+        new Sideways(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
         new ToPole(drivetrainSubsystem, limeLightSub));
   }
 }

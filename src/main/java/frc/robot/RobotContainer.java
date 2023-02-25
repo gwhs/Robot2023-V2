@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.RobotSetup;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
@@ -44,6 +45,7 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -52,7 +54,11 @@ import java.util.Map;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-
+  // for ctrl+shift+f, hana, chris, calliope, spring
+  // change robot name
+  // change this to change robot -----------------v
+  // change the same in Robot.java
+  private final RobotSetup robot = Constants.chris;
   private final CommandXboxController controller = new CommandXboxController(0);
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
@@ -60,11 +66,10 @@ public class RobotContainer {
   private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
 
   // Arm
-  private final MagicMotion mainArm = new MagicMotion(21, DrivetrainConstants.CANIVORE_NAME);
+  private final MagicMotion mainArm = new MagicMotion(21, robot.canivore_name());
   private final BoreEncoder shaftEncoder = new BoreEncoder();
 
-  // TODO: change to hana or spring depending on robot
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
   private final PPIDAutoAim autoAimLime1 =
@@ -81,7 +86,7 @@ public class RobotContainer {
           LimeLightConstants.UPPER_DISTANCE_SHOOT);
 
   private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, 0);
-  private final Sideways sideways = new Sideways(drivetrainSubsystem, limeLightSub);
+  private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final StraightWheel straightWheel1 = new StraightWheel(drivetrainSubsystem);
   private final StraightWheel straightWheel2 = new StraightWheel(drivetrainSubsystem);
@@ -123,6 +128,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    Logger logger = Logger.getInstance();
     // Set up the default command for the drivetrain.
     drivetrainSubsystem.setDefaultCommand(
         new DefaultDriveCommand(
@@ -144,6 +150,7 @@ public class RobotContainer {
 
     drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
+
     configureButtonBindings();
     configureDashboard();
     mainArm.robotInit();
@@ -211,6 +218,7 @@ public class RobotContainer {
 
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
+    controller.b().onTrue(sideways);
     //   controller.x().toggleOnTrue(toPole);
 
     controller.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
@@ -268,7 +276,7 @@ public class RobotContainer {
     final ShuffleboardTab tab = Shuffleboard.getTab("Drive");
 
     m_chooser.setDefaultOption("Straight No Rotation", "StraightNoRotation");
-    m_chooser.addOption("Straight With Rotation", "StragihtWithRotation");
+    m_chooser.addOption("Straight With Rotation", "StraightWithRotation");
     m_chooser.addOption("FUN", "FUN");
 
     tab.add(m_chooser);

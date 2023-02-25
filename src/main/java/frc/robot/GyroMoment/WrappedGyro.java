@@ -17,10 +17,10 @@ public class WrappedGyro {
     NAVX
   }
 
-  public WrappedGyro(GyroType type) {
+  public WrappedGyro(GyroType type, String canivoreName) {
     if (Robot.isReal()) {
       if (type == GyroType.PIGEON) {
-        gyro = new PigeonGyro();
+        gyro = new PigeonGyro(canivoreName);
       } else if (type == GyroType.NAVX) {
         gyro = new NavXGyro();
       }

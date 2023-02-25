@@ -4,8 +4,6 @@
 
 package frc.robot.GyroMoment;
 
-import static frc.robot.Constants.DrivetrainConstants.CANIVORE_NAME;
-
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants.DrivetrainConstants;
@@ -25,8 +23,8 @@ public class PigeonGyro extends AbstractGyro {
   // -Make auto balance faster
   // -
 
-  public PigeonGyro() {
-    pigeon = new WPI_Pigeon2(DrivetrainConstants.PIGEON_ID, CANIVORE_NAME);
+  public PigeonGyro(String canivoreName) {
+    pigeon = new WPI_Pigeon2(DrivetrainConstants.PIGEON_ID, canivoreName);
   }
 
   @Override
