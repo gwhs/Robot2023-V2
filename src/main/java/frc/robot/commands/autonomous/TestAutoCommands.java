@@ -33,14 +33,29 @@ public class TestAutoCommands extends SequentialCommandGroup {
 
     if (path.equals("StraightNoRotation")) {
       addCommands(
-          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
-          new PPSwerveFollower(
-              driveSystem,
-              poseEstimatorSystem,
-              "StraightNoRotation",
-              new PathConstraints(2, 2),
-              true),
-          autoBalance);
+          Commands.sequence(
+              new PPSwerveFollower(
+                  driveSystem, poseEstimatorSystem, "move12", new PathConstraints(2, 2), true),
+              new MagicMotionPos(mainArm, 210, 0, 0),
+              Commands.waitSeconds(.5),
+              new MagicMotionPos(mainArm, 0, 0, 0),
+              Commands.waitSeconds(.5),
+              new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
+              new PPSwerveFollower(
+                  driveSystem,
+                  poseEstimatorSystem,
+                  "StraightNoRotation",
+                  new PathConstraints(2, 2),
+                  true),
+              autoBalance));
+      // Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
+      // new PPSwerveFollower(
+      //     driveSystem,
+      //     poseEstimatorSystem,
+      //     "StraightNoRotation",
+      //     new PathConstraints(2, 2),
+      //     true),
+      // autoBalance);
     } else if (path.equals("StraightWithRotation")) {
       addCommands(
           Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),

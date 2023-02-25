@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.RobotSetup;
@@ -31,7 +32,6 @@ import frc.robot.commands.Lime.PPIDAutoAim;
 import frc.robot.commands.Lime.Rotate;
 import frc.robot.commands.Lime.Sideways;
 import frc.robot.commands.Lime.ToPole;
-import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
 import frc.robot.pathfind.VisGraph;
@@ -299,13 +299,30 @@ public class RobotContainer {
     //     shaftEncoder,
     //     autoBalance,
     //     m_chooser.getSelected());
-    return new TestAutoCommands(
-        drivetrainSubsystem,
-        poseEstimator,
-        mainArm,
-        shaftEncoder,
-        autoBalance,
-        "StraightNoRotation");
+
+    // return new TestAutoCommands(
+    //     drivetrainSubsystem,
+    //     poseEstimator,
+    //     mainArm,
+    //     shaftEncoder,
+    //     autoBalance,
+    //     "StraightNoRotation");
+
+    return new SequentialCommandGroup(
+        // new PPSwerveFollower(
+        //     drivetrainSubsystem, poseEstimator, "move12", new PathConstraints(2, 2), true),
+        new MagicMotionPos(mainArm, 210, 0, 0),
+        Commands.waitSeconds(.5),
+        new MagicMotionPos(mainArm, 0, 0, 0),
+        Commands.waitSeconds(.5),
+        new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
+        new PPSwerveFollower(
+            drivetrainSubsystem,
+            poseEstimator,
+            "StraightNoRotation",
+            new PathConstraints(2, 2),
+            true),
+        new AutoBalanceFast(drivetrainSubsystem));
 
     // return Commands.print("Starting Command " + m_chooser.getSelected());
     // return Commands.print("Starting Command " + m_chooser.getSelected());
