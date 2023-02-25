@@ -275,6 +275,103 @@ public class RobotContainer {
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
   }
 
+  private void configureLimelightBindings() {
+    // Start button reseeds the steer motors to fix dead wheel
+    controller
+        .start()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+    // Back button resets the robot pose
+    controller
+        .back()
+        .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
+     // 
+    controller
+        .x()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+     // 
+    controller
+        .y()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+    // 
+    controller
+        .a()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+     // 
+    controller
+        .b()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+  }
+
+  private void configureAutoBalanceBindings() {
+    // Start button reseeds the steer motors to fix dead wheel
+    controller
+        .start()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+    // Back button resets the robot pose
+    controller
+        .back()
+        .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
+     // 
+    controller
+        .x()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+     // 
+    controller
+        .y()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+    // 
+    controller
+        .a()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+     // 
+    controller
+        .b()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+  }
+
+  private void configureArmBindings() {
+    // Start button reseeds the steer motors to fix dead wheel
+    controller
+        .start()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+    // Back button resets the robot pose
+    controller
+        .back()
+        .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
+     // 
+    controller
+        .x()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+     // 
+    controller
+        .y()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+    // 
+    controller
+        .a()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+     // 
+    controller
+        .b()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+  }
+
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
