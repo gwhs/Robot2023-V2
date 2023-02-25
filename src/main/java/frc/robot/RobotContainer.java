@@ -45,7 +45,6 @@ import java.util.List;
 import java.util.Map;
 import org.littletonrobotics.junction.Logger;
 
-import angleBenCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -367,19 +366,15 @@ public class RobotContainer {
     //     "StraightNoRotation");
 
     return new SequentialCommandGroup(
-        // new PPSwerveFollower(
-        //     drivetrainSubsystem, poseEstimator, "move12", new PathConstraints(2, 2), true),
+        new PPSwerveFollower(
+            drivetrainSubsystem, poseEstimator, "move12", new PathConstraints(2, 2), true),
         new MagicMotionPos(mainArm, 210, 0, 0),
         Commands.waitSeconds(.5),
         new MagicMotionPos(mainArm, 0, 0, 0),
         Commands.waitSeconds(.5),
         new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
         new PPSwerveFollower(
-            drivetrainSubsystem,
-            poseEstimator,
-            "StraightNoRotation",
-            new PathConstraints(2, 2),
-            true),
+            drivetrainSubsystem, poseEstimator, "HajelPath", new PathConstraints(2, 2), true),
         new AutoBalanceFast(drivetrainSubsystem));
 
     // return Commands.print("Starting Command " + m_chooser.getSelected());
