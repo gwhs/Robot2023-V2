@@ -579,4 +579,14 @@ public final class Constants {
     public static final int PWM_CHANNEL_ENCODER_1 = 7;
     public static final int PWM_CHANNEL_ENCODER_2 = 8;
   }
+
+  public static class Claw{
+    public static final double GEAR_RATIO = 40;
+    public static final double UP_MAX_VELOCITY = .20;
+    public static final double DOWN_MAX_VELOCITY = .05;
+    public static final double MAX_ACCELERATION = .1;
+    public static final double kP = .01;
+    public static final double kI = 0;
+    public static final double kD = 0;
+  }
 }

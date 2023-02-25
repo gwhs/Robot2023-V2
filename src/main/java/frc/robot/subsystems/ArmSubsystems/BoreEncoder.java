@@ -16,12 +16,7 @@ import frc.robot.Constants.Arm;
 import java.util.Map;
 
 public class BoreEncoder extends SubsystemBase {
-  private final Encoder m_encoder =
-      new Encoder(
-          Arm.PWM_CHANNEL_ENCODER_1,
-          Arm.PWM_CHANNEL_ENCODER_2,
-          false,
-          CounterBase.EncodingType.k4X);
+  private final Encoder m_encoder;
 
   private ShuffleboardTab tab = Shuffleboard.getTab("Encoder");
   private GenericEntry encoderPosition = tab.add("Encoder Position", 0).getEntry();
@@ -33,9 +28,15 @@ public class BoreEncoder extends SubsystemBase {
   /** Creates a new BoreEncoder. */
   public BoreEncoder() {
 
+    m_encoder =
+    new Encoder(
+        Arm.PWM_CHANNEL_ENCODER_1,
+        Arm.PWM_CHANNEL_ENCODER_2,
+        false,
+        CounterBase.EncodingType.k4X);
+
     m_encoder.setSamplesToAverage(5);
     m_encoder.setDistancePerPulse(1. / 256.);
-    // m_encoder.setDistancePerPulse(1.0 / 360.0 * 2.0 * Math.PI * 1.5);
     m_encoder.setMinRate(1.0);
   }
 
