@@ -5,29 +5,20 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
-import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.DriveTrainConstants;
 import frc.robot.GyroMoment.WrappedGyro;
@@ -36,7 +27,6 @@ import frc.robot.swerve.SwerveModule;
 import frc.robot.swerve.SwerveSpeedController;
 import frc.robot.swerve.SwerveSteerController;
 import java.util.Arrays;
-import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -46,8 +36,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private final WrappedGyro gyro; // hana
   // private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON); // chris
   private final SwerveModule[] swerveModules;
-  private final PIDController thetaControllerPID =
-      new PIDController(-AutoConstants.THETA_kP, AutoConstants.THETA_kI, AutoConstants.THETA_kD);
+
   private final DriveTrainConstants driveTrain;
 
   private ChassisSpeeds desiredChassisSpeeds;
@@ -62,17 +51,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     ShuffleboardLayout frontRightLayout = null;
     ShuffleboardLayout backLeftLayout = null;
     ShuffleboardLayout backRightLayout = null;
-    String canivoreName = setup.canivore_name();
-
-    if (setup.name().equals("hana")) {
-      driveTrain = DriveTrainConstants.hana;
-    } else if (setup.name().equals("spring")) {
-      driveTrain = DriveTrainConstants.spring;
-    } else if (setup.name().equals("chris")) {
-      driveTrain = DriveTrainConstants.chris;
-    } else {
-      driveTrain = DriveTrainConstants.calliope;
-    }
 
     if (DrivetrainConstants.ADD_TO_DASHBOARD) {
       frontLeftLayout =
@@ -95,6 +73,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     if (setup.name().equals("spring")) {
+      driveTrain = DriveTrainConstants.spring;
       swerveModules =
           swerveModuleSpring(
               frontLeftLayout,
@@ -103,6 +82,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
               backRightLayout,
               setup.canivore_name());
     } else if (setup.name().equals("hana")) {
+      driveTrain = DriveTrainConstants.hana;
       swerveModules =
           swerveModuleHana(
               frontLeftLayout,
@@ -111,6 +91,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
               backRightLayout,
               setup.canivore_name());
     } else if (setup.name().equals("chris")) {
+      driveTrain = DriveTrainConstants.chris;
       swerveModules =
           swerveModuleChris(
               frontLeftLayout,
@@ -119,6 +100,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
               backRightLayout,
               setup.canivore_name());
     } else {
+      driveTrain = DriveTrainConstants.calliope;
       swerveModules =
           swerveModuleCalliope(
               frontLeftLayout,
@@ -153,7 +135,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     /*
      * Specific to the springtrap drivetrain(just the offset)
      */
-    DriveTrainConstants driveTrain = DriveTrainConstants.spring;
+
     SwerveModule[] swerveModules =
         new SwerveModule[] {
           createSwerveModule(
@@ -201,7 +183,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     /*
      * Specific to the springtrap drivetrain(just the offset)
      */
-    DriveTrainConstants driveTrain = DriveTrainConstants.chris;
+
     SwerveModule[] swerveModules =
         new SwerveModule[] {
           createSwerveModule(
@@ -249,7 +231,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     /*
      * Specific to the hana drivetrain(just the offset)
      */
-    DriveTrainConstants driveTrain = DriveTrainConstants.hana;
+
     SwerveModule[] swerveModules =
         new SwerveModule[] {
           createSwerveModule(
@@ -298,7 +280,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     /*
      * Specific to the calliope drivetrain(just the offset)
      */
-    DriveTrainConstants driveTrain = DriveTrainConstants.calliope;
+
     SwerveModule[] swerveModules =
         new SwerveModule[] {
           createSwerveModule(
@@ -471,46 +453,5 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public void reseedSteerMotorOffsets() {
     Arrays.stream(swerveModules).forEach(SwerveModule::reseedSteerMotorOffset);
-  }
-  /**
-   * Creates a command to follow a Trajectory on the drivetrain.
-   *
-   * @param trajectory trajectory to follow
-   * @return command that will run the trajectory
-   */
-  public Command createCommandForTrajectory(Trajectory trajectory, Supplier<Pose2d> poseSupplier) {
-    var thetaController =
-        new ProfiledPIDController(
-            -AutoConstants.THETA_kP,
-            AutoConstants.THETA_kI,
-            AutoConstants.THETA_kD,
-            Constants.AutoConstants.THETA_CONSTRAINTS);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-    SwerveControllerCommand swerveControllerCommand =
-        new SwerveControllerCommand(
-            trajectory,
-            poseSupplier,
-            DrivetrainConstants.KINEMATICS,
-            new PIDController(AutoConstants.X_kP, AutoConstants.X_kI, AutoConstants.X_kD),
-            new PIDController(AutoConstants.Y_kP, AutoConstants.Y_kI, AutoConstants.Y_kD),
-            thetaController,
-            this::setModuleStates,
-            this);
-
-    return swerveControllerCommand;
-  }
-
-  public PPSwerveControllerCommand followTrajectory(
-      PoseEstimatorSubsystem s, PathPlannerTrajectory traj) {
-    Constants.AutoConstants.m_thetaController.enableContinuousInput(-Math.PI, Math.PI);
-    return new PPSwerveControllerCommand(
-        traj,
-        s::getCurrentPose,
-        Constants.DrivetrainConstants.KINEMATICS,
-        Constants.AutoConstants.m_translationController,
-        Constants.AutoConstants.m_strafeController,
-        Constants.AutoConstants.m_thetaController,
-        this::setModuleStates,
-        this);
   }
 }

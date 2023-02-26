@@ -8,6 +8,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.commands.autonomous.TrajectoryCommands;
 import frc.robot.pathfind.Edge;
 import frc.robot.pathfind.Node;
 import frc.robot.pathfind.Obstacle;
@@ -97,8 +98,8 @@ public class WPIAStar extends CommandBase {
             config);
     poseEstimatorSystem.addWTrajectory(exampleTrajectory);
     pathDrivingCommand =
-        driveSystem.createCommandForTrajectory(
-            exampleTrajectory, poseEstimatorSystem::getCurrentPose);
+        TrajectoryCommands.createCommandForTrajectory(
+            exampleTrajectory, poseEstimatorSystem::getCurrentPose, driveSystem);
     // RunCommand pathDrivingCommand = new RunCommand(driveSystem::stop, driveSystem);
     // pathDrivingCommand = DrivetrainSubsystem.followTrajectory(driveSystem, poseEstimatorSystem,
     // trajectory);
