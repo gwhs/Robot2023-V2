@@ -20,6 +20,7 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.FieldConstants;
 import java.util.ArrayList;
 import java.util.Map;
+import org.littletonrobotics.junction.Logger;
 
 public class PoseEstimatorSubsystem extends SubsystemBase {
 
@@ -129,7 +130,10 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   }
 
   public Pose2d getCurrentPose() {
-    return poseEstimator.getEstimatedPosition();
+
+    Pose2d currentpose = poseEstimator.getEstimatedPosition();
+    Logger.getInstance().recordOutput("pos/currentPose", currentpose);
+    return currentpose;
   }
 
   /**
