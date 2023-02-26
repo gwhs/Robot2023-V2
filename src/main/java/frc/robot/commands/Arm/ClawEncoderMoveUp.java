@@ -19,17 +19,21 @@ public class ClawEncoderMoveUp extends CommandBase {
   private BoreEncoder encoder;
   private double desiredAngle;
   private double error;
+  private String piece;
 
-  public ClawEncoderMoveUp(double angle, Claw initClaw , BoreEncoder weewoo) {
+  public ClawEncoderMoveUp(double angle, Claw initClaw , BoreEncoder weewoo, String piece) {
     clawOne = initClaw;
     this.encoder = weewoo;
     this.desiredAngle = angle;
+    this.piece = piece;
     addRequirements(initClaw);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    // System.out.println("--------------START-----------");
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -37,13 +41,23 @@ public class ClawEncoderMoveUp extends CommandBase {
     double rawAngle = (-encoder.getRaw() / 8192. * 360.);
     error = (desiredAngle - rawAngle);
     double velocity = Constants.Claw.kP * error;
+    if(piece.toUpperCase().equals("CUBE")){
+      if(velocity > Constants.Claw.CUBE_UP_MAX_VELOCITY){
+        velocity = Constants.Claw.CUBE_UP_MAX_VELOCITY;
+      }
+      else if(velocity < -Constants.Claw.CUBE_UP_MAX_VELOCITY){
+        velocity = -Constants.Claw.CUBE_UP_MAX_VELOCITY;
+      }
+    }
+    else if(piece.toUpperCase().equals("CONE")){
+      if(velocity > Constants.Claw.CONE_UP_MAX_VELOCITY){
+        velocity = Constants.Claw.CONE_UP_MAX_VELOCITY;
+      }
+      else if(velocity < -Constants.Claw.CONE_UP_MAX_VELOCITY){
+        velocity = -Constants.Claw.CONE_UP_MAX_VELOCITY;
+      }
+    }
 
-    if(velocity > Constants.Claw.UP_MAX_VELOCITY){
-      velocity = Constants.Claw.UP_MAX_VELOCITY;
-    }
-    else if(velocity < -Constants.Claw.UP_MAX_VELOCITY){
-      velocity = -Constants.Claw.UP_MAX_VELOCITY;
-    }
 
     clawOne.setPercent(velocity);
   }
@@ -52,10 +66,12 @@ public class ClawEncoderMoveUp extends CommandBase {
   public void end(boolean interrupted) {
     clawOne.brake();
     clawOne.setPercent(0);
+    System.out.println("CLAWMOVEUP FINISHED");
+    // System.out.pr intln("---------------END------------");
   }
 
   @Override 
   public boolean isFinished() {
-    return Math.abs(error) < .5;
+    return Math.abs(error) < 1;
   }
 }

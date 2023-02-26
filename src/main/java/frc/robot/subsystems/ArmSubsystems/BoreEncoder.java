@@ -26,7 +26,7 @@ public class BoreEncoder extends SubsystemBase {
           .withProperties(Map.of("min", -500, "max", 500))
           .getEntry();
   /** Creates a new BoreEncoder. */
-  public BoreEncoder() {
+  public BoreEncoder(int channel1, int channel2) {
 
     m_encoder =
     new Encoder(

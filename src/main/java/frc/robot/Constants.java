@@ -580,10 +580,11 @@ public final class Constants {
     public static final int PWM_CHANNEL_ENCODER_2 = 8;
   }
 
-  public static class Claw{
+  public static final class Claw{
     public static final double GEAR_RATIO = 40;
-    public static final double UP_MAX_VELOCITY = .20;
-    public static final double DOWN_MAX_VELOCITY = .05;
+    public static final double CUBE_UP_MAX_VELOCITY = .20; // .3 for Cone, .2 for Cube1`   
+    public static final double CONE_UP_MAX_VELOCITY = .30; // .3 for Cone, .2 for Cube1`   
+    public static final double DOWN_MAX_VELOCITY = .1;
     public static final double MAX_ACCELERATION = .1;
     public static final double kP = .01;
     public static final double kI = 0;

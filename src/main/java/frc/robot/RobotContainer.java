@@ -56,7 +56,7 @@ public class RobotContainer {
 
   // Arm
   private final MagicMotion mainArm = new MagicMotion(21, DrivetrainConstants.CANIVORE_NAME);
-  private final BoreEncoder shaftEncoder = new BoreEncoder();
+  private final BoreEncoder shaftEncoder = new BoreEncoder(Constants.Arm.PWM_CHANNEL_ENCODER_1, Constants.Arm.PWM_CHANNEL_ENCODER_2);
 
   // TODO: change to hana or spring depending on robot
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
