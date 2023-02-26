@@ -7,6 +7,7 @@ package frc.robot.GyroMoment;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SPI;
+import org.littletonrobotics.junction.Logger;
 
 /** Add your docs here. */
 public class NavXGyro extends AbstractGyro {
@@ -29,22 +30,30 @@ public class NavXGyro extends AbstractGyro {
 
   @Override
   public double getAngle() {
-    return ahrs.getAngle();
+    double angle = ahrs.getAngle();
+    Logger.getInstance().recordOutput("Gyro/Angle", angle);
+    return angle;
   }
 
   @Override
   public double getYaw() {
-    return ahrs.getYaw();
+    double yaw = ahrs.getYaw();
+    Logger.getInstance().recordOutput("Gyro/Yaw", yaw);
+    return yaw;
   }
 
   @Override
   public double getPitch() {
-    return ahrs.getPitch();
+    double pitch = ahrs.getPitch();
+    Logger.getInstance().recordOutput("Gyro/Pitch", pitch);
+    return pitch;
   }
 
   @Override
   public double getRoll() {
-    return ahrs.getRoll();
+    double roll = ahrs.getRoll();
+    Logger.getInstance().recordOutput("Gyro/Roll", roll);
+    return roll;
   }
 
   @Override

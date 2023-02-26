@@ -28,6 +28,7 @@ import frc.robot.swerve.SwerveSpeedController;
 import frc.robot.swerve.SwerveSteerController;
 import java.util.Arrays;
 import java.util.stream.IntStream;
+import org.littletonrobotics.junction.Logger;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
@@ -407,6 +408,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
       }
 
       setModuleStates(desiredStates);
+      Logger.getInstance().recordOutput("DriveTrainSub/DesireStates", desiredStates);
     }
     // Always reset desiredChassisSpeeds to null to prevent latching to the last state (aka motor
     // safety)!!
