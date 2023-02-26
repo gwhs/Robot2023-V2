@@ -236,14 +236,14 @@ public class RobotContainer {
     // place low
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    controller.x().onTrue(sideways);
+    controller.x().onTrue(new ChangePipeline(limeLightSub));
     controller.b().onTrue(rotate);
     // controller.y().onTrue(autoAimLime1);
 
     controllertwo
         .x // button
         ()
-        .onTrue(angleBenCommand); // add a button
+        .onTrue(new ChangePipeline(limeLightSub)); // add a button
     // place low
     controllertwo.a().toggleOnTrue(fieldHeadingDriveCommand);
 
