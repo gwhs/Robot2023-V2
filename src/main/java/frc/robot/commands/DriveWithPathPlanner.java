@@ -6,6 +6,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.commands.autonomous.TrajectoryCommands;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 
@@ -61,7 +62,8 @@ public class DriveWithPathPlanner extends CommandBase {
               pointOne);
     }
 
-    pathDrivingCommand = driveSystem.followTrajectory(poseEstimatorSystem, trajectory);
+    pathDrivingCommand =
+        TrajectoryCommands.followTrajectory(poseEstimatorSystem, trajectory, driveSystem);
     pathDrivingCommand.schedule();
   }
 
