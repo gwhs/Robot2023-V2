@@ -41,10 +41,12 @@ public class Rotate extends CommandBase {
   public Rotate(
       DrivetrainSubsystem drivetrainSubsystem,
       PoseEstimatorSubsystem poseEstimatorSubsystem,
+      LimeLightSub limeLightSub,
       double degrees) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.poseEstimatorSubsystem = poseEstimatorSubsystem;
     this.drivetrainSubsystem = drivetrainSubsystem;
+    this.limeLight = limeLightSub;
     this.degrees = degrees;
 
     addRequirements(poseEstimatorSubsystem, drivetrainSubsystem);
@@ -101,9 +103,10 @@ public class Rotate extends CommandBase {
     */
 
     double[] x = new double[3];
+    double d = anglePid.calculate(Math.toRadians(poseEstimatorSubsystem.getAngle()));
     x[0] = 0.00001;
-    x[1] = 0;
-    x[2] = angleDone ? 0 : (anglePid.calculate(Math.toRadians(poseEstimatorSubsystem.getAngle())));
+    x[1] = Math.abs(limeLight.getTx()) > .5 ? (d > 0 ? -.25 : .25) : 0;
+    x[2] = angleDone ? 0 : (d);
     return x;
   }
 }

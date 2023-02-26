@@ -29,22 +29,10 @@ public class Sideways extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50,
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
-  private Constraints angleConstraints =
-      new Constraints(
-          DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-          DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
-
   private double P = .025;
   private double I = 0;
   private double D = 0;
-
-  private boolean angleDone = false;
-  private double angleP = .5;
-  private double angleI = 0;
-  private double angleD = 0;
   private ProfiledPIDController pid = new ProfiledPIDController(P, I, D, constraints);
-  private ProfiledPIDController anglePid =
-      new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
 
   /** Creates a new AutoAimLime. */
   public Sideways(
@@ -67,13 +55,9 @@ public class Sideways extends CommandBase {
     pid.reset(Math.toRadians(limeLight.getTx()));
     pid.setGoal(Math.toRadians(0));
     pid.setTolerance(Math.toRadians(1));
-    angleDone = false;
 
     // configure rotation pid
     System.out.println(poseEstimatorSubsystem.getAngle());
-    anglePid.reset(Math.toRadians(poseEstimatorSubsystem.getAngle()));
-    anglePid.setGoal(Math.toRadians(0));
-    anglePid.setTolerance(Math.toRadians(.5));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -95,14 +79,9 @@ public class Sideways extends CommandBase {
     } else {
       sidewaysDone = false;
     }
-    if (Math.abs(Math.toRadians(poseEstimatorSubsystem.getAngle())) < Math.toRadians(.5)) {
-      angleDone = true;
-    } else {
-      angleDone = false;
-    }
+
     if (noTarget >= 10) {
       sidewaysDone = true;
-      angleDone = true;
     }
   }
 
@@ -116,7 +95,7 @@ public class Sideways extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return angleDone && sidewaysDone;
+    return sidewaysDone;
   }
 
   public double[] chassisValuesLower() {
@@ -133,7 +112,7 @@ public class Sideways extends CommandBase {
 
     x[0] = 0;
     x[1] = pid.calculate(limeLight.getTx());
-    x[2] = anglePid.calculate(Math.toRadians(poseEstimatorSubsystem.getAngle()));
+    x[2] = 0;
 
     return x;
     // d

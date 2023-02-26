@@ -81,7 +81,7 @@ public class RobotContainer {
           limeLightSub,
           LimeLightConstants.UPPER_DISTANCE_SHOOT);
 
-  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, 0);
+  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub, 0);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final StraightWheel straightWheel1 = new StraightWheel(drivetrainSubsystem);
@@ -218,11 +218,11 @@ public class RobotContainer {
     // Back button resets the robot pose
 
     // Auto aim
-    controller.b().onTrue(new ChangePipeline(limeLightSub));
+    // controller.b().onTrue(new ChangePipeline(limeLightSub));
     // rotate
     controller.leftBumper().onTrue(sideways);
     // rotate
-    controller.rightBumper().onTrue(rotate); //
+    controller.rightBumper().onTrue(allLime); //
 
     controllertwo
         .back()
@@ -238,7 +238,7 @@ public class RobotContainer {
 
     controller.x().onTrue(sideways);
     controller.b().onTrue(rotate);
-    controller.y().onTrue(autoAimLime1);
+    // controller.y().onTrue(autoAimLime1);
 
     controllertwo
         .x // button
@@ -287,7 +287,7 @@ public class RobotContainer {
         .y()
         .onTrue(
             Commands.sequence(
-                new MagicMotionPos(mainArm, 210, 0, 0),
+                new MagicMotionPos(mainArm, 190, 0, 0),
                 Commands.waitSeconds(.5),
                 new MagicMotionPos(mainArm, 0, 0, 0),
                 Commands.waitSeconds(.5),
@@ -297,7 +297,7 @@ public class RobotContainer {
         .y()
         .onTrue(
             Commands.sequence(
-                new MagicMotionPos(mainArm, 210, 0, 0),
+                new MagicMotionPos(mainArm, 190, 0, 0),
                 Commands.waitSeconds(.5),
                 new MagicMotionPos(mainArm, 0, 0, 0),
                 Commands.waitSeconds(.5),

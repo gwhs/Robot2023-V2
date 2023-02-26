@@ -29,7 +29,7 @@ public class AllLime extends SequentialCommandGroup {
             limeLightSub,
             LimeLightConstants.LOWER_DISTANCE_SHOOT),
         new WaitCommand(.5),
-        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, 0),
+        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub, 0),
         new StraightWheel(drivetrainSubsystem),
         new Sideways(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
         new StraightWheel(drivetrainSubsystem),
