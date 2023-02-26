@@ -340,6 +340,7 @@ public class RobotContainer {
     m_chooser.addOption("I 3 piece", "I3");
     m_chooser.addOption("FUN", "FUN");
     m_chooser.addOption("I 1+ and engage", "HajelPath");
+    m_chooser.addOption("I 2+ and engage", "HajelPathV2");
 
     tab.add(m_chooser);
   }
@@ -354,7 +355,7 @@ public class RobotContainer {
 
     TestAutoCommands vendingMachine =
         new TestAutoCommands(
-            drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "HajelPath");
+            drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "HajelPathV2");
 
     return vendingMachine.getAutoCommand();
   }
