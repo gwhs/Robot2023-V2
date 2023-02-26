@@ -351,45 +351,12 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // use return TestAutoCommands when using chris
-    // return new TestAutoCommands(
-    // drivetrainSubsystem,
-    // poseEstimator,
-    // mainArm,
-    // shaftEncoder,
-    // autoBalance,
-    // m_chooser.getSelected());
-
-    // return new TestAutoCommands(
-    // drivetrainSubsystem,
-    // poseEstimator,
-    // mainArm,
-    // shaftEncoder,
-    // autoBalance,
-    // "StraightNoRotation");
 
     TestAutoCommands vendingMachine =
         new TestAutoCommands(
             drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "HajelPath");
 
     return vendingMachine.getAutoCommand();
-
-    // return new SequentialCommandGroup(
-    //     new PPSwerveFollower(
-    //         drivetrainSubsystem, poseEstimator, "move12", new PathConstraints(2, 2), true),
-    //     new MagicMotionPos(mainArm, 210, 0, 0),
-    //     Commands.waitSeconds(.5),
-    //     new ParallelCommandGroup(
-    //         new SequentialCommandGroup(
-    //             new MagicMotionPos(mainArm, 0, 0, 0),
-    //             Commands.waitSeconds(.5),
-    //             new MagicMotionAbsoluteZero(mainArm, shaftEncoder)),
-    //         new PPSwerveFollower(
-    //             drivetrainSubsystem, poseEstimator, "HajelPath", new PathConstraints(2, 2),
-    // true)),
-    //     new AutoBalanceFast(drivetrainSubsystem));
-
-    // return Commands.print("Starting Command " + m_chooser.getSelected());
-    // return Commands.print("Starting Command " + m_chooser.getSelected());
   }
 
   private static double modifyAxis(double value) {
