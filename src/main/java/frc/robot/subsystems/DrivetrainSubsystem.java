@@ -36,7 +36,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private final WrappedGyro gyro; // hana
   // private final WrappedGyro gyro = new WrappedGyro(GyroType.PIGEON); // chris
   private final SwerveModule[] swerveModules;
-  
+
   private final DriveTrainConstants driveTrain;
 
   private ChassisSpeeds desiredChassisSpeeds;
@@ -51,8 +51,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     ShuffleboardLayout frontRightLayout = null;
     ShuffleboardLayout backLeftLayout = null;
     ShuffleboardLayout backRightLayout = null;
-
-   
 
     if (DrivetrainConstants.ADD_TO_DASHBOARD) {
       frontLeftLayout =
@@ -83,7 +81,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
               backLeftLayout,
               backRightLayout,
               setup.canivore_name());
-    } else if (setup.name().equals("hana")) { 
+    } else if (setup.name().equals("hana")) {
       driveTrain = DriveTrainConstants.hana;
       swerveModules =
           swerveModuleHana(
@@ -137,7 +135,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     /*
      * Specific to the springtrap drivetrain(just the offset)
      */
-    
+
     SwerveModule[] swerveModules =
         new SwerveModule[] {
           createSwerveModule(
@@ -185,7 +183,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     /*
      * Specific to the springtrap drivetrain(just the offset)
      */
-    
+
     SwerveModule[] swerveModules =
         new SwerveModule[] {
           createSwerveModule(
@@ -233,7 +231,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     /*
      * Specific to the hana drivetrain(just the offset)
      */
-   
+
     SwerveModule[] swerveModules =
         new SwerveModule[] {
           createSwerveModule(
@@ -282,7 +280,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     /*
      * Specific to the calliope drivetrain(just the offset)
      */
-    
+
     SwerveModule[] swerveModules =
         new SwerveModule[] {
           createSwerveModule(
@@ -456,5 +454,4 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void reseedSteerMotorOffsets() {
     Arrays.stream(swerveModules).forEach(SwerveModule::reseedSteerMotorOffset);
   }
-  
 }
