@@ -11,7 +11,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -29,8 +28,6 @@ import frc.robot.commands.AutoBalanceFast;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.*;
-import frc.robot.commands.ShuffleBoardBen;
-
 import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
@@ -363,7 +360,7 @@ public class RobotContainer {
 
     TestAutoCommands vendingMachine =
         new TestAutoCommands(
-            drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "StraightWithRotation");
+            drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "HajelPathV2", limeLightSub);
 
     return vendingMachine.getAutoCommand();
   }

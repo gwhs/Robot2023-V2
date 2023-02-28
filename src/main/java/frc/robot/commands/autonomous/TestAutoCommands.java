@@ -8,9 +8,11 @@ import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalanceFast;
+import frc.robot.commands.PlaceCone.ChangePipeline;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 
 public final class TestAutoCommands {
@@ -20,18 +22,21 @@ public final class TestAutoCommands {
   private MagicMotion mainArm;
   private BoreEncoder shaftEncoder;
   private String pathName;
+  private LimeLightSub lime;
 
   public TestAutoCommands(
       DrivetrainSubsystem d,
       PoseEstimatorSubsystem poseEstimatorSystem,
       MagicMotion m,
       BoreEncoder b,
-      String p) {
+      String p,
+      LimeLightSub l) {
     this.driveSystem = d;
     this.poseEstimatorSystem = poseEstimatorSystem;
     this.mainArm = m;
     this.shaftEncoder = b;
     this.pathName = p;
+    this.lime = l;
   }
 
   public SequentialCommandGroup getAutoCommand() {
@@ -83,8 +88,7 @@ public final class TestAutoCommands {
               "HajelPathV2Part2",
               new PathConstraints(3, 2),
               true),
-          new PPSwerveFollower(
-              driveSystem, poseEstimatorSystem, "move12", new PathConstraints(2, 2), true),
+          new ChangePipeline(lime), // APRIL?
           new MagicMotionPos(mainArm, 210, 0, 0),
           Commands.waitSeconds(.5),
           new ParallelCommandGroup(
