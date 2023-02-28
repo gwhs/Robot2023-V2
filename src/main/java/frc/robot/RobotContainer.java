@@ -25,7 +25,7 @@ import frc.robot.Constants.RobotSetup;
 import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
-import frc.robot.commands.AutoBalance;
+import frc.robot.commands.AutoBalanceFast;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.*;
@@ -85,6 +85,7 @@ public class RobotContainer {
   private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
   private final AllLime allLime = new AllLime(drivetrainSubsystem, poseEstimator, limeLightSub);
 
+  private final AutoBalanceFast autoBalance = new AutoBalanceFast(drivetrainSubsystem);
   // Arm
 
   final List<Obstacle> standardObstacles = FieldConstants.standardObstacles;
@@ -115,8 +116,9 @@ public class RobotContainer {
           () -> -controller.getRightY(),
           () -> -controller.getRightX());
 
-  private final ShuffleBoardBen angleBenCommand =
-      new ShuffleBoardBen(drivetrainSubsystem); // add a button
+  // private final ShuffleBoardBen angleBenCommand =
+  // new ShuffleBoardBen(
+  // drivetrainSubsystem); // add a button + FIX CANT CHANGE TAB ON SHUFFLEBOARD
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -150,8 +152,8 @@ public class RobotContainer {
     configureDashboard();
     mainArm.robotInit();
     shaftEncoder.reset();
-    LiveWindow.disableAllTelemetry();
-    setupPathChooser();
+
+    // setupPathChooser();
   }
 
   private GenericEntry maxSpeedAdjustment;
@@ -225,11 +227,11 @@ public class RobotContainer {
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    controller
-        // Place mid
-        .x // button
-        ()
-        .onTrue(angleBenCommand); // add a button
+    // controller
+    // // Place mid
+    // .x // button
+    // ()
+    // .onTrue(angleBenCommand); // add a button
     // place low
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
@@ -325,11 +327,6 @@ public class RobotContainer {
     controller.b().onTrue(sideways);
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private void setupPathChooser() {
@@ -337,21 +334,30 @@ public class RobotContainer {
 
     m_chooser.setDefaultOption("Straight No Rotation", "StraightNoRotation");
     m_chooser.addOption("Straight With Rotation", "StraightWithRotation");
+    m_chooser.addOption("D-F Place and engage", "D-F1E");
+    m_chooser.addOption("A 2 piece and engage", "A2E");
+    m_chooser.addOption("D place and hold", "D1+1");
+    m_chooser.addOption("F place and hold", "F1+1");
+    m_chooser.addOption("G 2 piece and engage", "G2E");
+    m_chooser.addOption("I 2 piece and hold", "I2+1");
+    m_chooser.addOption("I 2 piece engage and hold", "I2+1E");
+    m_chooser.addOption("I 3 piece", "I3");
     m_chooser.addOption("FUN", "FUN");
+    m_chooser.addOption("I 1+ and engage", "HajelPath");
 
     tab.add(m_chooser);
   }
 
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
   public Command getAutonomousCommand() {
-    // return new TestAutonomous(drivetrainSubsystem, poseEstimator);
-    return new PPSwerveFollower(
-        drivetrainSubsystem,
-        poseEstimator,
-        m_chooser.getSelected(),
-        new PathConstraints(2, 1),
-        true);
+    // use return TestAutoCommands when using chris
 
-    // return Commands.print("Starting Command " + m_chooser.getSelected());
+
+    return vendingMachine.getAutoCommand();
   }
 
   private static double modifyAxis(double value) {
