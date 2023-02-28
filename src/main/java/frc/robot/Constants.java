@@ -44,13 +44,13 @@ public final class Constants {
      *
      * <p>Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.635;
+    public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.508; // 0.62 calliope ,0.508 hana
     /**
      * The front-to-back distance between the drivetrain wheels.
      *
      * <p>Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.635;
+    public static final double DRIVETRAIN_WHEELBASE_METERS = 0.508;
 
     // Pick the longest side of the robot for this and measure outside bumper to outside bumper
     public static final double ROBOT_LENGTH_WIDTH = 0.698;
@@ -68,8 +68,8 @@ public final class Constants {
         6380.0
             / 60.0
             * // was 6380.0 / 60.0
-            ModuleConfiguration.MK4I_L2.getDriveReduction()
-            * ModuleConfiguration.MK4I_L2.getWheelDiameter()
+            ModuleConfiguration.MK4II_L3.getDriveReduction() // MK4II_L3 for chris
+            * ModuleConfiguration.MK4II_L3.getWheelDiameter()
             * PI;
 
     /**
@@ -162,11 +162,11 @@ public final class Constants {
     public static double THETA_kI = 0.0;
     public static double THETA_kD = 0.0;
 
-    public static double X_kP = 0.1; // 1.2 original
+    public static double X_kP = 1.2; // 1.2 original
     public static double X_kI = 0.0;
     public static double X_kD = 0.0;
 
-    public static double Y_kP = 1.2;
+    public static double Y_kP = 1.2; // 1.2 original
     public static double Y_kI = 0.0;
     public static double Y_kD = 0.0;
 

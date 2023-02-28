@@ -10,13 +10,16 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.GyroMoment.WrappedGyro;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import java.util.List;
 
-public class AutoBalance extends CommandBase {
+public class AutoBalanceFast extends CommandBase {
   private final DrivetrainSubsystem drivetrainSubsystem;
 
   private Timer engageTimer; // timer that counts how long the robot is 'engaged'
@@ -35,7 +38,6 @@ public class AutoBalance extends CommandBase {
   private double toleranceDefault;
   private double initialSpeedDefault;
 
-  private int state; // state of the robot; 0 or 1
   private double epsilonRollRate; // degrees per second threshold to switch from state 0 to 1
   private double epsilonRollRateDefault;
   private final GenericEntry epsilonRollRateEntry;
@@ -49,12 +51,12 @@ public class AutoBalance extends CommandBase {
   private final GenericEntry initialSpeedEntry;
 
   /** Creates a new AutoBalance. */
-  public AutoBalance(DrivetrainSubsystem drivetrainSubsystem) {
+  public AutoBalanceFast(DrivetrainSubsystem drivetrainSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
 
     pConstantDefault =
-        0.0033; // 0.0045 original these are the default values set on the robot and shuffleboard
+        0.004; // 0.0045 original these are the default values set on the robot and shuffleboard
     dConstantDefault = -0.0012;
     toleranceDefault = 2.5;
     maxSpeedDefault = 0.5;
@@ -72,36 +74,50 @@ public class AutoBalance extends CommandBase {
         tab.getLayout("Constant Inputs", BuiltInLayouts.kList).withSize(2, 4).withPosition(2, 0);
 
     WrappedGyro gryo = drivetrainSubsystem.getGyro();
-    orientation.addNumber("Yaw", () -> gryo.getYaw());
-    orientation.addNumber("Pitch", () -> gryo.getPitch());
-    orientation.addNumber("Roll", () -> gryo.getRoll());
-    orientation.addNumber("Yaw Rate", () -> gryo.getYawRate());
-    orientation.addNumber("Pitch Rate", () -> gryo.getPitchRate());
-    orientation.addNumber("Roll Rate", () -> gryo.getRollRate());
 
-    pConstantEntry =
-        input.add("p Constant", pConstantDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
-    dConstantEntry =
-        input.add("d Constant", dConstantDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
-    toleranceEntry =
-        input.add("Tolerance", toleranceDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
-    maxSpeedEntry =
-        input.add("Max Speed", maxSpeedDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
-    desiredEngageTimeEntry =
-        input
-            .add("Desired Engage Time", desiredEngageTimeDefault)
-            .withWidget(BuiltInWidgets.kTextView)
-            .getEntry();
-    initialSpeedEntry =
-        input
-            .add("Initial State Speed", initialSpeedDefault)
-            .withWidget(BuiltInWidgets.kTextView)
-            .getEntry();
-    epsilonRollRateEntry =
-        input
-            .add("Epsilon Roll Rate Threshold", epsilonRollRateDefault)
-            .withWidget(BuiltInWidgets.kTextView)
-            .getEntry();
+    if (orientation.getComponents().isEmpty()) {
+      orientation.addNumber("Yaw", () -> gryo.getYaw());
+      orientation.addNumber("Pitch", () -> gryo.getPitch());
+      orientation.addNumber("Roll", () -> gryo.getRoll());
+      orientation.addNumber("Yaw Rate", () -> gryo.getYawRate());
+      orientation.addNumber("Pitch Rate", () -> gryo.getPitchRate());
+      orientation.addNumber("Roll Rate", () -> gryo.getRollRate());
+    }
+
+    if (input.getComponents().isEmpty()) {
+      pConstantEntry =
+          input.add("p Constant", pConstantDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+      dConstantEntry =
+          input.add("d Constant", dConstantDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+      toleranceEntry =
+          input.add("Tolerance", toleranceDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+      maxSpeedEntry =
+          input.add("Max Speed", maxSpeedDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+      desiredEngageTimeEntry =
+          input
+              .add("Desired Engage Time", desiredEngageTimeDefault)
+              .withWidget(BuiltInWidgets.kTextView)
+              .getEntry();
+      initialSpeedEntry =
+          input
+              .add("Initial State Speed", initialSpeedDefault)
+              .withWidget(BuiltInWidgets.kTextView)
+              .getEntry();
+      epsilonRollRateEntry =
+          input
+              .add("Epsilon Roll Rate Threshold", epsilonRollRateDefault)
+              .withWidget(BuiltInWidgets.kTextView)
+              .getEntry();
+    } else {
+      List<ShuffleboardComponent<?>> widgets = input.getComponents();
+      pConstantEntry = ((SimpleWidget) widgets.get(0)).getEntry();
+      dConstantEntry = ((SimpleWidget) widgets.get(1)).getEntry();
+      toleranceEntry = ((SimpleWidget) widgets.get(2)).getEntry();
+      maxSpeedEntry = ((SimpleWidget) widgets.get(3)).getEntry();
+      desiredEngageTimeEntry = ((SimpleWidget) widgets.get(4)).getEntry();
+      initialSpeedEntry = ((SimpleWidget) widgets.get(5)).getEntry();
+      epsilonRollRateEntry = ((SimpleWidget) widgets.get(6)).getEntry();
+    }
 
     addRequirements(drivetrainSubsystem);
   }
@@ -109,7 +125,7 @@ public class AutoBalance extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    state = 0;
+
     // each time the command is activated, it takes the values from the shuffleboard---easier to
     // test values
     desiredEngageTime = desiredEngageTimeEntry.getDouble(desiredEngageTimeDefault);
@@ -145,18 +161,7 @@ public class AutoBalance extends CommandBase {
 
     double speed = 0;
 
-    // sometimes currentDPS spikes because it reads somehting weirdly do this later
-    if (Math.abs(currentDPS) >= Math.abs(epsilonRollRate)) {
-      state = 1;
-    }
-
-    if (state == 0) {
-      speed = Math.copySign(initialSpeed, error);
-    }
-
-    if (state == 1) {
-      speed = error * pConstant + currentDPS * dConstant;
-    }
+    speed = error * pConstant + currentDPS * dConstant;
 
     if (speed > maxSpeed) {
       speed = maxSpeed;

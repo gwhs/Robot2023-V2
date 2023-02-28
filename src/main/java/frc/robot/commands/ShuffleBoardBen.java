@@ -17,7 +17,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class ShuffleBoardBen extends CommandBase {
   private final DrivetrainSubsystem drivetrainSubsystem;
 
-  // private ShuffleboardTab tab = Shuffleboard.getTab("ShuffleBoardBen");
+  private ShuffleboardTab tab = Shuffleboard.getTab("ShuffleBoardBen");
 
   private double initialAngle;
   private GenericEntry angleEntry;
