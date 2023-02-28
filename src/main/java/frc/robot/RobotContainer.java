@@ -23,7 +23,7 @@ import frc.robot.Constants.RobotSetup;
 import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
-import frc.robot.commands.AutoBalanceFast;
+import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.Lime.AfterPPID;
@@ -80,7 +80,7 @@ public class RobotContainer {
   private final AfterPPID afterPPID =
       new AfterPPID(drivetrainSubsystem, poseEstimator, limeLightSub);
 
-  private final AutoBalanceFast autoBalance = new AutoBalanceFast(drivetrainSubsystem);
+  private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
   // Arm
 
   final List<Obstacle> standardObstacles = FieldConstants.standardObstacles;
@@ -230,7 +230,7 @@ public class RobotContainer {
     // place low
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    // controller.x().toggleOnTrue(toPole);
+    controller.x().toggleOnTrue(autoBalance);
 
     controller.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
 
