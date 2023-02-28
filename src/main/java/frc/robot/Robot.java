@@ -47,7 +47,7 @@ public class Robot extends LoggedRobot {
     // if (isReal()) {
     //   DriverStation.startDataLog(DataLogManager.getLog());
     // }
-    
+
     Logger logger = Logger.getInstance();
 
     // Record metadata

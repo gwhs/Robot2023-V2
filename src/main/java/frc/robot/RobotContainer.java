@@ -122,7 +122,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    m_led.rainbow();
+    m_led.yellow();
 
     Logger logger = Logger.getInstance();
     // Set up the default command for the drivetrain.
