@@ -35,6 +35,15 @@ public final class TestAutoCommands {
   }
 
   public SequentialCommandGroup getAutoCommand() {
+    if (pathName.equals("StraightWithRotation")) { // testing the rotation
+      return new SequentialCommandGroup(
+          new PPSwerveFollower(
+              driveSystem,
+              poseEstimatorSystem,
+              "StraightWithRotation",
+              new PathConstraints(2, 2),
+              true));
+    }
     if (pathName.equals("HajelPath")) {
       return new SequentialCommandGroup(
           new PPSwerveFollower(
@@ -67,7 +76,7 @@ public final class TestAutoCommands {
                   "HajelPathV2",
                   new PathConstraints(3, 2),
                   true)),
-          Commands.waitSeconds(1),
+          Commands.waitSeconds(1), // grab
           new PPSwerveFollower(
               driveSystem,
               poseEstimatorSystem,
@@ -89,6 +98,51 @@ public final class TestAutoCommands {
                   "HajelPathV2Part3",
                   new PathConstraints(3, 2),
                   true)),
+          new AutoBalanceFast(driveSystem));
+    }
+    if (pathName.equals("D-F1E")) {
+      return new SequentialCommandGroup(
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "move12", new PathConstraints(2, 2), true),
+          new MagicMotionPos(mainArm, 210, 0, 0),
+          Commands.waitSeconds(.5),
+          new ParallelCommandGroup(
+              new SequentialCommandGroup(
+                  new MagicMotionPos(mainArm, 0, 0, 0),
+                  Commands.waitSeconds(.5),
+                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
+                  new PPSwerveFollower(
+                      driveSystem, poseEstimatorSystem, "D-F1E", new PathConstraints(2, 2), true))),
+          new AutoBalanceFast(driveSystem));
+    }
+    if (pathName.equals("A2E")) {
+      return new SequentialCommandGroup(
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "move12", new PathConstraints(2, 2), true),
+          new MagicMotionPos(mainArm, 210, 0, 0),
+          Commands.waitSeconds(.5),
+          new ParallelCommandGroup(
+              new SequentialCommandGroup(
+                  new MagicMotionPos(mainArm, 0, 0, 0),
+                  Commands.waitSeconds(.5),
+                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
+                  new PPSwerveFollower(
+                      driveSystem, poseEstimatorSystem, "A2E", new PathConstraints(2, 2), true))),
+          Commands.waitSeconds(1), // grab
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "A2EPart2", new PathConstraints(2, 2), true),
+          new MagicMotionPos(mainArm, 210, 0, 0),
+          new ParallelCommandGroup(
+              new SequentialCommandGroup(
+                  new MagicMotionPos(mainArm, 0, 0, 0),
+                  Commands.waitSeconds(.5),
+                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
+                  new PPSwerveFollower(
+                      driveSystem,
+                      poseEstimatorSystem,
+                      "A2EPart3",
+                      new PathConstraints(2, 2),
+                      true))),
           new AutoBalanceFast(driveSystem));
     }
     return null;
