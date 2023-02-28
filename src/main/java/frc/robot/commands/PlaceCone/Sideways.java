@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Lime;
+package frc.robot.commands.PlaceCone;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -11,12 +11,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
+import frc.robot.subsystems.PoseEstimatorSubsystem;
 
 public class Sideways extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private LimeLightSub limeLight;
   private double[] values = {0, 0, 0};
-  private boolean angleDone = false;
+  private boolean sidewaysDone = false;
+  private PoseEstimatorSubsystem poseEstimatorSubsystem;
   private int noTarget = 0;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
@@ -33,22 +35,29 @@ public class Sideways extends CommandBase {
   private ProfiledPIDController pid = new ProfiledPIDController(P, I, D, constraints);
 
   /** Creates a new AutoAimLime. */
-  public Sideways(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {
+  public Sideways(
+      DrivetrainSubsystem drivetrainSubsystem,
+      PoseEstimatorSubsystem poseEstimatorSubsystem,
+      LimeLightSub limeLightSub) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLight = limeLightSub;
     this.drivetrainSubsystem = drivetrainSubsystem;
+    this.poseEstimatorSubsystem = poseEstimatorSubsystem;
 
-    addRequirements(drivetrainSubsystem);
+    addRequirements(drivetrainSubsystem, limeLightSub);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    angleDone = false;
+    sidewaysDone = false;
     // rotating to align
     pid.reset(Math.toRadians(limeLight.getTx()));
     pid.setGoal(Math.toRadians(0));
     pid.setTolerance(Math.toRadians(1));
+
+    // configure rotation pid
+    System.out.println(poseEstimatorSubsystem.getAngle());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -59,19 +68,20 @@ public class Sideways extends CommandBase {
     values = chassisValuesLower();
     if (limeLight.hasTarget()) {
       noTarget = 0;
-      drivetrainSubsystem.drive(new ChassisSpeeds(.00001, values[1], .00001));
+      drivetrainSubsystem.drive(new ChassisSpeeds(.00001, values[1], values[2]));
     } else {
       noTarget++;
     }
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
     // setpoint just makes sure it's in the tolerance, doesn't work
     if (Math.abs(limeLight.getTx()) < .5) {
-      angleDone = true;
+      sidewaysDone = true;
     } else {
-      angleDone = false;
+      sidewaysDone = false;
     }
+
     if (noTarget >= 10) {
-      angleDone = true;
+      sidewaysDone = true;
     }
   }
 
@@ -85,7 +95,7 @@ public class Sideways extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return angleDone;
+    return sidewaysDone;
   }
 
   public double[] chassisValuesLower() {
