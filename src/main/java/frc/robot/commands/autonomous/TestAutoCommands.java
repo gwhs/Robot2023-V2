@@ -205,6 +205,70 @@ public final class TestAutoCommands {
                       true))),
           new AutoBalanceFast(driveSystem));
     }
+    if (pathName.equals("I2+1")) {
+      return new SequentialCommandGroup(
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "move12", new PathConstraints(2, 2), true),
+          new MagicMotionPos(mainArm, 210, 0, 0),
+          new ParallelCommandGroup(
+              new SequentialCommandGroup(
+                  new MagicMotionPos(mainArm, 0, 0, 0),
+                  Commands.waitSeconds(.5),
+                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
+                  new PPSwerveFollower(
+                      driveSystem, poseEstimatorSystem, "I2+1", new PathConstraints(2, 2), true))),
+          // grab
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "I2+1Part2", new PathConstraints(2, 2), true),
+          // april
+          new MagicMotionPos(mainArm, 210, 0, 0),
+          new ParallelCommandGroup(
+              new SequentialCommandGroup(
+                  new MagicMotionPos(mainArm, 0, 0, 0),
+                  Commands.waitSeconds(.5),
+                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
+                  new PPSwerveFollower(
+                      driveSystem,
+                      poseEstimatorSystem,
+                      "I2+1Part3",
+                      new PathConstraints(2, 2),
+                      true)))
+          // grab
+          );
+    }
+    if (pathName.equals("I2+1E")) {
+      return new SequentialCommandGroup(
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "move12", new PathConstraints(2, 2), true),
+          new MagicMotionPos(mainArm, 210, 0, 0),
+          new ParallelCommandGroup(
+              new SequentialCommandGroup(
+                  new MagicMotionPos(mainArm, 0, 0, 0),
+                  Commands.waitSeconds(.5),
+                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
+                  new PPSwerveFollower(
+                      driveSystem, poseEstimatorSystem, "I2+1", new PathConstraints(2, 2), true))),
+          // grab
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "I2+1Part2", new PathConstraints(2, 2), true),
+          // april
+          new MagicMotionPos(mainArm, 210, 0, 0),
+          new ParallelCommandGroup(
+              new SequentialCommandGroup(
+                  new MagicMotionPos(mainArm, 0, 0, 0),
+                  Commands.waitSeconds(.5),
+                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
+                  new PPSwerveFollower(
+                      driveSystem,
+                      poseEstimatorSystem,
+                      "I2+1Part3",
+                      new PathConstraints(2, 2),
+                      true))),
+          // grab
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "I2+1E", new PathConstraints(2, 2), true),
+          new AutoBalanceFast(driveSystem));
+    }
     return null;
   }
 
