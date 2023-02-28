@@ -153,7 +153,6 @@ public class RobotContainer {
     configureDashboard();
     mainArm.robotInit();
     shaftEncoder.reset();
-    LiveWindow.disableAllTelemetry();
     setupPathChooser();
   }
 
