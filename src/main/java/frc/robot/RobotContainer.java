@@ -25,6 +25,7 @@ import frc.robot.Constants.RobotSetup;
 import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
+import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutoBalanceFast;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
@@ -86,7 +87,7 @@ public class RobotContainer {
   private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub, 0);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
 
-  private final AutoBalanceFast autoBalance = new AutoBalanceFast(drivetrainSubsystem);
+  private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
   // Arm
 
   final List<Obstacle> standardObstacles = FieldConstants.standardObstacles;
