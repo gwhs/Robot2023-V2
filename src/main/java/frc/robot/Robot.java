@@ -47,7 +47,7 @@ public class Robot extends LoggedRobot {
     // if (isReal()) {
     //   DriverStation.startDataLog(DataLogManager.getLog());
     // }
-
+    
     Logger logger = Logger.getInstance();
 
     // Record metadata
@@ -112,6 +112,7 @@ public class Robot extends LoggedRobot {
 
     // Logger.log("/Robot/Battery Voltage", RobotController.getBatteryVoltage());
     // Logger.update();
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
