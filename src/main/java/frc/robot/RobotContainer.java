@@ -83,11 +83,8 @@ public class RobotContainer {
 
   private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub, 0);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
-
-  private final StraightWheel straightWheel1 = new StraightWheel(drivetrainSubsystem);
-  private final StraightWheel straightWheel2 = new StraightWheel(drivetrainSubsystem);
   private final AllLime allLime = new AllLime(drivetrainSubsystem, poseEstimator, limeLightSub);
-  private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
+
   // Arm
 
   final List<Obstacle> standardObstacles = FieldConstants.standardObstacles;
