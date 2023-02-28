@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Lime;
+package frc.robot.commands.PlaceCone;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -31,7 +31,7 @@ public class ToPole extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5,
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 5);
 
-  private double P = .003;
+  private double P = .01;
   private double I = 0;
   private double D = 0;
   private double distanceError;
@@ -45,14 +45,14 @@ public class ToPole extends CommandBase {
     this.limeLight = limeLightSub;
     this.drivetrainSubsystem = drivetrainSubsystem;
 
-    addRequirements(drivetrainSubsystem);
+    addRequirements(drivetrainSubsystem, limeLight);
   }
 
   // Calle d when the command is initially scheduled.
   @Override
   public void initialize() {
     done = false;
-    distanceError = limeLight.getXDistance() - LimeLightConstants.TESTING_VALUE;
+    distanceError = limeLight.getXDistance() - LimeLightConstants.UPPER_DISTANCE_SHOOT;
 
     // rotating to align
     // Pid.reset(distanceError);
@@ -108,7 +108,7 @@ public class ToPole extends CommandBase {
     3 is degrees rotation
     */
 
-    distanceError = limeLight.getXDistance() - LimeLightConstants.TESTING_VALUE;
+    distanceError = limeLight.getXDistance() - LimeLightConstants.UPPER_DISTANCE_SHOOT;
     // pid is broken, so we just do the proportional by self.
     double[] x = new double[3];
     x[0] = P * distanceError;
