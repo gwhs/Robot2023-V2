@@ -68,18 +68,6 @@ public class RobotContainer {
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
-  private final PPIDAutoAim autoAimLime1 =
-      new PPIDAutoAim(
-          drivetrainSubsystem,
-          poseEstimator,
-          limeLightSub,
-          LimeLightConstants.LOWER_DISTANCE_SHOOT);
-  private final PPIDAutoAim autoAimLime2 =
-      new PPIDAutoAim(
-          drivetrainSubsystem,
-          poseEstimator,
-          limeLightSub,
-          LimeLightConstants.UPPER_DISTANCE_SHOOT);
 
   private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub, 0);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
