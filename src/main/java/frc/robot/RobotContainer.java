@@ -338,7 +338,7 @@ public class RobotContainer {
     m_chooser.addOption("I 2 piece and hold", "I2+1");
     m_chooser.addOption("I 2 piece engage and hold", "I2+1E");
     m_chooser.addOption("I 3 piece", "I3");
-    m_chooser.addOption("FUN", "FUN");
+    m_chooser.addOption("FUN", "FUN"); // why?
     m_chooser.addOption("I 1+ and engage", "HajelPath");
     m_chooser.addOption("I 2+ and engage", "HajelPathV2");
 
