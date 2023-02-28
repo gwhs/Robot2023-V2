@@ -11,6 +11,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -28,7 +29,6 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.*;
-
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
 import frc.robot.pathfind.VisGraph;
@@ -152,7 +152,8 @@ public class RobotContainer {
     configureDashboard();
     mainArm.robotInit();
     shaftEncoder.reset();
-
+    LiveWindow.disableAllTelemetry();
+    setupPathChooser();
   }
 
   private GenericEntry maxSpeedAdjustment;
