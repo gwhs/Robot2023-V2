@@ -14,6 +14,7 @@ public class LEDSubsystem extends SubsystemBase {
   private final AddressableLEDBuffer m_ledBuffer;
   // Store what the last hue of the first pixel is
   private int m_rainbowFirstPixelHue;
+  private int NUMBER_LED = 85;
 
   public LEDSubsystem() {
     // PWM port 9
@@ -46,8 +47,20 @@ public class LEDSubsystem extends SubsystemBase {
   //   m_rainbowFirstPixelHue %= 180;
   // }
 
+  // Green and blue are swapped
+  // It is Red, Blue, Green (RBG)
+  // When changing colors make sure to correct
+
   public void yellow() {
-    generalLED(0, 85, 255, 255, 0);
+    generalLED(0, NUMBER_LED, 255, 70, 0);
+  }
+
+  public void purple() {
+    generalLED(0, NUMBER_LED, 255, 0, 255);
+  }
+
+  public void white() {
+    generalLED(0, NUMBER_LED, 0, 0, 0);
   }
 
   @Override
@@ -57,7 +70,7 @@ public class LEDSubsystem extends SubsystemBase {
 
   public void generalLED(int startLED, int endLED, int redColor, int greenColor, int blueColor) {
     for (var i = startLED; i < endLED; i++) {
-      m_ledBuffer.setRGB(i, redColor, greenColor, blueColor);
+      m_ledBuffer.setRGB(i, redColor, blueColor, greenColor);
     }
   }
 }

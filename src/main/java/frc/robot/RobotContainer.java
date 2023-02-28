@@ -97,7 +97,7 @@ public class RobotContainer {
 
   // mikhail
   // addressableLED
-  public LEDSubsystem m_led = new LEDSubsystem();
+  public final LEDSubsystem m_led = new LEDSubsystem();
 
   HashMap<String, Command> eventMap = new HashMap<>();
 
@@ -122,7 +122,8 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    m_led.yellow();
+    // calls the function
+    m_led.white();
 
     Logger logger = Logger.getInstance();
     // Set up the default command for the drivetrain.
@@ -222,7 +223,7 @@ public class RobotContainer {
     // rotate
     controller.leftBumper().onTrue(sideways);
     // rotate
-    controller.rightBumper().onTrue(rotate); //
+    controller.rightBumper().onTrue(rotate);
 
     controllertwo
         .back()
@@ -301,6 +302,12 @@ public class RobotContainer {
                 new MagicMotionPos(mainArm, 0, 0, 0),
                 Commands.waitSeconds(.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
+
+    // change LEDStrip colors
+
+    controller.a().onTrue(Commands.runOnce(() -> m_led.yellow(), m_led));
+
+    controller.b().onTrue(Commands.runOnce(() -> m_led.purple(), m_led));
   }
 
   private void configureLimelightBindings() {
