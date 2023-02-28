@@ -2,15 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Lime;
+package frc.robot.commands.PlaceCone;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.LimeLightConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
@@ -43,20 +41,22 @@ public class PPIDAutoAim extends CommandBase {
   private double angleD = 0;
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
-
-  private double positionP = .005;
+  private double targetDistance = 0;
+  private double positionP = .01;
 
   /** Creates a new PPIDAutoAim. */
   public PPIDAutoAim(
       DrivetrainSubsystem drivetrainSubsystem,
       PoseEstimatorSubsystem poseEstimatorSubsystem,
-      LimeLightSub limeLightSub) {
+      LimeLightSub limeLightSub,
+      double targetDistance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLight = limeLightSub;
     this.drivetrainSubsystem = drivetrainSubsystem;
+    this.targetDistance = targetDistance;
 
-    addRequirements(limeLight);
-    addRequirements(drivetrainSubsystem);
+    addRequirements(limeLight, drivetrainSubsystem, poseEstimatorSubsystem);
+    // addRequirements(drivetrainSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -65,7 +65,7 @@ public class PPIDAutoAim extends CommandBase {
     angleDone = false;
     sidewaysDone = false;
     // calculates how far it is from target
-    distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
+    distanceError = limeLight.getXDistance() - targetDistance;
 
     // configuring rotation pid
     anglePid.reset(Math.toRadians(limeLight.getAngle()));
@@ -76,6 +76,7 @@ public class PPIDAutoAim extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
     if (limeLight.hasTarget()) {
       // calculates drive values, pid.calculate called in this function
       noTargets = 0;
@@ -102,14 +103,15 @@ public class PPIDAutoAim extends CommandBase {
     if (noTargets >= 10) {
       sidewaysDone = true;
       angleDone = true;
+      System.out.println("target is gone!");
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    SmartDashboard.putNumber("Final Horiz-error", limeLight.getTx());
-    SmartDashboard.putNumber("Final Vert-error", limeLight.getTy());
+    System.out.println(
+        "Distance error: " + distanceError + "Dist: " + sidewaysDone + "angle: " + angleDone);
     drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, 0));
   }
 
@@ -129,21 +131,20 @@ public class PPIDAutoAim extends CommandBase {
     use sin and cos to get values to reach max speed
     not really sure about the angle yet.
     */
-    distanceError = limeLight.getXDistance() - LimeLightConstants.LOWER_DISTANCE_SHOOT;
+    distanceError = limeLight.getXDistance() - targetDistance;
     double[] x = new double[3];
-    double d = (positionP) * distanceError;
-    x[0] = d;
-    x[1] = 0;
-    x[2] = anglePid.calculate(limeLight.getAngle());
-    System.out.println(
-        "Distance error: "
-            + distanceError
-            + " Velocity: "
-            + d
-            + "Angle error: "
-            + limeLight.getTx()
-            + "angleSpeed: "
-            + x[2]);
+
+    if (!isFinished()) {
+      double d = (positionP) * distanceError;
+      x[0] = d;
+      x[1] = 0;
+      x[2] = anglePid.calculate(limeLight.getAngle());
+      System.out.println(distanceError + "velo" + d);
+    } else {
+      x[0] = 0;
+      x[1] = 0;
+      x[2] = 0;
+    }
     return x;
   }
 }

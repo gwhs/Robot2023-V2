@@ -37,7 +37,7 @@ public final class Constants {
 
   public static final class DrivetrainConstants {
 
-    public static final boolean ADD_TO_DASHBOARD = true;
+    public static final boolean ADD_TO_DASHBOARD = false;
 
     /**
      * The left-to-right distance between the drivetrain wheels
@@ -193,9 +193,8 @@ public final class Constants {
     public static final double CAMERA_HEIGHT = 87;
     public static final double TARGET_HEIGHT = 61;
     public static final double MOUNTING_ANGLE = -19;
-    public static final double LOWER_DISTANCE_SHOOT = 79;
-    public static final double TESTING_VALUE = 42;
-    public static final double UPPER_ANGLE_SHOOT = 2;
+    public static final double LOWER_DISTANCE_SHOOT = 84;
+    public static final double UPPER_DISTANCE_SHOOT = 42;
   }
 
   public static final class Arm {

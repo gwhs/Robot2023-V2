@@ -11,6 +11,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.RobotSetup;
 import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
@@ -26,12 +28,9 @@ import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalanceFast;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
-import frc.robot.commands.Lime.AfterPPID;
-import frc.robot.commands.Lime.ChangePipeline;
-import frc.robot.commands.Lime.PPIDAutoAim;
-import frc.robot.commands.Lime.Rotate;
-import frc.robot.commands.Lime.Sideways;
-import frc.robot.commands.Lime.ToPole;
+import frc.robot.commands.PlaceCone.*;
+import frc.robot.commands.ShuffleBoardBen;
+
 import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
@@ -71,14 +70,21 @@ public class RobotContainer {
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
-  private final PPIDAutoAim autoAimLime =
-      new PPIDAutoAim(drivetrainSubsystem, poseEstimator, limeLightSub);
+  private final PPIDAutoAim autoAimLime1 =
+      new PPIDAutoAim(
+          drivetrainSubsystem,
+          poseEstimator,
+          limeLightSub,
+          LimeLightConstants.LOWER_DISTANCE_SHOOT);
+  private final PPIDAutoAim autoAimLime2 =
+      new PPIDAutoAim(
+          drivetrainSubsystem,
+          poseEstimator,
+          limeLightSub,
+          LimeLightConstants.UPPER_DISTANCE_SHOOT);
 
-  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, 0);
-  private final Sideways sideways = new Sideways(drivetrainSubsystem, limeLightSub);
-  private final ToPole toPole = new ToPole(drivetrainSubsystem, limeLightSub);
-  private final AfterPPID afterPPID =
-      new AfterPPID(drivetrainSubsystem, poseEstimator, limeLightSub);
+  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub, 0);
+  private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final AutoBalanceFast autoBalance = new AutoBalanceFast(drivetrainSubsystem);
   // Arm
@@ -87,6 +93,7 @@ public class RobotContainer {
   final List<Obstacle> cablePath = FieldConstants.cablePath;
   // final List<Obstacle> obstacles = new ArrayList<Obstacle>();
   // final List<Obstacle> obstacles = FieldConstants.obstacles;
+  private final AllLime allLime = new AllLime(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   // VisGraph AStarMap = new VisGraph();
   // final Node finalNode = new Node(4, 4, Rotation2d.fromDegrees(180));
@@ -212,32 +219,32 @@ public class RobotContainer {
     // Back button resets the robot pose
 
     // Auto aim
-    controller.b().onTrue(new ChangePipeline(limeLightSub));
+    // controller.b().onTrue(new ChangePipeline(limeLightSub));
     // rotate
-    controller.leftBumper().onTrue(sideways);
+    controller.leftBumper().onTrue(rotate);
     // rotate
-    controller.rightBumper().onTrue(rotate); //
+    controller.rightBumper().onTrue(allLime); //
 
     controllertwo
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    // controller
-    // // Place mid
-    // .x // button
-    // ()
-    // .onTrue(angleBenCommand); // add a button
+    controller
+        // Place mid
+        .x // button
+        ()
+        .onTrue(sideways); // add a button
     // place low
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    // controller.x().toggleOnTrue(toPole);
+    controller.x().onTrue(new ChangePipeline(limeLightSub));
+    controller.b().onTrue(rotate);
+    // controller.y().onTrue(autoAimLime1);
 
-    controller.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
-
-    // controllertwo
-    // .x // button
-    // ()
-    // .onTrue(angleBenCommand); // add a button
+    controllertwo
+        .x // button
+        ()
+        .onTrue(new ChangePipeline(limeLightSub)); // add a button
     // place low
     controllertwo.a().toggleOnTrue(fieldHeadingDriveCommand);
 
@@ -275,6 +282,7 @@ public class RobotContainer {
     // whileTrue(new PPAStar(drivetrainSubsystem, poseEstimator,
     // new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
 
+    // controller.y().onTrue(straightWheel1);
     controller
         // Place high
         .y()
@@ -292,7 +300,7 @@ public class RobotContainer {
         .y()
         .onTrue(
             Commands.sequence(
-                new MagicMotionPos(mainArm, 210, 0, 0),
+                new MagicMotionPos(mainArm, 190, 0, 0),
                 Commands.waitSeconds(.5),
                 new MagicMotionPos(mainArm, 0, 0, 0),
                 Commands.waitSeconds(.5),
