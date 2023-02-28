@@ -12,9 +12,9 @@ public class LEDSubsystem extends SubsystemBase {
 
   private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
+  private int NUMBER_LED = 85;
   // Store what the last hue of the first pixel is
   private int m_rainbowFirstPixelHue;
-  private int NUMBER_LED = 85;
 
   public LEDSubsystem() {
     // PWM port 9
@@ -32,20 +32,25 @@ public class LEDSubsystem extends SubsystemBase {
     m_led.start();
   }
 
-  // public void rainbow() {
-  //   // For every pixel
-  //   for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-  //     // Calculate the hue - hue is easier for rainbows because the color
-  //     // shape is a circle so only one value needs to precess
-  //     final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
-  //     // Set the value
-  //     m_ledBuffer.setHSV(i, hue, 255, 128);
-  //   }
-  //   // Increase by to make the rainbow "move"
-  //   m_rainbowFirstPixelHue += 3;
-  //   // Check bounds
-  //   m_rainbowFirstPixelHue %= 180;
-  // }
+// BIG buggy
+// Make an if-statement or some periodic thing so that when a button is pressed the for loop breaks
+// Then the light should change to the desired color (either yellow or purple)
+// This is so that the actual rainbow stops changing the incoming changes
+
+  public void rainbow() {
+    // For every pixel
+    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+      // Calculate the hue - hue is easier for rainbows because the color
+      // shape is a circle so only one value needs to precess
+      final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
+      // Set the value
+      m_ledBuffer.setHSV(i, hue, 255, 128);
+    }
+    // Increase by to make the rainbow "move"
+    m_rainbowFirstPixelHue += 3;
+    // Check bounds
+    m_rainbowFirstPixelHue %= 180;
+  }
 
   // Green and blue are swapped
   // It is Red, Blue, Green (RBG)
@@ -59,12 +64,14 @@ public class LEDSubsystem extends SubsystemBase {
     generalLED(0, NUMBER_LED, 255, 0, 255);
   }
 
-  public void white() {
+  public void clear() {
     generalLED(0, NUMBER_LED, 0, 0, 0);
   }
 
   @Override
   public void periodic() {
+    rainbow();
+
     m_led.setData(m_ledBuffer);
   }
 

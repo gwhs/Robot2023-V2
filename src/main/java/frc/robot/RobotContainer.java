@@ -27,7 +27,6 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.Lime.AfterPPID;
-import frc.robot.commands.Lime.ChangePipeline;
 import frc.robot.commands.Lime.PPIDAutoAim;
 import frc.robot.commands.Lime.Rotate;
 import frc.robot.commands.Lime.Sideways;
@@ -95,8 +94,7 @@ public class RobotContainer {
   public VisGraph standardMap = new VisGraph();
   public VisGraph cableMap = new VisGraph();
 
-  // mikhail
-  // addressableLED
+  // LEDStrips
   public final LEDSubsystem m_led = new LEDSubsystem();
 
   HashMap<String, Command> eventMap = new HashMap<>();
@@ -122,8 +120,8 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    // calls the function
-    m_led.white();
+    // Sets the color on robot start
+    m_led.rainbow();
 
     Logger logger = Logger.getInstance();
     // Set up the default command for the drivetrain.
@@ -219,7 +217,8 @@ public class RobotContainer {
     // Back button resets the robot pose
 
     // Auto aim
-    controller.b().onTrue(new ChangePipeline(limeLightSub));
+    // Revert - LED
+    // controller.b().onTrue(new ChangePipeline(limeLightSub));
     // rotate
     controller.leftBumper().onTrue(sideways);
     // rotate
@@ -235,7 +234,8 @@ public class RobotContainer {
         ()
         .onTrue(angleBenCommand); // add a button
     // place low
-    controller.a().toggleOnTrue(fieldHeadingDriveCommand);
+    // Change back - LED
+    // controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
     // controller.x().toggleOnTrue(toPole);
 
