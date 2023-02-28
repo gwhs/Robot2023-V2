@@ -7,6 +7,7 @@ package frc.robot.GyroMoment;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants.DrivetrainConstants;
+import org.littletonrobotics.junction.Logger;
 
 /** Add your docs here. */
 public class PigeonGyro extends AbstractGyro {
@@ -39,22 +40,30 @@ public class PigeonGyro extends AbstractGyro {
 
   @Override
   public double getAngle() {
-    return pigeon.getAngle();
+    double angle = pigeon.getAngle();
+    Logger.getInstance().recordOutput("Gyro/Angle", angle);
+    return angle;
   }
 
   @Override
   public double getYaw() {
-    return pigeon.getYaw();
+    double yaw = pigeon.getYaw();
+    Logger.getInstance().recordOutput("Gyro/Yaw", yaw);
+    return yaw;
   }
 
   @Override
   public double getPitch() {
-    return pigeon.getPitch();
+    double pitch = pigeon.getPitch();
+    Logger.getInstance().recordOutput("Gyro/Pitch", pitch);
+    return pitch;
   }
 
   @Override
   public double getRoll() {
-    return pigeon.getRoll();
+    double roll = pigeon.getRoll();
+    Logger.getInstance().recordOutput("Gyro/Roll", roll);
+    return roll;
   }
 
   @Override
