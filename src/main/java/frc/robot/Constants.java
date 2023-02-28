@@ -37,7 +37,7 @@ public final class Constants {
 
   public static final class DrivetrainConstants {
 
-    public static final boolean ADD_TO_DASHBOARD = false;
+    public static final boolean ADD_TO_DASHBOARD = true;
 
     /**
      * The left-to-right distance between the drivetrain wheels
