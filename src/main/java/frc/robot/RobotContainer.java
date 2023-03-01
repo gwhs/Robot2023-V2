@@ -6,13 +6,11 @@ package frc.robot;
 
 import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
 
-import com.fasterxml.jackson.databind.type.PlaceholderForType;
 import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -21,18 +19,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.RobotSetup;
 import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalance;
-import frc.robot.commands.AutoBalanceFast;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.*;
-import frc.robot.commands.ShuffleBoardBen;
-
 import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
@@ -205,7 +199,7 @@ public class RobotContainer {
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    //redo offsets
+    // redo offsets
     controller
         .start()
         .onTrue(
@@ -213,50 +207,44 @@ public class RobotContainer {
 
     // Back button resets the robot pose
 
-
     controller.leftBumper().onTrue(rotate);
-  
-    //throw cubes
-   // controller.rightBumper().onTrue(); //
+
+    // throw cubes
+    // controller.rightBumper().onTrue(); //
 
     controller.x().onTrue(new PlaceMid()); // add a button
     // place low
     controller.a().toggleOnTrue(new PlaceLow());
-    //fieldHeadingDriveCommand
+    // fieldHeadingDriveCommand
 
     controller.y().onTrue(new PlaceHigh());
-    
 
-    //b doesn't have binding rn
-    //controller.b().onTrue();\
+    // b doesn't have binding rn
+    // controller.b().onTrue();\
     controllertwo
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    //redo offsets
+    // redo offsets
     controllertwo
         .start()
         .onTrue(
             Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
 
-    
-    //chucks far
+    // chucks far
     controllertwo.leftBumper().onTrue(rotate);
     // chucks light
     controllertwo.rightBumper().onTrue(allLime); //
-    
 
     controllertwo.x().onTrue(new PlaceMid()); // add a button
-    
+
     controllertwo.a().toggleOnTrue(new PlaceLow());
-    //fieldHeadingDriveCommand
+    // fieldHeadingDriveCommand
 
     controllertwo.y().onTrue(new AutoBalance(drivetrainSubsystem));
 
-    //change between cube/cone
-    //controllertwo.b().onTrue()
-
-    
+    // change between cube/cone
+    // controllertwo.b().onTrue()
 
     // controller.y().onTrue(straightWheel1);
     controller
