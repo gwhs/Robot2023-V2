@@ -6,6 +6,7 @@ package frc.robot;
 
 import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
 
+import com.fasterxml.jackson.databind.type.PlaceholderForType;
 import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
@@ -220,9 +221,10 @@ public class RobotContainer {
     controller.rightBumper().onTrue(allLime); //
 
     
-    controller.x().onTrue(allLime); // add a button
+    controller.x().onTrue(new PlaceMid()); // add a button
     // place low
-    controller.a().toggleOnTrue(fieldHeadingDriveCommand);
+    controller.a().toggleOnTrue(new PlaceLow);
+    fieldHeadingDriveCommand
 
     controller.y().onTrue();
     controller.b().onTrue();
