@@ -73,6 +73,10 @@ public class RobotContainer {
   private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
   private final AllLime allLime = new AllLime(drivetrainSubsystem, poseEstimator, limeLightSub);
 
+<<<<<<< HEAD
+=======
+  private final AutoBalanceFast autoBalance = new AutoBalanceFast(drivetrainSubsystem);
+>>>>>>> de1314eacffebdae3133bd14314ef1f3dac2a49f
   // Arm
 
   final List<Obstacle> standardObstacles = FieldConstants.standardObstacles;
@@ -138,7 +142,12 @@ public class RobotContainer {
     configureDashboard();
     mainArm.robotInit();
     shaftEncoder.reset();
+<<<<<<< HEAD
     setupPathChooser();
+=======
+
+    // setupPathChooser();
+>>>>>>> de1314eacffebdae3133bd14314ef1f3dac2a49f
   }
 
   private GenericEntry maxSpeedAdjustment;
@@ -330,6 +339,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+<<<<<<< HEAD
     // return new TestAutonomous(drivetrainSubsystem, poseEstimator);
     return new PPSwerveFollower(
         drivetrainSubsystem,
@@ -339,6 +349,12 @@ public class RobotContainer {
         true);
 
     // return Commands.print("Starting Command " + m_chooser.getSelected());
+=======
+    // use return TestAutoCommands when using chris
+
+
+    return vendingMachine.getAutoCommand();
+>>>>>>> de1314eacffebdae3133bd14314ef1f3dac2a49f
   }
 
   private static double modifyAxis(double value) {
