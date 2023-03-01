@@ -71,18 +71,6 @@ public class RobotContainer {
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
-  private final PPIDAutoAim autoAimLime1 =
-      new PPIDAutoAim(
-          drivetrainSubsystem,
-          poseEstimator,
-          limeLightSub,
-          LimeLightConstants.LOWER_DISTANCE_SHOOT);
-  private final PPIDAutoAim autoAimLime2 =
-      new PPIDAutoAim(
-          drivetrainSubsystem,
-          poseEstimator,
-          limeLightSub,
-          LimeLightConstants.UPPER_DISTANCE_SHOOT);
 
   private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub, 0);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
@@ -212,7 +200,12 @@ public class RobotContainer {
     // Start button reseeds the steer motors to fix dead wheel
     this.startAndBackButton();
 
-    controllertwo
+    controller
+        .back()
+        .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
+
+    //redo offsets
+    controller
         .start()
         .onTrue(
             Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
@@ -226,20 +219,13 @@ public class RobotContainer {
     // rotate
     controller.rightBumper().onTrue(allLime); //
 
-    controllertwo
-        .back()
-        .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
-
-    controller
-        // Place mid
-        .x // button
-        ()
-        .onTrue(sideways); // add a button
+    
+    controller.x().onTrue(allLime); // add a button
     // place low
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    controller.x().onTrue(new ChangePipeline(limeLightSub));
-    controller.b().onTrue(rotate);
+    controller.y().onTrue();
+    controller.b().onTrue();
     // controller.y().onTrue(autoAimLime1);
 
     controllertwo
@@ -258,30 +244,7 @@ public class RobotContainer {
     // .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0),
     // drivetrainSubsystem));
 
-    // controller
-    // .y()
-    // .whileTrue(
-    // new WPIAStar(
-    // drivetrainSubsystem,
-    // poseEstimator,
-    // new TrajectoryConfig(2, 2),
-    // finalNode,
-    // obstacles,
-    // AStarMap));
 
-    // controller.x().whileTrue(new DriveWithPathPlanner(drivetrainSubsystem,
-    // poseEstimator, new PathConstraints(2, 2),
-    // new PathPoint(new Translation2d(2.33, 2.03),
-    // drivetrainSubsystem.getGyroscopeRotation(), Rotation2d.fromDegrees(270)),
-    // new PathPoint(new Translation2d(3, 3),
-    // drivetrainSubsystem.getGyroscopeRotation(), Rotation2d.fromDegrees(180)),
-    // new PathPoint(new Translation2d(2, 2),
-    // drivetrainSubsystem.getGyroscopeRotation(), Rotation2d.fromDegrees(270)),
-    // new PathPoint(new Translation2d(Units.inchesToMeters(200), 2.03),
-    // drivetrainSubsystem.getGyroscopeRotation(), Rotation2d.fromDegrees(270))));
-    // controller.x().
-    // whileTrue(new PPAStar(drivetrainSubsystem, poseEstimator,
-    // new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
 
     // controller.y().onTrue(straightWheel1);
     controller
