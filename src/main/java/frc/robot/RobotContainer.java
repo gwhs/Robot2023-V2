@@ -213,40 +213,50 @@ public class RobotContainer {
 
     // Back button resets the robot pose
 
-    // Auto aim
-    // controller.b().onTrue(new ChangePipeline(limeLightSub));
-    // rotate
-    controller.leftBumper().onTrue(rotate);
-    // rotate
-    controller.rightBumper().onTrue(allLime); //
 
-    
+    controller.leftBumper().onTrue(rotate);
+  
+    //throw cubes
+   // controller.rightBumper().onTrue(); //
+
     controller.x().onTrue(new PlaceMid()); // add a button
     // place low
-    controller.a().toggleOnTrue(new PlaceLow);
-    fieldHeadingDriveCommand
+    controller.a().toggleOnTrue(new PlaceLow());
+    //fieldHeadingDriveCommand
 
-    controller.y().onTrue();
-    controller.b().onTrue();
-    // controller.y().onTrue(autoAimLime1);
+    controller.y().onTrue(new PlaceHigh());
+    
 
+    //b doesn't have binding rn
+    //controller.b().onTrue();\
     controllertwo
-        .x // button
-        ()
-        .onTrue(new ChangePipeline(limeLightSub)); // add a button
-    // place low
-    controllertwo.a().toggleOnTrue(fieldHeadingDriveCommand);
+        .back()
+        .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    // controller.x().toggleOnTrue(toPole);
+    //redo offsets
+    controllertwo
+        .start()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
 
-    controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
+    
+    //chucks far
+    controllertwo.leftBumper().onTrue(rotate);
+    // chucks light
+    controllertwo.rightBumper().onTrue(allLime); //
+    
 
-    // controller
-    // .a()
-    // .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0),
-    // drivetrainSubsystem));
+    controllertwo.x().onTrue(new PlaceMid()); // add a button
+    
+    controllertwo.a().toggleOnTrue(new PlaceLow());
+    //fieldHeadingDriveCommand
 
+    controllertwo.y().onTrue(new AutoBalance(drivetrainSubsystem));
 
+    //change between cube/cone
+    //controllertwo.b().onTrue()
+
+    
 
     // controller.y().onTrue(straightWheel1);
     controller
