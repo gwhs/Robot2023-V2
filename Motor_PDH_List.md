@@ -14,3 +14,10 @@ Back Right (TM) - 2
 Back Right (DM) - 3
 
 Arm Motor - 7
+ground pickup spark - 6
+ground pickup rotation motor spark - 5
+mini power module - 8
+
+pigeon - 4
+back right encoder - 2
+front right -3
