@@ -35,6 +35,8 @@ import frc.robot.pathfind.VisGraph;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.LEDSubsystem.LEDMode;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.HashMap;
@@ -98,6 +100,9 @@ public class RobotContainer {
   public VisGraph standardMap = new VisGraph();
   public VisGraph cableMap = new VisGraph();
 
+  // LEDStrips
+  public final LEDSubsystem m_led = new LEDSubsystem();
+
   HashMap<String, Command> eventMap = new HashMap<>();
 
   private final FieldHeadingDriveCommand fieldHeadingDriveCommand =
@@ -121,6 +126,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
     Logger logger = Logger.getInstance();
     // Set up the default command for the drivetrain.
     drivetrainSubsystem.setDefaultCommand(
@@ -205,6 +211,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
     // Start button reseeds the steer motors to fix dead wheel
     this.startAndBackButton();
 
@@ -216,10 +223,12 @@ public class RobotContainer {
     // Back button resets the robot pose
 
     // Auto aim
+
     // controller.b().onTrue(new ChangePipeline(limeLightSub));
     // rotate
     controller.leftBumper().onTrue(rotate);
     // rotate
+
     controller.rightBumper().onTrue(allLime); //
 
     controllertwo
@@ -232,6 +241,7 @@ public class RobotContainer {
         ()
         .onTrue(sideways); // add a button
     // place low
+
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
     controller.x().onTrue(new ChangePipeline(limeLightSub));
@@ -302,6 +312,10 @@ public class RobotContainer {
                 new MagicMotionPos(mainArm, 0, 0, 0),
                 Commands.waitSeconds(.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
+
+    // change LEDStrip colors
+
+    // controller.a().onTrue(Commands.runOnce(() -> toggleLED()));
   }
 
   private void configureLimelightBindings() {
@@ -347,6 +361,14 @@ public class RobotContainer {
     m_chooser.addOption("I 1+ and engage", "HajelPath");
 
     tab.add(m_chooser);
+  }
+
+  private void toggleLED() {
+    if (m_led.getLedMode() == LEDMode.YELLOW) {
+      m_led.setLedMode(LEDMode.PURPLE);
+    } else {
+      m_led.setLedMode(LEDMode.YELLOW);
+    }
   }
 
   /**
