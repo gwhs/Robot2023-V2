@@ -16,8 +16,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.GyroMoment.WrappedGyro;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import javax.swing.SpringLayout.Constraints;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import java.util.List;
 
@@ -69,7 +67,7 @@ public class AutoBalance extends CommandBase {
     maxSpeedDefault = 0.5;
     requiredEngageTimeDefault = 0.1;
     requiredStateChangeTimeDefault = 0.008;
-    initialSpeedDefault = 0.5; 
+    initialSpeedDefault = 0.5;
     epsilonRollRateDefault = 13;
 
     engageTimer = new Timer();
