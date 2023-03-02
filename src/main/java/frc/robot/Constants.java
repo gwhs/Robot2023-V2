@@ -34,10 +34,11 @@ public final class Constants {
   public static final RobotSetup calliope =
       new RobotSetup("calliope", "CAN_Network", GyroType.NAVX);
   public static final RobotSetup spring = new RobotSetup("spring", "rio", GyroType.PIGEON);
+  public static final RobotSetup chuck = new RobotSetup("chuck", "CAN_Network", GyroType.PIGEON);
 
   public static final class DrivetrainConstants {
 
-    public static final boolean ADD_TO_DASHBOARD = false;
+    public static final boolean ADD_TO_DASHBOARD = true;
 
     /**
      * The left-to-right distance between the drivetrain wheels
