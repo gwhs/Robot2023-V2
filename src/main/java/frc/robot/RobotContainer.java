@@ -35,6 +35,7 @@ import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
+import frc.robot.subsystems.LimelightHelpers.LimelightHelpers;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.HashMap;
 import java.util.List;
@@ -217,7 +218,7 @@ public class RobotContainer {
     controller.a().toggleOnTrue(new PlaceLow());
     // fieldHeadingDriveCommand
 
-    controller.y().onTrue(new PlaceHigh());
+    controller.y().onTrue(new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub));
 
     // b doesn't have binding rn
     // controller.b().onTrue();\

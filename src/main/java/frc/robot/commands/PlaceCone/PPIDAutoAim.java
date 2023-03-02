@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
-import frc.robot.subsystems.PoseEstimatorSubsystem;
 
 public class PPIDAutoAim extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
@@ -47,7 +46,6 @@ public class PPIDAutoAim extends CommandBase {
   /** Creates a new PPIDAutoAim. */
   public PPIDAutoAim(
       DrivetrainSubsystem drivetrainSubsystem,
-      PoseEstimatorSubsystem poseEstimatorSubsystem,
       LimeLightSub limeLightSub,
       double targetDistance) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -55,7 +53,7 @@ public class PPIDAutoAim extends CommandBase {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.targetDistance = targetDistance;
 
-    addRequirements(limeLight, drivetrainSubsystem, poseEstimatorSubsystem);
+    addRequirements(limeLight, drivetrainSubsystem);
     // addRequirements(drivetrainSubsystem);
   }
 
