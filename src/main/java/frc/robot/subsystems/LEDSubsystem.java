@@ -79,6 +79,10 @@ public class LEDSubsystem extends SubsystemBase {
     generalLED(0, NUMBER_LED, 255, 0, 255);
   }
 
+  public void emergency() {
+    generalLED(0, NUMBER_LED, 255, 0, 0);
+  }
+
   public void clear() {
     generalLED(0, NUMBER_LED, 0, 0, 0);
   }
@@ -88,7 +92,7 @@ public class LEDSubsystem extends SubsystemBase {
     System.out.println(ledMode);
     switch (ledMode) {
       case RAINBOW:
-        rainbow();
+        yellow();
         break;
       case EMERGENCY:
         purple();
