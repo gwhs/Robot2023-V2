@@ -40,6 +40,11 @@ public final class TestAutoCommands {
   }
 
   public SequentialCommandGroup getAutoCommand() {
+    if (pathName.equals("TestCurve")) {
+      return new SequentialCommandGroup(
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "TestCurve", new PathConstraints(1, 1), true));
+    }
     if (pathName.equals("StraightWithRotation")) { // testing the rotation
       return new SequentialCommandGroup(
           new PPSwerveFollower(
@@ -79,7 +84,7 @@ public final class TestAutoCommands {
                   driveSystem,
                   poseEstimatorSystem,
                   "HajelPathV2",
-                  new PathConstraints(3, 2),
+                  new PathConstraints(1, 1),
                   true)),
           Commands.waitSeconds(1), // grab
           new PPSwerveFollower(
@@ -175,7 +180,7 @@ public final class TestAutoCommands {
                   Commands.waitSeconds(.5),
                   new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
                   new PPSwerveFollower(
-                      driveSystem, poseEstimatorSystem, "F1+1", new PathConstraints(2, 2), true))),
+                      driveSystem, poseEstimatorSystem, "F1+1", new PathConstraints(1, 1), true))),
           Commands.waitSeconds(1) // grab
           );
     }
@@ -190,7 +195,7 @@ public final class TestAutoCommands {
                   Commands.waitSeconds(.5),
                   new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
                   new PPSwerveFollower(
-                      driveSystem, poseEstimatorSystem, "G2E", new PathConstraints(2, 2), true))),
+                      driveSystem, poseEstimatorSystem, "G2E", new PathConstraints(1, 1), true))),
           Commands.waitSeconds(1), // grab
           new PPSwerveFollower(
               driveSystem, poseEstimatorSystem, "G2EPart2", new PathConstraints(2, 2), true),
