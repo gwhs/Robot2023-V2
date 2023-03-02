@@ -19,7 +19,7 @@ public class PlaceMid extends SequentialCommandGroup {
   public PlaceMid(DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new PPIDAutoAim(drivetrainSubsystem, LimeLightConstants.LOWER_DISTANCE_SHOOT)
+    addCommands(new PPIDAutoAim(drivetrainSubsystem,limeLightSub, LimeLightConstants.LOWER_DISTANCE_SHOOT)
     //missing shoot command
     );
   }
