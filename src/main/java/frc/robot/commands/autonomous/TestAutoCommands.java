@@ -84,14 +84,14 @@ public final class TestAutoCommands {
                   driveSystem,
                   poseEstimatorSystem,
                   "HajelPathV2",
-                  new PathConstraints(1, 1),
+                  new PathConstraints(1, 2),
                   true)),
           Commands.waitSeconds(1), // grab
           new PPSwerveFollower(
               driveSystem,
               poseEstimatorSystem,
               "HajelPathV2Part2",
-              new PathConstraints(1, 1),
+              new PathConstraints(1, 2),
               true),
           Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
           new AllLime(
@@ -107,7 +107,7 @@ public final class TestAutoCommands {
                   driveSystem,
                   poseEstimatorSystem,
                   "HajelPathV2Part3",
-                  new PathConstraints(1, 1),
+                  new PathConstraints(1, 2),
                   true)),
           new AutoBalance(driveSystem));
     }
