@@ -244,7 +244,7 @@ public class RobotContainer {
 
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    controller.x().onTrue(new ChangePipeline(limeLightSub));
+    // controller.x().onTrue(new ChangePipeline(limeLightSub));
     controller.b().onTrue(rotate);
     // controller.y().onTrue(autoAimLime1);
 
@@ -255,7 +255,9 @@ public class RobotContainer {
     // place low
     controllertwo.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    // controller.x().toggleOnTrue(toPole);
+    controller
+        .x()
+        .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
 
     controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
 
