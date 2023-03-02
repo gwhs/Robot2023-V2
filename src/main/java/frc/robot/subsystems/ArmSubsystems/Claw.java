@@ -4,23 +4,21 @@
 
 package frc.robot.subsystems.ArmSubsystems;
 
-import frc.robot.Constants;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.IdleMode;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Claw extends SubsystemBase {
   /** Creates a new claw. */
   private CANSparkMax m_motor;
+
   private SparkMaxPIDController m_pidController;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
   private RelativeEncoder m_encoder;
-
 
   public Claw(int id, CANSparkMax.MotorType type) {
     m_motor = new CANSparkMax(id, type);
@@ -28,35 +26,31 @@ public class Claw extends SubsystemBase {
     m_motor.setInverted(false);
     m_encoder = m_motor.getEncoder();
     m_encoder.setPosition(0);
-    
+
     /**
-     * In order to use PID functionality for a controller, a SparkMaxPIDController object
-     * is constructed by calling the getPIDController() method on an existing
-     * CANSparkMax object
+     * In order to use PID functionality for a controller, a SparkMaxPIDController object is
+     * constructed by calling the getPIDController() method on an existing CANSparkMax object
      */
     m_pidController = m_motor.getPIDController();
-    
-  
+
     /**
-     * By default, the PID controller will use the Hall sensor from a NEO for its
-     * feedback device. Instead, we can set the feedback device to the alternate
-     * encoder object
+     * By default, the PID controller will use the Hall sensor from a NEO for its feedback device.
+     * Instead, we can set the feedback device to the alternate encoder object
      */
     m_pidController.setFeedbackDevice(m_encoder);
 
     /**
-     * From here on out, code looks exactly like running PID control with the 
-     * built-in NEO encoder, but feedback will come from the alternate encoder
-     */ 
-
+     * From here on out, code looks exactly like running PID control with the built-in NEO encoder,
+     * but feedback will come from the alternate encoder
+     */
 
     // PID coefficients
-    kP = 0.1; 
+    kP = 0.1;
     kI = 1e-4;
-    kD = 1; 
-    kIz = 0; 
-    kFF = 0; 
-    kMaxOutput = 1; 
+    kD = 1;
+    kIz = 0;
+    kFF = 0;
+    kMaxOutput = 1;
     kMinOutput = -1;
 
     // set PID coefficients
@@ -78,32 +72,31 @@ public class Claw extends SubsystemBase {
     SmartDashboard.putNumber("Set Rotations", 0);
   }
 
-  public void setPercent(double percent){
+  public void setPercent(double percent) {
     m_motor.set(percent);
   }
 
-  public double getPosition(){
+  public double getPosition() {
     return m_encoder.getPosition();
   }
 
-  public void resetPosition(){
+  public void resetPosition() {
     m_encoder.setPosition(0);
   }
 
-  public void setPosition(double angle){
-    m_pidController.setReference(angle / 360.0 * Constants.Claw.GEAR_RATIO, CANSparkMax.ControlType.kPosition);
+  public void setPosition(double angle) {
+    m_pidController.setReference(
+        angle / 360.0 * Constants.Claw.GEAR_RATIO, CANSparkMax.ControlType.kPosition);
   }
 
-  public void setLimit(int num){
+  public void setLimit(int num) {
     m_motor.setSmartCurrentLimit(num);
   }
 
-  public void brake(){
+  public void brake() {
     m_motor.setIdleMode(IdleMode.kBrake);
   }
 
   @Override
-  public void periodic() {
-    
-  }
+  public void periodic() {}
 }

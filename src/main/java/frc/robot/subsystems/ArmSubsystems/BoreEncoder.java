@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.Arm;
 import java.util.Map;
 
 public class BoreEncoder extends SubsystemBase {
@@ -27,13 +26,7 @@ public class BoreEncoder extends SubsystemBase {
           .getEntry();
   /** Creates a new BoreEncoder. */
   public BoreEncoder(int channel1, int channel2) {
-
-    m_encoder =
-    new Encoder(
-        Arm.PWM_CHANNEL_ENCODER_1,
-        Arm.PWM_CHANNEL_ENCODER_2,
-        false,
-        CounterBase.EncodingType.k4X);
+    m_encoder = new Encoder(channel1, channel2, false, CounterBase.EncodingType.k4X);
 
     m_encoder.setSamplesToAverage(5);
     m_encoder.setDistancePerPulse(1. / 256.);
@@ -46,6 +39,11 @@ public class BoreEncoder extends SubsystemBase {
 
   public double getRaw() {
     return m_encoder.getRaw();
+  }
+
+  public boolean posDown() {
+    double rawAngle = (-m_encoder.getRaw() / 8192. * 360.);
+    return Math.abs(rawAngle) < 57;
   }
 
   public void reset() {

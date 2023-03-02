@@ -4,9 +4,19 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.RobotSetup;
+import java.util.ArrayList;
+import java.util.List;
+// import frc.lib2539.logging.Logger;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -14,8 +24,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
   private Command autonomousCommand;
+  private final RobotSetup robot = Constants.chris;
 
   private RobotContainer robotContainer;
 
@@ -25,8 +36,46 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+    // Instantiate our RobotContainer. This will perform all our button bindings,
+    // and put our
     // autonomous chooser on the dashboard.
+
+    // Disable default NetworkTables logging
+    // DataLogManager.logNetworkTables(false);
+
+    // Begin controller inputs
+    // if (isReal()) {
+    //   DriverStation.startDataLog(DataLogManager.getLog());
+    // }
+
+    Logger logger = Logger.getInstance();
+
+    // Record metadata
+    logger.recordMetadata("RuntimeType", getRuntimeType().toString());
+    logger.recordMetadata("Robot", robot.name());
+
+    String logfolder = "/home/lvuser";
+    logger.addDataReceiver(new WPILOGWriter(logfolder));
+    logger.addDataReceiver(new NT4Publisher());
+
+    switch (robot.name()) {
+      case "hana":
+        LoggedPowerDistribution.getInstance(0, ModuleType.kCTRE);
+        break;
+      case "chris":
+        LoggedPowerDistribution.getInstance(1, ModuleType.kRev);
+        break;
+      case "calliope":
+        LoggedPowerDistribution.getInstance(1, ModuleType.kRev);
+        break;
+      default:
+        LoggedPowerDistribution.getInstance(0, ModuleType.kCTRE);
+        break;
+    }
+
+    setUseTiming(true);
+    logger.start();
+
     robotContainer = new RobotContainer();
   }
 
@@ -39,11 +88,30 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
+    // Runs the Scheduler. This is responsible for polling buttons, adding
+    // newly-scheduled
+    // commands, running already-scheduled commands, removing finished or
+    // interrupted commands,
+    // and running subsystem periodic() methods. This must be called from the
+    // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    // Log list of NT clients
+    List<String> clientNames = new ArrayList<>();
+    List<String> clientAddresses = new ArrayList<>();
+    for (var client : NetworkTableInstance.getDefault().getConnections()) {
+      clientNames.add(client.remote_id);
+      clientAddresses.add(client.remote_ip);
+    }
+    Logger.getInstance()
+        .recordOutput("NTClients/Names", clientNames.toArray(new String[clientNames.size()]));
+    Logger.getInstance()
+        .recordOutput(
+            "NTClients/Addresses", clientAddresses.toArray(new String[clientAddresses.size()]));
+
+    // Logger.log("/Robot/Battery Voltage", RobotController.getBatteryVoltage());
+    // Logger.update();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

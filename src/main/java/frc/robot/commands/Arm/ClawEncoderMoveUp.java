@@ -4,14 +4,10 @@
 
 package frc.robot.commands.Arm;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.Claw;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 
 public class ClawEncoderMoveUp extends CommandBase {
 
@@ -21,7 +17,7 @@ public class ClawEncoderMoveUp extends CommandBase {
   private double error;
   private String piece;
 
-  public ClawEncoderMoveUp(double angle, Claw initClaw , BoreEncoder weewoo, String piece) {
+  public ClawEncoderMoveUp(double angle, Claw initClaw, BoreEncoder weewoo, String piece) {
     clawOne = initClaw;
     this.encoder = weewoo;
     this.desiredAngle = angle;
@@ -41,23 +37,19 @@ public class ClawEncoderMoveUp extends CommandBase {
     double rawAngle = (-encoder.getRaw() / 8192. * 360.);
     error = (desiredAngle - rawAngle);
     double velocity = Constants.Claw.kP * error;
-    if(piece.toUpperCase().equals("CUBE")){
-      if(velocity > Constants.Claw.CUBE_UP_MAX_VELOCITY){
+    if (piece.toUpperCase().equals("CUBE")) {
+      if (velocity > Constants.Claw.CUBE_UP_MAX_VELOCITY) {
         velocity = Constants.Claw.CUBE_UP_MAX_VELOCITY;
-      }
-      else if(velocity < -Constants.Claw.CUBE_UP_MAX_VELOCITY){
+      } else if (velocity < -Constants.Claw.CUBE_UP_MAX_VELOCITY) {
         velocity = -Constants.Claw.CUBE_UP_MAX_VELOCITY;
       }
-    }
-    else if(piece.toUpperCase().equals("CONE")){
-      if(velocity > Constants.Claw.CONE_UP_MAX_VELOCITY){
+    } else if (piece.toUpperCase().equals("CONE")) {
+      if (velocity > Constants.Claw.CONE_UP_MAX_VELOCITY) {
         velocity = Constants.Claw.CONE_UP_MAX_VELOCITY;
-      }
-      else if(velocity < -Constants.Claw.CONE_UP_MAX_VELOCITY){
+      } else if (velocity < -Constants.Claw.CONE_UP_MAX_VELOCITY) {
         velocity = -Constants.Claw.CONE_UP_MAX_VELOCITY;
       }
     }
-
 
     clawOne.setPercent(velocity);
   }
@@ -70,7 +62,7 @@ public class ClawEncoderMoveUp extends CommandBase {
     // System.out.pr intln("---------------END------------");
   }
 
-  @Override 
+  @Override
   public boolean isFinished() {
     return Math.abs(error) < 1;
   }

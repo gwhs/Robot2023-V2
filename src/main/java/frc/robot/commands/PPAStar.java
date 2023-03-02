@@ -8,6 +8,7 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.commands.autonomous.TrajectoryCommands;
 import frc.robot.pathfind.Edge;
 import frc.robot.pathfind.Node;
 import frc.robot.pathfind.Obstacle;
@@ -100,7 +101,7 @@ public class PPAStar extends CommandBase {
     // constructor.
     trajectory = PathPlanner.generatePath(constraints, Arrays.asList(fullPathPoints));
     pathDrivingCommand =
-        DrivetrainSubsystem.followTrajectory(driveSystem, poseEstimatorSystem, trajectory);
+        TrajectoryCommands.followTrajectory(poseEstimatorSystem, trajectory, driveSystem);
     pathDrivingCommand.schedule();
   }
 

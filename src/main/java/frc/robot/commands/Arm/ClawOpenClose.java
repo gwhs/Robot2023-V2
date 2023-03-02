@@ -4,10 +4,8 @@
 
 package frc.robot.commands.Arm;
 
-import frc.robot.Constants;
-import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
-import frc.robot.subsystems.ArmSubsystems.Claw;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ArmSubsystems.Claw;
 
 public class ClawOpenClose extends CommandBase {
 

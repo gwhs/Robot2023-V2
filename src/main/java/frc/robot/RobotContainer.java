@@ -6,32 +6,36 @@ package frc.robot;
 
 import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
 
-import com.pathplanner.lib.PathConstraints;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.auto.PPSwerveFollower;
+import frc.robot.Constants.LimeLightConstants;
+import frc.robot.Constants.RobotSetup;
+import frc.robot.commands.Arm.ClawEncoderMoveDown;
+import frc.robot.commands.Arm.ClawEncoderMoveUp;
+import frc.robot.commands.Arm.ClawOpenClose;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
-import frc.robot.commands.Lime.AfterPPID;
-import frc.robot.commands.Lime.PPIDAutoAim;
-import frc.robot.commands.Lime.Rotate;
-import frc.robot.commands.Lime.Sideways;
-import frc.robot.commands.Lime.ToPole;
+import frc.robot.commands.PlaceCone.*;
+import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
 import frc.robot.pathfind.VisGraph;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
+import frc.robot.subsystems.ArmSubsystems.Claw;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
@@ -39,6 +43,7 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -47,37 +52,51 @@ import java.util.Map;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-
+  // for ctrl+shift+f, hana, chris, calliope, spring
+  // change robot name
+  // change this to change robot -----------------v
+  // change the same in Robot.java
+  private final RobotSetup robot = Constants.chris;
   private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController controllertwo = new CommandXboxController(1);
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
-
-  private final LimeLightSub limeLightSub = new LimeLightSub("LimeLightTable");
+  private final LimeLightSub limeLightSub = new LimeLightSub("limelight");
 
   // Arm
-  private final MagicMotion mainArm = new MagicMotion(21, DrivetrainConstants.CANIVORE_NAME);
-  private final BoreEncoder shaftEncoder = new BoreEncoder(Constants.Arm.PWM_CHANNEL_ENCODER_1, Constants.Arm.PWM_CHANNEL_ENCODER_2);
+  private final MagicMotion mainArm = new MagicMotion(21, robot.canivore_name());
+  private final Claw clawPivot = new Claw(6, MotorType.kBrushless);
+  private final Claw clawOpenClose = new Claw(5, MotorType.kBrushless);
+  private final BoreEncoder shaftEncoder = new BoreEncoder(7, 8);
+  private final BoreEncoder clawEncoder = new BoreEncoder(2, 3);
 
-  // TODO: change to hana or spring depending on robot
-  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem("chris");
+  private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
-  private final PPIDAutoAim autoAimLime =
-      new PPIDAutoAim(drivetrainSubsystem, poseEstimator, limeLightSub);
+  private final PPIDAutoAim autoAimLime1 =
+      new PPIDAutoAim(
+          drivetrainSubsystem,
+          poseEstimator,
+          limeLightSub,
+          LimeLightConstants.LOWER_DISTANCE_SHOOT);
+  private final PPIDAutoAim autoAimLime2 =
+      new PPIDAutoAim(
+          drivetrainSubsystem,
+          poseEstimator,
+          limeLightSub,
+          LimeLightConstants.UPPER_DISTANCE_SHOOT);
 
-  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, 0);
-  private final Sideways sideways = new Sideways(drivetrainSubsystem, limeLightSub);
-  private final ToPole toPole = new ToPole(drivetrainSubsystem, limeLightSub);
-  private final AfterPPID afterPPID =
-      new AfterPPID(drivetrainSubsystem, poseEstimator, limeLightSub);
+  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub, 0);
+  private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
   // Arm
 
-  final List<Obstacle> standardObstacles = Constants.FieldConstants.standardObstacles;
-  final List<Obstacle> cablePath = Constants.FieldConstants.cablePath;
+  final List<Obstacle> standardObstacles = FieldConstants.standardObstacles;
+  final List<Obstacle> cablePath = FieldConstants.cablePath;
   // final List<Obstacle> obstacles = new ArrayList<Obstacle>();
   // final List<Obstacle> obstacles = FieldConstants.obstacles;
+  private final AllLime allLime = new AllLime(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   // VisGraph AStarMap = new VisGraph();
   // final Node finalNode = new Node(4, 4, Rotation2d.fromDegrees(180));
@@ -102,8 +121,13 @@ public class RobotContainer {
           () -> -controller.getRightY(),
           () -> -controller.getRightX());
 
+  // private final ShuffleBoardBen angleBenCommand =
+  // new ShuffleBoardBen(
+  // drivetrainSubsystem); // add a button + FIX CANT CHANGE TAB ON SHUFFLEBOARD
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    Logger logger = Logger.getInstance();
     // Set up the default command for the drivetrain.
     drivetrainSubsystem.setDefaultCommand(
         new DefaultDriveCommand(
@@ -122,12 +146,19 @@ public class RobotContainer {
                     * drivetrainAmplificationScaleRotation()
                     * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
                     / 2));
+
     drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
+
     configureButtonBindings();
+    // configureArmBindings();
+    // configureLimelightBindings();
+    // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
     shaftEncoder.reset();
+
+    // setupPathChooser();
   }
 
   private GenericEntry maxSpeedAdjustment;
@@ -160,13 +191,7 @@ public class RobotContainer {
     return maxRotationSpeedAdjustment.getDouble(0.2);
   }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
+  public void startAndBackButton() {
     // Start button reseeds the steer motors to fix dead wheel
     controller
         .start()
@@ -177,14 +202,58 @@ public class RobotContainer {
     controller
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
+  }
 
-    controller.b().onTrue(autoAimLime.withTimeout(3));
-    controller.leftBumper().onTrue(sideways);
-    controller.rightBumper().onTrue(rotate);
+  /**
+   * Use this method to define your button->command mappings. Buttons can be created by
+   * instantiating a {@link GenericHID} or one of its subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   */
+  private void configureButtonBindings() {
+    // Start button reseeds the steer motors to fix dead wheel
+    this.startAndBackButton();
 
+    controllertwo
+        .start()
+        .onTrue(
+            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+
+    // Back button resets the robot pose
+
+    // Auto aim
+    // controller.b().onTrue(new ChangePipeline(limeLightSub));
+    // rotate
+    controller.leftBumper().onTrue(rotate);
+    // rotate
+    controller.rightBumper().onTrue(allLime); //
+
+    controllertwo
+        .back()
+        .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
+
+    controller
+        // Place mid
+        .x // button
+        ()
+        .onTrue(sideways); // add a button
+    // place low
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    controller.x().toggleOnTrue(toPole);
+    controller.x().onTrue(new ChangePipeline(limeLightSub));
+    controller.b().onTrue(rotate);
+    // controller.y().onTrue(autoAimLime1);
+
+    controllertwo
+        .x // button
+        ()
+        .onTrue(new ChangePipeline(limeLightSub)); // add a button
+    // place low
+    controllertwo.a().toggleOnTrue(fieldHeadingDriveCommand);
+
+    // controller.x().toggleOnTrue(toPole);
+
+    controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
 
     // controller
     // .a()
@@ -216,15 +285,91 @@ public class RobotContainer {
     // whileTrue(new PPAStar(drivetrainSubsystem, poseEstimator,
     // new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
 
-    controller
+    // controller.y().onTrue(straightWheel1);
+    controllertwo
+        // Place high
         .y()
         .onTrue(
             Commands.sequence(
-                new MagicMotionPos(mainArm, 100, 50000, 30000),
+                new MagicMotionPos(mainArm, 190, 20000, 20000),
                 Commands.waitSeconds(.1),
                 new MagicMotionPos(mainArm, 2, 15000, 10000),
                 Commands.waitSeconds(.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
+
+    // CUBE
+    controllertwo
+        .rightTrigger()
+        .onTrue(
+            Commands.either(
+                new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube"),
+                Commands.sequence(
+                    Commands.print("Encoder Pos" + -clawEncoder.getRaw() / 8192. * 360.),
+                    Commands.parallel(
+                        new ClawOpenClose(-55, 5, clawOpenClose), Commands.waitSeconds(1)),
+                    new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CUBE"),
+                    new ClawOpenClose(0, 5, clawOpenClose).withTimeout(2)),
+                clawEncoder::posDown));
+
+    // CONE
+    // controllertwo.leftTrigger().onTrue(Commands.either(
+    //                   new ClawEncoderMoveDown(-125, clawPivot, clawEncoder,
+    // "CONE").withTimeout(3),
+
+    //                   Commands.sequence(
+    //                     Commands.parallel(new ClawOpenClose(-90, 20, clawOpenClose),
+    // Commands.waitSeconds(1)),
+    //                     new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(5),
+    //                     new ClawOpenClose(0, 20, clawOpenClose)),
+
+    //                   clawEncoder :: posDown)
+    //                   );
+
+  }
+
+  private void configureLimelightBindings() {
+    this.startAndBackButton();
+    controller.x().onTrue(sideways);
+    controller.y().onTrue(sideways);
+    controller.a().onTrue(sideways);
+    controller.b().onTrue(sideways);
+  }
+
+  private void configureAutoBalanceBindings() {
+    this.startAndBackButton();
+    controller.x().onTrue(sideways);
+    controller.y().onTrue(sideways);
+    controller.a().onTrue(sideways);
+    controller.b().onTrue(sideways);
+  }
+
+  private void configureArmBindings() {
+    this.startAndBackButton();
+    controller.x().onTrue(sideways);
+    controller.y().onTrue(sideways);
+    controller.a().onTrue(sideways);
+    controller.b().onTrue(sideways);
+  }
+
+  SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  private void setupPathChooser() {
+    final ShuffleboardTab tab = Shuffleboard.getTab("Drive");
+
+    m_chooser.setDefaultOption("Straight No Rotation", "StraightNoRotation");
+    m_chooser.addOption("Straight With Rotation", "StraightWithRotation");
+    m_chooser.addOption("D-F Place and engage", "D-F1E");
+    m_chooser.addOption("A 2 piece and engage", "A2E");
+    m_chooser.addOption("D place and hold", "D1+1");
+    m_chooser.addOption("F place and hold", "F1+1");
+    m_chooser.addOption("G 2 piece and engage", "G2E");
+    m_chooser.addOption("I 2 piece and hold", "I2+1");
+    m_chooser.addOption("I 2 piece engage and hold", "I2+1E");
+    m_chooser.addOption("I 3 piece", "I3");
+    m_chooser.addOption("FUN", "FUN");
+    m_chooser.addOption("I 1+ and engage", "HajelPath");
+
+    tab.add(m_chooser);
   }
 
   /**
@@ -232,12 +377,14 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  private int autoPath = 1;
-
   public Command getAutonomousCommand() {
-    // return new TestAutonomous(drivetrainSubsystem, poseEstimator);
-    return new PPSwerveFollower(
-        drivetrainSubsystem, poseEstimator, "StraightNoRotation", new PathConstraints(2, 1), true);
+    // use return TestAutoCommands when using chris
+
+    TestAutoCommands vendingMachine =
+        new TestAutoCommands(
+            drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "HajelPath");
+
+    return vendingMachine.getAutoCommand();
   }
 
   private static double modifyAxis(double value) {
