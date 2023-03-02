@@ -80,7 +80,7 @@ public class LEDSubsystem extends SubsystemBase {
   // When changing colors make sure to correct
 
   public void yellow() {
-    m_brightness += .01;
+    m_brightness += .05;
 
     if (m_brightness > 1) {
       m_brightness = 0.01;
@@ -89,7 +89,7 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void purple() {
-    m_brightness += .01;
+    m_brightness += .05;
 
     if (m_brightness > 1) {
       m_brightness = 0.01;
