@@ -19,7 +19,8 @@ public class AllLime extends SequentialCommandGroup {
   public AllLime(
       DrivetrainSubsystem drivetrainSubsystem,
       PoseEstimatorSubsystem poseEstimatorSubsystem,
-      LimeLightSub limeLightSub) {
+      LimeLightSub limeLightSub,
+      int degrees) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -29,7 +30,7 @@ public class AllLime extends SequentialCommandGroup {
             limeLightSub,
             LimeLightConstants.LOWER_DISTANCE_SHOOT),
         new WaitCommand(.5),
-        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub, 0),
+        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub, degrees),
         new StraightWheel(drivetrainSubsystem),
         new Sideways(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
         new StraightWheel(drivetrainSubsystem),

@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
-import frc.robot.commands.AutoBalanceFast;
-import frc.robot.commands.PlaceCone.ChangePipeline;
+import frc.robot.commands.AutoBalance;
+import frc.robot.commands.PlaceCone.AllLime;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -67,7 +67,7 @@ public final class TestAutoCommands {
                   new MagicMotionAbsoluteZero(mainArm, shaftEncoder)),
               new PPSwerveFollower(
                   driveSystem, poseEstimatorSystem, "HajelPath", new PathConstraints(2, 2), true)),
-          new AutoBalanceFast(driveSystem));
+          new AutoBalance(driveSystem));
     }
     if (pathName.equals("HajelPathV2")) {
       return new SequentialCommandGroup(
@@ -93,7 +93,8 @@ public final class TestAutoCommands {
               "HajelPathV2Part2",
               new PathConstraints(1, 1),
               true),
-          new ChangePipeline(lime), // APRIL?
+          new AllLime(
+              driveSystem, poseEstimatorSystem, lime, 180), // new ChangePipeline(lime), // APRIL?
           new MagicMotionPos(mainArm, 210, 0, 0),
           Commands.waitSeconds(.5),
           new ParallelCommandGroup(
@@ -107,7 +108,7 @@ public final class TestAutoCommands {
                   "HajelPathV2Part3",
                   new PathConstraints(1, 1),
                   true)),
-          new AutoBalanceFast(driveSystem));
+          new AutoBalance(driveSystem));
     }
     if (pathName.equals("D-F1E")) {
       return new SequentialCommandGroup(
@@ -122,7 +123,7 @@ public final class TestAutoCommands {
                   new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
                   new PPSwerveFollower(
                       driveSystem, poseEstimatorSystem, "D-F1E", new PathConstraints(2, 2), true))),
-          new AutoBalanceFast(driveSystem));
+          new AutoBalance(driveSystem));
     }
     if (pathName.equals("A2E")) {
       return new SequentialCommandGroup(
@@ -152,7 +153,7 @@ public final class TestAutoCommands {
                       "A2EPart3",
                       new PathConstraints(2, 2),
                       true))),
-          new AutoBalanceFast(driveSystem));
+          new AutoBalance(driveSystem));
     }
     if (pathName.equals("D1+1")) {
       return new SequentialCommandGroup(
@@ -212,7 +213,7 @@ public final class TestAutoCommands {
                       "G2EPart3",
                       new PathConstraints(2, 2),
                       true))),
-          new AutoBalanceFast(driveSystem));
+          new AutoBalance(driveSystem));
     }
     if (pathName.equals("I2+1")) {
       return new SequentialCommandGroup(
@@ -276,7 +277,7 @@ public final class TestAutoCommands {
           // grab
           new PPSwerveFollower(
               driveSystem, poseEstimatorSystem, "I2+1E", new PathConstraints(2, 2), true),
-          new AutoBalanceFast(driveSystem));
+          new AutoBalance(driveSystem));
     }
     return null;
   }
