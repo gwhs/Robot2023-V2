@@ -162,6 +162,10 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     setCurrentPose(new Pose2d());
   }
 
+  public void set180FieldPosition(){
+    setCurrentPose(new Pose2d(0,0,new Rotation2d(180)));
+  }
+
   public void initializeGyro(double angleDegree) {
     drivetrainSubsystem.setGyroscopeRotation(angleDegree);
     poseEstimator.resetPosition(

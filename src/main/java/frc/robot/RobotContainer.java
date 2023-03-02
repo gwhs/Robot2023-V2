@@ -249,7 +249,7 @@ public class RobotContainer {
     // place low
     controllertwo.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    // controller.x().toggleOnTrue(toPole);
+    controller.x().onTrue(Commands.runOnce( poseEstimator::set180FieldPosition, poseEstimator) );
 
     controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
 
