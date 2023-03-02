@@ -25,7 +25,7 @@ import frc.robot.Constants.RobotSetup;
 import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
-import frc.robot.commands.AutoBalanceFast;
+import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.*;
@@ -70,25 +70,12 @@ public class RobotContainer {
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
-  private final PPIDAutoAim autoAimLime1 =
-      new PPIDAutoAim(
-          drivetrainSubsystem,
-          poseEstimator,
-          limeLightSub,
-          LimeLightConstants.LOWER_DISTANCE_SHOOT);
-  private final PPIDAutoAim autoAimLime2 =
-      new PPIDAutoAim(
-          drivetrainSubsystem,
-          poseEstimator,
-          limeLightSub,
-          LimeLightConstants.UPPER_DISTANCE_SHOOT);
 
   private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub, 0);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
 
-  private final AutoBalanceFast autoBalance = new AutoBalanceFast(drivetrainSubsystem);
-  // Arm
 
+  private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
   final List<Obstacle> standardObstacles = FieldConstants.standardObstacles;
   final List<Obstacle> cablePath = FieldConstants.cablePath;
   // final List<Obstacle> obstacles = new ArrayList<Obstacle>();
@@ -118,9 +105,8 @@ public class RobotContainer {
           () -> -controller.getRightY(),
           () -> -controller.getRightX());
 
-  // private final ShuffleBoardBen angleBenCommand =
-  // new ShuffleBoardBen(
-  // drivetrainSubsystem); // add a button + FIX CANT CHANGE TAB ON SHUFFLEBOARD
+  private final ShuffleBoardBen angleBenCommand =
+      new ShuffleBoardBen(drivetrainSubsystem); // add a button
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -155,7 +141,7 @@ public class RobotContainer {
     mainArm.robotInit();
     shaftEncoder.reset();
 
-    // setupPathChooser();
+    setupPathChooser();
   }
 
   private GenericEntry maxSpeedAdjustment;
@@ -288,9 +274,7 @@ public class RobotContainer {
         .y()
         .onTrue(
             Commands.sequence(
-                new PPSwerveFollower(
-                    drivetrainSubsystem, poseEstimator, "move12", new PathConstraints(2, 2), true),
-                new MagicMotionPos(mainArm, 210, 0, 0),
+                new MagicMotionPos(mainArm, 190, 0, 0),
                 Commands.waitSeconds(.5),
                 new MagicMotionPos(mainArm, 0, 0, 0),
                 Commands.waitSeconds(.5),
@@ -331,6 +315,11 @@ public class RobotContainer {
     controller.b().onTrue(sideways);
   }
 
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
   SendableChooser<String> m_chooser = new SendableChooser<>();
 
   private void setupPathChooser() {
@@ -338,33 +327,19 @@ public class RobotContainer {
 
     m_chooser.setDefaultOption("Straight No Rotation", "StraightNoRotation");
     m_chooser.addOption("Straight With Rotation", "StraightWithRotation");
-    m_chooser.addOption("D-F Place and engage", "D-F1E");
-    m_chooser.addOption("A 2 piece and engage", "A2E");
-    m_chooser.addOption("D place and hold", "D1+1");
-    m_chooser.addOption("F place and hold", "F1+1");
-    m_chooser.addOption("G 2 piece and engage", "G2E");
-    m_chooser.addOption("I 2 piece and hold", "I2+1");
-    m_chooser.addOption("I 2 piece engage and hold", "I2+1E");
-    m_chooser.addOption("I 3 piece", "I3");
     m_chooser.addOption("FUN", "FUN");
-    m_chooser.addOption("I 1+ and engage", "HajelPath");
 
     tab.add(m_chooser);
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   public Command getAutonomousCommand() {
-    // use return TestAutoCommands when using chris
-
+    // return new TestAutonomous(drivetrainSubsystem, poseEstimator);
     TestAutoCommands vendingMachine =
         new TestAutoCommands(
             drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "HajelPath");
 
     return vendingMachine.getAutoCommand();
+
   }
 
   private static double modifyAxis(double value) {
