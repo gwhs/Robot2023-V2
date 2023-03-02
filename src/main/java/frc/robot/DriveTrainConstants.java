@@ -8,17 +8,17 @@ import static java.lang.Math.toRadians;
 
 /** Steer offsets, motor ids, encoder ids for all modules */
 public class DriveTrainConstants {
-  public int FRONT_LEFT_MODULE_DRIVE_MOTOR = 19;
-  public int FRONT_LEFT_MODULE_STEER_MOTOR = 18;
+  public int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1;
+  public int FRONT_LEFT_MODULE_STEER_MOTOR = 2;
   public int FRONT_LEFT_MODULE_STEER_ENCODER = 9;
-  public int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 1;
-  public int FRONT_RIGHT_MODULE_STEER_MOTOR = 0;
+  public int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 3;
+  public int FRONT_RIGHT_MODULE_STEER_MOTOR = 4;
   public int FRONT_RIGHT_MODULE_STEER_ENCODER = 11;
-  public int BACK_LEFT_MODULE_DRIVE_MOTOR = 16;
-  public int BACK_LEFT_MODULE_STEER_MOTOR = 17;
+  public int BACK_LEFT_MODULE_DRIVE_MOTOR = 7;
+  public int BACK_LEFT_MODULE_STEER_MOTOR = 8;
   public int BACK_LEFT_MODULE_STEER_ENCODER = 12;
-  public int BACK_RIGHT_MODULE_DRIVE_MOTOR = 3;
-  public int BACK_RIGHT_MODULE_STEER_MOTOR = 2;
+  public int BACK_RIGHT_MODULE_DRIVE_MOTOR = 5;
+  public int BACK_RIGHT_MODULE_STEER_MOTOR = 6;
   public int BACK_RIGHT_MODULE_STEER_ENCODER = 13;
   public double FRONT_LEFT_MODULE_STEER_OFFSET;
   public double FRONT_RIGHT_MODULE_STEER_OFFSET;
