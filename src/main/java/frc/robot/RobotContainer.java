@@ -127,9 +127,6 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    // Sets the color on robot start
-    // m_led.rainbow();
-
     Logger logger = Logger.getInstance();
     // Set up the default command for the drivetrain.
     drivetrainSubsystem.setDefaultCommand(
@@ -159,8 +156,9 @@ public class RobotContainer {
     // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
+    shaftEncoder.reset();
 
-    setupPathChooser();
+    // setupPathChooser();
   }
 
   private GenericEntry maxSpeedAdjustment;
@@ -243,8 +241,8 @@ public class RobotContainer {
         ()
         .onTrue(sideways); // add a button
     // place low
-    // Change back - LED
-    // controller.a().toggleOnTrue(fieldHeadingDriveCommand);
+
+    controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
     controller.x().onTrue(new ChangePipeline(limeLightSub));
     controller.b().onTrue(rotate);
@@ -317,7 +315,7 @@ public class RobotContainer {
 
     // change LEDStrip colors
 
-    controller.a().onTrue(Commands.runOnce(() -> toggleLED()));
+    // controller.a().onTrue(Commands.runOnce(() -> toggleLED()));
   }
 
   private void configureLimelightBindings() {
