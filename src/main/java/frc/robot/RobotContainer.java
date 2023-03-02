@@ -55,7 +55,7 @@ public class RobotContainer {
   // change robot name
   // change this to change robot -----------------v
   // change the same in Robot.java
-  private final RobotSetup robot = Constants.chuck;
+  private final RobotSetup robot = Constants.chris;
   private final CommandXboxController controller = new CommandXboxController(0);
   private final CommandXboxController controllertwo = new CommandXboxController(1);
   // Set IP to 10.57.12.11
@@ -244,7 +244,7 @@ public class RobotContainer {
 
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    controller.x().onTrue(new ChangePipeline(limeLightSub));
+    // controller.x().onTrue(new ChangePipeline(limeLightSub));
     controller.b().onTrue(rotate);
     // controller.y().onTrue(autoAimLime1);
 
@@ -255,7 +255,9 @@ public class RobotContainer {
     // place low
     controllertwo.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    controller.x().onTrue(Commands.runOnce( poseEstimator::set180FieldPosition, poseEstimator) );
+    controller
+        .x()
+        .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
 
     controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
 
