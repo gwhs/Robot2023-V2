@@ -21,7 +21,6 @@ public class PlaceHigh extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new PPIDAutoAim(
             drivetrainSubsystem,
-            poseEstimatorSubsystem,
             limeLightSub,
             LimeLightConstants.LOWER_DISTANCE_SHOOT),
         new WaitCommand(.5),
@@ -31,7 +30,6 @@ public class PlaceHigh extends SequentialCommandGroup {
         new StraightWheel(drivetrainSubsystem),
         new PPIDAutoAim(
             drivetrainSubsystem,
-            poseEstimatorSubsystem,
             limeLightSub,
             LimeLightConstants.UPPER_DISTANCE_SHOOT));
             //
