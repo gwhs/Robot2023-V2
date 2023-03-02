@@ -213,9 +213,9 @@ public class RobotContainer {
     // throw cubes
     // controller.rightBumper().onTrue(); //
 
-    controller.x().onTrue(new PlaceMid()); // add a button
+    controller.x().onTrue(new PlaceMid(drivetrainSubsystem, limeLightSub)); // add a button
     // place low
-    controller.a().toggleOnTrue(new PlaceLow());
+    controller.a().toggleOnTrue(new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub));
     // fieldHeadingDriveCommand
 
     controller.y().onTrue(new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub));
@@ -237,9 +237,9 @@ public class RobotContainer {
     // chucks light
     controllertwo.rightBumper().onTrue(allLime); //
 
-    controllertwo.x().onTrue(new PlaceMid()); // add a button
+    //controllertwo.x().onTrue(); // add a button
 
-    controllertwo.a().toggleOnTrue(new PlaceLow());
+    //controllertwo.a().toggleOnTrue();
     // fieldHeadingDriveCommand
 
     controllertwo.y().onTrue(new AutoBalance(drivetrainSubsystem));
