@@ -16,10 +16,9 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.GyroMoment.WrappedGyro;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import javax.swing.SpringLayout.Constraints;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import java.util.List;
+import org.littletonrobotics.junction.Logger;
 
 public class AutoBalance extends CommandBase {
   private final DrivetrainSubsystem drivetrainSubsystem;
@@ -69,7 +68,7 @@ public class AutoBalance extends CommandBase {
     maxSpeedDefault = 0.5;
     requiredEngageTimeDefault = 0.1;
     requiredStateChangeTimeDefault = 0.008;
-    initialSpeedDefault = 0.5; 
+    initialSpeedDefault = 0.5;
     epsilonRollRateDefault = 13;
 
     engageTimer = new Timer();
@@ -179,6 +178,12 @@ public class AutoBalance extends CommandBase {
 
     double error = currentAngle - 0;
 
+    Logger.getInstance()
+        .recordOutput("Pitch (actually roll cuz pigeon is oriented weirdly or smth", currentAngle);
+    Logger.getInstance()
+        .recordOutput(
+            "Pitch Rate (actually roll cuz pigeon is oriented weirdly or smth", currentDPS);
+
     double speed = 0;
 
     // sometimes currentDPS spikes because it reads somehting weirdly do this later
@@ -207,12 +212,16 @@ public class AutoBalance extends CommandBase {
       speed = -maxSpeed;
     }
 
+    Logger.getInstance().recordOutput("Speed", speed);
+
     if (Math.abs(error) <= tolerance) {
       engageTimer.start();
     } else {
       engageTimer.stop();
       engageTimer.reset();
     }
+
+    Logger.getInstance().recordOutput("Engage Timer", engageTimer.get());
 
     drivetrainSubsystem.drive(new ChassisSpeeds(speed, 0.0, 0.0));
   }
