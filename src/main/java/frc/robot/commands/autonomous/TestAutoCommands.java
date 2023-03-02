@@ -91,7 +91,7 @@ public final class TestAutoCommands {
               driveSystem,
               poseEstimatorSystem,
               "HajelPathV2Part2",
-              new PathConstraints(3, 2),
+              new PathConstraints(1, 1),
               true),
           new ChangePipeline(lime), // APRIL?
           new MagicMotionPos(mainArm, 210, 0, 0),
@@ -105,7 +105,7 @@ public final class TestAutoCommands {
                   driveSystem,
                   poseEstimatorSystem,
                   "HajelPathV2Part3",
-                  new PathConstraints(3, 2),
+                  new PathConstraints(1, 1),
                   true)),
           new AutoBalanceFast(driveSystem));
     }

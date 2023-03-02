@@ -360,7 +360,7 @@ public class RobotContainer {
 
     TestAutoCommands vendingMachine =
         new TestAutoCommands(
-            drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "TestCurve", limeLightSub);
+            drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "HajelPathV2", limeLightSub);
 
     return vendingMachine.getAutoCommand();
   }
