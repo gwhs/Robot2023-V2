@@ -93,8 +93,9 @@ public final class TestAutoCommands {
               "HajelPathV2Part2",
               new PathConstraints(1, 1),
               true),
+          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
           new AllLime(
-              driveSystem, poseEstimatorSystem, lime, 180), // new ChangePipeline(lime), // APRIL?
+              driveSystem, poseEstimatorSystem, lime, 0), // new ChangePipeline(lime), // APRIL?
           new MagicMotionPos(mainArm, 210, 0, 0),
           Commands.waitSeconds(.5),
           new ParallelCommandGroup(
@@ -141,6 +142,7 @@ public final class TestAutoCommands {
           Commands.waitSeconds(1), // grab
           new PPSwerveFollower(
               driveSystem, poseEstimatorSystem, "A2EPart2", new PathConstraints(2, 2), true),
+          new AllLime(driveSystem, poseEstimatorSystem, lime, 0), // APRIL TAGGGGG
           new MagicMotionPos(mainArm, 210, 0, 0),
           new ParallelCommandGroup(
               new SequentialCommandGroup(
@@ -200,7 +202,7 @@ public final class TestAutoCommands {
           Commands.waitSeconds(1), // grab
           new PPSwerveFollower(
               driveSystem, poseEstimatorSystem, "G2EPart2", new PathConstraints(2, 2), true),
-          // april tag?
+          new AllLime(driveSystem, poseEstimatorSystem, lime, 0), // april tag?
           new MagicMotionPos(mainArm, 210, 0, 0),
           new ParallelCommandGroup(
               new SequentialCommandGroup(
@@ -230,7 +232,7 @@ public final class TestAutoCommands {
           // grab
           new PPSwerveFollower(
               driveSystem, poseEstimatorSystem, "I2+1Part2", new PathConstraints(2, 2), true),
-          // april
+          new AllLime(driveSystem, poseEstimatorSystem, lime, 0), // april
           new MagicMotionPos(mainArm, 210, 0, 0),
           new ParallelCommandGroup(
               new SequentialCommandGroup(
@@ -261,7 +263,7 @@ public final class TestAutoCommands {
           // grab
           new PPSwerveFollower(
               driveSystem, poseEstimatorSystem, "I2+1Part2", new PathConstraints(2, 2), true),
-          // april
+          new AllLime(driveSystem, poseEstimatorSystem, lime, 0), // april
           new MagicMotionPos(mainArm, 210, 0, 0),
           new ParallelCommandGroup(
               new SequentialCommandGroup(
