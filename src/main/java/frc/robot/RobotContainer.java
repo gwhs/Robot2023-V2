@@ -39,6 +39,7 @@ import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.LEDSubsystem.LEDMode;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.HashMap;
@@ -121,7 +122,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     // Sets the color on robot start
-    m_led.rainbow();
+    // m_led.rainbow();
 
     Logger logger = Logger.getInstance();
     // Set up the default command for the drivetrain.
@@ -306,9 +307,9 @@ public class RobotContainer {
 
     // change LEDStrip colors
 
-    controller.a().onTrue(Commands.runOnce(() -> m_led.yellow(), m_led));
+    controller.a().onTrue(Commands.runOnce(() -> m_led.setLedMode(LEDMode.RAINBOW), m_led));
 
-    controller.b().onTrue(Commands.runOnce(() -> m_led.purple(), m_led));
+    controller.b().onTrue(Commands.runOnce(() -> m_led.setLedMode(LEDMode.EMERGENCY), m_led));
   }
 
   private void configureLimelightBindings() {
