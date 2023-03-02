@@ -230,7 +230,7 @@ public class RobotContainer {
         // Place mid
         .x // button
         ()
-        .onTrue(sideways); // add a button
+        .onTrue(autoBalance); // add a button
     // place low
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 

@@ -134,6 +134,8 @@ public class AutoBalance extends CommandBase {
       epsilonRollRateEntry = ((SimpleWidget) widgets.get(7)).getEntry();
     }
 
+    Logger.getInstance().start();
+
     addRequirements(drivetrainSubsystem);
   }
 
@@ -230,6 +232,7 @@ public class AutoBalance extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     drivetrainSubsystem.stop();
+    Logger.getInstance().end();
   }
 
   // Returns true when the command should end.
