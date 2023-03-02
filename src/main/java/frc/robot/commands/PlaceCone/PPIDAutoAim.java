@@ -47,7 +47,6 @@ public class PPIDAutoAim extends CommandBase {
   /** Creates a new PPIDAutoAim. */
   public PPIDAutoAim(
       DrivetrainSubsystem drivetrainSubsystem,
-      PoseEstimatorSubsystem poseEstimatorSubsystem,
       LimeLightSub limeLightSub,
       double targetDistance) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -55,7 +54,7 @@ public class PPIDAutoAim extends CommandBase {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.targetDistance = targetDistance;
 
-    addRequirements(limeLight, drivetrainSubsystem, poseEstimatorSubsystem);
+    addRequirements(limeLight, drivetrainSubsystem);
     // addRequirements(drivetrainSubsystem);
   }
 
