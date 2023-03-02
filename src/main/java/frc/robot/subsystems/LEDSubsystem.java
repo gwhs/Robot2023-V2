@@ -15,11 +15,12 @@ public class LEDSubsystem extends SubsystemBase {
     EMERGENCY,
     YELLOW,
     PURPLE,
+    TEAMCOLOR,
   }
 
   private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
-  private int NUMBER_LED = 85;
+  private int NUMBER_LED = 84;
   // Store what the last hue of the first pixel is
   private int m_rainbowFirstPixelHue;
   private double m_brightness = 1;
@@ -44,7 +45,7 @@ public class LEDSubsystem extends SubsystemBase {
     m_led.setData(m_ledBuffer);
     m_led.start();
 
-    ledMode = LEDMode.RAINBOW;
+    ledMode = LEDMode.TEAMCOLOR;
   }
 
   public void setLedMode(LEDMode ledMode) {
@@ -53,6 +54,19 @@ public class LEDSubsystem extends SubsystemBase {
 
   public LEDMode getLedMode() {
     return ledMode;
+  }
+
+  public int transformColor(int colorOne, int colorTwo, double multiplier) {
+    // hwne multiplier is 0, get color one, when color one is on color two
+     int value = (int)((colorOne * multiplier) + (colorTwo * (1 - multiplier)));
+
+     if (value > 255) {
+      return 255;
+     } else if (value < 0) {
+      return 0;
+     } else {
+      return value;
+     }
   }
 
   public void rainbow() {
@@ -98,6 +112,32 @@ public class LEDSubsystem extends SubsystemBase {
     generalLED(0, NUMBER_LED, 0, 0, 0);
   }
 
+  public void teamColor() {
+    // For every pixel
+    final int r1 = 255;
+    final int g1 = 0;
+    final int b1 = 0;
+
+    final int r2 = 0;
+    final int g2 = 5;
+    final int b2 = 0;
+
+    int r3;
+    int g3;
+    int b3;
+
+    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+      double t = (double) (i / (m_ledBuffer.getLength() - 1.0));
+
+      r3 = transformColor(r1, r2, t);
+      g3 = transformColor(g1, g2, t);
+      b3 = transformColor(b1, b2, t);
+
+      // generalLED(i, i + 1, r3, g3, b3);
+      m_ledBuffer.setRGB(i, (int) (r3), (int) (b3), (int) (g3));
+    }
+  }
+
   @Override
   public void periodic() {
     // System.out.println(ledMode);
@@ -113,6 +153,9 @@ public class LEDSubsystem extends SubsystemBase {
         break;
       case PURPLE:
         purple();
+        break;
+      case TEAMCOLOR:
+        teamColor();
         break;
     }
 
