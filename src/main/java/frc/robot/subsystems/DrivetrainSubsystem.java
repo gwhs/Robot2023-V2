@@ -100,10 +100,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
               backLeftLayout,
               backRightLayout,
               setup.canivore_name());
-    } else if (setup.name().equals("hana")) {
+    } else if (setup.name().equals("chuck")) {
       driveTrain = DriveTrainConstants.chuck;
       swerveModules =
-          swerveModuleHana(
+          swerveModuleChuck(
               frontLeftLayout,
               frontRightLayout,
               backLeftLayout,
