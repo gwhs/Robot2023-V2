@@ -307,9 +307,7 @@ public class RobotContainer {
 
     // change LEDStrip colors
 
-    controller.a().onTrue(Commands.runOnce(() -> m_led.setLedMode(LEDMode.RAINBOW), m_led));
-
-    controller.b().onTrue(Commands.runOnce(() -> m_led.setLedMode(LEDMode.EMERGENCY), m_led));
+    controller.a().onTrue(Commands.runOnce(() -> toggleLED()));
   }
 
   private void configureLimelightBindings() {
@@ -351,6 +349,14 @@ public class RobotContainer {
     m_chooser.addOption("FUN", "FUN");
 
     tab.add(m_chooser);
+  }
+
+  private void toggleLED() {
+    if (m_led.getLedMode() == LEDMode.YELLOW) {
+      m_led.setLedMode(LEDMode.PURPLE);
+    } else {
+      m_led.setLedMode(LEDMode.YELLOW);
+    }
   }
 
   public Command getAutonomousCommand() {
