@@ -100,6 +100,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
               backLeftLayout,
               backRightLayout,
               setup.canivore_name());
+    } else if (setup.name().equals("chuck")) {
+      driveTrain = DriveTrainConstants.chuck;
+      swerveModules =
+          swerveModuleChuck(
+              frontLeftLayout,
+              frontRightLayout,
+              backLeftLayout,
+              backRightLayout,
+              setup.canivore_name());
     } else {
       driveTrain = DriveTrainConstants.calliope;
       swerveModules =
@@ -176,6 +185,54 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   private SwerveModule[] swerveModuleChris(
+      ShuffleboardLayout frontLeftLayout,
+      ShuffleboardLayout frontRightLayout,
+      ShuffleboardLayout backLeftLayout,
+      ShuffleboardLayout backRightLayout,
+      String canivoreName) {
+    /*
+     * Specific to the springtrap drivetrain(just the offset)
+     */
+
+    SwerveModule[] swerveModules =
+        new SwerveModule[] {
+          createSwerveModule(
+              frontLeftLayout,
+              ModuleConfiguration.MK4II_L3,
+              driveTrain.FRONT_LEFT_MODULE_DRIVE_MOTOR,
+              driveTrain.FRONT_LEFT_MODULE_STEER_MOTOR,
+              driveTrain.FRONT_LEFT_MODULE_STEER_ENCODER,
+              driveTrain.FRONT_LEFT_MODULE_STEER_OFFSET,
+              canivoreName),
+          createSwerveModule(
+              frontRightLayout,
+              ModuleConfiguration.MK4II_L3,
+              driveTrain.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
+              driveTrain.FRONT_RIGHT_MODULE_STEER_MOTOR,
+              driveTrain.FRONT_RIGHT_MODULE_STEER_ENCODER,
+              driveTrain.FRONT_RIGHT_MODULE_STEER_OFFSET,
+              canivoreName),
+          createSwerveModule(
+              backLeftLayout,
+              ModuleConfiguration.MK4II_L3,
+              driveTrain.BACK_LEFT_MODULE_DRIVE_MOTOR,
+              driveTrain.BACK_LEFT_MODULE_STEER_MOTOR,
+              driveTrain.BACK_LEFT_MODULE_STEER_ENCODER,
+              driveTrain.BACK_LEFT_MODULE_STEER_OFFSET,
+              canivoreName),
+          createSwerveModule(
+              backRightLayout,
+              ModuleConfiguration.MK4II_L3,
+              driveTrain.BACK_RIGHT_MODULE_DRIVE_MOTOR,
+              driveTrain.BACK_RIGHT_MODULE_STEER_MOTOR,
+              driveTrain.BACK_RIGHT_MODULE_STEER_ENCODER,
+              driveTrain.BACK_RIGHT_MODULE_STEER_OFFSET,
+              canivoreName)
+        };
+    return swerveModules;
+  }
+
+  private SwerveModule[] swerveModuleChuck(
       ShuffleboardLayout frontLeftLayout,
       ShuffleboardLayout frontRightLayout,
       ShuffleboardLayout backLeftLayout,

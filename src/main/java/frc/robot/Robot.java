@@ -26,7 +26,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
-  private final RobotSetup robot = Constants.chris;
+  private final RobotSetup robot = Constants.chuck;
 
   private RobotContainer robotContainer;
 
@@ -66,6 +66,9 @@ public class Robot extends LoggedRobot {
         LoggedPowerDistribution.getInstance(1, ModuleType.kRev);
         break;
       case "calliope":
+        LoggedPowerDistribution.getInstance(1, ModuleType.kRev);
+        break;
+      case "chuck":
         LoggedPowerDistribution.getInstance(1, ModuleType.kRev);
         break;
       default:
@@ -112,6 +115,7 @@ public class Robot extends LoggedRobot {
 
     // Logger.log("/Robot/Battery Voltage", RobotController.getBatteryVoltage());
     // Logger.update();
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
