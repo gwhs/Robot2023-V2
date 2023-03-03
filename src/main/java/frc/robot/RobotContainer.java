@@ -6,12 +6,10 @@ package frc.robot;
 
 import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
 
-import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -20,9 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.RobotSetup;
-import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalance;
@@ -30,7 +26,6 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.*;
 import frc.robot.commands.ShuffleBoardBen;
-
 import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
@@ -73,7 +68,6 @@ public class RobotContainer {
 
   private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub, 0);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
-
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
   final List<Obstacle> standardObstacles = FieldConstants.standardObstacles;
@@ -237,6 +231,8 @@ public class RobotContainer {
     // controller.x().toggleOnTrue(toPole);
 
     controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
+    controllertwo.b().onTrue(new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub));
+    controllertwo.y().onTrue(new PlaceMid(drivetrainSubsystem, limeLightSub));
 
     // controller
     // .a()
@@ -339,7 +335,6 @@ public class RobotContainer {
             drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "HajelPath");
 
     return vendingMachine.getAutoCommand();
-
   }
 
   private static double modifyAxis(double value) {

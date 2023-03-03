@@ -23,18 +23,13 @@ public class AllLime extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new PPIDAutoAim(
-            drivetrainSubsystem,
-            limeLightSub,
-            LimeLightConstants.LOWER_DISTANCE_SHOOT),
+        new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.LOWER_DISTANCE_SHOOT),
         new WaitCommand(.5),
         new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub, 0),
         new StraightWheel(drivetrainSubsystem),
         new Sideways(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
         new StraightWheel(drivetrainSubsystem),
         new PPIDAutoAim(
-            drivetrainSubsystem,
-            limeLightSub,
-            LimeLightConstants.UPPER_DISTANCE_SHOOT));
+            drivetrainSubsystem, limeLightSub, LimeLightConstants.UPPER_DISTANCE_SHOOT));
   }
 }
