@@ -4,17 +4,10 @@
 
 package frc.robot;
 
-import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
-
-import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
-import frc.robot.commands.PlaceCone.PlaceMid;
-import frc.robot.commands.PlaceCone.PlaceHigh;
-import frc.robot.commands.PlaceCone.PlaceLow;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -31,7 +24,9 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.AllLime;
 import frc.robot.commands.PlaceCone.ChangePipeline;
-import frc.robot.commands.PlaceCone.PPIDAutoAim;
+import frc.robot.commands.PlaceCone.PlaceHigh;
+import frc.robot.commands.PlaceCone.PlaceLow;
+import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
 import frc.robot.commands.autonomous.TestAutoCommands;
@@ -363,6 +358,7 @@ public class RobotContainer {
     m_chooser.addOption("I 2+ and engage", "HajelPathV2");
     m_chooser.addOption("C place and engage", "C1+E");
     m_chooser.addOption("G place and engage", "G1+E");
+  }
 
   private void toggleLED() {
     if (m_led.getLedMode() == LEDMode.YELLOW) {

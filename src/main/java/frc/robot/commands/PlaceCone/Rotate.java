@@ -68,6 +68,7 @@ public class Rotate extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println(poseEstimatorSubsystem.getAngle());
     // gets drive values to align to 0 degrees, field oriented.
     values = chassisValuesLower();
     drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
