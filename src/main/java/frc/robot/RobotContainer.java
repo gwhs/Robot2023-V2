@@ -203,7 +203,6 @@ public class RobotContainer {
     // rotate
     controller.leftBumper().onTrue(rotate);
     // rotate
-    controller.rightBumper().onTrue(allLime); //
 
     controllertwo
         .back()
@@ -218,7 +217,7 @@ public class RobotContainer {
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
     controller.x().onTrue(new ChangePipeline(limeLightSub));
-    controller.b().onTrue(rotate);
+    // controller.b().onTrue(rotate);
     // controller.y().onTrue(autoAimLime1);
 
     controllertwo
@@ -231,10 +230,14 @@ public class RobotContainer {
     // controller.x().toggleOnTrue(toPole);
 
     controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
-    controllertwo.b().onTrue(new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub));
-    controllertwo.y().onTrue(new PlaceMid(drivetrainSubsystem, limeLightSub));
+    controller.b().onTrue(new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub));
+    controller.y().onTrue(new PlaceMid(drivetrainSubsystem, limeLightSub));
+    controller
+        .rightBumper()
+        .onTrue(
+            new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder));
 
-    // controller
+    // controller212
     // .a()
     // .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0),
     // drivetrainSubsystem));
@@ -265,16 +268,16 @@ public class RobotContainer {
     // new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
 
     // controller.y().onTrue(straightWheel1);
-    controller
-        // Place high
-        .y()
-        .onTrue(
-            Commands.sequence(
-                new MagicMotionPos(mainArm, 190, 0, 0),
-                Commands.waitSeconds(.5),
-                new MagicMotionPos(mainArm, 0, 0, 0),
-                Commands.waitSeconds(.5),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
+    // controller
+    //     // Place high
+    //     .y()
+    //     .onTrue(
+    //         Commands.sequence(
+    //             new MagicMotionPos(mainArm, 190, 0, 0),
+    //             Commands.waitSeconds(.5),
+    //             new MagicMotionPos(mainArm, 0, 0, 0),
+    //             Commands.waitSeconds(.5),
+    //             new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
 
     controllertwo
         .y()
