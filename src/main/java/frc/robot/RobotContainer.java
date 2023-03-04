@@ -346,6 +346,8 @@ public class RobotContainer {
     m_chooser.addOption("FUN", "FUN"); // why?
     m_chooser.addOption("I 1+ and engage", "HajelPath");
     m_chooser.addOption("I 2+ and engage", "HajelPathV2");
+    m_chooser.addOption("C place and engage", "C1+E");
+    m_chooser.addOption("G place and engage", "G1+E");
 
     tab.add(m_chooser);
   }
@@ -358,7 +360,12 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     TestAutoCommands vendingMachine =
         new TestAutoCommands(
-            drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "HajelPathV2", limeLightSub);
+            drivetrainSubsystem,
+            poseEstimator,
+            mainArm,
+            shaftEncoder,
+            "StraightWithRotation",
+            limeLightSub);
 
     return vendingMachine.getAutoCommand();
   }
