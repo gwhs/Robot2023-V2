@@ -304,12 +304,14 @@ public class RobotContainer {
         .onTrue(
             Commands.either(
                 new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube"),
+
                 Commands.sequence(
                     Commands.print("Encoder Pos" + -clawEncoder.getRaw() / 8192. * 360.),
                     Commands.parallel(
                         new ClawOpenClose(-55, 5, clawOpenClose), Commands.waitSeconds(1)),
                     new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CUBE"),
                     new ClawOpenClose(0, 5, clawOpenClose).withTimeout(2)),
+                    
                 clawEncoder::posDown));
 
     // CONE
