@@ -4,15 +4,9 @@
 
 package frc.robot;
 
-import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
-
-import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
-import frc.robot.commands.PlaceCone.PlaceMid;
-import frc.robot.commands.PlaceCone.PlaceHigh;
-import frc.robot.commands.PlaceCone.PlaceLow;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -31,7 +25,9 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.AllLime;
 import frc.robot.commands.PlaceCone.ChangePipeline;
-import frc.robot.commands.PlaceCone.PPIDAutoAim;
+import frc.robot.commands.PlaceCone.PlaceHigh;
+import frc.robot.commands.PlaceCone.PlaceLow;
+import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
 import frc.robot.commands.autonomous.TestAutoCommands;
@@ -44,7 +40,6 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LEDSubsystem.LEDMode;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
-import frc.robot.subsystems.LimelightHelpers.LimelightHelpers;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.HashMap;
 import java.util.List;
@@ -255,17 +250,34 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
 
     controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
-    
-    //for this place stuff, chagne the degrees by like -5(for cubes)
+
+    // for this place stuff, chagne the degrees by like -5(for cubes)
     controller
         .b()
-        .onTrue( Commands.either(new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 270), new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 265), limeLightSub :: checkPipe));
-            
-    controller.y().onTrue(Commands.either(new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder, 220), new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder, 215), limeLightSub::checkPipe));
+        .onTrue(
+            Commands.either(
+                new PlaceLow(
+                    drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 270),
+                new PlaceLow(
+                    drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 265),
+                limeLightSub::checkPipe));
+
+    controller
+        .y()
+        .onTrue(
+            Commands.either(
+                new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder, 220),
+                new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder, 215),
+                limeLightSub::checkPipe));
     controller
         .rightBumper()
-        .onTrue(Commands.either(new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 190), new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 185), limeLightSub::checkPipe)
-            );
+        .onTrue(
+            Commands.either(
+                new PlaceHigh(
+                    drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 190),
+                new PlaceHigh(
+                    drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 185),
+                limeLightSub::checkPipe));
 
     // controller212
     // .a()

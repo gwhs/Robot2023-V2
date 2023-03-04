@@ -25,7 +25,8 @@ public class PlaceLow extends SequentialCommandGroup {
       PoseEstimatorSubsystem poseEstimatorSubsystem,
       LimeLightSub limeLightSub,
       MagicMotion mainArm,
-      BoreEncoder shaftEncoder, int degrees) {
+      BoreEncoder shaftEncoder,
+      int degrees) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

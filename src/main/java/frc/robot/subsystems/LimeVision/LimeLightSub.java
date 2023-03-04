@@ -96,7 +96,7 @@ public class LimeLightSub extends SubsystemBase {
     limelight_comm.set_entry_number("pipeline", pipeline);
   }
 
-  public boolean checkPipe(){
-    return limelight_comm.get_entry_double("pipeline") <.5;
+  public boolean checkPipe() {
+    return limelight_comm.get_entry_double("pipeline") < .5;
   }
 }
