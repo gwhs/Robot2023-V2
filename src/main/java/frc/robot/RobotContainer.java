@@ -4,10 +4,15 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
+
 import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
+import frc.robot.commands.PlaceCone.PlaceMid;
+import frc.robot.commands.PlaceCone.PlaceHigh;
+import frc.robot.commands.PlaceCone.PlaceLow;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -18,9 +23,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.RobotSetup;
-import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalance;
@@ -73,25 +76,11 @@ public class RobotContainer {
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
-  private final PPIDAutoAim autoAimLime1 =
-      new PPIDAutoAim(
-          drivetrainSubsystem,
-          poseEstimator,
-          limeLightSub,
-          LimeLightConstants.LOWER_DISTANCE_SHOOT);
-  private final PPIDAutoAim autoAimLime2 =
-      new PPIDAutoAim(
-          drivetrainSubsystem,
-          poseEstimator,
-          limeLightSub,
-          LimeLightConstants.UPPER_DISTANCE_SHOOT);
 
   private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub, 0);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
-  // Arm
-
   final List<Obstacle> standardObstacles = FieldConstants.standardObstacles;
   final List<Obstacle> cablePath = FieldConstants.cablePath;
   // final List<Obstacle> obstacles = new ArrayList<Obstacle>();
@@ -125,8 +114,7 @@ public class RobotContainer {
           () -> -controller.getRightX());
 
   // private final ShuffleBoardBen angleBenCommand =
-  // new ShuffleBoardBen(
-  // drivetrainSubsystem); // add a button + FIX CANT CHANGE TAB ON SHUFFLEBOARD
+  //     new ShuffleBoardBen(drivetrainSubsystem); // add a button
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -248,6 +236,8 @@ public class RobotContainer {
 
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
+    controller.x().onTrue(new ChangePipeline(limeLightSub));
+    // controller.b().onTrue(rotate);
     // controller.x().onTrue(new ChangePipeline(limeLightSub));
     controller.b().onTrue(rotate);
     // controller.y().onTrue(autoAimLime1);
@@ -264,8 +254,17 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
 
     controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
+    controller
+        .b()
+        .onTrue(
+            new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder));
+    controller.y().onTrue(new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder));
+    controller
+        .rightBumper()
+        .onTrue(
+            new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder));
 
-    // controller
+    // controller212
     // .a()
     // .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0),
     // drivetrainSubsystem));
@@ -296,18 +295,16 @@ public class RobotContainer {
     // new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
 
     // controller.y().onTrue(straightWheel1);
-    controller
-        // Place high
-        .y()
-        .onTrue(
-            Commands.sequence(
-                new PPSwerveFollower(
-                    drivetrainSubsystem, poseEstimator, "move12", new PathConstraints(2, 2), true),
-                new MagicMotionPos(mainArm, 210, 0, 0),
-                Commands.waitSeconds(.5),
-                new MagicMotionPos(mainArm, 0, 0, 0),
-                Commands.waitSeconds(.5),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
+    // controller
+    //     // Place high
+    //     .y()
+    //     .onTrue(
+    //         Commands.sequence(
+    //             new MagicMotionPos(mainArm, 190, 0, 0),
+    //             Commands.waitSeconds(.5),
+    //             new MagicMotionPos(mainArm, 0, 0, 0),
+    //             Commands.waitSeconds(.5),
+    //             new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
 
     controllertwo
         .y()
@@ -354,16 +351,7 @@ public class RobotContainer {
 
     m_chooser.setDefaultOption("Straight No Rotation", "StraightNoRotation");
     m_chooser.addOption("Straight With Rotation", "StraightWithRotation");
-    m_chooser.addOption("D-F Place and engage", "D-F1E");
-    m_chooser.addOption("A 2 piece and engage", "A2E");
-    m_chooser.addOption("D place and hold", "D1+1");
-    m_chooser.addOption("F place and hold", "F1+1");
-    m_chooser.addOption("G 2 piece and engage", "G2E");
-    m_chooser.addOption("I 2 piece and hold", "I2+1");
-    m_chooser.addOption("I 2 piece engage and hold", "I2+1E");
-    m_chooser.addOption("I 3 piece", "I3");
     m_chooser.addOption("FUN", "FUN");
-    m_chooser.addOption("I 1+ and engage", "HajelPath");
 
     tab.getLayout("Auto Paths", BuiltInLayouts.kList)
         .withSize(2, 4)
@@ -385,8 +373,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // use return TestAutoCommands when using chris
-
+    // return new TestAutonomous(drivetrainSubsystem, poseEstimator);
     TestAutoCommands vendingMachine =
         new TestAutoCommands(
             drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, m_chooser.getSelected());
