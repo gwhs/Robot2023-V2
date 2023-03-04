@@ -230,8 +230,11 @@ public class RobotContainer {
     // controller.x().toggleOnTrue(toPole);
 
     controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
-    controller.b().onTrue(new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub));
-    controller.y().onTrue(new PlaceMid(drivetrainSubsystem, limeLightSub));
+    controller
+        .b()
+        .onTrue(
+            new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder));
+    controller.y().onTrue(new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder));
     controller
         .rightBumper()
         .onTrue(
