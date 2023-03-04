@@ -196,6 +196,7 @@ public final class Constants {
     public static final double MOUNTING_ANGLE = -19;
     public static final double LOWER_DISTANCE_SHOOT = 84;
     public static final double UPPER_DISTANCE_SHOOT = 42;
+    public static final double BOTTOM_DISTANCE_SHOOT = 100;
   }
 
   public static final class Arm {
