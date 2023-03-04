@@ -4,13 +4,12 @@
 
 package frc.robot;
 
-import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
-
 import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -27,7 +26,11 @@ import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
-import frc.robot.commands.PlaceCone.*;
+import frc.robot.commands.PlaceCone.AllLime;
+import frc.robot.commands.PlaceCone.ChangePipeline;
+import frc.robot.commands.PlaceCone.PPIDAutoAim;
+import frc.robot.commands.PlaceCone.Rotate;
+import frc.robot.commands.PlaceCone.Sideways;
 import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
@@ -55,7 +58,7 @@ public class RobotContainer {
   // change robot name
   // change this to change robot -----------------v
   // change the same in Robot.java
-  private final RobotSetup robot = Constants.chuck;
+  private final RobotSetup robot = Constants.chris;
   private final CommandXboxController controller = new CommandXboxController(0);
   private final CommandXboxController controllertwo = new CommandXboxController(1);
   // Set IP to 10.57.12.11
@@ -65,6 +68,7 @@ public class RobotContainer {
   // Arm
   private final MagicMotion mainArm = new MagicMotion(21, robot.canivore_name());
   private final BoreEncoder shaftEncoder = new BoreEncoder();
+  private SendableChooser<String> m_chooser;
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
   private final PoseEstimatorSubsystem poseEstimator =
@@ -158,7 +162,7 @@ public class RobotContainer {
     mainArm.robotInit();
     shaftEncoder.reset();
 
-    // setupPathChooser();
+    setupPathChooser();
   }
 
   private GenericEntry maxSpeedAdjustment;
@@ -344,10 +348,9 @@ public class RobotContainer {
     controller.b().onTrue(sideways);
   }
 
-  SendableChooser<String> m_chooser = new SendableChooser<>();
-
   private void setupPathChooser() {
     final ShuffleboardTab tab = Shuffleboard.getTab("Drive");
+    m_chooser = new SendableChooser<>();
 
     m_chooser.setDefaultOption("Straight No Rotation", "StraightNoRotation");
     m_chooser.addOption("Straight With Rotation", "StraightWithRotation");
@@ -362,7 +365,10 @@ public class RobotContainer {
     m_chooser.addOption("FUN", "FUN");
     m_chooser.addOption("I 1+ and engage", "HajelPath");
 
-    tab.add(m_chooser);
+    tab.getLayout("Auto Paths", BuiltInLayouts.kList)
+        .withSize(2, 4)
+        .withPosition(0, 0)
+        .add(m_chooser);
   }
 
   private void toggleLED() {
@@ -383,14 +389,14 @@ public class RobotContainer {
 
     TestAutoCommands vendingMachine =
         new TestAutoCommands(
-            drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "HajelPath");
+            drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, m_chooser.getSelected());
 
     return vendingMachine.getAutoCommand();
   }
 
   private static double modifyAxis(double value) {
     // Deadband
-    value = MathUtil.applyDeadband(value, DEADBAND);
+    value = MathUtil.applyDeadband(value, Constants.TeleopDriveConstants.DEADBAND);
 
     // Square the axis
     value = Math.copySign(value * value, value);
