@@ -28,6 +28,7 @@ public class PPSwerveFollower extends CommandBase {
       DrivetrainSubsystem d,
       PoseEstimatorSubsystem p,
       String pathName,
+      int status,
       PathConstraints constraints,
       boolean resetOdom) {
     this.driveSystem = d;

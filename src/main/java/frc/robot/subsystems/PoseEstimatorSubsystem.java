@@ -151,7 +151,9 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
   public double getAngle() {
     Pose2d pose = getCurrentPose();
-    return pose.getRotation().getDegrees();
+    double poseA = pose.getRotation().getDegrees();
+    Logger.getInstance().recordOutput("PostEstimator/Degree", poseA);
+    return poseA;
   }
 
   /**

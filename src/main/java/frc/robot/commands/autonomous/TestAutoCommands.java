@@ -20,25 +20,28 @@ public final class TestAutoCommands {
   private MagicMotion mainArm;
   private BoreEncoder shaftEncoder;
   private String pathName;
+  private int status;
 
   public TestAutoCommands(
       DrivetrainSubsystem d,
       PoseEstimatorSubsystem poseEstimatorSystem,
       MagicMotion m,
       BoreEncoder b,
-      String p) {
+      String p,
+      int s) {
     this.driveSystem = d;
     this.poseEstimatorSystem = poseEstimatorSystem;
     this.mainArm = m;
     this.shaftEncoder = b;
     this.pathName = p;
+    this.status = s;
   }
 
   public SequentialCommandGroup getAutoCommand() {
     if (pathName.equals("HajelPath")) {
       return new SequentialCommandGroup(
           new PPSwerveFollower(
-              driveSystem, poseEstimatorSystem, "move12", new PathConstraints(2, 2), true),
+              driveSystem, poseEstimatorSystem, "move12", status, new PathConstraints(2, 2), true),
           new MagicMotionPos(mainArm, 210, 0, 0),
           Commands.waitSeconds(.5),
           new ParallelCommandGroup(
@@ -47,7 +50,12 @@ public final class TestAutoCommands {
                   Commands.waitSeconds(.5),
                   new MagicMotionAbsoluteZero(mainArm, shaftEncoder)),
               new PPSwerveFollower(
-                  driveSystem, poseEstimatorSystem, "HajelPath", new PathConstraints(2, 2), true)),
+                  driveSystem,
+                  poseEstimatorSystem,
+                  "HajelPath",
+                  (status + 1),
+                  new PathConstraints(2, 2),
+                  true)),
           new AutoBalanceFast(driveSystem));
     }
     return null;

@@ -66,6 +66,9 @@ public class RobotContainer {
   private final MagicMotion mainArm = new MagicMotion(21, robot.canivore_name());
   private final BoreEncoder shaftEncoder = new BoreEncoder();
 
+  // Led status
+  private int status = 1;
+
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
@@ -242,7 +245,7 @@ public class RobotContainer {
         .onTrue(sideways); // add a button
     // place low
 
-    controller.a().toggleOnTrue(fieldHeadingDriveCommand);
+    // controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
     controller.x().onTrue(new ChangePipeline(limeLightSub));
     controller.b().onTrue(rotate);
@@ -296,7 +299,12 @@ public class RobotContainer {
         .onTrue(
             Commands.sequence(
                 new PPSwerveFollower(
-                    drivetrainSubsystem, poseEstimator, "move12", new PathConstraints(2, 2), true),
+                    drivetrainSubsystem,
+                    poseEstimator,
+                    "move12",
+                    status,
+                    new PathConstraints(2, 2),
+                    true),
                 new MagicMotionPos(mainArm, 210, 0, 0),
                 Commands.waitSeconds(.5),
                 new MagicMotionPos(mainArm, 0, 0, 0),
@@ -315,7 +323,7 @@ public class RobotContainer {
 
     // change LEDStrip colors
 
-    // controller.a().onTrue(Commands.runOnce(() -> toggleLED()));
+    controller.a().onTrue(Commands.runOnce(() -> toggleLED()));
   }
 
   private void configureLimelightBindings() {
@@ -381,7 +389,7 @@ public class RobotContainer {
 
     TestAutoCommands vendingMachine =
         new TestAutoCommands(
-            drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "HajelPath");
+            drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "HajelPath", status);
 
     return vendingMachine.getAutoCommand();
   }

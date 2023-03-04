@@ -7,6 +7,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.autonomous.TestAutoCommands;
+import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
+import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 
 public class LEDSubsystem extends SubsystemBase {
 
@@ -16,11 +19,15 @@ public class LEDSubsystem extends SubsystemBase {
     YELLOW,
     PURPLE,
     TEAMCOLOR,
+    // auto
+    GREEN,
+    ORANGE,
+    RED,
   }
 
   private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
-  private int NUMBER_LED = 84;
+  private int NUMBER_LED = 24;
   // Store what the last hue of the first pixel is
   private int m_rainbowFirstPixelHue;
   private double m_brightness = 1;
@@ -29,6 +36,17 @@ public class LEDSubsystem extends SubsystemBase {
   private int ledPortNumber = 9;
 
   private LEDMode ledMode;
+
+  // auto
+  private DrivetrainSubsystem drivetrainSubsystem;
+  private PoseEstimatorSubsystem poseEstimator;
+  private BoreEncoder shaftEncoder;
+  private MagicMotion mainArm;
+  private int status;
+
+  TestAutoCommands m_status =
+      new TestAutoCommands(
+          drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "HajelPath", status);
 
   public LEDSubsystem() {
     // PWM port 9
@@ -45,11 +63,19 @@ public class LEDSubsystem extends SubsystemBase {
     m_led.setData(m_ledBuffer);
     m_led.start();
 
-    ledMode = LEDMode.TEAMCOLOR;
+    ledMode = LEDMode.RAINBOW;
   }
 
   public void setLedMode(LEDMode ledMode) {
     this.ledMode = ledMode;
+
+    if (status == 1) {
+      ledMode = LEDMode.GREEN;
+    } else if (status == 2) {
+      ledMode = LEDMode.ORANGE;
+    } else {
+      ledMode = LEDMode.RED;
+    }
   }
 
   public LEDMode getLedMode() {
@@ -58,16 +84,20 @@ public class LEDSubsystem extends SubsystemBase {
 
   public int transformColor(int colorOne, int colorTwo, double multiplier) {
     // hwne multiplier is 0, get color one, when color one is on color two
-     int value = (int)((colorOne * multiplier) + (colorTwo * (1 - multiplier)));
+    int value = (int) ((colorOne * multiplier) + (colorTwo * (1 - multiplier)));
 
-     if (value > 255) {
+    if (value > 255) {
       return 255;
-     } else if (value < 0) {
+    } else if (value < 0) {
       return 0;
-     } else {
+    } else {
       return value;
-     }
+    }
   }
+  // auto
+  // public void setStatus() {
+  //   if (drivetrainSubsystem
+  // }
 
   public void rainbow() {
     // For every pixel
@@ -119,7 +149,7 @@ public class LEDSubsystem extends SubsystemBase {
     final int b1 = 0;
 
     final int r2 = 0;
-    final int g2 = 5;
+    final int g2 = 4;
     final int b2 = 0;
 
     int r3;
@@ -136,6 +166,19 @@ public class LEDSubsystem extends SubsystemBase {
       // generalLED(i, i + 1, r3, g3, b3);
       m_ledBuffer.setRGB(i, (int) (r3), (int) (b3), (int) (g3));
     }
+  }
+
+  // auto
+  public void green() {
+    generalLED(0, NUMBER_LED, 0, 255, 0);
+  }
+
+  public void orange() {
+    generalLED(0, NUMBER_LED, 255, 50, 0);
+  }
+
+  public void red() {
+    generalLED(0, NUMBER_LED, 255, 0, 0);
   }
 
   @Override
@@ -157,6 +200,17 @@ public class LEDSubsystem extends SubsystemBase {
       case TEAMCOLOR:
         teamColor();
         break;
+
+        // auto
+      case GREEN:
+        green();
+        break;
+      case ORANGE:
+        orange();
+        break;
+      case RED:
+        red();
+        break;
     }
 
     m_led.setData(m_ledBuffer);
@@ -171,4 +225,5 @@ public class LEDSubsystem extends SubsystemBase {
           (int) (greenColor * m_brightness));
     }
   }
+  // Hi! I caught your attention!
 }
