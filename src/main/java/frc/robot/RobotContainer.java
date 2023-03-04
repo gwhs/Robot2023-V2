@@ -44,6 +44,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LEDSubsystem.LEDMode;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
+import frc.robot.subsystems.LimelightHelpers.LimelightHelpers;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.HashMap;
 import java.util.List;
@@ -254,15 +255,17 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
 
     controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
+    
+    //for this place stuff, chagne the degrees by like -5(for cubes)
     controller
         .b()
-        .onTrue(
-            new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder));
-    controller.y().onTrue(new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder));
+        .onTrue( Commands.either(new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 270), new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 265), limeLightSub :: checkPipe));
+            
+    controller.y().onTrue(Commands.either(new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder, 220), new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder, 215), limeLightSub::checkPipe));
     controller
         .rightBumper()
-        .onTrue(
-            new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder));
+        .onTrue(Commands.either(new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 190), new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 185), limeLightSub::checkPipe)
+            );
 
     // controller212
     // .a()
