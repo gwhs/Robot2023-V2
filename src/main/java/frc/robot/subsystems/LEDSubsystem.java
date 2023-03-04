@@ -63,7 +63,7 @@ public class LEDSubsystem extends SubsystemBase {
     m_led.setData(m_ledBuffer);
     m_led.start();
 
-    ledMode = LEDMode.RAINBOW;
+    ledMode = LEDMode.TEAMCOLOR;
   }
 
   public void setLedMode(LEDMode ledMode) {

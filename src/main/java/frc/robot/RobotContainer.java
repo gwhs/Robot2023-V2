@@ -372,8 +372,23 @@ public class RobotContainer {
   }
 
   private void toggleLED() {
+  //   if (m_led.getLedMode() == LEDMode.YELLOW) {
+  //     m_led.setLedMode(LEDMode.PURPLE);
+  //   } else {
+  //     m_led.setLedMode(LEDMode.YELLOW);
+  //   }
+  // }
+
     if (m_led.getLedMode() == LEDMode.YELLOW) {
       m_led.setLedMode(LEDMode.PURPLE);
+    } else if (m_led.getLedMode() == LEDMode.PURPLE) {
+      m_led.setLedMode(LEDMode.EMERGENCY);
+    } else if (m_led.getLedMode() == LEDMode.EMERGENCY) {
+      m_led.setLedMode(LEDMode.GREEN);
+    }  else if (m_led.getLedMode() == LEDMode.GREEN) {
+      m_led.setLedMode(LEDMode.ORANGE);
+    } else if (m_led.getLedMode() == LEDMode.ORANGE) {
+      m_led.setLedMode(LEDMode.TEAMCOLOR);
     } else {
       m_led.setLedMode(LEDMode.YELLOW);
     }
