@@ -47,7 +47,7 @@ public class ClawEncoderMoveDown extends CommandBase {
       if (velocity > Constants.Claw.CONE_UP_MAX_VELOCITY) {
         velocity = Constants.Claw.CONE_UP_MAX_VELOCITY;
       } else if (velocity < -Constants.Claw.CONE_UP_MAX_VELOCITY) {
-        velocity = -Constants.Claw.CONE_UP_MAX_VELOCITY;
+        velocity =0 -Constants.Claw.CONE_UP_MAX_VELOCITY;
       }
     }
     // System.out.println("DesiredAngle: " + desiredAngle);

@@ -65,9 +65,9 @@ public class RobotContainer {
 
   // Arm
   private final MagicMotion mainArm = new MagicMotion(21, robot.canivore_name());
-  private final Claw clawPivot = new Claw(6, MotorType.kBrushless);
-  private final Claw clawOpenClose = new Claw(5, MotorType.kBrushless);
-  private final BoreEncoder shaftEncoder = new BoreEncoder(7, 8);
+  private final Claw clawPivot = new Claw(31, MotorType.kBrushless);
+  private final Claw clawOpenClose = new Claw(30, MotorType.kBrushless);
+  private final BoreEncoder shaftEncoder = new BoreEncoder(7, 8); // Blue 7 ; Yellow 8
   private final BoreEncoder clawEncoder = new BoreEncoder(2, 3);
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
@@ -157,6 +157,7 @@ public class RobotContainer {
     configureDashboard();
     mainArm.robotInit();
     shaftEncoder.reset();
+    clawEncoder.reset();
 
     // setupPathChooser();
   }
@@ -299,7 +300,7 @@ public class RobotContainer {
 
     // CUBE
     controllertwo
-        .rightTrigger()
+        .rightBumper()
         .onTrue(
             Commands.either(
                 new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube"),
@@ -313,7 +314,7 @@ public class RobotContainer {
 
     // CONE
     // controllertwo.leftTrigger().onTrue(Commands.either(
-    //                   new ClawEncoderMoveDown(-125, clawPivot, clawEncoder,
+    //                   new ClawEnc oderMoveDown(-125, clawPivot, clawEncoder,
     // "CONE").withTimeout(3),
 
     //                   Commands.sequence(

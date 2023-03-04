@@ -4,26 +4,21 @@
 
 package frc.robot.subsystems.ArmSubsystems;
 
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.Map;
 
 public class BoreEncoder extends SubsystemBase {
   private final Encoder m_encoder;
 
-  private ShuffleboardTab tab = Shuffleboard.getTab("Encoder");
-  private GenericEntry encoderPosition = tab.add("Encoder Position", 0).getEntry();
-  private GenericEntry encoderRate =
-      tab.add("Encoder Rate", 0)
-          .withWidget(BuiltInWidgets.kDial)
-          .withProperties(Map.of("min", -500, "max", 500))
-          .getEntry();
+  // private ShuffleboardTab tab = Shuffleboard.getTab("Encoder");
+  // private GenericEntry encoderPosition = tab.add("Encoder Position", 0).getEntry();
+  // private GenericEntry encoderRate =
+  //     tab.add("Encoder Rate", 0)
+  //         .withWidget(BuiltInWidgets.kDial)
+  //         .withProperties(Map.of("min", -500, "max", 500))
+  //         .getEntry();
+
   /** Creates a new BoreEncoder. */
   public BoreEncoder(int channel1, int channel2) {
     m_encoder = new Encoder(channel1, channel2, false, CounterBase.EncodingType.k4X);
@@ -60,8 +55,8 @@ public class BoreEncoder extends SubsystemBase {
     double ticks = m_encoder.get();
     // SmartDashboard.putNumber("Encoder ticks", ticks);
     // SmartDashboard.putNumber("Encoder Rate", m_encoder.getRate());
-    SmartDashboard.putNumber("Encoder Distance", m_encoder.getDistance());
-    encoderPosition.setDouble(ticks);
-    encoderRate.setDouble(m_encoder.getRate());
+    // SmartDashboard.putNumber("Encoder Distance", m_encoder.getDistance());
+    // encoderPosition.setDouble(ticks);
+    // encoderRate.setDouble(m_encoder.getRate());
   }
 }
