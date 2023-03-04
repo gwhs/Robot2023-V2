@@ -191,7 +191,7 @@ public final class TestAutoCommands {
     if (pathName.equals("G2E")) {
       return new SequentialCommandGroup(
           new PPSwerveFollower(
-              driveSystem, poseEstimatorSystem, "move12", new PathConstraints(2, 2), true),
+              driveSystem, poseEstimatorSystem, "move12", new PathConstraints(1, 1), true),
           new MagicMotionPos(mainArm, 210, 0, 0),
           new ParallelCommandGroup(
               new SequentialCommandGroup(
@@ -202,7 +202,7 @@ public final class TestAutoCommands {
                       driveSystem, poseEstimatorSystem, "G2E", new PathConstraints(1, 1), true))),
           Commands.waitSeconds(1), // grab
           new PPSwerveFollower(
-              driveSystem, poseEstimatorSystem, "G2EPart2", new PathConstraints(2, 2), true),
+              driveSystem, poseEstimatorSystem, "G2EPart2", new PathConstraints(1, 1), true),
           Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
           new AllLime(driveSystem, poseEstimatorSystem, lime, 0), // april tag?
           new MagicMotionPos(mainArm, 210, 0, 0),
@@ -215,7 +215,7 @@ public final class TestAutoCommands {
                       driveSystem,
                       poseEstimatorSystem,
                       "G2EPart3",
-                      new PathConstraints(2, 2),
+                      new PathConstraints(1, 1),
                       true))),
           new AutoBalance(driveSystem));
     }
