@@ -20,6 +20,7 @@ public class Rotate extends CommandBase {
   private double degrees;
   private double[] values = {0, 0, 0};
   private boolean angleDone = false;
+  private boolean sideDone = false;
   private double p = .03;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
@@ -58,6 +59,7 @@ public class Rotate extends CommandBase {
   @Override
   public void initialize() {
     angleDone = false;
+    sideDone = false;
 
     // configure rotation pid
     System.out.println(poseEstimatorSubsystem.getAngle());
@@ -80,6 +82,11 @@ public class Rotate extends CommandBase {
       angleDone = true;
     } else {
       angleDone = false;
+    }
+    if (Math.abs(limeLight.getTx()) < 1) {
+      sideDone = true;
+    } else {
+      sideDone = false;
     }
   }
 
