@@ -34,6 +34,7 @@ public final class Constants {
   public static final RobotSetup calliope =
       new RobotSetup("calliope", "CAN_Network", GyroType.NAVX);
   public static final RobotSetup spring = new RobotSetup("spring", "rio", GyroType.PIGEON);
+  public static final RobotSetup chuck = new RobotSetup("chuck", "CAN_Network", GyroType.PIGEON);
 
   public static final class DrivetrainConstants {
 

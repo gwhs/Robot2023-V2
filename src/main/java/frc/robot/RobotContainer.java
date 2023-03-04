@@ -25,7 +25,6 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.*;
-import frc.robot.commands.ShuffleBoardBen;
 import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
@@ -33,6 +32,8 @@ import frc.robot.pathfind.VisGraph;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.LEDSubsystem.LEDMode;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.HashMap;
@@ -51,7 +52,7 @@ public class RobotContainer {
   // change robot name
   // change this to change robot -----------------v
   // change the same in Robot.java
-  private final RobotSetup robot = Constants.chris;
+  private final RobotSetup robot = Constants.chuck;
   private final CommandXboxController controller = new CommandXboxController(0);
   private final CommandXboxController controllertwo = new CommandXboxController(1);
   // Set IP to 10.57.12.11
@@ -82,6 +83,9 @@ public class RobotContainer {
   public VisGraph standardMap = new VisGraph();
   public VisGraph cableMap = new VisGraph();
 
+  // LEDStrips
+  public final LEDSubsystem m_led = new LEDSubsystem();
+
   HashMap<String, Command> eventMap = new HashMap<>();
 
   private final FieldHeadingDriveCommand fieldHeadingDriveCommand =
@@ -99,11 +103,12 @@ public class RobotContainer {
           () -> -controller.getRightY(),
           () -> -controller.getRightX());
 
-  private final ShuffleBoardBen angleBenCommand =
-      new ShuffleBoardBen(drivetrainSubsystem); // add a button
+  // private final ShuffleBoardBen angleBenCommand =
+  //     new ShuffleBoardBen(drivetrainSubsystem); // add a button
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
     Logger logger = Logger.getInstance();
     // Set up the default command for the drivetrain.
     drivetrainSubsystem.setDefaultCommand(
@@ -188,6 +193,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
     // Start button reseeds the steer motors to fix dead wheel
     this.startAndBackButton();
 
@@ -199,10 +205,13 @@ public class RobotContainer {
     // Back button resets the robot pose
 
     // Auto aim
+
     // controller.b().onTrue(new ChangePipeline(limeLightSub));
     // rotate
     controller.leftBumper().onTrue(rotate);
     // rotate
+
+    controller.rightBumper().onTrue(allLime); //
 
     controllertwo
         .back()
@@ -214,10 +223,13 @@ public class RobotContainer {
         ()
         .onTrue(sideways); // add a button
     // place low
+
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
     controller.x().onTrue(new ChangePipeline(limeLightSub));
     // controller.b().onTrue(rotate);
+    // controller.x().onTrue(new ChangePipeline(limeLightSub));
+    controller.b().onTrue(rotate);
     // controller.y().onTrue(autoAimLime1);
 
     controllertwo
@@ -227,7 +239,9 @@ public class RobotContainer {
     // place low
     controllertwo.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    // controller.x().toggleOnTrue(toPole);
+    controller
+        .x()
+        .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
 
     controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
     controller
@@ -291,6 +305,10 @@ public class RobotContainer {
                 new MagicMotionPos(mainArm, 0, 0, 0),
                 Commands.waitSeconds(.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
+
+    // change LEDStrip colors
+
+    // controller.a().onTrue(Commands.runOnce(() -> toggleLED()));
   }
 
   private void configureLimelightBindings() {
@@ -334,6 +352,19 @@ public class RobotContainer {
     tab.add(m_chooser);
   }
 
+  private void toggleLED() {
+    if (m_led.getLedMode() == LEDMode.YELLOW) {
+      m_led.setLedMode(LEDMode.PURPLE);
+    } else {
+      m_led.setLedMode(LEDMode.YELLOW);
+    }
+  }
+
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
   public Command getAutonomousCommand() {
     // return new TestAutonomous(drivetrainSubsystem, poseEstimator);
     TestAutoCommands vendingMachine =
