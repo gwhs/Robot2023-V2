@@ -73,7 +73,7 @@ public class RobotContainer {
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
 
-  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub, 0);
+  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub, 180);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);

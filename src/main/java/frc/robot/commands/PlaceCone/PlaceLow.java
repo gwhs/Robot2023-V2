@@ -32,7 +32,7 @@ public class PlaceLow extends SequentialCommandGroup {
     addCommands(
         new PPIDAutoAim(
             drivetrainSubsystem, limeLightSub, LimeLightConstants.BOTTOM_DISTANCE_SHOOT),
-        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub, 0),
+        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub, 180),
         new MagicMotionPos(mainArm, degrees, 0, 0),
         Commands.waitSeconds(.5),
         new MagicMotionPos(mainArm, 0, 0, 0),
