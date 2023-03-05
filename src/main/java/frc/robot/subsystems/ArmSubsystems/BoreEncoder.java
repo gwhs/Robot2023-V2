@@ -23,6 +23,7 @@ public class BoreEncoder extends SubsystemBase {
   public BoreEncoder(int channel1, int channel2) {
     m_encoder = new Encoder(channel1, channel2, false, CounterBase.EncodingType.k4X);
 
+    m_encoder.reset();
     m_encoder.setSamplesToAverage(5);
     m_encoder.setDistancePerPulse(1. / 256.);
     m_encoder.setMinRate(1.0);

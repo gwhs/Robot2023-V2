@@ -28,7 +28,7 @@ public class ClawEncoderMoveDown extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // System.out.println("--------------START-----------");
+    System.out.println("--------------START-----------");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,11 +47,11 @@ public class ClawEncoderMoveDown extends CommandBase {
       if (velocity > Constants.Claw.CONE_UP_MAX_VELOCITY) {
         velocity = Constants.Claw.CONE_UP_MAX_VELOCITY;
       } else if (velocity < -Constants.Claw.CONE_UP_MAX_VELOCITY) {
-        velocity = 0 - Constants.Claw.CONE_UP_MAX_VELOCITY;
+        velocity = -Constants.Claw.CONE_UP_MAX_VELOCITY;
       }
     }
     // System.out.println("DesiredAngle: " + desiredAngle);
-    // System.out.println("RawAngle: " + rawAngle);
+    System.out.println("RawAngle: " + rawAngle);
     System.out.println("Error: " + error);
     // System.out.println("Velocity: " + velocity);
 
@@ -61,7 +61,7 @@ public class ClawEncoderMoveDown extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     clawOne.setPercent(0);
-    // System.out.println("---------------END------------");
+    System.out.println("---------------END------------");
   }
 
   @Override

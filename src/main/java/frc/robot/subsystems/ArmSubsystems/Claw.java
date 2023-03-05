@@ -46,7 +46,7 @@ public class Claw extends SubsystemBase {
 
     // PID coefficients
     kP = 0.1;
-    kI = 1e-4;
+    kI = 0;
     kD = 1;
     kIz = 0;
     kFF = 0;
