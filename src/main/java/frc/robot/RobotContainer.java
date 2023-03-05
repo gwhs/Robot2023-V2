@@ -22,6 +22,8 @@ import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.Arm.ClawEncoderMoveDown;
+import frc.robot.commands.Arm.ClawEncoderMoveUp;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.AllLime;
 import frc.robot.commands.PlaceCone.ChangePipeline;
@@ -45,6 +47,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.littletonrobotics.junction.Logger;
+import frc.robot.subsystems.ArmSubsystems.Claw;
+import frc.robot.commands.Arm.ClawOpenClose;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -65,10 +70,13 @@ public class RobotContainer {
   private final LimeLightSub limeLightSub = new LimeLightSub("limelight");
 
   // Arm
+  // Arm
   private final MagicMotion mainArm = new MagicMotion(21, robot.canivore_name());
-  private final BoreEncoder shaftEncoder = new BoreEncoder();
+  private final Claw clawPivot = new Claw(30, MotorType.kBrushless);
+  private final Claw clawOpenClose = new Claw(31, MotorType.kBrushless);
+  private final BoreEncoder shaftEncoder = new BoreEncoder(0, 1); // Blue 7 ; Yellow 8
+  private final BoreEncoder clawEncoder = new BoreEncoder(2, 3);
   private SendableChooser<String> m_chooser;
-
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
@@ -138,7 +146,7 @@ public class RobotContainer {
     drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
 
-    //configureButtonBindings();
+    configureButtonBindings();
     // configureArmBindings();
     // configureLimelightBindings();
     // configureAutoBalanceBindings();
@@ -257,26 +265,68 @@ public class RobotContainer {
         .onTrue(
             Commands.either(
                 new PlaceLow(
-                    drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 270),
+                    drivetrainSubsystem,
+                    poseEstimator,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    270),
                 new PlaceLow(
-                    drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 265),
+                    drivetrainSubsystem,
+                    poseEstimator,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    265),
                 limeLightSub::checkPipe));
 
     controller
         .y()
         .onTrue(
             Commands.either(
-                new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder, 220),
-                new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder, 215),
+                new PlaceMid(
+                    drivetrainSubsystem,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    220),
+                new PlaceMid(
+                    drivetrainSubsystem,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    20),
                 limeLightSub::checkPipe));
     controller
         .rightBumper()
         .onTrue(
             Commands.either(
                 new PlaceHigh(
-                    drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 190),
+                    drivetrainSubsystem,
+                    poseEstimator,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    190),
                 new PlaceHigh(
-                    drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 185),
+                    drivetrainSubsystem,
+                    poseEstimator,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    185),
                 limeLightSub::checkPipe));
 
     // controller212
@@ -309,29 +359,47 @@ public class RobotContainer {
     // whileTrue(new PPAStar(drivetrainSubsystem, poseEstimator,
     // new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
 
-    // controller.y().onTrue(straightWheel1);
-    // controller
-    //     // Place high
-    //     .y()
-    //     .onTrue(
-    //         Commands.sequence(
-    //             new MagicMotionPos(mainArm, 190, 0, 0),
-    //             Commands.waitSeconds(.5),
-    //             new MagicMotionPos(mainArm, 0, 0, 0),
-    //             Commands.waitSeconds(.5),
-    //             new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
-
     controllertwo
-        .y()
-        .onTrue(
-            Commands.sequence(
-                new MagicMotionPos(mainArm, 190, 0, 0),
-                Commands.waitSeconds(.5),
-                new MagicMotionPos(mainArm, 0, 0, 0),
-                Commands.waitSeconds(.5),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
+    // Place high
+    .y()
+    .onTrue(
+        Commands.sequence(
+            new ClawEncoderMoveDown(-30, clawPivot, clawEncoder, "Cube").withTimeout(.1),
+            Commands.waitSeconds(.1),
+            new MagicMotionPos(mainArm, 190, 20000, 20000),
+            Commands.waitSeconds(.1),
+            new MagicMotionPos(mainArm, 2, 15000, 10000),
+            Commands.waitSeconds(.5),
+            new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+            Commands.waitSeconds(.3),
+            new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
 
-    // change LEDStrip colors
+// CUBE
+controllertwo
+    .rightBumper()
+    .onTrue(
+        Commands.either(
+            new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+            Commands.sequence(
+                Commands.print("Encoder Pos" + -clawEncoder.getRaw() / 8192. * 360.),
+                Commands.parallel(
+                    new ClawOpenClose(-55, 5, clawOpenClose), Commands.waitSeconds(1)),
+                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CUBE"),
+                new ClawOpenClose(0, 5, clawOpenClose).withTimeout(2)),
+            clawEncoder::posDown));
+
+// CONE
+// controllertwo
+//     .leftTrigger()
+//     .onTrue(
+//         Commands.either(
+//             new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "CONE").withTimeout(3),
+//             Commands.sequence(
+//                 Commands.parallel(
+//                     new ClawOpenClose(-85, 20, clawOpenClose), Commands.waitSeconds(1)),
+//                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
+//                 new ClawOpenClose(0, 20, clawOpenClose)),
+//             clawEncoder::posDown));
 
     // controller.a().onTrue(Commands.runOnce(() -> toggleLED()));
   }
@@ -349,17 +417,45 @@ public class RobotContainer {
         .y()
         .onTrue(
             Commands.either(
-                new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder, 220),
-                new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder, 215),
+                new PlaceMid(
+                    drivetrainSubsystem,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    220),
+                new PlaceMid(
+                    drivetrainSubsystem,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    180),
                 limeLightSub::checkPipe));
     controller
         .b()
         .onTrue(
             Commands.either(
                 new PlaceHigh(
-                    drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 190),
+                    drivetrainSubsystem,
+                    poseEstimator,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    190),
                 new PlaceHigh(
-                    drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 185),
+                    drivetrainSubsystem,
+                    poseEstimator,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    180),
                 limeLightSub::checkPipe));
   }
 

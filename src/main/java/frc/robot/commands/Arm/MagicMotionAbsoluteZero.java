@@ -30,6 +30,7 @@ public class MagicMotionAbsoluteZero extends CommandBase {
     motorAngle = motor.getAngDegrees();
     double difference = rawAngle - motorAngle;
     rawAngle = encoder.getRaw() / 8192. * 360.;
+    System.out.println("RAW ANGLE: " + rawAngle);
     motorAngle = motor.getAngDegrees();
     motor.setAng(difference, velocity, acceleration);
   }
@@ -45,8 +46,8 @@ public class MagicMotionAbsoluteZero extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // rawAngle = encoder.getRaw() / 8192.0 * 360;
-    //  System.out.println("RAW ANGLE: " + rawAngle);
+    rawAngle = encoder.getRaw() / 8192.0 * 360;
+    System.out.println("RAW ANGLE: " + rawAngle);
     //  return Math.abs(rawAngle) < .5;
     // return encoder.getStopped();
     return true;
