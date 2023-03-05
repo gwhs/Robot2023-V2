@@ -4,15 +4,9 @@
 
 package frc.robot;
 
-import static frc.robot.Constants.TeleopDriveConstants.DEADBAND;
-
-import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
-import frc.robot.commands.PlaceCone.PlaceMid;
-import frc.robot.commands.PlaceCone.PlaceHigh;
-import frc.robot.commands.PlaceCone.PlaceLow;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -31,7 +25,8 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.AllLime;
 import frc.robot.commands.PlaceCone.ChangePipeline;
-import frc.robot.commands.PlaceCone.PPIDAutoAim;
+import frc.robot.commands.PlaceCone.PlaceHigh;
+import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
 import frc.robot.commands.autonomous.TestAutoCommands;
@@ -61,7 +56,7 @@ public class RobotContainer {
   // change robot name
   // change this to change robot -----------------v
   // change the same in Robot.java
-  private final RobotSetup robot = Constants.chris;
+  private final RobotSetup robot = Constants.chuck;
   private final CommandXboxController controller = new CommandXboxController(0);
   private final CommandXboxController controllertwo = new CommandXboxController(1);
   // Set IP to 10.57.12.11
@@ -239,7 +234,7 @@ public class RobotContainer {
     controller.x().onTrue(new ChangePipeline(limeLightSub));
     // controller.b().onTrue(rotate);
     // controller.x().onTrue(new ChangePipeline(limeLightSub));
-    controller.b().onTrue(rotate);
+    // controller.b().onTrue(rotate);
     // controller.y().onTrue(autoAimLime1);
 
     controllertwo
@@ -254,15 +249,17 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
 
     controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
-    controller
-        .b()
-        .onTrue(
-            new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder));
+    // controller
+    //     .b()
+    //     .onTrue(
+    //         new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm,
+    // shaftEncoder));
     controller.y().onTrue(new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder));
     controller
         .rightBumper()
         .onTrue(
             new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder));
+    controller.b().toggleOnTrue(autoBalance);
 
     // controller212
     // .a()
