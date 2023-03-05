@@ -112,7 +112,7 @@ public class Rotate extends CommandBase {
     */
 
     double[] x = new double[3];
-    double d = anglePid.calculate(poseEstimatorSubsystem.getAngle());
+
     x[0] = 0.00001;
     x[1] = Math.abs(limeLight.getTx()) > 1 ? (-p * limeLight.getTx()) : 0;
     x[2] =

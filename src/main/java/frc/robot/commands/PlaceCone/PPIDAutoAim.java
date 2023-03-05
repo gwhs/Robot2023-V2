@@ -131,7 +131,7 @@ public class PPIDAutoAim extends CommandBase {
     distanceError = limeLight.getXDistance() - targetDistance;
     double[] x = new double[3];
 
-    if (!isFinished()) {
+    if (sidewaysDone && angleDone) {
       double d = (positionP) * distanceError;
       x[0] = d;
       x[1] = 0;

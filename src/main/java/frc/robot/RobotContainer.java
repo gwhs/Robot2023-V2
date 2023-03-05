@@ -25,6 +25,7 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.AllLime;
 import frc.robot.commands.PlaceCone.ChangePipeline;
+import frc.robot.commands.PlaceCone.PPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceHigh;
 import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.commands.PlaceCone.PlaceMid;
@@ -232,7 +233,7 @@ public class RobotContainer {
 
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    //controller.x().onTrue(new ChangePipeline(limeLightSub));
+    // controller.x().onTrue(new ChangePipeline(limeLightSub));
     // controller.b().onTrue(rotate);
     // controller.x().onTrue(new ChangePipeline(limeLightSub));
     controller.b().onTrue(rotate);
@@ -339,14 +340,11 @@ public class RobotContainer {
   private void configureLimelightBindings() {
     this.startAndBackButton();
     controller.leftBumper().onTrue(rotate);
-    controller.rightBumper().onTrue(allLime); //
+    controller.rightBumper().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 50)); //
+
+    controller.a().onTrue(new ChangePipeline(limeLightSub));
     controller
-        // Place mid
-        .x // button
-        ()
-        .onTrue(sideways);
-        controller
-        .b()
+        .x()
         .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
     controller
         .y()
@@ -364,7 +362,6 @@ public class RobotContainer {
                 new PlaceHigh(
                     drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, 185),
                 limeLightSub::checkPipe));
-
   }
 
   private void configureAutoBalanceBindings() {

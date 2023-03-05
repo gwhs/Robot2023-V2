@@ -4,12 +4,9 @@
 
 package frc.robot.commands.PlaceCone;
 
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.LimeLightConstants;
-import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
-import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
