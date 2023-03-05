@@ -114,7 +114,7 @@ public class PPIDAutoAim extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println(distanceError);
+
     return angleDone && sidewaysDone;
   }
 
@@ -131,17 +131,12 @@ public class PPIDAutoAim extends CommandBase {
     distanceError = limeLight.getXDistance() - targetDistance;
     double[] x = new double[3];
 
-    if (sidewaysDone && angleDone) {
-      double d = (positionP) * distanceError;
-      x[0] = d;
-      x[1] = 0;
-      x[2] = anglePid.calculate(limeLight.getAngle());
-      System.out.println(distanceError + "velo" + d);
-    } else {
-      x[0] = 0;
-      x[1] = 0;
-      x[2] = 0;
-    }
+    double d = (positionP) * distanceError;
+    x[0] = sidewaysDone ? 0 : d;
+    x[1] = 0;
+    x[2] = angleDone ? 0 : anglePid.calculate(limeLight.getAngle());
+    System.out.println(distanceError + "velo" + d);
+
     return x;
   }
 }

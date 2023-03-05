@@ -25,7 +25,6 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.AllLime;
 import frc.robot.commands.PlaceCone.ChangePipeline;
-import frc.robot.commands.PlaceCone.PPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceHigh;
 import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.commands.PlaceCone.PlaceMid;
@@ -340,7 +339,7 @@ public class RobotContainer {
   private void configureLimelightBindings() {
     this.startAndBackButton();
     controller.leftBumper().onTrue(rotate);
-    controller.rightBumper().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 50)); //
+    // controller.rightBumper().onTrue(); //
 
     controller.a().onTrue(new ChangePipeline(limeLightSub));
     controller

@@ -11,6 +11,9 @@ import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
+import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
+import frc.robot.commands.Arm.MagicMotionPos;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -35,11 +38,11 @@ public class PlaceHigh extends SequentialCommandGroup {
         new Sideways(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
         new StraightWheel(drivetrainSubsystem),
         new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.UPPER_DISTANCE_SHOOT)
-        // new MagicMotionPos(mainArm, degrees, 0, 0),
-        // Commands.waitSeconds(.5),
-        // new MagicMotionPos(mainArm, 0, 0, 0),
-        // Commands.waitSeconds(.5),
-        // new MagicMotionAbsoluteZero(mainArm, shaftEncoder)
+        new MagicMotionPos(mainArm, degrees, 0, 0),
+        Commands.waitSeconds(.5),
+        new MagicMotionPos(mainArm, 0, 0, 0),
+        Commands.waitSeconds(.5),
+        new MagicMotionAbsoluteZero(mainArm, shaftEncoder)
         );
 
     //
