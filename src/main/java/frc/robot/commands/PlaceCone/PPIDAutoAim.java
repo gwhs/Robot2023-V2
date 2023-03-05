@@ -83,7 +83,7 @@ public class PPIDAutoAim extends CommandBase {
       noTargets++;
     }
     // atgoal and setpoint do not work, so we just brute force it.
-    if (Math.abs(limeLight.getTx()) < .5) {
+    if (Math.abs(limeLight.getTx()) < .2) {
       angleDone = true;
     } else {
       // sets it to false if position not there yet
