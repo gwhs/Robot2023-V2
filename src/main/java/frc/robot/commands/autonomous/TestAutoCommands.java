@@ -8,7 +8,6 @@ import frc.robot.auto.PPSwerveFollower;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalance;
-import frc.robot.commands.PlaceCone.AllLime;
 import frc.robot.commands.PlaceCone.PlaceHigh;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
@@ -73,45 +72,59 @@ public final class TestAutoCommands {
     if (pathName.equals("HajelPathV2")) {
       return new SequentialCommandGroup(
           new PPSwerveFollower(
-              driveSystem, poseEstimatorSystem, "move12", new PathConstraints(2, 2), true),
+              driveSystem, poseEstimatorSystem, "move12", new PathConstraints(1, 1), true),
           new MagicMotionPos(mainArm, 210, 0, 0),
-          Commands.waitSeconds(.5),
           new ParallelCommandGroup(
               new SequentialCommandGroup(
                   new MagicMotionPos(mainArm, 0, 0, 0),
                   Commands.waitSeconds(.5),
-                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder)),
-              new PPSwerveFollower(
-                  driveSystem,
-                  poseEstimatorSystem,
-                  "HajelPathV2",
-                  new PathConstraints(1, 2),
-                  true)),
-          Commands.waitSeconds(1), // grab
+                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
+                  new PPSwerveFollower(
+                      driveSystem, poseEstimatorSystem, "I2+1", new PathConstraints(5, 3), true))),
+          Commands.waitSeconds(1),
+          Commands.runOnce(poseEstimatorSystem::set180FieldPosition, driveSystem),
+          new PlaceHigh(driveSystem, poseEstimatorSystem, lime, mainArm, shaftEncoder, 190),
           new PPSwerveFollower(
               driveSystem,
               poseEstimatorSystem,
-              "HajelPathV2Part2",
-              new PathConstraints(1, 2),
+              "HajelPathV2Part3",
+              new PathConstraints(2, 1),
               true),
-          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
-          new AllLime(
-              driveSystem, poseEstimatorSystem, lime, 0), // new ChangePipeline(lime), // APRIL?
-          new MagicMotionPos(mainArm, 210, 0, 0),
-          Commands.waitSeconds(.5),
-          new ParallelCommandGroup(
-              new SequentialCommandGroup(
-                  new MagicMotionPos(mainArm, 0, 0, 0),
-                  Commands.waitSeconds(.5),
-                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder)),
-              new PPSwerveFollower(
-                  driveSystem,
-                  poseEstimatorSystem,
-                  "HajelPathV2Part3",
-                  new PathConstraints(1, 2),
-                  true)),
           new AutoBalance(driveSystem));
     }
+    //   return new SequentialCommandGroup(
+    //       new PPSwerveFollower(
+    //           driveSystem, poseEstimatorSystem, "move12", new PathConstraints(2, 2), true),
+    //       new MagicMotionPos(mainArm, 210, 0, 0),
+    //       Commands.waitSeconds(.5),
+    //       new ParallelCommandGroup(
+    //           new SequentialCommandGroup(
+    //               new MagicMotionPos(mainArm, 0, 0, 0),
+    //               Commands.waitSeconds(.5),
+    //               new MagicMotionAbsoluteZero(mainArm, shaftEncoder)),
+    //           new PPSwerveFollower(
+    //               driveSystem,
+    //               poseEstimatorSystem,
+    //               "HajelPathV2",
+    //               new PathConstraints(1, 2),
+    //               true)),
+    //       Commands.waitSeconds(1), // grab
+    //     //   new PPSwerveFollower(
+    //     //       driveSystem,
+    //     //       poseEstimatorSystem,
+    //     //       "HajelPathV2Part2",
+    //     //       new PathConstraints(1, 2),
+    //     //       true),
+    //     Commands.runOnce(poseEstimatorSystem::set180FieldPosition, driveSystem),
+    //     new PlaceHigh(driveSystem, poseEstimatorSystem, lime, mainArm, shaftEncoder, 190),
+    //       new PPSwerveFollower(
+    //         driveSystem,
+    //         poseEstimatorSystem,
+    //         "HajelPathV2Part3",
+    //         new PathConstraints(1, 2),
+    //         true)),
+    //       new AutoBalance(driveSystem));
+    // }
     if (pathName.equals("D-F1E")) {
       return new SequentialCommandGroup(
           new PPSwerveFollower(
@@ -143,20 +156,10 @@ public final class TestAutoCommands {
           Commands.waitSeconds(1), // grab
           new PPSwerveFollower(
               driveSystem, poseEstimatorSystem, "A2EPart2", new PathConstraints(2, 2), true),
-          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
-          new AllLime(driveSystem, poseEstimatorSystem, lime, 0), // APRIL TAGGGGG
-          new MagicMotionPos(mainArm, 210, 0, 0),
-          new ParallelCommandGroup(
-              new SequentialCommandGroup(
-                  new MagicMotionPos(mainArm, 0, 0, 0),
-                  Commands.waitSeconds(.5),
-                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
-                  new PPSwerveFollower(
-                      driveSystem,
-                      poseEstimatorSystem,
-                      "A2EPart3",
-                      new PathConstraints(2, 2),
-                      true))),
+          Commands.runOnce(poseEstimatorSystem::set180FieldPosition, driveSystem),
+          new PlaceHigh(driveSystem, poseEstimatorSystem, lime, mainArm, shaftEncoder, 190),
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "A2EPart3", new PathConstraints(2, 2), true),
           new AutoBalance(driveSystem));
     }
     if (pathName.equals("D1+1")) {
@@ -232,22 +235,11 @@ public final class TestAutoCommands {
                   new PPSwerveFollower(
                       driveSystem, poseEstimatorSystem, "I2+1", new PathConstraints(2, 2), true))),
           // grab
+
+          Commands.runOnce(poseEstimatorSystem::set180FieldPosition, driveSystem),
+          new PlaceHigh(driveSystem, poseEstimatorSystem, lime, mainArm, shaftEncoder, 190),
           new PPSwerveFollower(
-              driveSystem, poseEstimatorSystem, "I2+1Part2", new PathConstraints(2, 2), true),
-          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
-          new AllLime(driveSystem, poseEstimatorSystem, lime, 0), // april
-          new MagicMotionPos(mainArm, 210, 0, 0),
-          new ParallelCommandGroup(
-              new SequentialCommandGroup(
-                  new MagicMotionPos(mainArm, 0, 0, 0),
-                  Commands.waitSeconds(.5),
-                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
-                  new PPSwerveFollower(
-                      driveSystem,
-                      poseEstimatorSystem,
-                      "I2+1Part3",
-                      new PathConstraints(2, 2),
-                      true)))
+              driveSystem, poseEstimatorSystem, "I2+1Part3", new PathConstraints(2, 2), true)
           // grab
           );
     }
@@ -280,23 +272,11 @@ public final class TestAutoCommands {
                   new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
                   new PPSwerveFollower(
                       driveSystem, poseEstimatorSystem, "I2+1", new PathConstraints(2, 2), true))),
-          // grab
+          Commands.waitSeconds(1),
+          Commands.runOnce(poseEstimatorSystem::set180FieldPosition, driveSystem),
+          new PlaceHigh(driveSystem, poseEstimatorSystem, lime, mainArm, shaftEncoder, 190),
           new PPSwerveFollower(
-              driveSystem, poseEstimatorSystem, "I2+1Part2", new PathConstraints(2, 2), true),
-          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
-          new AllLime(driveSystem, poseEstimatorSystem, lime, 0), // april
-          new MagicMotionPos(mainArm, 210, 0, 0),
-          new ParallelCommandGroup(
-              new SequentialCommandGroup(
-                  new MagicMotionPos(mainArm, 0, 0, 0),
-                  Commands.waitSeconds(.5),
-                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
-                  new PPSwerveFollower(
-                      driveSystem,
-                      poseEstimatorSystem,
-                      "I2+1Part3",
-                      new PathConstraints(2, 2),
-                      true))),
+              driveSystem, poseEstimatorSystem, "I2+1Part3", new PathConstraints(2, 2), true),
           // grab
           new PPSwerveFollower(
               driveSystem, poseEstimatorSystem, "I2+1E", new PathConstraints(2, 2), true),
