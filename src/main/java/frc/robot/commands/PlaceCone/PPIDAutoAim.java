@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
-import frc.robot.subsystems.PoseEstimatorSubsystem;
 
 public class PPIDAutoAim extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
@@ -36,26 +35,23 @@ public class PPIDAutoAim extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
   // pid for angle
-  private double angleP = 1;
+  private double angleP = 3;
   private double angleI = 0;
   private double angleD = 0;
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
   private double targetDistance = 0;
-  private double positionP = .01;
+  private double positionP = .0235;
 
   /** Creates a new PPIDAutoAim. */
   public PPIDAutoAim(
-      DrivetrainSubsystem drivetrainSubsystem,
-      PoseEstimatorSubsystem poseEstimatorSubsystem,
-      LimeLightSub limeLightSub,
-      double targetDistance) {
+      DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub, double targetDistance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLight = limeLightSub;
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.targetDistance = targetDistance;
 
-    addRequirements(limeLight, drivetrainSubsystem, poseEstimatorSubsystem);
+    addRequirements(limeLight, drivetrainSubsystem);
     // addRequirements(drivetrainSubsystem);
   }
 
@@ -118,6 +114,7 @@ public class PPIDAutoAim extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println(distanceError);
     return angleDone && sidewaysDone;
   }
 

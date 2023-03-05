@@ -115,6 +115,7 @@ public class Robot extends LoggedRobot {
 
     // Logger.log("/Robot/Battery Voltage", RobotController.getBatteryVoltage());
     // Logger.update();
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
