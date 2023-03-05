@@ -138,7 +138,7 @@ public class RobotContainer {
     drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
 
-    configureLimelightBindings();
+    //configureButtonBindings();
     // configureArmBindings();
     // configureLimelightBindings();
     // configureAutoBalanceBindings();
