@@ -26,19 +26,18 @@ public class PlaceHigh extends SequentialCommandGroup {
       PoseEstimatorSubsystem poseEstimatorSubsystem,
       LimeLightSub limeLightSub,
       MagicMotion mainArm,
-      BoreEncoder shaftEncoder,
-      int degrees) {
+      BoreEncoder shaftEncoder) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub, 180),
         new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.LOWER_DISTANCE_SHOOT),
         new WaitCommand(.5),
+        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub, 0),
         new StraightWheel(drivetrainSubsystem),
         new Sideways(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
         new StraightWheel(drivetrainSubsystem),
         new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.UPPER_DISTANCE_SHOOT),
-        new MagicMotionPos(mainArm, degrees, 0, 0),
+        new MagicMotionPos(mainArm, 190, 0, 0),
         Commands.waitSeconds(.5),
         new MagicMotionPos(mainArm, 0, 0, 0),
         Commands.waitSeconds(.5),

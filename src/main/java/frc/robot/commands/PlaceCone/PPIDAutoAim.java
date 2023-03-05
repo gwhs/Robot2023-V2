@@ -83,7 +83,7 @@ public class PPIDAutoAim extends CommandBase {
       noTargets++;
     }
     // atgoal and setpoint do not work, so we just brute force it.
-    if (Math.abs(limeLight.getTx()) < .2) {
+    if (Math.abs(limeLight.getAngle()) < .5) {
       angleDone = true;
     } else {
       // sets it to false if position not there yet
@@ -106,14 +106,15 @@ public class PPIDAutoAim extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("done");
+    System.out.println(
+        "Distance error: " + distanceError + "Dist: " + sidewaysDone + "angle: " + angleDone);
     drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, 0));
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
+    System.out.println(distanceError);
     return angleDone && sidewaysDone;
   }
 
@@ -130,12 +131,17 @@ public class PPIDAutoAim extends CommandBase {
     distanceError = limeLight.getXDistance() - targetDistance;
     double[] x = new double[3];
 
-    double d = (positionP) * distanceError;
-    x[0] = sidewaysDone ? 0 : d;
-    x[1] = 0;
-    x[2] = angleDone ? 0 : anglePid.calculate(limeLight.getAngle());
-    System.out.println(distanceError + "velo" + d);
-
+    if (!isFinished()) {
+      double d = (positionP) * distanceError;
+      x[0] = d;
+      x[1] = 0;
+      x[2] = anglePid.calculate(limeLight.getAngle());
+      System.out.println(distanceError + "velo" + d);
+    } else {
+      x[0] = 0;
+      x[1] = 0;
+      x[2] = 0;
+    }
     return x;
   }
 }
