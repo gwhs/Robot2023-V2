@@ -206,7 +206,7 @@ public final class TestAutoCommands {
           new PPSwerveFollower(
               driveSystem, poseEstimatorSystem, "G2EPart2", new PathConstraints(1, 1), true),
           Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
-          new PlaceHigh(driveSystem, poseEstimatorSystem, lime, mainArm, shaftEncoder),
+          new PlaceHigh(driveSystem, poseEstimatorSystem, lime, mainArm, shaftEncoder,190),
           //   Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
           //   new AllLime(driveSystem, poseEstimatorSystem, lime, 0), // april tag?
           //   new MagicMotionPos(mainArm, 210, 0, 0),
