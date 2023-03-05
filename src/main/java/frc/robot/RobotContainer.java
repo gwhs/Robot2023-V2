@@ -362,7 +362,7 @@ public class RobotContainer {
   private void setupPathChooser() {
     final ShuffleboardTab tab = Shuffleboard.getTab("Drive");
     m_chooser = new SendableChooser<>();
-
+    tab.add(m_chooser);
     m_chooser.setDefaultOption("Straight No Rotation", "StraightNoRotation");
     m_chooser.addOption("Straight With Rotation", "StraightWithRotation");
     m_chooser.addOption("D-F Place and engage", "D-F1E");
@@ -377,6 +377,7 @@ public class RobotContainer {
     m_chooser.addOption("I 2+ and engage", "HajelPathV2");
     m_chooser.addOption("C place and engage", "C1+E");
     m_chooser.addOption("G place and engage", "G1+E");
+    m_chooser.addOption("I 2 piece", "I2");
   }
 
   private void toggleLED() {
@@ -395,7 +396,12 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     TestAutoCommands vendingMachine =
         new TestAutoCommands(
-            drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "G2E", limeLightSub);
+            drivetrainSubsystem,
+            poseEstimator,
+            mainArm,
+            shaftEncoder,
+            m_chooser.getSelected(),
+            limeLightSub);
 
     return vendingMachine.getAutoCommand();
   }
