@@ -205,8 +205,7 @@ public final class TestAutoCommands {
           Commands.waitSeconds(1), // grabT
           new PPSwerveFollower(
               driveSystem, poseEstimatorSystem, "G2EPart2", new PathConstraints(1, 1), true),
-
-          // Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
+          Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
           new PlaceHigh(driveSystem, poseEstimatorSystem, lime, mainArm, shaftEncoder),
           //   Commands.runOnce(poseEstimatorSystem::resetFieldPosition, driveSystem),
           //   new AllLime(driveSystem, poseEstimatorSystem, lime, 0), // april tag?
