@@ -25,14 +25,15 @@ public class PlaceLow extends SequentialCommandGroup {
       PoseEstimatorSubsystem poseEstimatorSubsystem,
       LimeLightSub limeLightSub,
       MagicMotion mainArm,
-      BoreEncoder shaftEncoder) {
+      BoreEncoder shaftEncoder,
+      int degrees) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new PPIDAutoAim(
             drivetrainSubsystem, limeLightSub, LimeLightConstants.BOTTOM_DISTANCE_SHOOT),
-        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub, 0),
-        new MagicMotionPos(mainArm, 270, 0, 0),
+        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub, 180),
+        new MagicMotionPos(mainArm, degrees, 0, 0),
         Commands.waitSeconds(.5),
         new MagicMotionPos(mainArm, 0, 0, 0),
         Commands.waitSeconds(.5),
