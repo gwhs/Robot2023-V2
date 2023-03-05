@@ -168,8 +168,13 @@ public class LEDSubsystem extends SubsystemBase {
 
       // generalLED(i, i + 1, r3, g3, b3);
       m_ledBuffer.setRGB(i, (int) (r3), (int) (b3), (int) (g3));
+
+      System.out.println("loop 1");
+
+      if (i == m_ledBuffer.getLength()) {
+        finish = true;
+      }
     }
-    finish = true;
 
     // reverse
     if (finish) {
@@ -182,8 +187,13 @@ public class LEDSubsystem extends SubsystemBase {
 
         // generalLED(i, i + 1, r3, g3, b3);
         m_ledBuffer.setRGB(i, (int) (r3), (int) (b3), (int) (g3));
+
+        System.out.println("loop 2");
+
+        if (i == m_ledBuffer.getLength()) {
+          finish = false;
+        }
       }
-      finish = false;
     }
 
     // experiment
