@@ -19,9 +19,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.RobotSetup;
-import frc.robot.commands.Arm.ClawEncoderMoveDown;
-import frc.robot.commands.Arm.ClawEncoderMoveUp;
-import frc.robot.commands.Arm.ClawOpenClose;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.AutoBalance;
@@ -74,7 +71,7 @@ public class RobotContainer {
   private final Claw clawPivot = new Claw(30, MotorType.kBrushless);
   private final Claw clawOpenClose = new Claw(31, MotorType.kBrushless);
   private final BoreEncoder shaftEncoder = new BoreEncoder(0, 1); // Blue 7 ; Yellow 8
-  private final BoreEncoder clawEncoder = new BoreEncoder(2, 3);
+  //   private final BoreEncoder clawEncoder = new BoreEncoder(2, 3);
   private SendableChooser<String> m_chooser;
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
@@ -303,29 +300,29 @@ public class RobotContainer {
         .y()
         .onTrue(
             Commands.sequence(
-                new ClawEncoderMoveDown(-30, clawPivot, clawEncoder, "Cube").withTimeout(.1),
+                // new ClawEncoderMoveDown(-30, clawPivot, clawEncoder, "Cube").withTimeout(.1),
+                // Commands.waitSeconds(.1),
+                new MagicMotionPos(mainArm, 190, 20000, 40000),
                 Commands.waitSeconds(.1),
-                new MagicMotionPos(mainArm, 190, 20000, 20000),
-                Commands.waitSeconds(.1),
-                new MagicMotionPos(mainArm, 2, 15000, 10000),
+                new MagicMotionPos(mainArm, 5, 15000, 10000),
                 Commands.waitSeconds(.5),
-                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
                 Commands.waitSeconds(.3),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
 
     // CUBE
-    controllertwo
-        .rightBumper()
-        .onTrue(
-            Commands.either(
-                new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
-                Commands.sequence(
-                    Commands.print("Encoder Pos" + -clawEncoder.getRaw() / 8192. * 360.),
-                    Commands.parallel(
-                        new ClawOpenClose(-55, 5, clawOpenClose), Commands.waitSeconds(1)),
-                    new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CUBE"),
-                    new ClawOpenClose(0, 5, clawOpenClose).withTimeout(2)),
-                clawEncoder::posDown));
+    // controllertwo
+    //     .rightBumper()
+    //     .onTrue(
+    //         Commands.either(
+    //             new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+    //             Commands.sequence(
+    //                 Commands.print("Encoder Pos" + -clawEncoder.getRaw() / 8192. * 360.),
+    //                 Commands.parallel(
+    //                     new ClawOpenClose(-55, 5, clawOpenClose), Commands.waitSeconds(1)),
+    //                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CUBE"),
+    //                 new ClawOpenClose(0, 5, clawOpenClose).withTimeout(2)),
+    //             clawEncoder::posDown));
 
     // CONE
     // controllertwo
