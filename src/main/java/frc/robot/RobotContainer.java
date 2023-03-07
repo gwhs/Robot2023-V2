@@ -305,7 +305,7 @@ public class RobotContainer {
                 // Commands.waitSeconds(.1),
                 new MagicMotionPos(mainArm, 190, 150, 100),
                 Commands.waitSeconds(.1),
-                new MagicMotionPos(mainArm, 30, 150, 100),
+                new MagicMotionPos(mainArm, 5, 150, 100),
                 Commands.waitSeconds(.5),
                 // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
                 Commands.waitSeconds(.3),
