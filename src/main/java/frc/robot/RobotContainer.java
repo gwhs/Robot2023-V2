@@ -260,12 +260,12 @@ public class RobotContainer {
     controller
         .b()
         .onTrue(
-            new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder));
-    controller.y().onTrue(new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder));
+            new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, clawEncoder, clawPivot, 210));
+    controller.y().onTrue(new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder, clawEncoder, clawPivot, 180));
     controller
         .rightBumper()
         .onTrue(
-            new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder));
+            new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, clawEncoder, clawPivot, 180));
 
     // controller212
     // .a()
@@ -311,7 +311,7 @@ public class RobotContainer {
                 Commands.waitSeconds(.5),
                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
                 Commands.waitSeconds(.3),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 50, 50)));
 
     // CUBE
     controllertwo
