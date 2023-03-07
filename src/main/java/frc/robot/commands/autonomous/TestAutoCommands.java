@@ -265,8 +265,8 @@ public final class TestAutoCommands {
                   new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
                   new PPSwerveFollower(
                       driveSystem, poseEstimatorSystem, "I2+1", new PathConstraints(5, 3), true))),
-          Commands.waitSeconds(1),
-          Commands.runOnce(poseEstimatorSystem::set180FieldPosition, driveSystem),
+          Commands.waitSeconds(1), //grab
+                    Commands.runOnce(poseEstimatorSystem::set180FieldPosition, driveSystem),
           new PlaceHigh(driveSystem, poseEstimatorSystem, lime, mainArm, shaftEncoder, 190));
     }
 
