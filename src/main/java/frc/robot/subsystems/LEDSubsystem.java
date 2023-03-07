@@ -185,7 +185,7 @@ public class LEDSubsystem extends SubsystemBase {
 
     // reverse
     if (finish) {
-      for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+      for (var i = NUMBER_LED; i > 0; i--) {
         double t = (double) (i / (m_ledBuffer.getLength() - 1.0));
 
         r3 = transformColor(r2, r1, t);
@@ -195,7 +195,7 @@ public class LEDSubsystem extends SubsystemBase {
         // generalLED(i, i + 1, r3, g3, b3);
         m_ledBuffer.setRGB(i, (int) (r3), (int) (b3), (int) (g3));
 
-        if (i == (m_ledBuffer.getLength() - 1)) {
+        if (i == 1) {
           System.out.println("loop 2");
           r3 = 0;
           g3 = 0;
