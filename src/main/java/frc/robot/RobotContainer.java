@@ -71,7 +71,7 @@ public class RobotContainer {
   private final Claw clawPivot = new Claw(30, MotorType.kBrushless);
   private final Claw clawOpenClose = new Claw(31, MotorType.kBrushless);
   private final BoreEncoder shaftEncoder = new BoreEncoder(0, 1); // Blue 7 ; Yellow 8
-  //   private final BoreEncoder clawEncoder = new BoreEncoder(2, 3);
+  private final BoreEncoder clawEncoder = new BoreEncoder(2, 3);
   private SendableChooser<String> m_chooser;
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
@@ -257,12 +257,12 @@ public class RobotContainer {
     controller
         .b()
         .onTrue(
-            new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder));
-    controller.y().onTrue(new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder));
+            new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder,clawEncoder, clawPivot, 220));
+    controller.y().onTrue(new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder,clawEncoder, clawPivot, 220));
     controller
         .rightBumper()
         .onTrue(
-            new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder));
+            new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder,clawEncoder, clawPivot, 220));
 
     // controller212
     // .a()
@@ -338,14 +338,62 @@ public class RobotContainer {
     //                 new ClawOpenClose(0, 20, clawOpenClose)),
     //             clawEncoder::posDown));
   }
-
   private void configureLimelightBindings() {
     this.startAndBackButton();
-    controller.x().onTrue(sideways);
-    controller.y().onTrue(sideways);
-    controller.a().onTrue(sideways);
-    controller.b().onTrue(sideways);
+    controller.leftBumper().onTrue(rotate);
+    // controller.rightBumper().onTrue(); //
+
+    controller.a().onTrue(new ChangePipeline(limeLightSub));
+    controller
+        .x()
+        .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
+    controller
+        .y()
+        .onTrue(
+            Commands.either(
+                new PlaceMid(
+                    drivetrainSubsystem,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    220),
+                new PlaceMid(
+                    drivetrainSubsystem,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    215),
+                limeLightSub::checkPipe));
+    controller
+        .b()
+        .onTrue(
+            Commands.either(
+                new PlaceHigh(
+                    drivetrainSubsystem,
+                    poseEstimator,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    190),
+                new PlaceHigh(
+                    drivetrainSubsystem,
+                    poseEstimator,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    185),
+                limeLightSub::checkPipe));
   }
+
+
 
   private void configureAutoBalanceBindings() {
     this.startAndBackButton();
