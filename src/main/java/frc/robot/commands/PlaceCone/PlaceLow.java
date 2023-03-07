@@ -44,8 +44,6 @@ public class PlaceLow extends SequentialCommandGroup {
         Commands.waitSeconds(.1),
         new MagicMotionPos(mainArm, 2, 15000, 10000),
         Commands.waitSeconds(.5),
-        new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-        Commands.waitSeconds(.3),
-        new MagicMotionAbsoluteZero(mainArm, shaftEncoder));
+        new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5000, 1000));
   }
 }
