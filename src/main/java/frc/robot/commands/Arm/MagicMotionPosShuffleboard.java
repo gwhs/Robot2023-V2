@@ -49,9 +49,9 @@ public class MagicMotionPosShuffleboard extends CommandBase {
    * initial values displayed on the Shuffleboard will be the default values. In the case of missing
    * or unretrievable values, the command will use the default values.
    *
-   * @param desiredAngleDefault The default desired angle.
-   * @param velocityDefault The default velocity.
-   * @param accelerationDefault The default acceleration.
+   * @param desiredAngleDefault The default desired angle. 📐
+   * @param velocityDefault The default velocity. (●'◡'●)
+   * @param accelerationDefault The default acceleration. ☆*: .｡. o(≧▽≦)o .｡.:*☆
    */
   public MagicMotionPosShuffleboard(
       MagicMotion motor,

@@ -4,18 +4,32 @@
 
 package frc.robot.commands.Arm;
 
+import java.util.List;
+
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.Claw;
-
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 public class ClawEncoderMoveUp extends CommandBase {
 
   private Claw clawOne;
   private BoreEncoder encoder;
   private double desiredAngle;
   private double error;
+
   private String piece;
+  private GenericEntry pieceEntry;
+  private String pieceDefault;
+
+  private final ShuffleboardTab tab;
 
   public ClawEncoderMoveUp(double angle, Claw initClaw, BoreEncoder weewoo, String piece) {
     clawOne = initClaw;
@@ -23,12 +37,31 @@ public class ClawEncoderMoveUp extends CommandBase {
     this.desiredAngle = angle;
     this.piece = piece;
     addRequirements(initClaw);
+
+    tab = Shuffleboard.getTab("Arm");
+
+    ShuffleboardLayout moveUp =
+    tab.getLayout("Claw Encoder Move Up", BuiltInLayouts.kList)
+        .withSize(2, 4)
+        .withPosition(2, 0);
+
+if (moveUp.getComponents().isEmpty()) {
+  pieceEntry =
+  moveUp
+          .add("Piece Name", pieceDefault)
+          .withWidget(BuiltInWidgets.kTextView)
+          .getEntry();
+} else {
+  List<ShuffleboardComponent<?>> widgets = moveUp.getComponents();
+  pieceEntry = ((SimpleWidget) widgets.get(0)).getEntry();
+}
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     // System.out.println("--------------START-----------");
+    piece = pieceEntry.getString(pieceDefault);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
