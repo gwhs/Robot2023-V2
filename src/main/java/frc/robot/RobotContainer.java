@@ -335,11 +335,11 @@ public class RobotContainer {
                 // Commands.waitSeconds(.1),
                 new MagicMotionPosShuffleboard(mainArm, 190, 150, 100),
                 Commands.waitSeconds(.1),
-                new MagicMotionPos(mainArm, 2, 15000, 10000),
+                new MagicMotionPos(mainArm, 2, 50, 25),
                 Commands.waitSeconds(.5),
                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
                 Commands.waitSeconds(.3),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 50, 50)));
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
     // CUBE
     controllertwo
