@@ -37,6 +37,10 @@ public class LEDSubsystem extends SubsystemBase {
 
   private LEDMode ledMode;
 
+  // moving pixel
+  private int m_pixelCounter;
+  private int m_loopCounter;
+
   // auto
   private DrivetrainSubsystem drivetrainSubsystem;
   private PoseEstimatorSubsystem poseEstimator;
@@ -149,8 +153,8 @@ public class LEDSubsystem extends SubsystemBase {
     final int b1 = 0;
 
     final int r2 = 0;
-    final int g2 = 4;
-    final int b2 = 0;
+    final int g2 = 0;
+    final int b2 = 255;
 
     boolean finish = false;
 
@@ -169,9 +173,12 @@ public class LEDSubsystem extends SubsystemBase {
       // generalLED(i, i + 1, r3, g3, b3);
       m_ledBuffer.setRGB(i, (int) (r3), (int) (b3), (int) (g3));
 
-      System.out.println("loop 1");
-
-      if (i == m_ledBuffer.getLength()) {
+      if (i == (m_ledBuffer.getLength() - 1)) {
+        System.out.println("loop 1");
+        r3 = 0;
+        g3 = 0;
+        b3 = 0;
+        // generalLED(0, NUMBER_LED, r1, g2, b3);
         finish = true;
       }
     }
@@ -188,9 +195,12 @@ public class LEDSubsystem extends SubsystemBase {
         // generalLED(i, i + 1, r3, g3, b3);
         m_ledBuffer.setRGB(i, (int) (r3), (int) (b3), (int) (g3));
 
-        System.out.println("loop 2");
-
-        if (i == m_ledBuffer.getLength()) {
+        if (i == (m_ledBuffer.getLength() - 1)) {
+          System.out.println("loop 2");
+          r3 = 0;
+          g3 = 0;
+          b3 = 0;
+          // generalLED(0, NUMBER_LED, r1, g2, b3);
           finish = false;
         }
       }
@@ -200,7 +210,14 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void movingPixel() {
-    // input commands
+    m_ledBuffer.setRGB(m_pixelCounter, 0, 255, 0);
+    if (m_loopCounter % 5 == 0) {
+      m_pixelCounter++;
+    }
+
+    if (m_pixelCounter >= NUMBER_LED) {
+      m_pixelCounter = 0;
+    }
   }
 
   // auto
@@ -260,5 +277,5 @@ public class LEDSubsystem extends SubsystemBase {
           (int) (greenColor * m_brightness));
     }
   }
-  // Hi! I caught your attention!
+  // Hi! I caught your attention! (●'◡'●)❤💚🧡💛💙💜🤎🖤🤍❣💕💞💓💗💖💘💝💟🗿🗿🗿😘💋👄
 }
