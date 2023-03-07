@@ -31,10 +31,18 @@ public class ClawOpenClose extends CommandBase {
   private final GenericEntry ampsEntry;
   private double ampsDefault;
 
-  public ClawOpenClose(double angle, int amps, Claw claw) {
+  /**
+   * The actual desired angle and amps will be pulled from the Shuffleboard. The
+   * initial values displayed on the Shuffleboard will be the default values. In the case of missing
+   * or unretrievable values, the command will use the default values.
+   *
+   * @param desiredAngleDefault The default desired angle. 📐
+   * @param ampsDefault The default amps. (●'◡'●)
+   */
+  public ClawOpenClose(double desiredAngleDefault, int ampsDefault, Claw claw) {
     this.claw = claw;
-    this.desiredAngleDefault = angle;
-    this.ampsDefault = amps;
+    this.desiredAngleDefault = desiredAngleDefault;
+    this.ampsDefault = ampsDefault;
 
     tab = Shuffleboard.getTab("Arm");
 
