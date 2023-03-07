@@ -31,9 +31,9 @@ public class ClawOpenClose extends CommandBase {
   private double ampsDefault;
 
   /**
-   * The actual desired angle and amps will be pulled from the Shuffleboard. The
-   * initial values displayed on the Shuffleboard will be the default values. In the case of missing
-   * or unretrievable values, the command will use the default values.
+   * The actual desired angle and amps will be pulled from the Shuffleboard. The initial values
+   * displayed on the Shuffleboard will be the default values. In the case of missing or
+   * unretrievable values, the command will use the default values.
    *
    * @param desiredAngleDefault The default desired angle. 📐
    * @param ampsDefault The default amps. (●'◡'●)
@@ -46,9 +46,7 @@ public class ClawOpenClose extends CommandBase {
     tab = Shuffleboard.getTab("Arm");
 
     ShuffleboardLayout openCloseShit =
-        tab.getLayout("Claw Open Close Shit", BuiltInLayouts.kList)
-            .withSize(2, 4)
-            .withPosition(4, 0);
+        tab.getLayout("Claw Open Close", BuiltInLayouts.kList).withSize(2, 4).withPosition(4, 0);
 
     if (openCloseShit.getComponents().isEmpty()) {
       desiredAngleEntry =
