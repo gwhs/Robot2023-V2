@@ -17,39 +17,39 @@ public class MagicMotionAbsoluteZero extends CommandBase {
   private double motorAngle;
   private double difference;
   /** Creates a new MagicMotionAbsoluteZero. */
-  public MagicMotionAbsoluteZero(MagicMotion motor, BoreEncoder encoder) {
+  public MagicMotionAbsoluteZero(
+      MagicMotion motor, BoreEncoder encoder, double velocity, double acceleration) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.motor = motor;
     this.encoder = encoder;
+    this.acceleration = acceleration;
+    this.velocity = velocity;
     addRequirements(motor);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    motorAngle = motor.getAngDegrees();
-    double difference = rawAngle - motorAngle;
-    rawAngle = encoder.getRaw() / 8192. * 360.;
-    System.out.println("RAW ANGLE: " + rawAngle);
-    motorAngle = motor.getAngDegrees();
-    motor.setAng(difference, velocity, acceleration);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    motorAngle = motor.getAngDegrees();
+    rawAngle = encoder.getRaw() / 8192. * 360.;
+    double difference = rawAngle - motorAngle;
+    motor.setAng(-difference, velocity, acceleration);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    rawAngle = encoder.getRaw() / 8192. * 360.;
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     rawAngle = encoder.getRaw() / 8192.0 * 360;
-    System.out.println("RAW ANGLE: " + rawAngle);
-    //  return Math.abs(rawAngle) < .5;
-    // return encoder.getStopped();
-    return true;
+    return Math.abs(rawAngle) < .5;
   }
 }

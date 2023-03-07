@@ -296,19 +296,20 @@ public class RobotContainer {
 
     // controller.y().onTrue(straightWheel1);
     controllertwo
-        // Place high
+        // Place high 20k & 40k For first, 15k & 10k for second b4 degree switch
         .y()
         .onTrue(
             Commands.sequence(
+                Commands.print("START"),
                 // new ClawEncoderMoveDown(-30, clawPivot, clawEncoder, "Cube").withTimeout(.1),
                 // Commands.waitSeconds(.1),
-                new MagicMotionPos(mainArm, 190, 20000, 40000),
+                new MagicMotionPos(mainArm, 190, 150, 100),
                 Commands.waitSeconds(.1),
-                new MagicMotionPos(mainArm, 5, 15000, 10000),
+                new MagicMotionPos(mainArm, 30, 150, 100),
                 Commands.waitSeconds(.5),
                 // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
                 Commands.waitSeconds(.3),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
     // CUBE
     // controllertwo
