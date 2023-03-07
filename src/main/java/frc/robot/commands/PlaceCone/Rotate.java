@@ -20,6 +20,8 @@ public class Rotate extends CommandBase {
   private double degrees;
   private double[] values = {0, 0, 0};
   private boolean angleDone = false;
+  private boolean sideDone = false;
+  private double p = .03;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
   private Constraints angleConstraints =
@@ -30,7 +32,7 @@ public class Rotate extends CommandBase {
   //// second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
 
-  private double angleP = 3;
+  private double angleP = .03;
   private double angleI = 0;
   private double angleD = 0;
 
@@ -57,27 +59,34 @@ public class Rotate extends CommandBase {
   @Override
   public void initialize() {
     angleDone = false;
+    sideDone = false;
 
     // configure rotation pid
     System.out.println(poseEstimatorSubsystem.getAngle());
-    anglePid.reset(Math.toRadians(poseEstimatorSubsystem.getAngle()));
-    anglePid.setGoal(Math.toRadians(degrees));
-    anglePid.setTolerance(Math.toRadians(.5));
+    anglePid.reset(poseEstimatorSubsystem.getAngle());
+    anglePid.setGoal(180);
+    anglePid.setTolerance(.5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
     // gets drive values to align to 0 degrees, field oriented.
     values = chassisValuesLower();
     drivetrainSubsystem.drive(new ChassisSpeeds(values[0], values[1], values[2]));
     // System.out.printf(
     //     "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // setpoint and atgoal don't work, just brute forced.
-    if (Math.abs(poseEstimatorSubsystem.getAngle()) < .2) {
+    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < 2) {
       angleDone = true;
     } else {
       angleDone = false;
+    }
+    if (Math.abs(limeLight.getTx()) < .5) {
+      sideDone = true;
+    } else {
+      sideDone = false;
     }
   }
 
@@ -103,10 +112,23 @@ public class Rotate extends CommandBase {
     */
 
     double[] x = new double[3];
-    double d = anglePid.calculate(Math.toRadians(poseEstimatorSubsystem.getAngle()));
+
     x[0] = 0.00001;
-    x[1] = Math.abs(limeLight.getTx()) > .5 ? (d > 0 ? -.3 : .3) : 0;
-    x[2] = angleDone ? 0 : (d);
+    x[1] = Math.abs(limeLight.getTx()) > 1 ? (-p * limeLight.getTx()) : 0;
+    x[2] =
+        angleDone
+            ? 0
+            : -((poseEstimatorSubsystem.getAngle() % 180)
+                    - Math.copySign(180, poseEstimatorSubsystem.getAngle()))
+                * angleP;
+    // System.out.println(
+    //     "sideways speed"
+    //         + x[1]
+    //         + "\nangle speed"
+    //         + x[2]
+    //         + "\nangle"
+    //         + poseEstimatorSubsystem.getAngle());
+    System.out.println("Angle: " + poseEstimatorSubsystem.getAngle());
     return x;
   }
 }
