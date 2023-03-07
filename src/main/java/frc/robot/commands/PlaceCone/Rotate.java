@@ -32,7 +32,7 @@ public class Rotate extends CommandBase {
   //// second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
 
-  private double angleP = .02;
+  private double angleP = .01;
   private double angleI = 0;
   private double angleD = 0;
 
@@ -78,7 +78,7 @@ public class Rotate extends CommandBase {
     // System.out.printf(
     //     "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // setpoint and atgoal don't work, just brute forced.
-    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < 2) {
+    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < .5) {
       angleDone = true;
     } else {
       angleDone = false;
