@@ -206,7 +206,16 @@ public final class Constants {
     public static final Gains kGains = new Gains(0.2, 0.0, 0.0, 0.2, 0, 1.0);
     public static final int FALCON_TICKS = 2048;
     public static final int GEAR_RATIO = 64;
-    public static final int PWM_CHANNEL_ENCODER_1 = 7;
-    public static final int PWM_CHANNEL_ENCODER_2 = 8;
+  }
+
+  public static final class Claw {
+    public static final double GEAR_RATIO = 40;
+    public static final double CUBE_UP_MAX_VELOCITY = .30; // .3 for Cone, .2 for Cube
+    public static final double CONE_UP_MAX_VELOCITY = .40; // .3 for Cone, .2 for Cube
+    public static final double DOWN_MAX_VELOCITY = .1;
+    public static final double MAX_ACCELERATION = .1;
+    public static final double kP = .01;
+    public static final double kI = 0;
+    public static final double kD = 0;
   }
 }
