@@ -40,6 +40,16 @@ public final class TestAutoCommands {
   }
 
   public SequentialCommandGroup getAutoCommand() {
+    if (pathName.equals("StraightNoRotation")) {
+      return new SequentialCommandGroup(
+          new PPSwerveFollower(
+              driveSystem,
+              poseEstimatorSystem,
+              "StraightNoRotation",
+              new PathConstraints(1, 1),
+              true));
+    }
+
     if (pathName.equals("TestCurve")) {
       return new SequentialCommandGroup(
           new PPSwerveFollower(
