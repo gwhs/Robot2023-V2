@@ -4,8 +4,6 @@
 
 package frc.robot.commands.PlaceCone;
 
-import java.util.List;
-
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -16,16 +14,17 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
-import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import java.util.List;
 
 public class PPIDAutoAim extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private LimeLightSub limeLight;
-  private double[] values = { 0, 0, 0 };
+  private double[] values = {0, 0, 0};
   private boolean sidewaysDone = false;
   private boolean angleDone = false;
   private int noTargets = 0;
@@ -53,21 +52,22 @@ public class PPIDAutoAim extends CommandBase {
   // second param on constraints is estimated, should be max accel, not max speed,
   // but lets say it
   // gets there in a second
-  private Constraints angleConstraints = new Constraints(
-      DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-      DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
+  private Constraints angleConstraints =
+      new Constraints(
+          DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+          DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
 
   // second param on constraints is estimated, should be max accel, not max speed,
   // but lets say it
   // gets there in a second
-  private Constraints positionConstraints = new Constraints(
-      DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50,
-      DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
+  private Constraints positionConstraints =
+      new Constraints(
+          DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50,
+          DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
   // pid for angle
 
   private double targetDistance = 0;
-  
 
   /** Creates a new PPIDAutoAim. */
   public PPIDAutoAim(
@@ -84,15 +84,29 @@ public class PPIDAutoAim extends CommandBase {
 
     tab = Shuffleboard.getTab("Drive");
 
-    ShuffleboardLayout PIDConstants = tab.getLayout("AutoAim PID Constants", BuiltInLayouts.kList).withSize(2, 4)
-        .withPosition(0, 0);
+    ShuffleboardLayout PIDConstants =
+        tab.getLayout("AutoAim PID Constants", BuiltInLayouts.kList)
+            .withSize(2, 4)
+            .withPosition(0, 0);
 
     if (PIDConstants.getComponents().isEmpty()) {
 
-      anglePEntry = PIDConstants.add("Angle P Constant", anglePDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
-      angleIEntry = PIDConstants.add("Angle I Constant", angleIDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
-      angleDEntry = PIDConstants.add("Angle D Constant", angleDDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
-      positionPEntry = PIDConstants.add("Position P Constant", positionPDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+      anglePEntry =
+          PIDConstants.add("Angle P Constant", anglePDefault)
+              .withWidget(BuiltInWidgets.kTextView)
+              .getEntry();
+      angleIEntry =
+          PIDConstants.add("Angle I Constant", angleIDefault)
+              .withWidget(BuiltInWidgets.kTextView)
+              .getEntry();
+      angleDEntry =
+          PIDConstants.add("Angle D Constant", angleDDefault)
+              .withWidget(BuiltInWidgets.kTextView)
+              .getEntry();
+      positionPEntry =
+          PIDConstants.add("Position P Constant", positionPDefault)
+              .withWidget(BuiltInWidgets.kTextView)
+              .getEntry();
 
     } else {
       List<ShuffleboardComponent<?>> widgets = PIDConstants.getComponents();
