@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.commands.Arm.ClawEncoderMoveDown;
-import frc.robot.commands.Arm.ClawEncoderMoveUp;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;

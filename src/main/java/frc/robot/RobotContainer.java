@@ -260,12 +260,38 @@ public class RobotContainer {
     controller
         .b()
         .onTrue(
-            new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, clawEncoder, clawPivot, 210));
-    controller.y().onTrue(new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder, clawEncoder, clawPivot, 180));
+            new PlaceLow(
+                drivetrainSubsystem,
+                poseEstimator,
+                limeLightSub,
+                mainArm,
+                shaftEncoder,
+                clawEncoder,
+                clawPivot,
+                210));
+    controller
+        .y()
+        .onTrue(
+            new PlaceMid(
+                drivetrainSubsystem,
+                limeLightSub,
+                mainArm,
+                shaftEncoder,
+                clawEncoder,
+                clawPivot,
+                180));
     controller
         .rightBumper()
         .onTrue(
-            new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder, clawEncoder, clawPivot, 180));
+            new PlaceHigh(
+                drivetrainSubsystem,
+                poseEstimator,
+                limeLightSub,
+                mainArm,
+                shaftEncoder,
+                clawEncoder,
+                clawPivot,
+                180));
 
     // controller212
     // .a()
