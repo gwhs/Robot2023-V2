@@ -83,7 +83,7 @@ public class RobotContainer {
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
 
-  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub, 180);
+  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub, 0);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
@@ -148,12 +148,11 @@ public class RobotContainer {
     drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
 
+    configureButtonBindings();
     // configureArmBindings();
-    configureLimelightBindings();
     // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
-    shaftEncoder.reset();
 
     setupPathChooser();
   }
@@ -241,7 +240,7 @@ public class RobotContainer {
 
     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    // controller.x().onTrue(new ChangePipeline(limeLightSub));
+    controller.x().onTrue(new ChangePipeline(limeLightSub));
     // controller.b().onTrue(rotate);
     // controller.x().onTrue(new ChangePipeline(limeLightSub));
     controller.b().onTrue(rotate);
@@ -259,8 +258,6 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
 
     controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
-
-    // for this place stuff, chagne the degrees by like -5(for cubes)
     controller
         .rightBumper()
         .onTrue(
@@ -367,7 +364,7 @@ public class RobotContainer {
             Commands.sequence(
                 new ClawEncoderMoveDown(-30, clawPivot, clawEncoder, "Cube").withTimeout(.1),
                 Commands.waitSeconds(.1),
-                new MagicMotionPos(mainArm, 190, 15000, 15000),
+                new MagicMotionPos(mainArm, 190, 20000, 20000),
                 Commands.waitSeconds(.1),
                 new MagicMotionPos(mainArm, 2, 15000, 10000),
                 Commands.waitSeconds(.5),
