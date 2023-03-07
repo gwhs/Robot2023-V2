@@ -4,20 +4,10 @@
 
 package frc.robot.commands.Arm;
 
-import java.util.List;
-
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.Claw;
-import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 
 public class ClawEncoderMoveDown extends CommandBase {
 
@@ -28,13 +18,11 @@ public class ClawEncoderMoveDown extends CommandBase {
 
   private String piece;
 
-
   public ClawEncoderMoveDown(double angle, Claw initClaw, BoreEncoder weewoo, String piece) {
     clawOne = initClaw;
     this.encoder = weewoo;
     this.desiredAngle = angle;
     this.piece = piece;
-    
 
     addRequirements(initClaw);
   }
@@ -51,10 +39,9 @@ public class ClawEncoderMoveDown extends CommandBase {
     double rawAngle = (-encoder.getRaw() / 8192. * 360.);
     error = (desiredAngle - rawAngle);
     double velocity = Constants.Claw.kP * error;
-    if(velocity > Constants.Claw.DOWN_MAX_VELOCITY){
+    if (velocity > Constants.Claw.DOWN_MAX_VELOCITY) {
       velocity = Constants.Claw.DOWN_MAX_VELOCITY;
-    }
-    else if(velocity < -Constants.Claw.DOWN_MAX_VELOCITY){
+    } else if (velocity < -Constants.Claw.DOWN_MAX_VELOCITY) {
       velocity = -Constants.Claw.DOWN_MAX_VELOCITY;
     }
 

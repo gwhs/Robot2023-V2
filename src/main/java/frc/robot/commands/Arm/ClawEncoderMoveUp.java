@@ -4,8 +4,6 @@
 
 package frc.robot.commands.Arm;
 
-import java.util.List;
-
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -13,11 +11,13 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.Claw;
-import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import java.util.List;
+
 public class ClawEncoderMoveUp extends CommandBase {
 
   private Claw clawOne;
@@ -41,20 +41,17 @@ public class ClawEncoderMoveUp extends CommandBase {
     tab = Shuffleboard.getTab("Arm");
 
     ShuffleboardLayout moveUp =
-    tab.getLayout("Claw Encoder Move Up", BuiltInLayouts.kList)
-        .withSize(2, 4)
-        .withPosition(2, 0);
+        tab.getLayout("Claw Encoder Move Up", BuiltInLayouts.kList)
+            .withSize(2, 4)
+            .withPosition(2, 0);
 
-if (moveUp.getComponents().isEmpty()) {
-  pieceEntry =
-  moveUp
-          .add("Piece Name", pieceDefault)
-          .withWidget(BuiltInWidgets.kTextView)
-          .getEntry();
-} else {
-  List<ShuffleboardComponent<?>> widgets = moveUp.getComponents();
-  pieceEntry = ((SimpleWidget) widgets.get(0)).getEntry();
-}
+    if (moveUp.getComponents().isEmpty()) {
+      pieceEntry =
+          moveUp.add("Piece Name", pieceDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+    } else {
+      List<ShuffleboardComponent<?>> widgets = moveUp.getComponents();
+      pieceEntry = ((SimpleWidget) widgets.get(0)).getEntry();
+    }
   }
 
   // Called when the command is initially scheduled.

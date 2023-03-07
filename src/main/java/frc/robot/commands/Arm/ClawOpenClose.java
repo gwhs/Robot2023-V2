@@ -4,8 +4,6 @@
 
 package frc.robot.commands.Arm;
 
-import java.util.List;
-
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -13,9 +11,10 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystems.Claw;
+import java.util.List;
 
 public class ClawOpenClose extends CommandBase {
 
@@ -58,10 +57,7 @@ public class ClawOpenClose extends CommandBase {
               .withWidget(BuiltInWidgets.kTextView)
               .getEntry();
       ampsEntry =
-          openCloseShit
-              .add("Amps", ampsDefault)
-              .withWidget(BuiltInWidgets.kTextView)
-              .getEntry();
+          openCloseShit.add("Amps", ampsDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
     } else {
       List<ShuffleboardComponent<?>> widgets = openCloseShit.getComponents();
       desiredAngleEntry = ((SimpleWidget) widgets.get(0)).getEntry();
