@@ -86,7 +86,7 @@ public class MagicMotion extends SubsystemBase {
 
     testTalon.set(
         ControlMode.MotionMagic,
-        angle / 360.0 * Constants.Arm.FALCON_TICKS * Constants.Arm.GEAR_RATIO);
+        angle / 360 * Constants.Arm.FALCON_TICKS * Constants.Arm.GEAR_RATIO);
   }
 
   public void resetPosition() {

@@ -7,11 +7,20 @@ package frc.robot.commands.PlaceCone;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
+import java.util.List;
 
 public class Rotate extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
@@ -20,6 +29,17 @@ public class Rotate extends CommandBase {
   private double degrees;
   private double[] values = {0, 0, 0};
   private boolean angleDone = false;
+  private boolean sideDone = false;
+  private double p = .02;
+
+  private double angleP;
+  private double anglePDefault;
+  private GenericEntry anglePEntry;
+
+  private final ShuffleboardTab tab;
+
+  private ProfiledPIDController anglePid;
+
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
   private Constraints angleConstraints =
@@ -30,12 +50,8 @@ public class Rotate extends CommandBase {
   //// second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
 
-  private double angleP = 3;
   private double angleI = 0;
   private double angleD = 0;
-
-  private ProfiledPIDController anglePid =
-      new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
 
   /** Creates a new Rotate. */
   public Rotate(
@@ -49,6 +65,27 @@ public class Rotate extends CommandBase {
     this.limeLight = limeLightSub;
     this.degrees = degrees;
 
+    anglePDefault = 3;
+
+    tab = Shuffleboard.getTab("Drive");
+
+    ShuffleboardLayout PIDConstants =
+        tab.getLayout("Rotate PID Constants", BuiltInLayouts.kList)
+            .withSize(2, 4)
+            .withPosition(2, 0);
+
+    if (PIDConstants.getComponents().isEmpty()) {
+
+      anglePEntry =
+          PIDConstants.add("Angle P Constant", anglePDefault)
+              .withWidget(BuiltInWidgets.kTextView)
+              .getEntry();
+
+    } else {
+      List<ShuffleboardComponent<?>> widgets = PIDConstants.getComponents();
+      anglePEntry = ((SimpleWidget) widgets.get(0)).getEntry();
+    }
+
     addRequirements(poseEstimatorSubsystem, drivetrainSubsystem);
     // addRequirements(drivetrainSubsystem);
   }
@@ -57,6 +94,10 @@ public class Rotate extends CommandBase {
   @Override
   public void initialize() {
     angleDone = false;
+
+    angleP = anglePEntry.getDouble(anglePDefault);
+
+    anglePid = new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
 
     // configure rotation pid
     System.out.println(poseEstimatorSubsystem.getAngle());
@@ -74,7 +115,7 @@ public class Rotate extends CommandBase {
     // System.out.printf(
     //     "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // setpoint and atgoal don't work, just brute forced.
-    if (Math.abs(poseEstimatorSubsystem.getAngle()) < .2) {
+    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < .5) {
       angleDone = true;
     } else {
       angleDone = false;

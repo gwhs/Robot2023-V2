@@ -6,11 +6,11 @@ package frc.robot.commands.PlaceCone;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
+import frc.robot.subsystems.ArmSubsystems.Claw;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
@@ -26,20 +26,25 @@ public class PlaceHigh extends SequentialCommandGroup {
       PoseEstimatorSubsystem poseEstimatorSubsystem,
       LimeLightSub limeLightSub,
       MagicMotion mainArm,
-      BoreEncoder shaftEncoder) {
+      BoreEncoder shaftEncoder,
+      BoreEncoder clawEncoder,
+      Claw clawPivot,
+      int degrees) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.LOWER_DISTANCE_SHOOT),
-        new WaitCommand(.5),
-        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub, 0),
+        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub, 180),
         new StraightWheel(drivetrainSubsystem),
         new Sideways(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
         new StraightWheel(drivetrainSubsystem),
         new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.UPPER_DISTANCE_SHOOT),
-        new MagicMotionPos(mainArm, 190, 0, 0),
-        Commands.waitSeconds(.5),
-        new MagicMotionPos(mainArm, 0, 0, 0),
+        Commands.waitSeconds(1),
+        new MagicMotionPos(mainArm, 200, 20000, 3500),
+        Commands.waitSeconds(.05),
+        // new MagicMotionPos(mainArm, 195, 15000, 10000),
+        // new MagicMotionPos(mainArm, 197, 15000, 10000),
+        new MagicMotionPos(mainArm, 2, 15000, 10000),
         Commands.waitSeconds(.5),
         new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5000, 1000));
 
