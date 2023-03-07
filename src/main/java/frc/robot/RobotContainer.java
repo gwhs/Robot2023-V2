@@ -24,6 +24,7 @@ import frc.robot.commands.Arm.ClawEncoderMoveUp;
 import frc.robot.commands.Arm.ClawOpenClose;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
+import frc.robot.commands.Arm.MagicMotionPosShuffleboard;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
@@ -329,9 +330,10 @@ public class RobotContainer {
         .y()
         .onTrue(
             Commands.sequence(
-                new ClawEncoderMoveDown(-30, clawPivot, clawEncoder, "Cube").withTimeout(.1),
-                Commands.waitSeconds(.1),
-                new MagicMotionPos(mainArm, 190, 20000, 20000),
+                Commands.print("START"),
+                // new ClawEncoderMoveDown(-30, clawPivot, clawEncoder, "Cube").withTimeout(.1),
+                // Commands.waitSeconds(.1),
+                new MagicMotionPosShuffleboard(mainArm, 190, 150, 100),
                 Commands.waitSeconds(.1),
                 new MagicMotionPos(mainArm, 2, 15000, 10000),
                 Commands.waitSeconds(.5),
