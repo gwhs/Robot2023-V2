@@ -45,7 +45,7 @@ public final class TestAutoCommands {
               new SequentialCommandGroup(
                   new MagicMotionPos(mainArm, 0, 0, 0),
                   Commands.waitSeconds(.5),
-                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder)),
+                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5000, 1000)),
               new PPSwerveFollower(
                   driveSystem, poseEstimatorSystem, "HajelPath", new PathConstraints(2, 2), true)),
           new AutoBalanceFast(driveSystem));

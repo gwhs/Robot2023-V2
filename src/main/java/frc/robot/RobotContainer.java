@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -26,6 +27,7 @@ import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.AllLime;
 import frc.robot.commands.PlaceCone.ChangePipeline;
 import frc.robot.commands.PlaceCone.PlaceHigh;
+import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
@@ -34,6 +36,7 @@ import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
 import frc.robot.pathfind.VisGraph;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
+import frc.robot.subsystems.ArmSubsystems.Claw;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -65,7 +68,10 @@ public class RobotContainer {
 
   // Arm
   private final MagicMotion mainArm = new MagicMotion(21, robot.canivore_name());
-  private final BoreEncoder shaftEncoder = new BoreEncoder();
+  private final Claw clawPivot = new Claw(30, MotorType.kBrushless);
+  private final Claw clawOpenClose = new Claw(31, MotorType.kBrushless);
+  private final BoreEncoder shaftEncoder = new BoreEncoder(0, 1); // Blue 7 ; Yellow 8
+  //   private final BoreEncoder clawEncoder = new BoreEncoder(2, 3);
   private SendableChooser<String> m_chooser;
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
@@ -143,7 +149,6 @@ public class RobotContainer {
     // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
-    shaftEncoder.reset();
 
     setupPathChooser();
   }
@@ -292,30 +297,48 @@ public class RobotContainer {
     // new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
 
     // controller.y().onTrue(straightWheel1);
-    // controller
-    //     // Place high
-    //     .y()
-    //     .onTrue(
-    //         Commands.sequence(
-    //             new MagicMotionPos(mainArm, 190, 0, 0),
-    //             Commands.waitSeconds(.5),
-    //             new MagicMotionPos(mainArm, 0, 0, 0),
-    //             Commands.waitSeconds(.5),
-    //             new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
-
     controllertwo
+        // Place high 20k & 40k For first, 15k & 10k for second b4 degree switch
         .y()
         .onTrue(
             Commands.sequence(
-                new MagicMotionPos(mainArm, 190, 0, 0),
+                Commands.print("START"),
+                // new ClawEncoderMoveDown(-30, clawPivot, clawEncoder, "Cube").withTimeout(.1),
+                // Commands.waitSeconds(.1),
+                new MagicMotionPos(mainArm, 190, 150, 100),
+                Commands.waitSeconds(.1),
+                new MagicMotionPos(mainArm, 5, 150, 100),
                 Commands.waitSeconds(.5),
-                new MagicMotionPos(mainArm, 0, 0, 0),
-                Commands.waitSeconds(.5),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder)));
+                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+                Commands.waitSeconds(.3),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
-    // change LEDStrip colors
+    // CUBE
+    // controllertwo
+    //     .rightBumper()
+    //     .onTrue(
+    //         Commands.either(
+    //             new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+    //             Commands.sequence(
+    //                 Commands.print("Encoder Pos" + -clawEncoder.getRaw() / 8192. * 360.),
+    //                 Commands.parallel(
+    //                     new ClawOpenClose(-55, 5, clawOpenClose), Commands.waitSeconds(1)),
+    //                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CUBE"),
+    //                 new ClawOpenClose(0, 5, clawOpenClose).withTimeout(2)),
+    //             clawEncoder::posDown));
 
-    // controller.a().onTrue(Commands.runOnce(() -> toggleLED()));
+    // CONE
+    // controllertwo
+    //     .leftTrigger()
+    //     .onTrue(
+    //         Commands.either(
+    //             new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "CONE").withTimeout(3),
+    //             Commands.sequence(
+    //                 Commands.parallel(
+    //                     new ClawOpenClose(-85, 20, clawOpenClose), Commands.waitSeconds(1)),
+    //                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
+    //                 new ClawOpenClose(0, 20, clawOpenClose)),
+    //             clawEncoder::posDown));
   }
 
   private void configureLimelightBindings() {

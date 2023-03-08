@@ -33,13 +33,14 @@ public class MagicMotionPos extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("mMPos");
-    motor.setAng(angle, velocity, acceleration);
+    // System.out.println("mMPos");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    motor.setAng(angle, velocity, acceleration);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
