@@ -25,7 +25,7 @@ public class LEDSubsystem extends SubsystemBase {
   private double m_brightness = 1;
 
   // Change for different PWM ports
-  private int ledPortNumber = 9;
+  private int ledPortNumber = 0;
 
   private LEDMode ledMode;
 

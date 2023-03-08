@@ -35,13 +35,13 @@ public class PPIDAutoAim extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
   // pid for angle
-  private double angleP = 3;
+  private double angleP = 2;
   private double angleI = 0;
   private double angleD = 0;
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
   private double targetDistance = 0;
-  private double positionP = .0235;
+  private double positionP = .023;
 
   /** Creates a new PPIDAutoAim. */
   public PPIDAutoAim(
