@@ -27,7 +27,6 @@ import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.AllLime;
 import frc.robot.commands.PlaceCone.ChangePipeline;
 import frc.robot.commands.PlaceCone.PlaceHigh;
-import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
@@ -59,7 +58,7 @@ public class RobotContainer {
   // change robot name
   // change this to change robot -----------------v
   // change the same in Robot.java
-  private final RobotSetup robot = Constants.chuck;
+  private final RobotSetup robot = Constants.chris;
   private final CommandXboxController controller = new CommandXboxController(0);
   private final CommandXboxController controllertwo = new CommandXboxController(1);
   // Set IP to 10.57.12.11
