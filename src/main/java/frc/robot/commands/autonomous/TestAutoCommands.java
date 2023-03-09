@@ -1,6 +1,7 @@
 package frc.robot.commands.autonomous;
 
 import com.pathplanner.lib.PathConstraints;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -95,7 +96,10 @@ public final class TestAutoCommands {
                   new MagicMotionAbsoluteZero(mainArm, shaftEncoder)),
               new PPSwerveFollower(
                   driveSystem, poseEstimatorSystem, "HajelPath", new PathConstraints(2, 2), true)),
-          new AutoBalance(driveSystem));
+          new AutoBalance(driveSystem),
+          Commands.runOnce(() -> driveSystem.drive(new ChassisSpeeds(0, 0.1, 0)), driveSystem),
+          Commands.waitSeconds(0.2),
+          Commands.run(driveSystem::stop, driveSystem));
     }
     if (pathName.equals("HajelPathV2")) {
       return new SequentialCommandGroup(
@@ -166,7 +170,10 @@ public final class TestAutoCommands {
                   new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
                   new PPSwerveFollower(
                       driveSystem, poseEstimatorSystem, "D-F1E", new PathConstraints(2, 2), true))),
-          new AutoBalance(driveSystem));
+          new AutoBalance(driveSystem),
+          Commands.runOnce(() -> driveSystem.drive(new ChassisSpeeds(0, 0.1, 0)), driveSystem),
+          Commands.waitSeconds(0.2),
+          Commands.run(driveSystem::stop, driveSystem));
     }
     if (pathName.equals("A2E")) {
       return new SequentialCommandGroup(
