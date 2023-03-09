@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.RobotSetup;
@@ -263,7 +265,16 @@ public class RobotContainer {
         .rightBumper()
         .onTrue(
             new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder));
-    controller.b().toggleOnTrue(autoBalance);
+    controller
+        .b()
+        .toggleOnTrue(
+            new SequentialCommandGroup(
+                autoBalance,
+                Commands.runOnce(
+                    () -> drivetrainSubsystem.drive(new ChassisSpeeds(0, 0.1, 0)),
+                    drivetrainSubsystem),
+                Commands.waitSeconds(0.2),
+                Commands.runOnce(drivetrainSubsystem::stop, drivetrainSubsystem)));
 
     // controller212
     // .a()

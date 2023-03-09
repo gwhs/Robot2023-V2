@@ -15,8 +15,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.GyroMoment.WrappedGyro;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import java.util.List;
@@ -78,9 +76,10 @@ public class AutoBalance extends CommandBase {
     stateChangeTimer.stop();
     tab = Shuffleboard.getTab("Auto Balance");
 
-    ShuffleboardLayout orientation = tab.getLayout("Robot Orientation", BuiltInLayouts.kList).withSize(2, 4)
-        .withPosition(0, 0);
-    ShuffleboardLayout input = tab.getLayout("Constant Inputs", BuiltInLayouts.kList).withSize(2, 4).withPosition(2, 0);
+    ShuffleboardLayout orientation =
+        tab.getLayout("Robot Orientation", BuiltInLayouts.kList).withSize(2, 4).withPosition(0, 0);
+    ShuffleboardLayout input =
+        tab.getLayout("Constant Inputs", BuiltInLayouts.kList).withSize(2, 4).withPosition(2, 0);
 
     WrappedGyro gyro = drivetrainSubsystem.getGyro();
 
@@ -94,26 +93,34 @@ public class AutoBalance extends CommandBase {
     }
 
     if (input.getComponents().isEmpty()) {
-      pConstantEntry = input.add("p Constant", pConstantDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
-      dConstantEntry = input.add("d Constant", dConstantDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
-      toleranceEntry = input.add("Tolerance", toleranceDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
-      maxSpeedEntry = input.add("Max Speed", maxSpeedDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
-      requiredEngageTimeEntry = input
-          .add("Required Engage Time", requiredEngageTimeDefault)
-          .withWidget(BuiltInWidgets.kTextView)
-          .getEntry();
-      requiredStateChangeTimeEntry = input
-          .add("Required State Change Time", requiredStateChangeTimeDefault)
-          .withWidget(BuiltInWidgets.kTextView)
-          .getEntry();
-      initialSpeedEntry = input
-          .add("Initial State Speed", initialSpeedDefault)
-          .withWidget(BuiltInWidgets.kTextView)
-          .getEntry();
-      epsilonRateEntry = input
-          .add("Epsilon Rate Threshold", epsilonRateDefault)
-          .withWidget(BuiltInWidgets.kTextView)
-          .getEntry();
+      pConstantEntry =
+          input.add("p Constant", pConstantDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+      dConstantEntry =
+          input.add("d Constant", dConstantDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+      toleranceEntry =
+          input.add("Tolerance", toleranceDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+      maxSpeedEntry =
+          input.add("Max Speed", maxSpeedDefault).withWidget(BuiltInWidgets.kTextView).getEntry();
+      requiredEngageTimeEntry =
+          input
+              .add("Required Engage Time", requiredEngageTimeDefault)
+              .withWidget(BuiltInWidgets.kTextView)
+              .getEntry();
+      requiredStateChangeTimeEntry =
+          input
+              .add("Required State Change Time", requiredStateChangeTimeDefault)
+              .withWidget(BuiltInWidgets.kTextView)
+              .getEntry();
+      initialSpeedEntry =
+          input
+              .add("Initial State Speed", initialSpeedDefault)
+              .withWidget(BuiltInWidgets.kTextView)
+              .getEntry();
+      epsilonRateEntry =
+          input
+              .add("Epsilon Rate Threshold", epsilonRateDefault)
+              .withWidget(BuiltInWidgets.kTextView)
+              .getEntry();
     } else {
       List<ShuffleboardComponent<?>> widgets = input.getComponents();
       pConstantEntry = ((SimpleWidget) widgets.get(0)).getEntry();
@@ -137,7 +144,8 @@ public class AutoBalance extends CommandBase {
     // shuffleboard---easier to
     // test values
     requiredEngageTime = requiredEngageTimeEntry.getDouble(requiredEngageTimeDefault);
-    requiredStateChangeTime = requiredStateChangeTimeEntry.getDouble(requiredStateChangeTimeDefault);
+    requiredStateChangeTime =
+        requiredStateChangeTimeEntry.getDouble(requiredStateChangeTimeDefault);
     maxSpeed = maxSpeedEntry.getDouble(maxSpeedDefault);
     pConstant = pConstantEntry.getDouble(pConstantDefault);
     dConstant = dConstantEntry.getDouble(dConstantDefault);
@@ -165,11 +173,11 @@ public class AutoBalance extends CommandBase {
   public void execute() {
     WrappedGyro gyro = drivetrainSubsystem.getGyro();
 
-    //for chris
+    // for chris
     double currentAngle = gyro.getRoll();
     double currentDPS = gyro.getRollRate();
 
-    //for chuck
+    // for chuck
     // double currentAngle = gyro.getPitch();
     // double currentDPS = gyro.getPitchRate();
 
@@ -216,10 +224,7 @@ public class AutoBalance extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-        Commands.sequence(
-          Commands.runOnce(() -> drivetrainSubsystem.drive(new ChassisSpeeds(0, 0.1, 0)), drivetrainSubsystem), 
-          Commands.waitSeconds(0.1), 
-          Commands.runOnce(drivetrainSubsystem::stop, drivetrainSubsystem));
+    
   }
 
   // Returns true when the command should end.
