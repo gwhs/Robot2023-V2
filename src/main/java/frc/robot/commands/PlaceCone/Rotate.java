@@ -88,6 +88,7 @@ public class Rotate extends CommandBase {
     } else {
       sideDone = false;
     }
+    System.out.println(poseEstimatorSubsystem.getAngle());
   }
 
   // Called once the command ends or is interrupted.

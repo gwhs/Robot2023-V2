@@ -40,6 +40,24 @@ public final class TestAutoCommands {
   }
 
   public SequentialCommandGroup getAutoCommand() {
+    if (pathName.equals("BenPath")) {
+      return new SequentialCommandGroup(
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "move12", new PathConstraints(1, 1), true),
+          new MagicMotionPos(mainArm, 210, 0, 0),
+          new ParallelCommandGroup(
+              new SequentialCommandGroup(
+                  new MagicMotionPos(mainArm, 0, 0, 0),
+                  Commands.waitSeconds(.5),
+                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
+                  new PPSwerveFollower(
+                      driveSystem, poseEstimatorSystem, "I2+1", new PathConstraints(1, 1), true))),
+          Commands.waitSeconds(1), // grab
+          new PPSwerveFollower(
+              driveSystem, poseEstimatorSystem, "BenPath", new PathConstraints(1, 1), true),
+          Commands.runOnce(poseEstimatorSystem::set180FieldPosition, driveSystem),
+          new PlaceHigh(driveSystem, poseEstimatorSystem, lime, mainArm, shaftEncoder, 190));
+    }
     if (pathName.equals("StraightNoRotation")) {
       return new SequentialCommandGroup(
           new PPSwerveFollower(
@@ -265,8 +283,8 @@ public final class TestAutoCommands {
                   new MagicMotionAbsoluteZero(mainArm, shaftEncoder),
                   new PPSwerveFollower(
                       driveSystem, poseEstimatorSystem, "I2+1", new PathConstraints(5, 3), true))),
-          Commands.waitSeconds(1), //grab
-                    Commands.runOnce(poseEstimatorSystem::set180FieldPosition, driveSystem),
+          Commands.waitSeconds(1), // grab
+          Commands.runOnce(poseEstimatorSystem::set180FieldPosition, driveSystem),
           new PlaceHigh(driveSystem, poseEstimatorSystem, lime, mainArm, shaftEncoder, 190));
     }
 

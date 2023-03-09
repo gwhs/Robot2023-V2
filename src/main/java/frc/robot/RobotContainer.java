@@ -137,7 +137,7 @@ public class RobotContainer {
     drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
 
-    // configureButtonBindings();
+    configureButtonBindings();
     // configureArmBindings();
     // configureLimelightBindings();
     // configureAutoBalanceBindings();
@@ -397,6 +397,7 @@ public class RobotContainer {
     m_chooser.addOption("C place and engage", "C1+E");
     m_chooser.addOption("G place and engage", "G1+E");
     m_chooser.addOption("I 2 piece", "I2");
+    m_chooser.addOption("Ben Path", "BenPath");
   }
 
   private void toggleLED() {
