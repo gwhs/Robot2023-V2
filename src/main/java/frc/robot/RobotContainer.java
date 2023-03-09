@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.RobotSetup;
@@ -27,7 +29,6 @@ import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.AllLime;
 import frc.robot.commands.PlaceCone.ChangePipeline;
 import frc.robot.commands.PlaceCone.PlaceHigh;
-import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
@@ -239,7 +240,7 @@ public class RobotContainer {
     controller.x().onTrue(new ChangePipeline(limeLightSub));
     // controller.b().onTrue(rotate);
     // controller.x().onTrue(new ChangePipeline(limeLightSub));
-    controller.b().onTrue(rotate);
+    // controller.b().onTrue(rotate);
     // controller.y().onTrue(autoAimLime1);
 
     controllertwo
@@ -254,15 +255,26 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
 
     controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
-    controller
-        .b()
-        .onTrue(
-            new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder));
+    // controller
+    //     .b()
+    //     .onTrue(
+    //         new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm,
+    // shaftEncoder));
     controller.y().onTrue(new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder));
     controller
         .rightBumper()
         .onTrue(
             new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder));
+    controller
+        .b()
+        .toggleOnTrue(
+            new SequentialCommandGroup(
+                autoBalance,
+                Commands.runOnce(
+                    () -> drivetrainSubsystem.drive(new ChassisSpeeds(0, 0.1, 0)),
+                    drivetrainSubsystem),
+                Commands.waitSeconds(0.2),
+                Commands.runOnce(drivetrainSubsystem::stop, drivetrainSubsystem)));
 
     // controller212
     // .a()
