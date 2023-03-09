@@ -88,7 +88,7 @@ public class LEDSubsystem extends SubsystemBase {
 
   public int transformColor(int colorOne, int colorTwo, double multiplier) {
     // hwne multiplier is 0, get color one, when color one is on color two
-    int value = (int) ((colorOne * multiplier) + (colorTwo * (1 - multiplier)));
+    int value = (int) ((colorOne * multiplier) + (colorTwo * (1 - multiplier + 10)));
 
     if (value > 255) {
       return 255;
@@ -114,7 +114,7 @@ public class LEDSubsystem extends SubsystemBase {
     }
 
     // Increase by to make the rainbow "move"
-    m_rainbowFirstPixelHue += 4;
+    m_rainbowFirstPixelHue += 8;
     // Check bounds
     m_rainbowFirstPixelHue %= 180;
   }
@@ -139,6 +139,11 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void emergency() {
+    m_brightness += .05;
+
+    if (m_brightness > 1) {
+      m_brightness = 0.01;
+    }
     generalLED(0, NUMBER_LED, 255, 0, 0);
   }
 
@@ -222,14 +227,29 @@ public class LEDSubsystem extends SubsystemBase {
 
   // auto
   public void green() {
+    m_brightness += .05;
+
+    if (m_brightness > 1) {
+      m_brightness = 0.01;
+    }
     generalLED(0, NUMBER_LED, 0, 255, 0);
   }
 
   public void orange() {
+    m_brightness += .05;
+
+    if (m_brightness > 1) {
+      m_brightness = 0.01;
+    }
     generalLED(0, NUMBER_LED, 255, 50, 0);
   }
 
   public void red() {
+    m_brightness += .05;
+
+    if (m_brightness > 1) {
+      m_brightness = 0.01;
+    }
     generalLED(0, NUMBER_LED, 255, 0, 0);
   }
 
