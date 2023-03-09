@@ -174,12 +174,12 @@ public class AutoBalance extends CommandBase {
     WrappedGyro gyro = drivetrainSubsystem.getGyro();
 
     // for chris
-    double currentAngle = gyro.getRoll();
-    double currentDPS = gyro.getRollRate();
+    // double currentAngle = gyro.getRoll();
+    // double currentDPS = gyro.getRollRate();
 
     // for chuck
-    // double currentAngle = gyro.getPitch();
-    // double currentDPS = gyro.getPitchRate();
+    double currentAngle = -gyro.getPitch();
+    double currentDPS = -gyro.getPitchRate();
 
     double error = currentAngle - 0;
 
@@ -223,9 +223,7 @@ public class AutoBalance extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
