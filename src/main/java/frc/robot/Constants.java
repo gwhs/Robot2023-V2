@@ -207,6 +207,7 @@ public final class Constants {
     public static final double LOWER_DISTANCE_SHOOT = 85.5;
     public static final double UPPER_DISTANCE_SHOOT = 42;
     public static final double BOTTOM_DISTANCE_SHOOT = 114;
+    // 44 upper cone
   }
 
   public static final class Arm {

@@ -121,6 +121,6 @@ public class MagicMotionPosShuffleboard extends CommandBase {
   @Override
   public boolean isFinished() {
     motorAng = motor.getAngDegrees();
-    return Math.abs(motorAng - angle) < .5;
+    return Math.abs(motorAng - angle) < 5;
   }
 }

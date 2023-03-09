@@ -328,18 +328,20 @@ public class RobotContainer {
 
     // controller.y().onTrue(straightWheel1);
     controllertwo
-        // Place high
+        // Place high //5 , 2.5, 5
         .y()
         .onTrue(
             Commands.sequence(
                 Commands.print("START"),
                 // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
-                Commands.waitSeconds(.25),
-                new MagicMotionPosShuffleboard(mainArm, 190, 10, 5),
-                Commands.waitSeconds(.1),
-                new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
-                Commands.waitSeconds(1),
-                new MagicMotionPos(mainArm, 2, 3, 1),
+                // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
+                // Commands.waitSeconds(.25),
+                // new MagicMotionPos(mainArm, 40, 1, 1, 5),
+                new MagicMotionPosShuffleboard(mainArm, 175, 2.75, 5),
+                // Commands.waitSeconds(.1),
+                // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
+                // Commands.waitSeconds(),
+                new MagicMotionPos(mainArm, 0, 3, 1.5, .5),
                 Commands.waitSeconds(.5),
                 // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
                 // Commands.waitSeconds(.3),
