@@ -82,15 +82,15 @@ public class AutoBalance extends CommandBase {
         .withPosition(0, 0);
     ShuffleboardLayout input = tab.getLayout("Constant Inputs", BuiltInLayouts.kList).withSize(2, 4).withPosition(2, 0);
 
-    WrappedGyro gryo = drivetrainSubsystem.getGyro();
+    WrappedGyro gyro = drivetrainSubsystem.getGyro();
 
     if (orientation.getComponents().isEmpty()) {
-      orientation.addNumber("Yaw", () -> gryo.getYaw());
-      orientation.addNumber("Pitch", () -> gryo.getPitch());
-      orientation.addNumber("Roll", () -> gryo.getRoll());
-      orientation.addNumber("Yaw Rate", () -> gryo.getYawRate());
-      orientation.addNumber("Pitch Rate", () -> gryo.getPitchRate());
-      orientation.addNumber("Roll Rate", () -> gryo.getRollRate());
+      orientation.addNumber("Yaw", () -> gyro.getYaw());
+      orientation.addNumber("Pitch", () -> gyro.getPitch());
+      orientation.addNumber("Roll", () -> gyro.getRoll());
+      orientation.addNumber("Yaw Rate", () -> gyro.getYawRate());
+      orientation.addNumber("Pitch Rate", () -> gyro.getPitchRate());
+      orientation.addNumber("Roll Rate", () -> gyro.getRollRate());
     }
 
     if (input.getComponents().isEmpty()) {
@@ -164,8 +164,14 @@ public class AutoBalance extends CommandBase {
   @Override
   public void execute() {
     WrappedGyro gyro = drivetrainSubsystem.getGyro();
+
+    //for chris
     double currentAngle = gyro.getRoll();
     double currentDPS = gyro.getRollRate();
+
+    //for chuck
+    // double currentAngle = gyro.getPitch();
+    // double currentDPS = gyro.getPitchRate();
 
     double error = currentAngle - 0;
 
