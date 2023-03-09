@@ -27,7 +27,7 @@ public class LEDSubsystem extends SubsystemBase {
 
   private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
-  private int NUMBER_LED = 24;
+  private int NUMBER_LED = 6;
   // Store what the last hue of the first pixel is
   private int m_rainbowFirstPixelHue;
   private double m_brightness = 1;
@@ -100,7 +100,7 @@ public class LEDSubsystem extends SubsystemBase {
   }
   // auto
   // public void setStatus() {
-  //   if (drivetrainSubsystem
+  // if (drivetrainSubsystem
   // }
 
   public void rainbow() {
@@ -114,7 +114,7 @@ public class LEDSubsystem extends SubsystemBase {
     }
 
     // Increase by to make the rainbow "move"
-    m_rainbowFirstPixelHue += 8;
+    m_rainbowFirstPixelHue += 240; //speed of rainbow color movement
     // Check bounds
     m_rainbowFirstPixelHue %= 180;
   }
@@ -129,7 +129,7 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void purple() {
-    m_brightness += .05;
+    m_brightness += .02;
 
     if (m_brightness > 1) {
       m_brightness = 0.01;
@@ -139,7 +139,7 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void emergency() {
-    m_brightness += .05;
+    m_brightness += .02;
 
     if (m_brightness > 1) {
       m_brightness = 0.01;
@@ -161,7 +161,7 @@ public class LEDSubsystem extends SubsystemBase {
     final int g2 = 0;
     final int b2 = 255;
 
-    boolean finish = false;
+    // boolean finish = false;
 
     int r3;
     int g3;
@@ -169,7 +169,7 @@ public class LEDSubsystem extends SubsystemBase {
 
     // front
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      double t = (double) (i / (m_ledBuffer.getLength() - 1.0));
+      double t = (double) (i / (m_ledBuffer.getLength() - 5.0));
 
       r3 = transformColor(r1, r2, t);
       g3 = transformColor(g1, g2, t);
@@ -184,35 +184,34 @@ public class LEDSubsystem extends SubsystemBase {
         g3 = 0;
         b3 = 0;
         // generalLED(0, NUMBER_LED, r1, g2, b3);
-        finish = true;
+        // finish = true;
       }
     }
 
     // reverse
-    if (finish) {
-      for (var i = NUMBER_LED; i > 0; i--) {
-        double t = (double) (i / (m_ledBuffer.getLength() - 1.0));
+    // if (finish) {
+    // for (var i = NUMBER_LED; i > 0; i--) {
+    // double t = (double) (i / (m_ledBuffer.getLength() - 1.0));
 
-        r3 = transformColor(r2, r1, t);
-        g3 = transformColor(g2, g1, t);
-        b3 = transformColor(b2, b1, t);
+    // r3 = transformColor(r2, r1, t);
+    // g3 = transformColor(g2, g1, t);
+    // b3 = transformColor(b2, b1, t);
 
-        // generalLED(i, i + 1, r3, g3, b3);
-        m_ledBuffer.setRGB(i, (int) (r3), (int) (b3), (int) (g3));
+    // // generalLED(i, i + 1, r3, g3, b3);
+    // m_ledBuffer.setRGB(i, (int) (r3), (int) (b3), (int) (g3));
 
-        if (i == 1) {
-          System.out.println("loop 2");
-          r3 = 0;
-          g3 = 0;
-          b3 = 0;
-          // generalLED(0, NUMBER_LED, r1, g2, b3);
-          finish = false;
-        }
-      }
-    }
-
-    // experiment
+    // if (i == 1) {
+    // System.out.println("loop 2");
+    // r3 = 0;
+    // g3 = 0;
+    // b3 = 0;
+    // // generalLED(0, NUMBER_LED, r1, g2, b3);
+    // finish = false;
+    // }
+    // }
   }
+
+  // experiment
 
   public void movingPixel() {
     m_ledBuffer.setRGB(m_pixelCounter, 0, 255, 0);
@@ -297,5 +296,6 @@ public class LEDSubsystem extends SubsystemBase {
           (int) (greenColor * m_brightness));
     }
   }
-  // Hi! I caught your attention! (●'◡'●)❤💚🧡💛💙💜🤎🖤🤍❣💕💞💓💗💖💘💝💟🗿🗿🗿😘💋👄
+  // Hi! I caught your attention!
+  // (●'◡'●)❤💚🧡💛💙💜🤎🖤🤍❣💕💞💓💗💖💘💝💟🗿🗿🗿😘💋👄
 }
