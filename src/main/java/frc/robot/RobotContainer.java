@@ -389,14 +389,17 @@ public class RobotContainer {
     m_chooser.addOption("D place and hold", "D1+1");
     m_chooser.addOption("F place and hold", "F1+1");
     m_chooser.addOption("G 2 piece and engage", "G2E");
+    m_chooser.addOption("G 2 piece and engage No Lime", "G2ENoLime");
     m_chooser.addOption("I 2 piece and hold", "I2+1");
     m_chooser.addOption("I 2 piece engage and hold", "I2+1E");
     m_chooser.addOption("FUN", "FUN"); // why?
     m_chooser.addOption("I 1+ and engage", "HajelPath");
     m_chooser.addOption("I 2+ and engage", "HajelPathV2");
+    m_chooser.addOption("I 2+ and engage no Lime", "HajelPathV2NoLime");
     m_chooser.addOption("C place and engage", "C1+E");
     m_chooser.addOption("G place and engage", "G1+E");
     m_chooser.addOption("I 2 piece", "I2");
+    m_chooser.addOption("I 2 piece no Lime", "I2NoLime");
     m_chooser.addOption("Ben Path", "BenPath");
   }
 
