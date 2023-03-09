@@ -7,14 +7,13 @@ package frc.robot.commands.Arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystems.Claw;
 
-public class ClawOpenClose extends CommandBase {
-
+public class CLAWPERCENT extends CommandBase {
   private Claw claw;
 
   private double angle;
   private int amps;
 
-  public ClawOpenClose(double desiredAngle, int desiredAmps, Claw claw) {
+  public CLAWPERCENT(double desiredAngle, int desiredAmps, Claw claw) {
     this.claw = claw;
     this.angle = desiredAngle;
     this.amps = desiredAmps;
@@ -24,8 +23,7 @@ public class ClawOpenClose extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    claw.setLimit(amps);
-    claw.setPosition(angle);
+    claw.setPercent(0.5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,6 +37,6 @@ public class ClawOpenClose extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

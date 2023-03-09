@@ -19,9 +19,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.RobotSetup;
+import frc.robot.commands.Arm.CLAWPERCENT;
 import frc.robot.commands.Arm.ClawEncoderMoveDown;
 import frc.robot.commands.Arm.ClawEncoderMoveUp;
 import frc.robot.commands.Arm.ClawOpenClose;
+import frc.robot.commands.Arm.ClawOpenCloseShuffleBoard;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.Arm.MagicMotionPosShuffleboard;
@@ -72,8 +74,8 @@ public class RobotContainer {
 
   // Arm
   private final MagicMotion mainArm = new MagicMotion(21, robot.canivore_name());
-  private final Claw clawPivot = new Claw(30, MotorType.kBrushless);
-  private final Claw clawOpenClose = new Claw(31, MotorType.kBrushless);
+  private final Claw clawPivot = new Claw(30, MotorType.kBrushless, false);
+  private final Claw clawOpenClose = new Claw(31, MotorType.kBrushless, true);
   private final BoreEncoder shaftEncoder = new BoreEncoder(0, 1); // Blue 7 ; Yellow 8
   private final BoreEncoder clawEncoder = new BoreEncoder(2, 3);
   private SendableChooser<String> m_chooser;
@@ -331,7 +333,7 @@ public class RobotContainer {
         .onTrue(
             Commands.sequence(
                 Commands.print("START"),
-                new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+                // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
                 Commands.waitSeconds(.25),
                 new MagicMotionPosShuffleboard(mainArm, 190, 10, 5),
                 Commands.waitSeconds(.1),
@@ -339,8 +341,8 @@ public class RobotContainer {
                 Commands.waitSeconds(1),
                 new MagicMotionPos(mainArm, 2, 3, 1),
                 Commands.waitSeconds(.5),
-                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-                Commands.waitSeconds(.3),
+                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+                // Commands.waitSeconds(.3),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
     // CUBE
@@ -352,7 +354,8 @@ public class RobotContainer {
                 Commands.sequence(
                     Commands.print("Encoder Pos" + -clawEncoder.getRaw() / 8192. * 360.),
                     Commands.parallel(
-                        new ClawOpenClose(-55, 5, clawOpenClose), Commands.waitSeconds(1)),
+                        new ClawOpenCloseShuffleBoard(75, 5, clawOpenClose),
+                        Commands.waitSeconds(1)),
                     new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CUBE"),
                     new ClawOpenClose(0, 5, clawOpenClose).withTimeout(2)),
                 clawEncoder::posDown));
@@ -369,6 +372,8 @@ public class RobotContainer {
     //                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
     //                 new ClawOpenClose(0, 20, clawOpenClose)),
     //             clawEncoder::posDown));
+
+    controllertwo.leftBumper().whileTrue(new CLAWPERCENT(0, 0, clawOpenClose));
   }
 
   private void configureLimelightBindings() {

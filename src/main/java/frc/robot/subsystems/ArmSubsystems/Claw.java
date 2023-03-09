@@ -20,10 +20,10 @@ public class Claw extends SubsystemBase {
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
   private RelativeEncoder m_encoder;
 
-  public Claw(int id, CANSparkMax.MotorType type) {
+  public Claw(int id, CANSparkMax.MotorType type, boolean inverted) {
     m_motor = new CANSparkMax(id, type);
     m_motor.restoreFactoryDefaults();
-    m_motor.setInverted(false);
+    m_motor.setInverted(inverted);
     m_encoder = m_motor.getEncoder();
     m_encoder.setPosition(0);
 

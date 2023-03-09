@@ -4,11 +4,10 @@
 
 package frc.robot.subsystems.ArmSubsystems;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class BoreEncoder extends SubsystemBase {
   private final Encoder m_encoder;
