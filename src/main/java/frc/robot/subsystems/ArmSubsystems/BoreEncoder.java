@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.ArmSubsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,6 +36,7 @@ public class BoreEncoder extends SubsystemBase {
   }
 
   public double getRaw() {
+    Logger.getInstance().recordOutput("Arm/Angle", m_encoder.getRaw());
     return m_encoder.getRaw();
   }
 
