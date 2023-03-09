@@ -391,6 +391,8 @@ public class RobotContainer {
       m_led.setLedMode(LEDMode.TEAMCOLOR);
     } else if (m_led.getLedMode() == LEDMode.TEAMCOLOR) {
       m_led.setLedMode(LEDMode.RAINBOW);
+    } else if (m_led.getLedMode() == LEDMode.RAINBOW) {
+      m_led.setLedMode(LEDMode.WHITE);
     } else {
       m_led.setLedMode(LEDMode.YELLOW);
     }

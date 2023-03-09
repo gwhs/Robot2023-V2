@@ -19,6 +19,8 @@ public class LEDSubsystem extends SubsystemBase {
     YELLOW,
     PURPLE,
     TEAMCOLOR,
+    BLUE,
+    PINK,
     // auto
     GREEN,
     ORANGE,
@@ -77,8 +79,10 @@ public class LEDSubsystem extends SubsystemBase {
       ledMode = LEDMode.GREEN;
     } else if (status == 2) {
       ledMode = LEDMode.ORANGE;
-    } else {
+    } else if (status == 3) {
       ledMode = LEDMode.RED;
+    } else {
+      ledMode = LEDMode.PINK;
     }
   }
 
@@ -114,9 +118,27 @@ public class LEDSubsystem extends SubsystemBase {
     }
 
     // Increase by to make the rainbow "move"
-    m_rainbowFirstPixelHue += 240; //speed of rainbow color movement
+    m_rainbowFirstPixelHue += 240; // speed of rainbow color movement
     // Check bounds
     m_rainbowFirstPixelHue %= 180;
+  }
+
+  public void blue() {
+    m_brightness += .05;
+
+    if (m_brightness > 1) {
+      m_brightness = 0.01;
+    }
+    generalLED(0, NUMBER_LED, 0, 0, 255);
+  }
+
+  public void pink() {
+    m_brightness += .05;
+
+    if (m_brightness > 1) {
+      m_brightness = 0.01;
+    }
+    generalLED(0, NUMBER_LED, 255, 192, 203);
   }
 
   public void yellow() {
@@ -270,6 +292,12 @@ public class LEDSubsystem extends SubsystemBase {
         break;
       case TEAMCOLOR:
         teamColor();
+        break;
+      case BLUE:
+        blue();
+        break;
+      case PINK:
+        pink();
         break;
 
         // auto
