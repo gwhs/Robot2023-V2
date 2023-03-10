@@ -496,7 +496,10 @@ public class RobotContainer {
             mainArm,
             shaftEncoder,
             m_chooser.getSelected(),
-            limeLightSub,clawEncoder,clawPivot,clawOpenClose);
+            limeLightSub,
+            clawEncoder,
+            clawPivot,
+            clawOpenClose);
 
     return vendingMachine.getAutoCommand();
   }
