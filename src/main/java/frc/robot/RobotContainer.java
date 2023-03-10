@@ -22,7 +22,6 @@ import frc.robot.Constants.RobotSetup;
 import frc.robot.commands.Arm.ClawEncoderMoveDown;
 import frc.robot.commands.Arm.ClawEncoderMoveUp;
 import frc.robot.commands.Arm.ClawOpenClose;
-import frc.robot.commands.Arm.ClawOpenCloseShuffleBoard;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.Arm.MagicMotionPosShuffleboard;
@@ -149,9 +148,9 @@ public class RobotContainer {
     drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
 
-    // configureButtonBindings();
+    configureButtonBindings();
     // configureArmBindings();
-    configureLimelightBindings();
+    // configureLimelightBindings();
     // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
@@ -349,33 +348,32 @@ public class RobotContainer {
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
     // CUBE
-    controllertwo
-        .rightBumper()
-        .onTrue(
-            Commands.either(
-                new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
-                Commands.sequence(
-                    Commands.print("Encoder Pos" + -clawEncoder.getRaw() / 8192. * 360.),
-                    Commands.parallel(
-                        new ClawOpenCloseShuffleBoard(25, 5, clawOpenClose),
-                        Commands.waitSeconds(1)),
-                    new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CUBE"),
-                    new ClawOpenClose(0, 5, clawOpenClose).withTimeout(2)),
-                clawEncoder::posDown));
-
-    // CONE
     // controllertwo
-    //     .leftTrigger()
+    //     .rightBumper()
     //     .onTrue(
     //         Commands.either(
-    //             new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "CONE").withTimeout(3),
+    //             new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
     //             Commands.sequence(
+    //                 Commands.print("Encoder Pos" + -clawEncoder.getRaw() / 8192. * 360.),
     //                 Commands.parallel(
-    //                     new ClawOpenClose(-85, 20, clawOpenClose), Commands.waitSeconds(1)),
-    //                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
-    //                 new ClawOpenClose(0, 20, clawOpenClose)),
+    //                     new ClawOpenCloseShuffleBoard(25, 5, clawOpenClose),
+    //                     Commands.waitSeconds(1)),
+    //                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CUBE"),
+    //                 new ClawOpenClose(0, 5, clawOpenClose).withTimeout(2)),
     //             clawEncoder::posDown));
 
+    // CONE
+    controllertwo
+        .leftTrigger()
+        .onTrue(
+            Commands.either(
+                new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "CONE").withTimeout(3),
+                Commands.sequence(
+                    Commands.parallel(
+                        new ClawOpenClose(100, 20, clawOpenClose), Commands.waitSeconds(1)),
+                    new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
+                    new ClawOpenClose(20, 20, clawOpenClose)),
+                clawEncoder::posDown));
   }
 
   private void configureLimelightBindings() {
