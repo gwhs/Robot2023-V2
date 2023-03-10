@@ -40,7 +40,6 @@ public class PPIDAutoAim extends CommandBase {
   private GenericEntry angleDEntry;
   private GenericEntry positionPEntry;
 
-
   private final ShuffleboardTab tab;
 
   // second param on constraints is estimated, should be max accel, not max speed,

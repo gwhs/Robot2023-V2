@@ -31,7 +31,7 @@ public class Rotate extends CommandBase {
   private boolean sideDone = false;
   private double p = .02;
 
-  private double angleP;
+  private double angleP = .01;
   private double anglePDefault;
   private GenericEntry anglePEntry;
 
@@ -49,7 +49,6 @@ public class Rotate extends CommandBase {
   //// second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
 
-  angleP = .01;
   private double angleI = 0;
   private double angleD = 0;
 
