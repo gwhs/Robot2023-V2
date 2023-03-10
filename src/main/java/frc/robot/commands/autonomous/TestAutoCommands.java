@@ -39,11 +39,11 @@ public final class TestAutoCommands {
       return new SequentialCommandGroup(
           new PPSwerveFollower(
               driveSystem, poseEstimatorSystem, "move12", new PathConstraints(2, 2), true),
-          new MagicMotionPos(mainArm, 210, 0, 0),
+          new MagicMotionPos(mainArm, 210, 0, 0, .5),
           Commands.waitSeconds(.5),
           new ParallelCommandGroup(
               new SequentialCommandGroup(
-                  new MagicMotionPos(mainArm, 0, 0, 0),
+                  new MagicMotionPos(mainArm, 0, 0, 0, .5),
                   Commands.waitSeconds(.5),
                   new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5000, 1000)),
               new PPSwerveFollower(

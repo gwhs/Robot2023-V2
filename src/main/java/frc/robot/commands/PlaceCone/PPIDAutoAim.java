@@ -7,10 +7,19 @@ package frc.robot.commands.PlaceCone;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
+import java.util.List;
 
 public class PPIDAutoAim extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
@@ -20,14 +29,29 @@ public class PPIDAutoAim extends CommandBase {
   private boolean angleDone = false;
   private int noTargets = 0;
   private double distanceError;
-  // second param on constraints is estimated, should be max accel, not max speed, but lets say it
+
+  private double anglePDefault;
+  private double angleIDefault;
+  private double angleDDefault;
+  private double positionPDefault;
+
+  private GenericEntry anglePEntry;
+  private GenericEntry angleIEntry;
+  private GenericEntry angleDEntry;
+  private GenericEntry positionPEntry;
+
+  private final ShuffleboardTab tab;
+
+  // second param on constraints is estimated, should be max accel, not max speed,
+  // but lets say it
   // gets there in a second
   private Constraints angleConstraints =
       new Constraints(
           DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
           DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
 
-  // second param on constraints is estimated, should be max accel, not max speed, but lets say it
+  // second param on constraints is estimated, should be max accel, not max speed,
+  // but lets say it
   // gets there in a second
   private Constraints positionConstraints =
       new Constraints(
@@ -51,6 +75,45 @@ public class PPIDAutoAim extends CommandBase {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.targetDistance = targetDistance;
 
+    anglePDefault = 3;
+    angleIDefault = 0;
+    angleDDefault = 0;
+    positionPDefault = 0.235;
+
+    tab = Shuffleboard.getTab("Drive");
+
+    ShuffleboardLayout PIDConstants =
+        tab.getLayout("AutoAim PID Constants", BuiltInLayouts.kList)
+            .withSize(2, 4)
+            .withPosition(0, 0);
+
+    if (PIDConstants.getComponents().isEmpty()) {
+
+      anglePEntry =
+          PIDConstants.add("Angle P Constant", anglePDefault)
+              .withWidget(BuiltInWidgets.kTextView)
+              .getEntry();
+      angleIEntry =
+          PIDConstants.add("Angle I Constant", angleIDefault)
+              .withWidget(BuiltInWidgets.kTextView)
+              .getEntry();
+      angleDEntry =
+          PIDConstants.add("Angle D Constant", angleDDefault)
+              .withWidget(BuiltInWidgets.kTextView)
+              .getEntry();
+      positionPEntry =
+          PIDConstants.add("Position P Constant", positionPDefault)
+              .withWidget(BuiltInWidgets.kTextView)
+              .getEntry();
+
+    } else {
+      List<ShuffleboardComponent<?>> widgets = PIDConstants.getComponents();
+      anglePEntry = ((SimpleWidget) widgets.get(0)).getEntry();
+      angleIEntry = ((SimpleWidget) widgets.get(1)).getEntry();
+      angleDEntry = ((SimpleWidget) widgets.get(2)).getEntry();
+      positionPEntry = ((SimpleWidget) widgets.get(3)).getEntry();
+    }
+
     addRequirements(limeLight, drivetrainSubsystem);
     // addRequirements(drivetrainSubsystem);
   }
@@ -62,6 +125,13 @@ public class PPIDAutoAim extends CommandBase {
     sidewaysDone = false;
     // calculates how far it is from target
     distanceError = limeLight.getXDistance() - targetDistance;
+
+    angleP = anglePEntry.getDouble(anglePDefault);
+    angleI = angleIEntry.getDouble(angleIDefault);
+    angleD = angleDEntry.getDouble(angleDDefault);
+    positionP = positionPEntry.getDouble(positionPDefault);
+
+    anglePid = new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
 
     // configuring rotation pid
     anglePid.reset(Math.toRadians(limeLight.getAngle()));
@@ -119,14 +189,14 @@ public class PPIDAutoAim extends CommandBase {
 
   public double[] chassisValuesLower() {
     /*
-    [1,2,3]
-    1 is x velocity
-    2 is y velocity
-    3 is degrees rotation
-    get the angle using atan2, it returns radians
-    use sin and cos to get values to reach max speed
-    not really sure about the angle yet.
-    */
+     * [1,2,3]
+     * 1 is x velocity
+     * 2 is y velocity
+     * 3 is degrees rotation
+     * get the angle using atan2, it returns radians
+     * use sin and cos to get values to reach max speed
+     * not really sure about the angle yet.
+     */
     distanceError = limeLight.getXDistance() - targetDistance;
     double[] x = new double[3];
 

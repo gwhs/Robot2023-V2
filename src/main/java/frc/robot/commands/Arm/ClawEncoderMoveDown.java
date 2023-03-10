@@ -15,6 +15,7 @@ public class ClawEncoderMoveDown extends CommandBase {
   private BoreEncoder encoder;
   private double desiredAngle;
   private double error;
+
   private String piece;
 
   public ClawEncoderMoveDown(double angle, Claw initClaw, BoreEncoder weewoo, String piece) {
@@ -22,13 +23,14 @@ public class ClawEncoderMoveDown extends CommandBase {
     this.encoder = weewoo;
     this.desiredAngle = angle;
     this.piece = piece;
+
     addRequirements(initClaw);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("--------------START-----------");
+    // System.out.println("--------------START-----------");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,22 +39,15 @@ public class ClawEncoderMoveDown extends CommandBase {
     double rawAngle = (-encoder.getRaw() / 8192. * 360.);
     error = (desiredAngle - rawAngle);
     double velocity = Constants.Claw.kP * error;
-    if (piece.toUpperCase().equals("CUBE")) {
-      if (velocity > Constants.Claw.CUBE_UP_MAX_VELOCITY) {
-        velocity = Constants.Claw.CUBE_UP_MAX_VELOCITY;
-      } else if (velocity < -Constants.Claw.CUBE_UP_MAX_VELOCITY) {
-        velocity = -Constants.Claw.CUBE_UP_MAX_VELOCITY;
-      }
-    } else if (piece.toUpperCase().equals("CONE")) {
-      if (velocity > Constants.Claw.CONE_UP_MAX_VELOCITY) {
-        velocity = Constants.Claw.CONE_UP_MAX_VELOCITY;
-      } else if (velocity < -Constants.Claw.CONE_UP_MAX_VELOCITY) {
-        velocity = -Constants.Claw.CONE_UP_MAX_VELOCITY;
-      }
+    if (velocity > Constants.Claw.DOWN_MAX_VELOCITY) {
+      velocity = Constants.Claw.DOWN_MAX_VELOCITY;
+    } else if (velocity < -Constants.Claw.DOWN_MAX_VELOCITY) {
+      velocity = -Constants.Claw.DOWN_MAX_VELOCITY;
     }
+
     // System.out.println("DesiredAngle: " + desiredAngle);
     System.out.println("RawAngle: " + rawAngle);
-    System.out.println("Error: " + error);
+    // System.out.println("Error: " + error);
     // System.out.println("Velocity: " + velocity);
 
     clawOne.setPercent(velocity);
@@ -61,7 +56,7 @@ public class ClawEncoderMoveDown extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     clawOne.setPercent(0);
-    System.out.println("---------------END------------");
+    // System.out.println("---------------END------------");
   }
 
   @Override
