@@ -29,7 +29,7 @@ public class Sideways extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50,
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
-  private double P = .025;
+  private double P = .015;
   private double I = 0;
   private double D = 0;
   private ProfiledPIDController pid = new ProfiledPIDController(P, I, D, constraints);

@@ -10,13 +10,14 @@ import frc.robot.subsystems.ArmSubsystems.Claw;
 public class ClawOpenClose extends CommandBase {
 
   private Claw claw;
+
   private double angle;
   private int amps;
 
-  public ClawOpenClose(double angle, int amps, Claw claw) {
+  public ClawOpenClose(double desiredAngle, int desiredAmps, Claw claw) {
     this.claw = claw;
-    this.angle = angle;
-    this.amps = amps;
+    this.angle = desiredAngle;
+    this.amps = desiredAmps;
     addRequirements(claw);
   }
 
