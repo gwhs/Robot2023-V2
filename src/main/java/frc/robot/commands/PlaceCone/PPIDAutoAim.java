@@ -66,8 +66,18 @@ public class PPIDAutoAim extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
   // pid for angle
+<<<<<<< HEAD
 
   private double targetDistance = 0;
+=======
+  private double angleP = 2;
+  private double angleI = 0;
+  private double angleD = 0;
+  private ProfiledPIDController anglePid =
+      new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
+  private double targetDistance = 0;
+  private double positionP = .023;
+>>>>>>> 402527847606a2011a400c996bc95e1e5d233b7d
 
   /** Creates a new PPIDAutoAim. */
   public PPIDAutoAim(
@@ -155,7 +165,7 @@ public class PPIDAutoAim extends CommandBase {
       noTargets++;
     }
     // atgoal and setpoint do not work, so we just brute force it.
-    if (Math.abs(limeLight.getAngle()) < .5) {
+    if (Math.abs(limeLight.getTx()) < .2) {
       angleDone = true;
     } else {
       // sets it to false if position not there yet
@@ -178,15 +188,14 @@ public class PPIDAutoAim extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println(
-        "Distance error: " + distanceError + "Dist: " + sidewaysDone + "angle: " + angleDone);
+    System.out.println("done");
     drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, 0));
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println(distanceError);
+
     return angleDone && sidewaysDone;
   }
 
@@ -203,17 +212,12 @@ public class PPIDAutoAim extends CommandBase {
     distanceError = limeLight.getXDistance() - targetDistance;
     double[] x = new double[3];
 
-    if (!isFinished()) {
-      double d = (positionP) * distanceError;
-      x[0] = d;
-      x[1] = 0;
-      x[2] = anglePid.calculate(limeLight.getAngle());
-      System.out.println(distanceError + "velo" + d);
-    } else {
-      x[0] = 0;
-      x[1] = 0;
-      x[2] = 0;
-    }
+    double d = (positionP) * distanceError;
+    x[0] = sidewaysDone ? 0 : d;
+    x[1] = 0;
+    x[2] = angleDone ? 0 : anglePid.calculate(limeLight.getAngle());
+    System.out.println(distanceError + "velo" + d);
+
     return x;
   }
 }

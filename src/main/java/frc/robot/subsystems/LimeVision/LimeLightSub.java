@@ -97,6 +97,6 @@ public class LimeLightSub extends SubsystemBase {
   }
 
   public boolean checkPipe() {
-    return getPipeline() < .5;
+    return limelight_comm.get_entry_double("pipeline") < .5;
   }
 }
