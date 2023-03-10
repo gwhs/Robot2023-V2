@@ -42,9 +42,9 @@ public class AutoBalance extends CommandBase {
   private double initialSpeedDefault;
 
   private int state; // state of the robot; 0 or 1
-  private double epsilonRollRate; // degrees per second threshold to switch from state 0 to 1
-  private double epsilonRollRateDefault;
-  private final GenericEntry epsilonRollRateEntry;
+  private double epsilonRate; // degrees per second threshold to switch from state 0 to 1
+  private double epsilonRateDefault;
+  private final GenericEntry epsilonRateEntry;
 
   private final ShuffleboardTab tab;
   private final GenericEntry pConstantEntry;
@@ -60,15 +60,15 @@ public class AutoBalance extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
 
-    pConstantDefault = 0.0014; // 0.0045 original these are the default values set on the robot and
+    pConstantDefault = 0.0015; // 0.0045 original these are the default values set on the robot and
     // shuffleboard
-    dConstantDefault = 0.00008;
-    toleranceDefault = 2.5;
+    dConstantDefault = 0.000021;
+    toleranceDefault = 2;
     maxSpeedDefault = 0.5;
     requiredEngageTimeDefault = 0.1;
-    requiredStateChangeTimeDefault = 0.008;
-    initialSpeedDefault = 0.5;
-    epsilonRollRateDefault = 13;
+    requiredStateChangeTimeDefault = 0.01;
+    initialSpeedDefault = 0.4;
+    epsilonRateDefault = 4;
 
     engageTimer = new Timer();
     engageTimer.stop();
@@ -81,15 +81,15 @@ public class AutoBalance extends CommandBase {
     ShuffleboardLayout input =
         tab.getLayout("Constant Inputs", BuiltInLayouts.kList).withSize(2, 4).withPosition(2, 0);
 
-    WrappedGyro gryo = drivetrainSubsystem.getGyro();
+    WrappedGyro gyro = drivetrainSubsystem.getGyro();
 
     if (orientation.getComponents().isEmpty()) {
-      orientation.addNumber("Yaw", () -> gryo.getYaw());
-      orientation.addNumber("Pitch", () -> gryo.getPitch());
-      orientation.addNumber("Roll", () -> gryo.getRoll());
-      orientation.addNumber("Yaw Rate", () -> gryo.getYawRate());
-      orientation.addNumber("Pitch Rate", () -> gryo.getPitchRate());
-      orientation.addNumber("Roll Rate", () -> gryo.getRollRate());
+      orientation.addNumber("Yaw", () -> gyro.getYaw());
+      orientation.addNumber("Pitch", () -> gyro.getPitch());
+      orientation.addNumber("Roll", () -> gyro.getRoll());
+      orientation.addNumber("Yaw Rate", () -> gyro.getYawRate());
+      orientation.addNumber("Pitch Rate", () -> gyro.getPitchRate());
+      orientation.addNumber("Roll Rate", () -> gyro.getRollRate());
     }
 
     if (input.getComponents().isEmpty()) {
@@ -116,9 +116,9 @@ public class AutoBalance extends CommandBase {
               .add("Initial State Speed", initialSpeedDefault)
               .withWidget(BuiltInWidgets.kTextView)
               .getEntry();
-      epsilonRollRateEntry =
+      epsilonRateEntry =
           input
-              .add("Epsilon Roll Rate Threshold", epsilonRollRateDefault)
+              .add("Epsilon Rate Threshold", epsilonRateDefault)
               .withWidget(BuiltInWidgets.kTextView)
               .getEntry();
     } else {
@@ -130,7 +130,7 @@ public class AutoBalance extends CommandBase {
       requiredEngageTimeEntry = ((SimpleWidget) widgets.get(4)).getEntry();
       requiredStateChangeTimeEntry = ((SimpleWidget) widgets.get(5)).getEntry();
       initialSpeedEntry = ((SimpleWidget) widgets.get(6)).getEntry();
-      epsilonRollRateEntry = ((SimpleWidget) widgets.get(7)).getEntry();
+      epsilonRateEntry = ((SimpleWidget) widgets.get(7)).getEntry();
     }
 
     addRequirements(drivetrainSubsystem);
@@ -151,17 +151,17 @@ public class AutoBalance extends CommandBase {
     dConstant = dConstantEntry.getDouble(dConstantDefault);
     tolerance = toleranceEntry.getDouble(toleranceDefault);
     initialSpeed = initialSpeedEntry.getDouble(initialSpeedDefault);
-    epsilonRollRate = epsilonRollRateEntry.getDouble(epsilonRollRateDefault);
+    epsilonRate = epsilonRateEntry.getDouble(epsilonRateDefault);
     // prints values used in autobalance in the console
     System.out.printf(
-        "max = %f, p Constant = %f, d Constant = %f, tolerance = %f, Required Engage Time = %f, Initial p Constant = %f, Epsilon Roll Rate Threshold = %f, Required State Change Time = %f",
+        "max = %f, p Constant = %f, d Constant = %f, tolerance = %f, Required Engage Time = %f, Initial p Constant = %f, Epsilon Rate Threshold = %f, Required State Change Time = %f",
         maxSpeed,
         pConstant,
         dConstant,
         tolerance,
         requiredEngageTime,
         initialSpeed,
-        epsilonRollRate,
+        epsilonRate,
         requiredStateChangeTime);
 
     engageTimer.reset();
@@ -172,22 +172,28 @@ public class AutoBalance extends CommandBase {
   @Override
   public void execute() {
     WrappedGyro gyro = drivetrainSubsystem.getGyro();
+
+    // for chris
     double currentAngle = gyro.getRoll();
     double currentDPS = gyro.getRollRate();
+
+    // for chuck
+    // double currentAngle = gyro.getPitch();
+    // double currentDPS = gyro.getPitchRate();
 
     double error = currentAngle - 0;
 
     double speed = 0;
 
     // sometimes currentDPS spikes because it reads somehting weirdly do this later
-    if (Math.abs(currentDPS) >= Math.abs(epsilonRollRate)) {
+    if ((Math.abs(currentDPS) >= Math.abs(epsilonRate))) {
       stateChangeTimer.start();
     } else {
       stateChangeTimer.stop();
       stateChangeTimer.reset();
     }
 
-    if (stateChangeTimer.hasElapsed(requiredStateChangeTime)) {
+    if (stateChangeTimer.hasElapsed(requiredStateChangeTime) && Math.abs(error) <= 13.5) {
       state = 1;
     }
 
@@ -218,7 +224,7 @@ public class AutoBalance extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivetrainSubsystem.stop();
+    
   }
 
   // Returns true when the command should end.
