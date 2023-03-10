@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.RobotSetup;
-import frc.robot.commands.Arm.CLAWPERCENT;
 import frc.robot.commands.Arm.ClawEncoderMoveDown;
 import frc.robot.commands.Arm.ClawEncoderMoveUp;
 import frc.robot.commands.Arm.ClawOpenClose;
@@ -337,9 +336,9 @@ public class RobotContainer {
                 Commands.waitSeconds(.25),
                 new MagicMotionPosShuffleboard(mainArm, 190, 10, 5),
                 Commands.waitSeconds(.1),
-                new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
+                new MagicMotionPos(mainArm, 180, 1, 1),
                 Commands.waitSeconds(1),
-                new MagicMotionPos(mainArm, 2, 3, 1),
+                new MagicMotionPos(mainArm, 50, 3, 1),
                 Commands.waitSeconds(.5),
                 // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
                 // Commands.waitSeconds(.3),
@@ -373,7 +372,6 @@ public class RobotContainer {
     //                 new ClawOpenClose(0, 20, clawOpenClose)),
     //             clawEncoder::posDown));
 
-    controllertwo.leftBumper().whileTrue(new CLAWPERCENT(0, 0, clawOpenClose));
   }
 
   private void configureLimelightBindings() {

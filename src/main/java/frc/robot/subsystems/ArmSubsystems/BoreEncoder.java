@@ -35,7 +35,7 @@ public class BoreEncoder extends SubsystemBase {
   }
 
   public double getRaw() {
-    
+
     return m_encoder.getRaw();
   }
 

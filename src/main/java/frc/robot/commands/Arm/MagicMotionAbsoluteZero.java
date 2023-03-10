@@ -44,6 +44,7 @@ public class MagicMotionAbsoluteZero extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     rawAngle = encoder.getRaw() / 8192. * 360.;
+    encoder.reset();
   }
 
   // Returns true when the command should end.
