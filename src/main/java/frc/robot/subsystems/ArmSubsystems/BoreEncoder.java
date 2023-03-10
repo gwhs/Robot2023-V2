@@ -7,6 +7,7 @@ package frc.robot.subsystems.ArmSubsystems;
 import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class BoreEncoder extends SubsystemBase {
   private final Encoder m_encoder;
@@ -34,6 +35,7 @@ public class BoreEncoder extends SubsystemBase {
   }
 
   public double getRaw() {
+
     return m_encoder.getRaw();
   }
 
@@ -54,6 +56,7 @@ public class BoreEncoder extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     double ticks = m_encoder.get();
+    Logger.getInstance().recordOutput("Arm/Angle", -m_encoder.getRaw() / 8192. * 360.);
     // SmartDashboard.putNumber("Encoder ticks", ticks);
     // SmartDashboard.putNumber("Encoder Rate", m_encoder.getRate());
     // SmartDashboard.putNumber("Encoder Distance", m_encoder.getDistance());

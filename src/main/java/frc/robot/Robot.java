@@ -26,7 +26,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
-  private final RobotSetup robot = Constants.chris;
+  private final RobotSetup robot = Constants.chuck;
 
   private RobotContainer robotContainer;
 
