@@ -40,11 +40,11 @@ public class PlaceHigh extends SequentialCommandGroup {
         new StraightWheel(drivetrainSubsystem),
         new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.UPPER_DISTANCE_SHOOT),
         Commands.waitSeconds(1),
-        new MagicMotionPos(mainArm, 200, 20000, 3500),
+        new MagicMotionPos(mainArm, 200, 20000, 3500, .5),
         Commands.waitSeconds(.05),
         // new MagicMotionPos(mainArm, 195, 15000, 10000),
         // new MagicMotionPos(mainArm, 197, 15000, 10000),
-        new MagicMotionPos(mainArm, 2, 15000, 10000),
+        new MagicMotionPos(mainArm, 2, 15000, 10000, .5),
         Commands.waitSeconds(.5),
         new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5000, 1000));
 

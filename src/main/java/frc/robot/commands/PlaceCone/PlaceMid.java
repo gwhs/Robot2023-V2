@@ -35,11 +35,11 @@ public class PlaceMid extends SequentialCommandGroup {
         new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.LOWER_DISTANCE_SHOOT),
         new ClawEncoderMoveDown(-30.0, clawPivot, clawEncoder, "Cube").withTimeout(.1),
         Commands.waitSeconds(.1),
-        new MagicMotionPos(mainArm, degrees, 20000, 20000),
+        new MagicMotionPos(mainArm, degrees, 20000, 20000, .5),
         Commands.waitSeconds(.1),
-        new MagicMotionPos(mainArm, 2, 15000, 10000),
+        new MagicMotionPos(mainArm, 2, 15000, 10000, .5),
         Commands.waitSeconds(.5),
-        new MagicMotionPos(mainArm, 0, 0, 0),
+        new MagicMotionPos(mainArm, 0, 0, 0, .5),
         Commands.waitSeconds(.5),
         new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5000, 1000))
     // missing shoot command
