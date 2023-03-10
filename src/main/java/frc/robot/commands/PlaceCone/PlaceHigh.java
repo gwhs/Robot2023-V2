@@ -6,6 +6,7 @@ package frc.robot.commands.PlaceCone;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
@@ -25,23 +26,21 @@ public class PlaceHigh extends SequentialCommandGroup {
       PoseEstimatorSubsystem poseEstimatorSubsystem,
       LimeLightSub limeLightSub,
       MagicMotion mainArm,
-      BoreEncoder shaftEncoder,
-      int degrees) {
+      BoreEncoder shaftEncoder) {
     // Add your commands in the addCommands() call, e.g.
     addCommands(
         new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.LOWER_DISTANCE_SHOOT),
-        // new WaitCommand(.5),
-        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub, 180),
-        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub, 180),
+        new WaitCommand(.5),
+        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub, 0),
         new StraightWheel(drivetrainSubsystem),
         new Sideways(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
         new StraightWheel(drivetrainSubsystem),
         new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.UPPER_DISTANCE_SHOOT),
-        new MagicMotionPos(mainArm, degrees, 0, 0),
+        new MagicMotionPos(mainArm, 190, 0, 0),
         Commands.waitSeconds(.5),
         new MagicMotionPos(mainArm, 0, 0, 0),
         Commands.waitSeconds(.5),
-        new MagicMotionAbsoluteZero(mainArm, shaftEncoder));
+        new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5000, 1000));
 
     //
   }
