@@ -28,6 +28,7 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.AllLime;
 import frc.robot.commands.PlaceCone.ChangePipeline;
+import frc.robot.commands.PlaceCone.PPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceHigh;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
@@ -35,6 +36,7 @@ import frc.robot.commands.PlaceCone.Sideways;
 import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
+import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.pathfind.VisGraph;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.Claw;
@@ -72,14 +74,14 @@ public class RobotContainer {
   private final Claw clawPivot = new Claw(30, MotorType.kBrushless);
   private final Claw clawOpenClose = new Claw(31, MotorType.kBrushless);
   private final BoreEncoder shaftEncoder = new BoreEncoder(0, 1); // Blue 7 ; Yellow 8
-  //   private final BoreEncoder clawEncoder = new BoreEncoder(2, 3);
+  private final BoreEncoder clawEncoder = new BoreEncoder(2, 3);
   private SendableChooser<String> m_chooser;
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
 
-  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub, 0);
+  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
@@ -144,9 +146,9 @@ public class RobotContainer {
     drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
 
-    configureButtonBindings();
+    // configureButtonBindings();
     // configureArmBindings();
-    // configureLimelightBindings();
+    configureLimelightBindings();
     // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
@@ -255,26 +257,41 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
 
     controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
-    // controller
-    //     .b()
-    //     .onTrue(
-    //         new PlaceLow(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm,
-    // shaftEncoder));
-    controller.y().onTrue(new PlaceMid(drivetrainSubsystem, limeLightSub, mainArm, shaftEncoder));
+    controller
+        .b()
+        .onTrue(
+            new PlaceLow(
+                drivetrainSubsystem,
+                poseEstimator,
+                limeLightSub,
+                mainArm,
+                shaftEncoder,
+                clawEncoder,
+                clawPivot,
+                220));
+    controller
+        .y()
+        .onTrue(
+            new PlaceMid(
+                drivetrainSubsystem,
+                limeLightSub,
+                mainArm,
+                shaftEncoder,
+                clawEncoder,
+                clawPivot,
+                220));
     controller
         .rightBumper()
         .onTrue(
-            new PlaceHigh(drivetrainSubsystem, poseEstimator, limeLightSub, mainArm, shaftEncoder));
-    controller
-        .b()
-        .toggleOnTrue(
-            new SequentialCommandGroup(
-                autoBalance,
-                Commands.runOnce(
-                    () -> drivetrainSubsystem.drive(new ChassisSpeeds(0, 0.1, 0)),
-                    drivetrainSubsystem),
-                Commands.waitSeconds(0.2),
-                Commands.runOnce(drivetrainSubsystem::stop, drivetrainSubsystem)));
+            new PlaceHigh(
+                drivetrainSubsystem,
+                poseEstimator,
+                limeLightSub,
+                mainArm,
+                shaftEncoder,
+                clawEncoder,
+                clawPivot,
+                220));
 
     // controller212
     // .a()
@@ -353,10 +370,57 @@ public class RobotContainer {
 
   private void configureLimelightBindings() {
     this.startAndBackButton();
-    controller.x().onTrue(sideways);
-    controller.y().onTrue(sideways);
-    controller.a().onTrue(sideways);
-    controller.b().onTrue(sideways);
+    controller.leftBumper().onTrue(rotate);
+    controller.rightBumper().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 80)); //
+
+    controller.a().onTrue(new ChangePipeline(limeLightSub));
+    controller
+        .x()
+        .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
+    controller
+        .y()
+        .onTrue(
+            Commands.either(
+                new PlaceMid(
+                    drivetrainSubsystem,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    220),
+                new PlaceMid(
+                    drivetrainSubsystem,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    215),
+                limeLightSub::checkPipe));
+    controller
+        .b()
+        .onTrue(
+            Commands.either(
+                new PlaceHigh(
+                    drivetrainSubsystem,
+                    poseEstimator,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    190),
+                new PlaceHigh(
+                    drivetrainSubsystem,
+                    poseEstimator,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    185),
+                limeLightSub::checkPipe));
   }
 
   private void configureAutoBalanceBindings() {
