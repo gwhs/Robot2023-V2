@@ -8,10 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.commands.Arm.ClawEncoderMoveDown;
-<<<<<<< HEAD
-=======
 import frc.robot.commands.Arm.ClawEncoderMoveUp;
->>>>>>> 402527847606a2011a400c996bc95e1e5d233b7d
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
@@ -39,23 +36,13 @@ public class PlaceMid extends SequentialCommandGroup {
         new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.LOWER_DISTANCE_SHOOT),
         new ClawEncoderMoveDown(-30.0, clawPivot, clawEncoder, "Cube").withTimeout(.1),
         Commands.waitSeconds(.1),
-<<<<<<< HEAD
-        new MagicMotionPos(mainArm, degrees, 20000, 20000, .5),
+        new MagicMotionPos(mainArm, degrees, 1, 1, .5),
         Commands.waitSeconds(.1),
-        new MagicMotionPos(mainArm, 2, 15000, 10000, .5),
-        Commands.waitSeconds(.5),
-        new MagicMotionPos(mainArm, 0, 0, 0, .5),
-        Commands.waitSeconds(.5),
-        new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5000, 1000))
-=======
-        new MagicMotionPos(mainArm, degrees, 1, 1),
-        Commands.waitSeconds(.1),
-        new MagicMotionPos(mainArm, 2, 1, 1),
+        new MagicMotionPos(mainArm, 2, 1, 1, .5),
         Commands.waitSeconds(.5),
         new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
         Commands.waitSeconds(.3),
         new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
->>>>>>> 402527847606a2011a400c996bc95e1e5d233b7d
     // missing shoot command
     ;
   }

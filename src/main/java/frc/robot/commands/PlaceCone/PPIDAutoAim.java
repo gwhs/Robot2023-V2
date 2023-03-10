@@ -35,17 +35,11 @@ public class PPIDAutoAim extends CommandBase {
   private double angleDDefault;
   private double positionPDefault;
 
-  private double angleP;
-  private double angleI;
-  private double angleD;
-  private double positionP;
-
   private GenericEntry anglePEntry;
   private GenericEntry angleIEntry;
   private GenericEntry angleDEntry;
   private GenericEntry positionPEntry;
 
-  private ProfiledPIDController anglePid;
 
   private final ShuffleboardTab tab;
 
@@ -66,10 +60,6 @@ public class PPIDAutoAim extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
   // pid for angle
-<<<<<<< HEAD
-
-  private double targetDistance = 0;
-=======
   private double angleP = 2;
   private double angleI = 0;
   private double angleD = 0;
@@ -77,7 +67,6 @@ public class PPIDAutoAim extends CommandBase {
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
   private double targetDistance = 0;
   private double positionP = .023;
->>>>>>> 402527847606a2011a400c996bc95e1e5d233b7d
 
   /** Creates a new PPIDAutoAim. */
   public PPIDAutoAim(

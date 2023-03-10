@@ -29,7 +29,6 @@ public class Rotate extends CommandBase {
   private double[] values = {0, 0, 0};
   private boolean angleDone = false;
   private boolean sideDone = false;
-<<<<<<< HEAD
   private double p = .02;
 
   private double angleP;
@@ -40,9 +39,6 @@ public class Rotate extends CommandBase {
 
   private ProfiledPIDController anglePid;
 
-=======
-  private double p = .03;
->>>>>>> 402527847606a2011a400c996bc95e1e5d233b7d
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
   private Constraints angleConstraints =
@@ -53,10 +49,7 @@ public class Rotate extends CommandBase {
   //// second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
 
-<<<<<<< HEAD
-=======
-  private double angleP = .01;
->>>>>>> 402527847606a2011a400c996bc95e1e5d233b7d
+  angleP = .01;
   private double angleI = 0;
   private double angleD = 0;
 
@@ -122,11 +115,7 @@ public class Rotate extends CommandBase {
     // System.out.printf(
     //     "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // setpoint and atgoal don't work, just brute forced.
-<<<<<<< HEAD
-    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < .5) {
-=======
     if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < .3) {
->>>>>>> 402527847606a2011a400c996bc95e1e5d233b7d
       angleDone = true;
     } else {
       angleDone = false;
