@@ -55,7 +55,7 @@ public class RobotContainer {
   // change robot name
   // change this to change robot -----------------v
   // change the same in Robot.java
-  private final RobotSetup robot = Constants.hana;
+  private final RobotSetup robot = Constants.chuck;
   private final CommandXboxController controller = new CommandXboxController(0);
   private final CommandXboxController controllertwo = new CommandXboxController(1);
   // Set IP to 10.57.12.11
@@ -153,9 +153,9 @@ public class RobotContainer {
     drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
 
-    configureButtonBindings();
+    // configureButtonBindings();
     // configureArmBindings();
-    // configureLimelightBindings();
+    configureLimelightBindings();
     // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
@@ -328,8 +328,8 @@ public class RobotContainer {
 
   private void configureLimelightBindings() {
     this.startAndBackButton();
-    controller.x().onTrue(sideways);
-    controller.y().onTrue(sideways);
+    controller.a().onTrue(Commands.runOnce(() -> toggleLED()));
+
     controller.a().onTrue(sideways);
     controller.b().onTrue(sideways);
   }
@@ -372,30 +372,29 @@ public class RobotContainer {
   }
 
   private void toggleLED() {
-    //   if (m_led.getLedMode() == LEDMode.YELLOW) {
-    //     m_led.setLedMode(LEDMode.PURPLE);
-    //   } else {
-    //     m_led.setLedMode(LEDMode.YELLOW);
-    //   }
-    // }
-
     if (m_led.getLedMode() == LEDMode.YELLOW) {
       m_led.setLedMode(LEDMode.PURPLE);
-    } else if (m_led.getLedMode() == LEDMode.PURPLE) {
-      m_led.setLedMode(LEDMode.EMERGENCY);
-    } else if (m_led.getLedMode() == LEDMode.EMERGENCY) {
-      m_led.setLedMode(LEDMode.GREEN);
-    } else if (m_led.getLedMode() == LEDMode.GREEN) {
-      m_led.setLedMode(LEDMode.ORANGE);
-    } else if (m_led.getLedMode() == LEDMode.ORANGE) {
-      m_led.setLedMode(LEDMode.TEAMCOLOR);
-    } else if (m_led.getLedMode() == LEDMode.TEAMCOLOR) {
-      m_led.setLedMode(LEDMode.RAINBOW);
-    } else if (m_led.getLedMode() == LEDMode.RAINBOW) {
-      m_led.setLedMode(LEDMode.WHITE);
     } else {
       m_led.setLedMode(LEDMode.YELLOW);
     }
+
+    // if (m_led.getLedMode() == LEDMode.YELLOW) {
+    //   m_led.setLedMode(LEDMode.PURPLE);
+    // } else if (m_led.getLedMode() == LEDMode.PURPLE) {
+    //   m_led.setLedMode(LEDMode.EMERGENCY);
+    // } else if (m_led.getLedMode() == LEDMode.EMERGENCY) {
+    //   m_led.setLedMode(LEDMode.GREEN);
+    // } else if (m_led.getLedMode() == LEDMode.GREEN) {
+    //   m_led.setLedMode(LEDMode.ORANGE);
+    // } else if (m_led.getLedMode() == LEDMode.ORANGE) {
+    //   m_led.setLedMode(LEDMode.TEAMCOLOR);
+    // } else if (m_led.getLedMode() == LEDMode.TEAMCOLOR) {
+    //   m_led.setLedMode(LEDMode.RAINBOW);
+    // } else if (m_led.getLedMode() == LEDMode.RAINBOW) {
+    //   m_led.setLedMode(LEDMode.PINK);
+    // } else {
+    //   m_led.setLedMode(LEDMode.YELLOW);
+    // }
   }
 
   /**

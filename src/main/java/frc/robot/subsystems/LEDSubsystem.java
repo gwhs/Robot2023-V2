@@ -29,13 +29,13 @@ public class LEDSubsystem extends SubsystemBase {
 
   private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
-  private int NUMBER_LED = 6;
+  private int NUMBER_LED = 100;
   // Store what the last hue of the first pixel is
   private int m_rainbowFirstPixelHue;
   private double m_brightness = 1;
 
   // Change for different PWM ports
-  private int ledPortNumber = 9;
+  private int ledPortNumber = 0;
 
   private LEDMode ledMode;
 
@@ -62,7 +62,7 @@ public class LEDSubsystem extends SubsystemBase {
     // Reuse buffer
     // Default to a length of 60, start empty output
     // Length is expensive to set, so only set it once, then just update data
-    m_ledBuffer = new AddressableLEDBuffer(85);
+    m_ledBuffer = new AddressableLEDBuffer(60);
     m_led.setLength(m_ledBuffer.getLength());
 
     // Set the data
@@ -201,7 +201,6 @@ public class LEDSubsystem extends SubsystemBase {
       m_ledBuffer.setRGB(i, (int) (r3), (int) (b3), (int) (g3));
 
       if (i == (m_ledBuffer.getLength() - 1)) {
-        System.out.println("loop 1");
         r3 = 0;
         g3 = 0;
         b3 = 0;
@@ -323,6 +322,40 @@ public class LEDSubsystem extends SubsystemBase {
           (int) (blueColor * m_brightness),
           (int) (greenColor * m_brightness));
     }
+  }
+
+  private void toggleLED() {
+    if (getLedMode() == LEDMode.YELLOW) {
+      setLedMode(LEDMode.PURPLE);
+    } else {
+      setLedMode(LEDMode.YELLOW);
+    }
+
+    // if (m_led.getLedMode() == LEDMode.YELLOW) {
+    //   m_led.setLedMode(LEDMode.PURPLE);
+    // } else if (m_led.getLedMode() == LEDMode.PURPLE) {
+    //   m_led.setLedMode(LEDMode.EMERGENCY);
+    // } else if (m_led.getLedMode() == LEDMode.EMERGENCY) {
+    //   m_led.setLedMode(LEDMode.GREEN);
+    // } else if (m_led.getLedMode() == LEDMode.GREEN) {
+    //   m_led.setLedMode(LEDMode.ORANGE);
+    // } else if (m_led.getLedMode() == LEDMode.ORANGE) {
+    //   m_led.setLedMode(LEDMode.TEAMCOLOR);
+    // } else if (m_led.getLedMode() == LEDMode.TEAMCOLOR) {
+    //   m_led.setLedMode(LEDMode.RAINBOW);
+    // } else if (m_led.getLedMode() == LEDMode.RAINBOW) {
+    //   m_led.setLedMode(LEDMode.PINK);
+    // } else {
+    //   m_led.setLedMode(LEDMode.YELLOW);
+    // }
+  }
+
+  public void setPurple() {
+    this.setLedMode(LEDMode.PURPLE);
+  }
+
+  public void setYellow() {
+    this.setLedMode(LEDMode.YELLOW);
   }
   // Hi! I caught your attention!
   // (●'◡'●)❤💚🧡💛💙💜🤎🖤🤍❣💕💞💓💗💖💘💝💟🗿🗿🗿😘💋👄
