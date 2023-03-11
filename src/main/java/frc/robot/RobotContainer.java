@@ -537,14 +537,6 @@ public class RobotContainer {
     controllertwo.rightBumper().onTrue(allLime); 
     controllertwo.start().onTrue(Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
     controllertwo.back().onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
-
- 
-     controller
-         // Place mid
-         .x // button
-         ()
-         .onTrue(sideways); // add a button
-     // place low
  
      controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
@@ -556,29 +548,6 @@ public class RobotContainer {
          .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
  
      controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
-     controller
-         .b()
-         .onTrue(
-             new PlaceLow(
-                 drivetrainSubsystem,
-                 poseEstimator,
-                 limeLightSub,
-                 mainArm,
-                 shaftEncoder,
-                 clawEncoder,
-                 clawPivot,
-                 220));
-     controller
-         .y()
-         .onTrue(
-             new PlaceMid(
-                 drivetrainSubsystem,
-                 limeLightSub,
-                 mainArm,
-                 shaftEncoder,
-                 clawEncoder,
-                 clawPivot,
-                 220));
      controller
          .rightBumper()
          .onTrue(
