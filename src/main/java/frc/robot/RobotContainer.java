@@ -519,6 +519,7 @@ public class RobotContainer {
      // Start button reseeds the steer motors to fix dead wheel
      this.startAndBackButton();
 
+     //all need binding
     controller.a().onTrue(fieldHeadingDriveCommand);
     controller.b().onTrue(fieldHeadingDriveCommand);
     controller.x().onTrue(fieldHeadingDriveCommand);
@@ -530,36 +531,17 @@ public class RobotContainer {
 
 
     controllertwo.a().onTrue(fieldHeadingDriveCommand);
+    //needs binding
     controllertwo.b().onTrue(fieldHeadingDriveCommand);
     controllertwo.x().onTrue(new ChangePipeline(limeLightSub));
+    //needs binding
     controllertwo.y().onTrue(fieldHeadingDriveCommand);
     controllertwo.leftBumper().onTrue(rotate);
     controllertwo.rightBumper().onTrue(allLime); 
     controllertwo.start().onTrue(Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
-    controllertwo.back().onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
+    controllertwo.back().onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
  
-     controller.a().toggleOnTrue(fieldHeadingDriveCommand);
-
-     // place low
-     controllertwo.a().toggleOnTrue(fieldHeadingDriveCommand);
  
-     controller
-         .x()
-         .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
- 
-     controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
-     controller
-         .rightBumper()
-         .onTrue(
-             new PlaceHigh(
-                 drivetrainSubsystem,
-                 poseEstimator,
-                 limeLightSub,
-                 mainArm,
-                 shaftEncoder,
-                 clawEncoder,
-                 clawPivot,
-                 220));
  
 
  
