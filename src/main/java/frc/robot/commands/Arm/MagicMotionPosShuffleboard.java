@@ -97,7 +97,6 @@ public class MagicMotionPosShuffleboard extends CommandBase {
       accelerationEntry = ((SimpleWidget) widgets.get(2)).getEntry();
     }
 
-    
     addRequirements(motor);
   }
 
