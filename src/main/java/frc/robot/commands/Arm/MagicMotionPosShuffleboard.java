@@ -106,11 +106,12 @@ public class MagicMotionPosShuffleboard extends CommandBase {
   @Override
   public void initialize() {
     // System.out.println("mMPos");
+    boreEncoder.reset();
     angle = desiredAngleEntry.getDouble(desiredAngleDefault);
     velocity = velocityEntry.getDouble(velocityDefault);
     acceleration = accelerationEntry.getDouble(accelerationDefault);
     motor.enableBrakeMode(true);
-    boreEncoder.reset();
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
