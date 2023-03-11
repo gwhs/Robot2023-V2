@@ -4,6 +4,8 @@
 
 package frc.robot.commands.Arm;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
@@ -47,6 +49,7 @@ public class ClawEncoderMoveDown extends CommandBase {
 
     // System.out.println("DesiredAngle: " + desiredAngle);
     System.out.println("RawAngle: " + rawAngle);
+    Logger.getInstance().recordOutput("Claw/Angle", rawAngle);
     // System.out.println("Error: " + error);
     // System.out.println("Velocity: " + velocity);
 

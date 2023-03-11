@@ -18,6 +18,8 @@ import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.Claw;
 import java.util.List;
 
+import org.littletonrobotics.junction.Logger;
+
 public class ClawEncoderMoveUp extends CommandBase {
 
   private Claw clawOne;
@@ -81,6 +83,7 @@ public class ClawEncoderMoveUp extends CommandBase {
       }
     }
 
+    Logger.getInstance().recordOutput("Claw/Angle", rawAngle);
     clawOne.setPercent(velocity);
   }
 
