@@ -104,7 +104,6 @@ public class MagicMotionPosShuffleboard extends CommandBase {
   @Override
   public void initialize() {
     // System.out.println("mMPos");
-
     angle = desiredAngleEntry.getDouble(desiredAngleDefault);
     velocity = velocityEntry.getDouble(velocityDefault);
     acceleration = accelerationEntry.getDouble(accelerationDefault);
