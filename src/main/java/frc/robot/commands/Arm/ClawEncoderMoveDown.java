@@ -4,12 +4,11 @@
 
 package frc.robot.commands.Arm;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.Claw;
+import org.littletonrobotics.junction.Logger;
 
 public class ClawEncoderMoveDown extends CommandBase {
 

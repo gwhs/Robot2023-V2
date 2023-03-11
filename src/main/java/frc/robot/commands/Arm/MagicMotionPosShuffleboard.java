@@ -17,8 +17,6 @@ import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import java.util.List;
 
-import org.littletonrobotics.junction.Logger;
-
 public class MagicMotionPosShuffleboard extends CommandBase {
   /** Creates a new mMPosUp. */
   private MagicMotion motor;
