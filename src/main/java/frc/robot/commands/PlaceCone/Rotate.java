@@ -164,7 +164,6 @@ public class Rotate extends CommandBase {
     //         + x[2]
     //         + "\nangle"
     //         + poseEstimatorSubsystem.getAngle());
-    System.out.println("Angle: " + poseEstimatorSubsystem.getAngle());
     return x;
   }
 }

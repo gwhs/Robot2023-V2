@@ -30,7 +30,7 @@ public class MagicMotionAbsoluteZero extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("RUNNING MMAZ");
+    System.out.println("-------RUNNING MMAZ----------");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,7 +42,7 @@ public class MagicMotionAbsoluteZero extends CommandBase {
     System.out.println("Difference: " + difference);
     System.out.println("Raw:" + rawAngle);
     System.out.println("Motor Angle:" + motorAngle);
-    System.out.println(encoder.getRaw());
+    // System.out.println(encoder.getRaw());
     motor.setAng(-difference, velocity, acceleration);
   }
 
