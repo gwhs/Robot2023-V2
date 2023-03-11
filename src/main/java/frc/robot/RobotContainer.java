@@ -651,16 +651,26 @@ public class RobotContainer {
         .back()
         .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
 
+    // INTAKE PICK-UP CONE
     controller
         .b()
         .onTrue(
             Commands.either(
+                new ClawEncoderMoveDown(-155, clawPivot, clawEncoder, "CONE").withTimeout(3),
+                Commands.sequence(
+                    Commands.parallel(
+                        new ClawOpenClose(100, 30, clawOpenClose), Commands.waitSeconds(1)),
+                    new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
+                    new ClawOpenClose(20, 30, clawOpenClose)),
+                clawEncoder::posDown));
+
+    // INTAKE UP & DOWN
+    controllertwo
+        .a()
+        .onTrue(
+            Commands.either(
                 new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "CONE").withTimeout(3),
-                // Commands.sequence(
-                // Commands.parallel(
-                // new ClawOpenClose(100, 20, clawOpenClose), Commands.waitSeconds(1)),
                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
-                // new ClawOpenClose(20, 20, clawOpenClose)),
                 clawEncoder::posDown));
   }
 
