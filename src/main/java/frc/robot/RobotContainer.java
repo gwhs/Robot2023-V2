@@ -19,12 +19,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.RobotSetup;
-import frc.robot.commands.Arm.CLAWPERCENT;
 import frc.robot.commands.Arm.ClawEncoderMoveDown;
+import frc.robot.commands.Arm.GrabPiece;
 import frc.robot.commands.Arm.ClawEncoderMoveUp;
 import frc.robot.commands.Arm.ClawOpenClose;
-import frc.robot.commands.Arm.ClawOpenCloseShuffleBoard;
-import frc.robot.commands.Arm.GrabPiece;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.Arm.MagicMotionPosShuffleboard;
@@ -33,6 +31,7 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.AllLime;
 import frc.robot.commands.PlaceCone.ChangePipeline;
+import frc.robot.commands.PlaceCone.PPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceHigh;
 import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.commands.PlaceCone.PlaceMid;
@@ -86,7 +85,7 @@ public class RobotContainer {
   private final PoseEstimatorSubsystem poseEstimator =
       new PoseEstimatorSubsystem(drivetrainSubsystem);
 
-  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub, 0);
+  private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
@@ -250,7 +249,7 @@ public class RobotContainer {
     controller.x().onTrue(new ChangePipeline(limeLightSub));
     // controller.b().onTrue(rotate);
     // controller.x().onTrue(new ChangePipeline(limeLightSub));
-    controller.b().onTrue(rotate);
+    // controller.b().onTrue(rotate);
     // controller.y().onTrue(autoAimLime1);
 
     controllertwo
@@ -276,7 +275,7 @@ public class RobotContainer {
                 shaftEncoder,
                 clawEncoder,
                 clawPivot,
-                210));
+                220));
     controller
         .y()
         .onTrue(
@@ -287,7 +286,7 @@ public class RobotContainer {
                 shaftEncoder,
                 clawEncoder,
                 clawPivot,
-                180));
+                220));
     controller
         .rightBumper()
         .onTrue(
@@ -299,7 +298,7 @@ public class RobotContainer {
                 shaftEncoder,
                 clawEncoder,
                 clawPivot,
-                180));
+                220));
 
     // controller212
     // .a()
@@ -370,27 +369,109 @@ public class RobotContainer {
     controllertwo.rightBumper().onTrue(new GrabPiece(mainArm, shaftEncoder, clawPivot, clawEncoder, clawOpenClose, mode));
 
     // CONE
+    controllertwo
+        // Place high //5 , 2.5, 5
+        .y()
+        .onTrue(
+            Commands.sequence(
+                Commands.print("START"),
+                // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+                // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
+                // Commands.waitSeconds(.25),
+                // new MagicMotionPos(mainArm, 40, 1, 1, 5),
+                new MagicMotionPosShuffleboard(mainArm, 190, 2.75, 5),
+                // Commands.waitSeconds(.1),
+                // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
+                // Commands.waitSeconds(),
+                new MagicMotionPos(mainArm, 30, 3, 1.5, .5),
+                Commands.waitSeconds(.5),
+                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+                // Commands.waitSeconds(.3),
+
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
+
+    // CUBE
     // controllertwo
-    //     .leftTrigger()
+    //     .rightBumper()
     //     .onTrue(
     //         Commands.either(
-    //             new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "CONE").withTimeout(3),
+    //             new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
     //             Commands.sequence(
+    //                 Commands.print("Encoder Pos" + -clawEncoder.getRaw() / 8192. * 360.),
     //                 Commands.parallel(
-    //                     new ClawOpenClose(-85, 20, clawOpenClose), Commands.waitSeconds(1)),
-    //                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
-    //                 new ClawOpenClose(0, 20, clawOpenClose)),
+    //                     new ClawOpenCloseShuffleBoard(25, 5, clawOpenClose),
+    //                     Commands.waitSeconds(1)),
+    //                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CUBE"),
+    //                 new ClawOpenClose(0, 5, clawOpenClose).withTimeout(2)),
     //             clawEncoder::posDown));
 
-    controllertwo.leftBumper().whileTrue(new CLAWPERCENT(0, 0, clawOpenClose));
+    // CONE
+    controllertwo
+        .leftTrigger()
+        .onTrue(
+            Commands.either(
+                new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "CONE").withTimeout(3),
+                Commands.sequence(
+                    Commands.parallel(
+                        new ClawOpenClose(100, 20, clawOpenClose), Commands.waitSeconds(1)),
+                    new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
+                    new ClawOpenClose(20, 20, clawOpenClose)),
+                clawEncoder::posDown));
   }
 
   private void configureLimelightBindings() {
     this.startAndBackButton();
-    controller.x().onTrue(sideways);
-    controller.y().onTrue(sideways);
-    controller.a().onTrue(sideways);
-    controller.b().onTrue(sideways);
+    controller.leftBumper().onTrue(rotate);
+    controller.rightBumper().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 80)); //
+
+    controller.a().onTrue(new ChangePipeline(limeLightSub));
+    controller
+        .x()
+        .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
+    controller
+        .y()
+        .onTrue(
+            Commands.either(
+                new PlaceMid(
+                    drivetrainSubsystem,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    220),
+                new PlaceMid(
+                    drivetrainSubsystem,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    215),
+                limeLightSub::checkPipe));
+    controller
+        .b()
+        .onTrue(
+            Commands.either(
+                new PlaceHigh(
+                    drivetrainSubsystem,
+                    poseEstimator,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    190),
+                new PlaceHigh(
+                    drivetrainSubsystem,
+                    poseEstimator,
+                    limeLightSub,
+                    mainArm,
+                    shaftEncoder,
+                    clawEncoder,
+                    clawPivot,
+                    185),
+                limeLightSub::checkPipe));
   }
 
   private void configureAutoBalanceBindings() {

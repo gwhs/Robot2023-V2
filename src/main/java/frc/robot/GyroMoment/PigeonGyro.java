@@ -90,6 +90,7 @@ public class PigeonGyro extends AbstractGyro {
   public double getYawRate() {
     double[] xyz_dps = new double[3];
     pigeon.getRawGyro(xyz_dps);
+    Logger.getInstance().recordOutput("Gyro/Yaw Rate", xyz_dps[2]);
     return xyz_dps[2];
   }
 
@@ -97,6 +98,7 @@ public class PigeonGyro extends AbstractGyro {
   public double getPitchRate() {
     double[] xyz_dps = new double[3];
     pigeon.getRawGyro(xyz_dps);
+    Logger.getInstance().recordOutput("Gyro/Pitch Rate", xyz_dps[1]);
     return xyz_dps[1];
   }
 
@@ -104,6 +106,7 @@ public class PigeonGyro extends AbstractGyro {
   public double getRollRate() {
     double[] xyz_dps = new double[3];
     pigeon.getRawGyro(xyz_dps);
+    Logger.getInstance().recordOutput("Gyro/Roll Rate", xyz_dps[0]);
     return xyz_dps[0];
   }
 }

@@ -7,6 +7,8 @@ package frc.robot.commands.PlaceCone;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.LimeLightConstants;
+import frc.robot.commands.Arm.ClawEncoderMoveDown;
+import frc.robot.commands.Arm.ClawEncoderMoveUp;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
@@ -34,19 +36,21 @@ public class PlaceHigh extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.LOWER_DISTANCE_SHOOT),
-        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub, 180),
+        new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
         new StraightWheel(drivetrainSubsystem),
         new Sideways(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
         new StraightWheel(drivetrainSubsystem),
         new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.UPPER_DISTANCE_SHOOT),
-        Commands.waitSeconds(1),
-        new MagicMotionPos(mainArm, 200, 20000, 3500, .5),
-        Commands.waitSeconds(.05),
-        // new MagicMotionPos(mainArm, 195, 15000, 10000),
-        // new MagicMotionPos(mainArm, 197, 15000, 10000),
-        new MagicMotionPos(mainArm, 2, 15000, 10000, .5),
+        new Sideways(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
+        new ClawEncoderMoveDown(-30, clawPivot, clawEncoder, "Cube").withTimeout(.1),
+        Commands.waitSeconds(.1),
+        new MagicMotionPos(mainArm, degrees, 1, 1, .5),
+        Commands.waitSeconds(.1),
+        new MagicMotionPos(mainArm, 2, 1, 1, .5),
         Commands.waitSeconds(.5),
-        new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5000, 1000));
+        new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+        Commands.waitSeconds(.3),
+        new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
 
     //
   }

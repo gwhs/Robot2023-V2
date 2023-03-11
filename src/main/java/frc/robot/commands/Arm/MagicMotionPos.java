@@ -36,7 +36,7 @@ public class MagicMotionPos extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // System.out.println("mMPos");
+    System.out.println("mMPos");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
