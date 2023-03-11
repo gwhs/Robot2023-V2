@@ -31,6 +31,7 @@ public class MagicMotionAbsoluteZero extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("-------RUNNING MMAZ----------");
+    motor.neutralOutput();
     motor.enableBrakeMode(false);
   }
 
