@@ -519,25 +519,25 @@ public class RobotContainer {
      // Start button reseeds the steer motors to fix dead wheel
      this.startAndBackButton();
 
-     controllertwo
-         .start()
-         .onTrue(
-             Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
- 
-     // Back button resets the robot pose
- 
-     // Auto aim
- 
-     // controller.b().onTrue(new ChangePipeline(limeLightSub));
-     // rotate
-     controller.leftBumper().onTrue(rotate);
-     // rotate
- 
-     controller.rightBumper().onTrue(allLime); //
- 
-     controllertwo
-         .back()
-         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
+    controller.a().onTrue(fieldHeadingDriveCommand);
+    controller.b().onTrue(fieldHeadingDriveCommand);
+    controller.x().onTrue(fieldHeadingDriveCommand);
+    controller.y().onTrue(fieldHeadingDriveCommand);
+    controller.leftBumper().onTrue(rotate);
+    controller.rightBumper().onTrue(allLime); 
+    controller.start().onTrue();
+    controller.back().onTrue();
+
+
+    controllertwo.a().onTrue(fieldHeadingDriveCommand);
+    controllertwo.b().onTrue(fieldHeadingDriveCommand);
+    controllertwo.x().onTrue(new ChangePipeline(limeLightSub));
+    controllertwo.y().onTrue(fieldHeadingDriveCommand);
+    controllertwo.leftBumper().onTrue(rotate);
+    controllertwo.rightBumper().onTrue(allLime); 
+    controllertwo.start().onTrue(Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+    controllertwo.back().onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
+
  
      controller
          // Place mid
@@ -547,13 +547,7 @@ public class RobotContainer {
      // place low
  
      controller.a().toggleOnTrue(fieldHeadingDriveCommand);
- 
-     controller.x().onTrue(new ChangePipeline(limeLightSub));
- 
-     controllertwo
-         .x // button
-         ()
-         .onTrue(new ChangePipeline(limeLightSub)); // add a button
+
      // place low
      controllertwo.a().toggleOnTrue(fieldHeadingDriveCommand);
  
