@@ -584,10 +584,9 @@ public class RobotContainer {
                 // Commands.waitSeconds(),
                 new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
                 Commands.waitSeconds(.25),
-                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube")
+                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
                 // Commands.waitSeconds(.3),
-                // new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)
-                ));
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
     /*
      * controller.b().onTrue(
@@ -644,7 +643,7 @@ public class RobotContainer {
     // needs binding
     controllertwo.y().onTrue(fieldHeadingDriveCommand);
     controllertwo.leftBumper().onTrue(rotate);
-    controllertwo.rightBumper().onTrue(allLime);
+    // controllertwo.rightBumper().onTrue(allLime);
     controllertwo
         .start()
         .onTrue(
@@ -675,11 +674,13 @@ public class RobotContainer {
                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
                 clawEncoder::posDown));
 
-    controllertwo.rightBumper().onTrue(
-                                Commands.sequence(
-                                    Commands.runOnce(mainArm::resetPosition, mainArm), 
-                                    Commands.runOnce(shaftEncoder::reset, shaftEncoder),
-                                    Commands.runOnce(clawEncoder::reset, clawEncoder)));
+    controllertwo
+        .rightBumper()
+        .onTrue(
+            Commands.sequence(
+                Commands.runOnce(mainArm::resetPosition, mainArm),
+                Commands.runOnce(shaftEncoder::reset, shaftEncoder),
+                Commands.runOnce(clawEncoder::reset, clawEncoder)));
   }
 
   // zoey

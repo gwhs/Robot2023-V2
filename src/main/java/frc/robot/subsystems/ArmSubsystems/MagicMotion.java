@@ -114,8 +114,7 @@ public class MagicMotion extends SubsystemBase {
     }
   }
 
-  public void neutralOutput()
-  {
+  public void neutralOutput() {
     testTalon.neutralOutput();
   }
 }
