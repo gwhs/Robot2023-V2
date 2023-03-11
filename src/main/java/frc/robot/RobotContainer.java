@@ -36,6 +36,7 @@ import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
+import frc.robot.commands.PlaceCone.rotatesideways;
 import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
@@ -520,14 +521,61 @@ public class RobotContainer {
      this.startAndBackButton();
 
      //all need binding
-    controller.a().onTrue(fieldHeadingDriveCommand);
-    controller.b().onTrue(fieldHeadingDriveCommand);
-    controller.x().onTrue(fieldHeadingDriveCommand);
-    controller.y().onTrue(fieldHeadingDriveCommand);
-    controller.leftBumper().onTrue(rotate);
-    controller.rightBumper().onTrue(allLime); 
-    controller.start().onTrue();
-    controller.back().onTrue();
+    controller.a().onTrue(
+        Commands.sequence(
+            Commands.print("START"),
+            // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+            // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
+            // Commands.waitSeconds(.25),
+            // new MagicMotionPos(mainArm, 40, 1, 1, 5),
+            new MagicMotionPosShuffleboard(mainArm, 190, 2.75, 5),
+            // Commands.waitSeconds(.1),
+            // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
+            // Commands.waitSeconds(),
+            new MagicMotionPos(mainArm, 30, 3, 1.5, .5),
+            Commands.waitSeconds(.5),
+            // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+            // Commands.waitSeconds(.3),
+
+            // new MagicMotionPosShuffleboard(mainArm, 190, 2.75, 5),
+            // new MagicMotionPos(mainArm, 15, 3, 1.5, .5),
+            // Commands.waitSeconds(.5),
+            new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
+    controller.b().onTrue(Commands.either(
+        new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+        Commands.sequence(
+            Commands.print("Encoder Pos" + -clawEncoder.getRaw() / 8192. * 360.),
+            Commands.parallel(
+                new ClawOpenCloseShuffleBoard(25, 5, clawOpenClose),
+                Commands.waitSeconds(1)),
+            new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CUBE"),
+            new ClawOpenClose(0, 5, clawOpenClose).withTimeout(2)),
+        clawEncoder::posDown));
+    controller.x().onTrue(new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub));
+    controller.y().onTrue( Commands.sequence(
+        Commands.print("START"),
+        // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+        // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
+        // Commands.waitSeconds(.25),
+        // new MagicMotionPos(mainArm, 40, 1, 1, 5),
+        new MagicMotionPosShuffleboard(mainArm, 190, 2.75, 5),
+        // Commands.waitSeconds(.1),
+        // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
+        // Commands.waitSeconds(),
+        new MagicMotionPos(mainArm, 30, 3, 1.5, .5),
+        Commands.waitSeconds(.5),
+        // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+        // Commands.waitSeconds(.3),
+
+        // new MagicMotionPosShuffleboard(mainArm, 190, 2.75, 5),
+        // new MagicMotionPos(mainArm, 15, 3, 1.5, .5),
+        // Commands.waitSeconds(.5),
+        new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
+
+    controller.leftBumper().onTrue(fieldHeadingDriveCommand);
+    // controller.rightBumper().onTrue(allLime); 
+    // controller.start().onTrue(fieldHeadingDriveCommand);
+    // controller.back().onTrue(fieldHeadingDriveCommand);
 
 
     controllertwo.a().onTrue(fieldHeadingDriveCommand);
