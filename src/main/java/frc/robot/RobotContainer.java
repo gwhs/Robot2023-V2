@@ -35,6 +35,7 @@ import frc.robot.commands.PlaceCone.PlaceHigh;
 import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
+import frc.robot.commands.PlaceCone.RotatePID;
 import frc.robot.commands.PlaceCone.Sideways;
 import frc.robot.commands.PlaceCone.rotatesideways;
 import frc.robot.commands.autonomous.TestAutoCommands;
@@ -86,6 +87,7 @@ public class RobotContainer {
       new PoseEstimatorSubsystem(drivetrainSubsystem);
 
   private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub);
+  private final RotatePID rotatePid = new RotatePID(drivetrainSubsystem, poseEstimator, limeLightSub);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
@@ -160,6 +162,7 @@ public class RobotContainer {
     configureDashboard();
     mainArm.robotInit();
     officialBindings();
+    configureTest();
     setupPathChooser();
   }
 
@@ -204,6 +207,11 @@ public class RobotContainer {
     controller
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
+  }
+
+  private void configureTest() {
+    controller.rightBumper().onTrue(rotate);
+    controller.leftBumper().onTrue(rotatePid);
   }
 
   /**
