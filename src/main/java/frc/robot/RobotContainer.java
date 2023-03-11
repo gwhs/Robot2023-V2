@@ -586,6 +586,7 @@ public class RobotContainer {
                 Commands.waitSeconds(.25),
                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
                 // Commands.waitSeconds(.3),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
     /*
@@ -643,6 +644,7 @@ public class RobotContainer {
     // needs binding
     controllertwo.y().onTrue(fieldHeadingDriveCommand);
     controllertwo.leftBumper().onTrue(rotate);
+    controllertwo.rightBumper().onTrue(new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
     // controllertwo.rightBumper().onTrue(allLime);
     controllertwo
         .start()
@@ -672,7 +674,7 @@ public class RobotContainer {
             Commands.either(
                 new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "CONE").withTimeout(3),
                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
-                clawEncoder::posDown));
+                clawEncoder::posDown2));
 
     controllertwo
         .rightBumper()
