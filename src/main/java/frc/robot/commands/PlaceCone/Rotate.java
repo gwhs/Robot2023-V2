@@ -62,14 +62,14 @@ public class Rotate extends CommandBase {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.limeLight = limeLightSub;
 
-    anglePDefault = 3;
+    anglePDefault = .25;
 
     tab = Shuffleboard.getTab("Drive");
 
     ShuffleboardLayout PIDConstants =
         tab.getLayout("Rotate PID Constants", BuiltInLayouts.kList)
             .withSize(2, 4)
-            .withPosition(2, 0);
+            .withPosition(8, 0);
 
     if (PIDConstants.getComponents().isEmpty()) {
 
