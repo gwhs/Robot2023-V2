@@ -113,4 +113,9 @@ public class MagicMotion extends SubsystemBase {
       testTalon.setNeutralMode(NeutralMode.Coast);
     }
   }
+
+  public void neutralOutput()
+  {
+    testTalon.neutralOutput();
+  }
 }
