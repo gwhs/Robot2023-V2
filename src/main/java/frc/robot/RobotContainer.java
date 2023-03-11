@@ -78,8 +78,8 @@ public class RobotContainer {
   private final MagicMotion mainArm = new MagicMotion(21, robot.canivore_name());
   private final Claw clawPivot = new Claw(30, MotorType.kBrushless, false);
   private final Claw clawOpenClose = new Claw(31, MotorType.kBrushless, true);
-  private final BoreEncoder shaftEncoder = new BoreEncoder(0, 1); // Blue 7 ; Yellow 8
-  private final BoreEncoder clawEncoder = new BoreEncoder(2, 3);
+  private final BoreEncoder shaftEncoder = new BoreEncoder(0, 1, "Arm"); // Blue 7 ; Yellow 8
+  private final BoreEncoder clawEncoder = new BoreEncoder(2, 3, "Claw");
   private SendableChooser<String> m_chooser;
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
@@ -659,16 +659,26 @@ public class RobotContainer {
         .back()
         .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
 
+    // INTAKE PICK-UP CONE
     controller
         .b()
         .onTrue(
             Commands.either(
+                new ClawEncoderMoveDown(-155, clawPivot, clawEncoder, "CONE").withTimeout(3),
+                Commands.sequence(
+                    Commands.parallel(
+                        new ClawOpenClose(100, 30, clawOpenClose), Commands.waitSeconds(1)),
+                    new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
+                    new ClawOpenClose(20, 30, clawOpenClose)),
+                clawEncoder::posDown));
+
+    // INTAKE UP & DOWN
+    controllertwo
+        .a()
+        .onTrue(
+            Commands.either(
                 new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "CONE").withTimeout(3),
-                // Commands.sequence(
-                // Commands.parallel(
-                // new ClawOpenClose(100, 20, clawOpenClose), Commands.waitSeconds(1)),
                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
-                // new ClawOpenClose(20, 20, clawOpenClose)),
                 clawEncoder::posDown));
   }
 
