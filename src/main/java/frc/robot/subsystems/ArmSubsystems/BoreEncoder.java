@@ -60,7 +60,7 @@ public class BoreEncoder extends SubsystemBase {
     double ticks = m_encoder.get();
 
     double rawAngle = (-m_encoder.getRaw() / 8192. * 360.);
-      Logger.getInstance().recordOutput(name + "/Angle", rawAngle);
+    Logger.getInstance().recordOutput(name + "/Angle", rawAngle);
 
     // SmartDashboard.putNumber("Encoder ticks", ticks);
     // SmartDashboard.putNumber("Encoder Rate", m_encoder.getRate());

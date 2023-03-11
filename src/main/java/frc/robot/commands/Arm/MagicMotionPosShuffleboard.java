@@ -17,8 +17,6 @@ import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import java.util.List;
 
-import org.littletonrobotics.junction.Logger;
-
 public class MagicMotionPosShuffleboard extends CommandBase {
   /** Creates a new mMPosUp. */
   private MagicMotion motor;
@@ -99,7 +97,6 @@ public class MagicMotionPosShuffleboard extends CommandBase {
       accelerationEntry = ((SimpleWidget) widgets.get(2)).getEntry();
     }
 
-    
     addRequirements(motor);
   }
 
@@ -107,12 +104,11 @@ public class MagicMotionPosShuffleboard extends CommandBase {
   @Override
   public void initialize() {
     // System.out.println("mMPos");
-    boreEncoder.reset();
+    motor.resetPosition();
     angle = desiredAngleEntry.getDouble(desiredAngleDefault);
     velocity = velocityEntry.getDouble(velocityDefault);
     acceleration = accelerationEntry.getDouble(accelerationDefault);
     motor.enableBrakeMode(true);
-    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
