@@ -51,7 +51,7 @@ public class MagicMotionAbsoluteZero extends CommandBase {
   public void end(boolean interrupted) {
     rawAngle = encoder.getRaw() / 8192. * 360.;
     System.out.println("Raw:" + rawAngle);
-    encoder.reset();
+    motor.enableBrakeMode(false);
   }
 
   // Returns true when the command should end.

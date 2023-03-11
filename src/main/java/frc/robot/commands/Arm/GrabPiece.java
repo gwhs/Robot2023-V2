@@ -42,7 +42,7 @@ public class GrabPiece extends SequentialCommandGroup {
           // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
           // Commands.waitSeconds(.25),
           // new MagicMotionPos(mainArm, 40, 1, 1, 5),
-          new MagicMotionPosShuffleboard(mainArm, 175, 2.75, 5),
+          new MagicMotionPosShuffleboard(mainArm, 175, 2.75, 5, shaftEncoder),
           // Commands.waitSeconds(.1),
           // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
           // Commands.waitSeconds(),
