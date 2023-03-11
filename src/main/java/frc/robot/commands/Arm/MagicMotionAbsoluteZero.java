@@ -31,6 +31,8 @@ public class MagicMotionAbsoluteZero extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("-------RUNNING MMAZ----------");
+    motor.neutralOutput();
+    motor.enableBrakeMode(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -51,7 +53,6 @@ public class MagicMotionAbsoluteZero extends CommandBase {
   public void end(boolean interrupted) {
     rawAngle = encoder.getRaw() / 8192. * 360.;
     System.out.println("Raw:" + rawAngle);
-    motor.enableBrakeMode(false);
   }
 
   // Returns true when the command should end.
