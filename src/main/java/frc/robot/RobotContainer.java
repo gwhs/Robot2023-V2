@@ -576,6 +576,7 @@ public class RobotContainer {
                 new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
                 // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
                 Commands.waitSeconds(.25),
+                Commands.runOnce(mainArm::resetPosition, mainArm),
                 new MagicMotionPos(mainArm, 40, 1, 1, 5),
                 new MagicMotionPosShuffleboard(mainArm, 190, 2.75, 5, shaftEncoder),
                 Commands.waitSeconds(.25),
@@ -642,7 +643,7 @@ public class RobotContainer {
     // needs binding
     controllertwo.y().onTrue(fieldHeadingDriveCommand);
     controllertwo.leftBumper().onTrue(rotate);
-    controllertwo.rightBumper().onTrue(allLime);
+    // controllertwo.rightBumper().onTrue(allLime);
     controllertwo
         .start()
         .onTrue(
@@ -672,6 +673,14 @@ public class RobotContainer {
                 new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "CONE").withTimeout(3),
                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
                 clawEncoder::posDown));
+
+    controllertwo
+        .rightBumper()
+        .onTrue(
+            Commands.sequence(
+                Commands.runOnce(mainArm::resetPosition, mainArm),
+                Commands.runOnce(shaftEncoder::reset, shaftEncoder),
+                Commands.runOnce(clawEncoder::reset, clawEncoder)));
   }
 
   // zoey
