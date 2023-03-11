@@ -83,7 +83,6 @@ public class ClawEncoderMoveUp extends CommandBase {
       }
     }
 
-    Logger.getInstance().recordOutput("Claw/Angle", rawAngle);
     clawOne.setPercent(velocity);
   }
 

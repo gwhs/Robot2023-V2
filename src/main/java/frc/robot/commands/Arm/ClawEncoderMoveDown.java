@@ -49,7 +49,7 @@ public class ClawEncoderMoveDown extends CommandBase {
 
     // System.out.println("DesiredAngle: " + desiredAngle);
     System.out.println("RawAngle: " + rawAngle);
-    Logger.getInstance().recordOutput("Claw/Angle", rawAngle);
+  
     // System.out.println("Error: " + error);
     // System.out.println("Velocity: " + velocity);
 

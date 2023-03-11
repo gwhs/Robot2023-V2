@@ -77,8 +77,8 @@ public class RobotContainer {
   private final MagicMotion mainArm = new MagicMotion(21, robot.canivore_name());
   private final Claw clawPivot = new Claw(30, MotorType.kBrushless, false);
   private final Claw clawOpenClose = new Claw(31, MotorType.kBrushless, true);
-  private final BoreEncoder shaftEncoder = new BoreEncoder(0, 1); // Blue 7 ; Yellow 8
-  private final BoreEncoder clawEncoder = new BoreEncoder(2, 3);
+  private final BoreEncoder shaftEncoder = new BoreEncoder(0, 1, "Arm"); // Blue 7 ; Yellow 8
+  private final BoreEncoder clawEncoder = new BoreEncoder(2, 3, "Claw");
   private SendableChooser<String> m_chooser;
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
