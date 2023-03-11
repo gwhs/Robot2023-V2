@@ -21,6 +21,7 @@ import frc.robot.Constants.RobotSetup;
 import frc.robot.commands.Arm.ClawEncoderMoveDown;
 import frc.robot.commands.Arm.GrabPiece;
 import frc.robot.commands.Arm.ClawEncoderMoveUp;
+import frc.robot.commands.Arm.ClawOpenCloseShuffleBoard;
 import frc.robot.commands.Arm.ClawOpenClose;
 import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
