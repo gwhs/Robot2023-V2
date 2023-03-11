@@ -62,7 +62,7 @@ public class Rotate extends CommandBase {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.limeLight = limeLightSub;
 
-    anglePDefault = .07;
+    anglePDefault = .03;
 
     tab = Shuffleboard.getTab("Drive");
 
