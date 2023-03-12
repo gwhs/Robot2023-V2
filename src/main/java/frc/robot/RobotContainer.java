@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
+import frc.robot.commands.PlaceCone.rotatesideways;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -36,7 +37,7 @@ import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
-import frc.robot.commands.PlaceCone.rotatesideways;
+import frc.robot.commands.PlaceCone.toZero;
 import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
@@ -597,7 +598,7 @@ public class RobotContainer {
                 // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
                 Commands.waitSeconds(.25),
                 Commands.runOnce(mainArm::resetPosition, mainArm),
-                new MagicMotionPos(mainArm, 40, 1, 1, 5),
+
                 // this one is for cones
                 new MagicMotionPos(mainArm, 100, 10, 10, 1),
                 // for cubes
@@ -624,7 +625,6 @@ public class RobotContainer {
                 // new MagicMotionPos(mainArm, 40, 1, 1, 5),
                 // for cube throw 100deg, 10vel, 10 accel
                 // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
-                // new MagicMotionPosShuffleboard(mainArm, 100, 2.75, 5, shaftEncoder),
                 new MagicMotionPos(mainArm, 210, 2.75, 3.5, 1),
                 Commands.waitSeconds(.25),
                 // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
@@ -636,8 +636,8 @@ public class RobotContainer {
                 // Commands.waitSeconds(.3),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
-    controller.leftBumper().onTrue(fieldHeadingDriveCommand);
-    controller.rightBumper().onTrue(rotate);
+    controller.leftBumper().onTrue(new toZero(drivetrainSubsystem, poseEstimator));
+    controller.rightBumper().onTrue(rotate.withTimeout(3));
     // controller.start().onTrue(fieldHeadingDriveCommand);
     // controller.back().onTrue(fieldHeadingDriveCommand);
 
