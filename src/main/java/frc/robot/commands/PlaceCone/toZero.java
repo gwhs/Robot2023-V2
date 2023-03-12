@@ -26,8 +26,6 @@ public class toZero extends CommandBase {
   private PoseEstimatorSubsystem poseEstimatorSubsystem;
   private double[] values = {0, 0, 0};
   private boolean angleDone = false;
-  private double p = .002;
-  private int noTarg = 0;
   private double angleP = .03;
   private double anglePDefault;
   private GenericEntry anglePEntry;
@@ -124,7 +122,7 @@ public class toZero extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (angleDone) || (noTarg > 10);
+    return (angleDone);
   }
 
   public double[] chassisValuesLower() {
