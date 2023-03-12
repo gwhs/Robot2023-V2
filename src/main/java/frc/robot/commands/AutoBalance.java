@@ -174,12 +174,12 @@ public class AutoBalance extends CommandBase {
     WrappedGyro gyro = drivetrainSubsystem.getGyro();
 
     // for chris
-    double currentAngle = gyro.getRoll();
-    double currentDPS = gyro.getRollRate();
+    // double currentAngle = gyro.getRoll();
+    // double currentDPS = gyro.getRollRate();
 
     // for chuck
-    // double currentAngle = gyro.getPitch();
-    // double currentDPS = gyro.getPitchRate();
+    double currentAngle = -gyro.getPitch();
+    double currentDPS = -gyro.getPitchRate();
 
     double error = currentAngle - 0;
 
@@ -193,7 +193,7 @@ public class AutoBalance extends CommandBase {
       stateChangeTimer.reset();
     }
 
-    if (stateChangeTimer.hasElapsed(requiredStateChangeTime) && Math.abs(error) <= 13.5) {
+    if (stateChangeTimer.hasElapsed(requiredStateChangeTime) && Math.abs(error) <= 11) {
       state = 1;
     }
 
