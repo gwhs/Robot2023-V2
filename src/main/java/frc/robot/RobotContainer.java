@@ -36,6 +36,7 @@ import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
+import frc.robot.commands.PlaceCone.StraightWheel;
 import frc.robot.commands.PlaceCone.rotatesideways;
 import frc.robot.commands.PlaceCone.toZero;
 import frc.robot.commands.autonomous.TestAutoCommands;
@@ -653,6 +654,7 @@ public class RobotContainer {
     operator.leftBumper().onTrue(rotate);
     operator.rightBumper().onTrue(new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
     // operator.rightBumper().onTrue(allLime);
+    operator.rightTrigger().onTrue(new StraightWheel(drivetrainSubsystem, true));
     operator
         .start()
         .onTrue(
