@@ -36,7 +36,7 @@ import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
-import frc.robot.commands.PlaceCone.rotatesideways;
+import frc.robot.commands.PlaceCone.toZero;
 import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
@@ -580,7 +580,7 @@ public class RobotContainer {
                 Commands.runOnce(mainArm::resetPosition, mainArm),
                 new MagicMotionPos(mainArm, 40, 1, 1, 5),
                 // this one is for cones
-                new MagicMotionPos(mainArm, 190.0, 2.75, 5.0,1),
+                new MagicMotionPos(mainArm, 190.0, 2.75, 5.0, 1),
                 // for cubes
                 // new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 5, shaftEncoder),
                 Commands.waitSeconds(.25),
@@ -592,8 +592,8 @@ public class RobotContainer {
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
-  controller
-        .a()
+    controller
+        .b()
         .onTrue(
             Commands.sequence(
                 Commands.print("START"),
@@ -601,7 +601,7 @@ public class RobotContainer {
                 // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
                 Commands.waitSeconds(.25),
                 Commands.runOnce(mainArm::resetPosition, mainArm),
-                new MagicMotionPos(mainArm, 40, 1, 1, 5),
+
                 // this one is for cones
                 new MagicMotionPos(mainArm, 100, 10, 10, 1),
                 // for cubes
@@ -614,8 +614,26 @@ public class RobotContainer {
                 // Commands.waitSeconds(.3),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
-     
-    controller.x().onTrue(new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub));
+
+    controller
+        .x()
+        .onTrue(
+            Commands.sequence(
+                Commands.runOnce(mainArm::resetPosition, mainArm),
+                new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+                // this one is for cones
+                new MagicMotionPosShuffleboard(mainArm, 10, 5, 5, shaftEncoder),
+                // for cubes
+                // new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 5, shaftEncoder),
+                Commands.waitSeconds(.25),
+                // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
+                // Commands.waitSeconds(),
+                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+
+                // Commands.waitSeconds(.3),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
+
     // Cube Toss
     controller
         .y()
@@ -628,7 +646,7 @@ public class RobotContainer {
                 // new MagicMotionPos(mainArm, 40, 1, 1, 5),
                 // for cube throw 100deg, 10vel, 10 accel
                 // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
-                new MagicMotionPos(mainArm, 210, 2.75, 3.5,1),
+                new MagicMotionPos(mainArm, 210, 2.75, 3.5, 1),
                 Commands.waitSeconds(.25),
                 // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
                 // Commands.waitSeconds(),
@@ -639,8 +657,8 @@ public class RobotContainer {
                 // Commands.waitSeconds(.3),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
-    controller.leftBumper().onTrue(fieldHeadingDriveCommand);
-    controller.rightBumper().onTrue(rotate);
+    controller.leftBumper().onTrue(new toZero(drivetrainSubsystem, poseEstimator));
+    controller.rightBumper().onTrue(rotate.withTimeout(3));
     // controller.start().onTrue(fieldHeadingDriveCommand);
     // controller.back().onTrue(fieldHeadingDriveCommand);
 
