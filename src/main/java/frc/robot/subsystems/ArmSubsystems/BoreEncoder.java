@@ -11,6 +11,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class BoreEncoder extends SubsystemBase {
   private final Encoder m_encoder;
+  String name;
 
   // private ShuffleboardTab tab = Shuffleboard.getTab("Encoder");
   // private GenericEntry encoderPosition = tab.add("Encoder Position", 0).getEntry();
@@ -21,7 +22,8 @@ public class BoreEncoder extends SubsystemBase {
   //         .getEntry();
 
   /** Creates a new BoreEncoder. */
-  public BoreEncoder(int channel1, int channel2) {
+  public BoreEncoder(int channel1, int channel2, String name) {
+    this.name = name;
     m_encoder = new Encoder(channel1, channel2, false, CounterBase.EncodingType.k4X);
 
     m_encoder.reset();
@@ -44,6 +46,11 @@ public class BoreEncoder extends SubsystemBase {
     return Math.abs(rawAngle) < 57;
   }
 
+  public boolean posDown2() {
+    double rawAngle = (-m_encoder.getRaw() / 8192. * 360.);
+    return Math.abs(rawAngle) < 20;
+  }
+
   public void reset() {
     m_encoder.reset();
   }
@@ -56,7 +63,10 @@ public class BoreEncoder extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     double ticks = m_encoder.get();
-    Logger.getInstance().recordOutput("Arm/Angle", -m_encoder.getRaw() / 8192. * 360.);
+
+    double rawAngle = (-m_encoder.getRaw() / 8192. * 360.);
+    Logger.getInstance().recordOutput(name + "/Angle", rawAngle);
+
     // SmartDashboard.putNumber("Encoder ticks", ticks);
     // SmartDashboard.putNumber("Encoder Rate", m_encoder.getRate());
     // SmartDashboard.putNumber("Encoder Distance", m_encoder.getDistance());
