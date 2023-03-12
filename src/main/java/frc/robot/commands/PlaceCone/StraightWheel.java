@@ -17,17 +17,34 @@ public class StraightWheel extends CommandBase {
   private int counter = 0;
   private SwerveModulePosition[] positions;
   private SwerveModuleState[] swervemodule = new SwerveModuleState[4];
+  private boolean xLock;
 
-  public StraightWheel(DrivetrainSubsystem drivetrainSubsystem) {
+  /*
+   * When xLock is true, all the wheels point against each other like an 'x'
+   * When xLock is false, all the wheels are straight
+   */
+  public StraightWheel(DrivetrainSubsystem drivetrainSubsystem, boolean xLock) {
     this.drivetrainSubsystem = drivetrainSubsystem;
-    swervemodule[0] = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
-    swervemodule[1] = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
+    if (xLock) {
+      swervemodule[0] = new SwerveModuleState(0, Rotation2d.fromDegrees(45));
+      swervemodule[1] = new SwerveModuleState(0, Rotation2d.fromDegrees(-45));
 
-    swervemodule[2] = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
-    swervemodule[3] = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
+      swervemodule[2] = new SwerveModuleState(0, Rotation2d.fromDegrees(-45));
+      swervemodule[3] = new SwerveModuleState(0, Rotation2d.fromDegrees(45));
+    } else {
+      swervemodule[0] = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
+      swervemodule[1] = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
+
+      swervemodule[2] = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
+      swervemodule[3] = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
+    }
     // Use addRequirements() here to declare subsystem dependencies.
 
     addRequirements(drivetrainSubsystem);
+  }
+
+  public StraightWheel(DrivetrainSubsystem drivetrainSubsystem) {
+    this(drivetrainSubsystem, false);
   }
 
   // Called when the command is initially scheduled.
