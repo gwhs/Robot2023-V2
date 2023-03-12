@@ -576,14 +576,20 @@ public class RobotContainer {
                 new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
                 // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
                 Commands.waitSeconds(.25),
+                Commands.runOnce(mainArm::resetPosition, mainArm),
                 new MagicMotionPos(mainArm, 40, 1, 1, 5),
-                new MagicMotionPosShuffleboard(mainArm, 190, 2.75, 5, shaftEncoder),
+                // this one is for cones
+                // new MagicMotionPosShuffleboard(mainArm, 190, 2.75, 5, shaftEncoder),
+
+                // for cubes
+                // new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 5, shaftEncoder),
                 Commands.waitSeconds(.25),
                 // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
                 // Commands.waitSeconds(),
                 new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
                 // Commands.waitSeconds(.3),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
     /*
@@ -618,14 +624,17 @@ public class RobotContainer {
                 new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
                 // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
                 Commands.waitSeconds(.25),
-                new MagicMotionPos(mainArm, 40, 1, 1, 5),
+                // new MagicMotionPos(mainArm, 40, 1, 1, 5),
+                // for cube throw 100deg, 10vel, 10 accel
+                //FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
                 new MagicMotionPosShuffleboard(mainArm, 100, 2.75, 5, shaftEncoder),
                 Commands.waitSeconds(.25),
                 // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
                 // Commands.waitSeconds(),
                 new MagicMotionPos(mainArm, 20, 3, 1.5, .5),
-                
-                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+                Commands.waitSeconds(.25),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
                 // Commands.waitSeconds(.3),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
@@ -634,14 +643,12 @@ public class RobotContainer {
     // controller.start().onTrue(fieldHeadingDriveCommand);
     // controller.back().onTrue(fieldHeadingDriveCommand);
 
-    controllertwo.a().onTrue(fieldHeadingDriveCommand);
-    // needs binding
-    controllertwo.b().onTrue(fieldHeadingDriveCommand);
     controllertwo.x().onTrue(new ChangePipeline(limeLightSub));
     // needs binding
     controllertwo.y().onTrue(fieldHeadingDriveCommand);
     controllertwo.leftBumper().onTrue(rotate);
-    controllertwo.rightBumper().onTrue(allLime);
+    controllertwo.rightBumper().onTrue(new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
+    // controllertwo.rightBumper().onTrue(allLime);
     controllertwo
         .start()
         .onTrue(
@@ -670,7 +677,15 @@ public class RobotContainer {
             Commands.either(
                 new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "CONE").withTimeout(3),
                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
-                clawEncoder::posDown));
+                clawEncoder::posDown2));
+
+    // controllertwo
+    //     .rightBumper()
+    //     .onTrue(
+    //         Commands.sequence(
+    //             Commands.runOnce(mainArm::resetPosition, mainArm),
+    //             Commands.runOnce(shaftEncoder::reset, shaftEncoder),
+    //             Commands.runOnce(clawEncoder::reset, clawEncoder)));
   }
 
   // zoey
