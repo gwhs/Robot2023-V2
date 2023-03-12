@@ -46,7 +46,6 @@ import frc.robot.subsystems.ArmSubsystems.Claw;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.subsystems.LEDSubsystem.LEDMode;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.HashMap;
@@ -162,7 +161,9 @@ public class RobotContainer {
     // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
-    officialBindings();
+    // officialBindings();
+
+    controller.a().onTrue(Commands.runOnce(() -> m_led.toggleLED()));
 
     setupPathChooser();
   }
@@ -433,7 +434,7 @@ public class RobotContainer {
 
   private void configureLimelightBindings() {
     this.startAndBackButton();
-    controller.a().onTrue(Commands.runOnce(() -> toggleLED()));
+    controller.a().onTrue(Commands.runOnce(() -> m_led.toggleLED()));
     controller.leftBumper().onTrue(rotate);
     controller.rightBumper().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 80)); //
 
@@ -524,31 +525,23 @@ public class RobotContainer {
     // m_chooser.addOption("I 2 piece no Lime", "I2NoLime");
   }
 
-  private void toggleLED() {
-    if (m_led.getLedMode() == LEDMode.YELLOW) {
-      m_led.setLedMode(LEDMode.PURPLE);
-    } else {
-      m_led.setLedMode(LEDMode.YELLOW);
-    }
-
-    // if (m_led.getLedMode() == LEDMode.YELLOW) {
-    //   m_led.setLedMode(LEDMode.PURPLE);
-    // } else if (m_led.getLedMode() == LEDMode.PURPLE) {
-    //   m_led.setLedMode(LEDMode.EMERGENCY);
-    // } else if (m_led.getLedMode() == LEDMode.EMERGENCY) {
-    //   m_led.setLedMode(LEDMode.GREEN);
-    // } else if (m_led.getLedMode() == LEDMode.GREEN) {
-    //   m_led.setLedMode(LEDMode.ORANGE);
-    // } else if (m_led.getLedMode() == LEDMode.ORANGE) {
-    //   m_led.setLedMode(LEDMode.TEAMCOLOR);
-    // } else if (m_led.getLedMode() == LEDMode.TEAMCOLOR) {
-    //   m_led.setLedMode(LEDMode.RAINBOW);
-    // } else if (m_led.getLedMode() == LEDMode.RAINBOW) {
-    //   m_led.setLedMode(LEDMode.PINK);
-    // } else {
-    //   m_led.setLedMode(LEDMode.YELLOW);
-    // }
-  }
+  // if (m_led.getLedMode() == LEDMode.YELLOW) {
+  //   m_led.setLedMode(LEDMode.PURPLE);
+  // } else if (m_led.getLedMode() == LEDMode.PURPLE) {
+  //   m_led.setLedMode(LEDMode.EMERGENCY);
+  // } else if (m_led.getLedMode() == LEDMode.EMERGENCY) {
+  //   m_led.setLedMode(LEDMode.GREEN);
+  // } else if (m_led.getLedMode() == LEDMode.GREEN) {
+  //   m_led.setLedMode(LEDMode.ORANGE);
+  // } else if (m_led.getLedMode() == LEDMode.ORANGE) {
+  //   m_led.setLedMode(LEDMode.TEAMCOLOR);
+  // } else if (m_led.getLedMode() == LEDMode.TEAMCOLOR) {
+  //   m_led.setLedMode(LEDMode.RAINBOW);
+  // } else if (m_led.getLedMode() == LEDMode.RAINBOW) {
+  //   m_led.setLedMode(LEDMode.PINK);
+  // } else {
+  //   m_led.setLedMode(LEDMode.YELLOW);
+  // }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

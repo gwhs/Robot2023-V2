@@ -308,7 +308,7 @@ public class LEDSubsystem extends SubsystemBase {
     }
   }
 
-  private void toggleLED() {
+  public void toggleLED() {
     if (getLedMode() == LEDMode.YELLOW) {
       setLedMode(LEDMode.PURPLE);
     } else {
