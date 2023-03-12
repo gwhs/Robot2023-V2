@@ -20,7 +20,6 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
-
 import java.util.List;
 
 public class RotatePID extends CommandBase {
@@ -56,8 +55,8 @@ public class RotatePID extends CommandBase {
 
   private Constraints tConstraints =
       new Constraints(
-          DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND/10,
-          DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND/10);
+          DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 10,
+          DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 10);
 
   public RotatePID(
       DrivetrainSubsystem drivetrainSubsystem,

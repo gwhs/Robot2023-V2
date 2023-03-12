@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.RobotSetup;
 import frc.robot.commands.Arm.ClawEncoderMoveDown;
+import frc.robot.commands.Arm.ClawEncoderMoveDownPID;
 import frc.robot.commands.Arm.ClawEncoderMoveUp;
 import frc.robot.commands.Arm.ClawOpenClose;
 import frc.robot.commands.Arm.GrabPiece;
@@ -212,6 +213,8 @@ public class RobotContainer {
   private void configureTest() {
     controller.rightBumper().onTrue(rotate);
     controller.leftBumper().onTrue(rotatePid);
+    controller.x().onTrue(new ClawEncoderMoveDownPID(-125, clawPivot, clawEncoder, "CUBE"));
+    controller.y().onTrue(new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CUBE"));
   }
 
   /**

@@ -41,8 +41,12 @@ public class BoreEncoder extends SubsystemBase {
     return m_encoder.getRaw();
   }
 
+  public double getAngle() {
+    return m_encoder.getRaw() * (360. / 8192.);
+  }
+
   public boolean posDown() {
-    double rawAngle = (-m_encoder.getRaw() / 8192. * 360.);
+    double rawAngle = -getAngle();
     return Math.abs(rawAngle) < 57;
   }
 
@@ -59,7 +63,7 @@ public class BoreEncoder extends SubsystemBase {
     // This method will be called once per scheduler run
     double ticks = m_encoder.get();
 
-    double rawAngle = (-m_encoder.getRaw() / 8192. * 360.);
+    double rawAngle = -getAngle();
     Logger.getInstance().recordOutput(name + "/Angle", rawAngle);
 
     // SmartDashboard.putNumber("Encoder ticks", ticks);
