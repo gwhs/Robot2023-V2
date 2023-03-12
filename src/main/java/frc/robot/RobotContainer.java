@@ -36,6 +36,7 @@ import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
+import frc.robot.commands.PlaceCone.StraightWheel;
 import frc.robot.commands.PlaceCone.rotatesideways;
 import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
@@ -160,6 +161,8 @@ public class RobotContainer {
     configureDashboard();
     mainArm.robotInit();
     officialBindings();
+
+
     setupPathChooser();
   }
 
@@ -626,7 +629,7 @@ public class RobotContainer {
                 Commands.waitSeconds(.25),
                 // new MagicMotionPos(mainArm, 40, 1, 1, 5),
                 // for cube throw 100deg, 10vel, 10 accel
-                //FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
+                // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
                 new MagicMotionPosShuffleboard(mainArm, 100, 2.75, 5, shaftEncoder),
                 Commands.waitSeconds(.25),
                 // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
