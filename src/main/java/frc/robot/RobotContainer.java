@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
+import frc.robot.commands.PlaceCone.rotatesideways;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -36,7 +37,7 @@ import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
-import frc.robot.commands.PlaceCone.rotatesideways;
+import frc.robot.commands.PlaceCone.toZero;
 import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
 import frc.robot.pathfind.Obstacle;
@@ -161,9 +162,7 @@ public class RobotContainer {
     // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
-    // officialBindings();
-
-    driver.a().onTrue(Commands.runOnce(() -> m_led.toggleLED()));
+    officialBindings();
 
     setupPathChooser();
   }
@@ -612,7 +611,7 @@ public class RobotContainer {
                 // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
                 Commands.waitSeconds(.25),
                 Commands.runOnce(mainArm::resetPosition, mainArm),
-                new MagicMotionPos(mainArm, 40, 1, 1, 5),
+
                 // this one is for cones
                 new MagicMotionPos(mainArm, 100, 10, 10, 1),
                 // for cubes
@@ -639,7 +638,6 @@ public class RobotContainer {
                 // new MagicMotionPos(mainArm, 40, 1, 1, 5),
                 // for cube throw 100deg, 10vel, 10 accel
                 // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
-                // new MagicMotionPosShuffleboard(mainArm, 100, 2.75, 5, shaftEncoder),
                 new MagicMotionPos(mainArm, 210, 2.75, 3.5, 1),
                 Commands.waitSeconds(.25),
                 // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
@@ -651,14 +649,15 @@ public class RobotContainer {
                 // Commands.waitSeconds(.3),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
-    driver.leftBumper().onTrue(fieldHeadingDriveCommand);
-    driver.rightBumper().onTrue(rotate);
+    driver.leftBumper().onTrue(new toZero(drivetrainSubsystem, poseEstimator));
+    driver.rightBumper().onTrue(rotate.withTimeout(3));
     // driver.start().onTrue(fieldHeadingDriveCommand);
     // driver.back().onTrue(fieldHeadingDriveCommand);
 
     operator.x().onTrue(new ChangePipeline(limeLightSub));
     // needs binding
     operator.y().onTrue(fieldHeadingDriveCommand);
+    operator.b().onTrue(Commands.runOnce(() -> m_led.toggleLED(), m_led));
     operator.leftBumper().onTrue(rotate);
     operator.rightBumper().onTrue(new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
     // operator.rightBumper().onTrue(allLime);

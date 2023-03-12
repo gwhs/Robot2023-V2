@@ -56,7 +56,7 @@ public class LEDSubsystem extends SubsystemBase {
     // Reuse buffer
     // Default to a length of 60, start empty output
     // Length is expensive to set, so only set it once, then just update data
-    m_ledBuffer = new AddressableLEDBuffer(60);
+    m_ledBuffer = new AddressableLEDBuffer(NUMBER_LED);
     m_led.setLength(m_ledBuffer.getLength());
 
     // Set the data
@@ -135,7 +135,7 @@ public class LEDSubsystem extends SubsystemBase {
   }
 
   public void purple() {
-    m_brightness += .02;
+    m_brightness += .05;
 
     if (m_brightness > 1) {
       m_brightness = 0.01;
