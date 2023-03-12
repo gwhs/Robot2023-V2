@@ -601,7 +601,7 @@ public class RobotContainer {
         .onTrue(
             Commands.sequence(
                 Commands.print("START"),
-                new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+                new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(0.5),
                 // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
                 Commands.runOnce(mainArm::resetPosition, mainArm),
 
@@ -625,9 +625,8 @@ public class RobotContainer {
         .onTrue(
             Commands.sequence(
                 Commands.print("START"),
-                new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+                new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(0.5),
                 // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
-                Commands.waitSeconds(.25),
                 // new MagicMotionPos(mainArm, 40, 1, 1, 5),
                 // for cube throw 100deg, 10vel, 10 accel
                 // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
