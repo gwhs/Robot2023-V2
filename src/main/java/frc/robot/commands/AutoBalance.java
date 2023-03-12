@@ -14,8 +14,10 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.GyroMoment.WrappedGyro;
+import frc.robot.commands.PlaceCone.StraightWheel;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import java.util.List;
 
@@ -173,7 +175,7 @@ public class AutoBalance extends CommandBase {
   public void execute() {
     WrappedGyro gyro = drivetrainSubsystem.getGyro();
 
-    // for chris
+    // // for chris
     // double currentAngle = gyro.getRoll();
     // double currentDPS = gyro.getRollRate();
 
@@ -223,7 +225,10 @@ public class AutoBalance extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    Command xLock = new StraightWheel(drivetrainSubsystem, true);
+    xLock.schedule();
+  }
 
   // Returns true when the command should end.
   @Override
