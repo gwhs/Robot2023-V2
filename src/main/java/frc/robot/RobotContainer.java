@@ -213,10 +213,10 @@ public class RobotContainer {
   }
 
   private void configureTest() {
-    controller.rightBumper().onTrue(rotate);
-    controller.leftBumper().onTrue(rotatePid);
-    controller.x().onTrue(new ClawEncoderMoveDownPID(-125, clawPivot, clawEncoder, "CUBE"));
-    controller.y().onTrue(new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CUBE"));
+    driver.rightBumper().onTrue(rotate);
+    driver.leftBumper().onTrue(rotatePid);
+    driver.x().onTrue(new ClawEncoderMoveDownPID(-125, clawPivot, clawEncoder, "CUBE"));
+    driver.y().onTrue(new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CUBE"));
   }
 
   /**
