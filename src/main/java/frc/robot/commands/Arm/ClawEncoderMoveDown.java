@@ -24,7 +24,7 @@ public class ClawEncoderMoveDown extends CommandBase {
     this.desiredAngle = angle;
     this.piece = piece;
 
-    addRequirements(initClaw);
+    addRequirements(initClaw, weewoo);
   }
 
   // Called when the command is initially scheduled.

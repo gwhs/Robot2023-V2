@@ -637,9 +637,6 @@ public class RobotContainer {
     // controller.start().onTrue(fieldHeadingDriveCommand);
     // controller.back().onTrue(fieldHeadingDriveCommand);
 
-    controllertwo.a().onTrue(fieldHeadingDriveCommand);
-    // needs binding
-    controllertwo.b().onTrue(fieldHeadingDriveCommand);
     controllertwo.x().onTrue(new ChangePipeline(limeLightSub));
     // needs binding
     controllertwo.y().onTrue(fieldHeadingDriveCommand);
@@ -676,13 +673,13 @@ public class RobotContainer {
                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
                 clawEncoder::posDown2));
 
-    controllertwo
-        .rightBumper()
-        .onTrue(
-            Commands.sequence(
-                Commands.runOnce(mainArm::resetPosition, mainArm),
-                Commands.runOnce(shaftEncoder::reset, shaftEncoder),
-                Commands.runOnce(clawEncoder::reset, clawEncoder)));
+    // controllertwo
+    //     .rightBumper()
+    //     .onTrue(
+    //         Commands.sequence(
+    //             Commands.runOnce(mainArm::resetPosition, mainArm),
+    //             Commands.runOnce(shaftEncoder::reset, shaftEncoder),
+    //             Commands.runOnce(clawEncoder::reset, clawEncoder)));
   }
 
   // zoey
