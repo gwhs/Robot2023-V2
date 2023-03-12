@@ -53,6 +53,27 @@ public final class TestAutoCommands {
     this.clawOpenClose = clawOP;
   }
 
+  public SequentialCommandGroup starting(String path, double maxVel, double maxAcc){
+    return new SequentialCommandGroup(
+        new ParallelCommandGroup(
+            new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+            new PPSwerveFollower(
+                driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.5, .5), true)),
+        new MagicMotionPos(mainArm, 40, 1, 1, .5),
+        new MagicMotionPos(mainArm, 190, 2.75, 5, .5),
+        new ParallelCommandGroup(
+            new SequentialCommandGroup(
+                new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
+                Commands.waitSeconds(.5),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+                new PPSwerveFollower(
+                    driveSystem, poseEstimatorSystem, path, new PathConstraints(maxVel, maxAcc), true)))
+ 
+    );
+  }
+
   public SequentialCommandGroup getAutoCommand() {
     if (pathName.equals("BenPath")) {
       return new SequentialCommandGroup(
@@ -232,24 +253,24 @@ public final class TestAutoCommands {
           new AutoBalance(driveSystem));
     }
     if (pathName.equals("D-F1E")) {
-      return new SequentialCommandGroup(
-          new ParallelCommandGroup(
-              new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
-              new PPSwerveFollower(
-                  driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.5, .5), true)),
-          new MagicMotionPos(mainArm, 40, 1, 1, .5),
-          new MagicMotionPos(mainArm, 190, 2.75, 5, .5),
-          Commands.waitSeconds(.5),
-          new ParallelCommandGroup(
-              new SequentialCommandGroup(
-                  new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
-                  Commands.waitSeconds(.5),
-                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-                  new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-                  new PPSwerveFollower(
-                      driveSystem, poseEstimatorSystem, "D-F1E", new PathConstraints(2, 2), true))),
-          new AutoBalance(driveSystem));
+      return starting(pathName, 2, 2).andThen(new AutoBalance(driveSystem));
+        //   new ParallelCommandGroup(
+        //       new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+        //       new PPSwerveFollower(
+        //           driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.5, .5), true)),
+        //   new MagicMotionPos(mainArm, 40, 1, 1, .5),
+        //   new MagicMotionPos(mainArm, 190, 2.75, 5, .5),
+        //   Commands.waitSeconds(.5),
+        //   new ParallelCommandGroup(
+        //       new SequentialCommandGroup(
+        //           new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
+        //           Commands.waitSeconds(.5),
+        //           new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+        //           new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+        //           new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+        //           new PPSwerveFollower(
+        //               driveSystem, poseEstimatorSystem, "D-F1E", new PathConstraints(2, 2), true))),
+        //   new AutoBalance(driveSystem));
     }
     if (pathName.equals("A2E")) {
       return new SequentialCommandGroup(
@@ -600,23 +621,23 @@ public final class TestAutoCommands {
           new AutoBalance(driveSystem));
     }
     if (pathName.equals("C1+E")) {
-      return new SequentialCommandGroup(
-          new ParallelCommandGroup(
-              new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
-              new PPSwerveFollower(
-                  driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.5, .5), true)),
-          new MagicMotionPos(mainArm, 40, 1, 1, .5),
-          new MagicMotionPos(mainArm, 190, 2.75, 5, .5),
-          new ParallelCommandGroup(
-              new SequentialCommandGroup(
-                  new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
-                  Commands.waitSeconds(.5),
-                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-                  new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-                  new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-                  new PPSwerveFollower(
-                      driveSystem, poseEstimatorSystem, "C1+E", new PathConstraints(3, 2), true))),
-          new AutoBalance(driveSystem));
+      return starting(pathName, 3, 2).andThen(new AutoBalance(driveSystem));
+        //   new ParallelCommandGroup(
+        //       new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+        //       new PPSwerveFollower(
+        //           driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.5, .5), true)),
+        //   new MagicMotionPos(mainArm, 40, 1, 1, .5),
+        //   new MagicMotionPos(mainArm, 190, 2.75, 5, .5),
+        //   new ParallelCommandGroup(
+        //       new SequentialCommandGroup(
+        //           new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
+        //           Commands.waitSeconds(.5),
+        //           new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+        //           new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+        //           new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+        //           new PPSwerveFollower(
+        //               driveSystem, poseEstimatorSystem, "C1+E", new PathConstraints(3, 2), true))),
+         // new AutoBalance(driveSystem));
     }
     if (pathName.equals("G1+E")) {
       return new SequentialCommandGroup(
