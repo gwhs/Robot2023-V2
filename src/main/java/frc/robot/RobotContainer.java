@@ -161,9 +161,7 @@ public class RobotContainer {
     // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
-    // officialBindings();
-
-    controller.a().onTrue(Commands.runOnce(() -> m_led.toggleLED()));
+    officialBindings();
 
     setupPathChooser();
   }
@@ -659,6 +657,7 @@ public class RobotContainer {
     controllertwo.x().onTrue(new ChangePipeline(limeLightSub));
     // needs binding
     controllertwo.y().onTrue(fieldHeadingDriveCommand);
+    controllertwo.b().onTrue(Commands.runOnce(() -> m_led.toggleLED(), m_led));
     controllertwo.leftBumper().onTrue(rotate);
     controllertwo.rightBumper().onTrue(new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
     // controllertwo.rightBumper().onTrue(allLime);
