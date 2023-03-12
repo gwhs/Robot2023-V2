@@ -11,6 +11,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimeLightConstants;
+import org.littletonrobotics.junction.Logger;
 
 public class LimeLightSub extends SubsystemBase {
 
@@ -64,32 +65,47 @@ public class LimeLightSub extends SubsystemBase {
   }
 
   public double getTx() {
-    return tx.getDouble(0);
+    double Tx = tx.getDouble(0);
+    Logger.getInstance().recordOutput("LimeLightSub/Tx", Tx);
+    return Tx;
   }
 
   public double getTy() {
-    return ty.getDouble(0);
+    double Ty = ty.getDouble(0);
+    Logger.getInstance().recordOutput("LimeLightSub/Ty", Ty);
+    return Ty;
   }
 
   public double getTheta() {
-    return getTy() + LimeLightConstants.MOUNTING_ANGLE;
+    double Theta = getTy() + LimeLightConstants.MOUNTING_ANGLE;
+    Logger.getInstance().recordOutput("LimeLightSub/Theta", Theta);
+    return Theta;
   }
 
   public double getXDistance() {
-    return (kTargetHeight - kCameraHeight)
-        / (Math.tan(Math.toRadians(getTy() + LimeLightConstants.MOUNTING_ANGLE)));
+    double XDistance =
+        (kTargetHeight - kCameraHeight)
+            / (Math.tan(Math.toRadians(getTy() + LimeLightConstants.MOUNTING_ANGLE)));
+    Logger.getInstance().recordOutput("LimeLightSub/XDistance", XDistance);
+    return XDistance;
   }
 
   public double getYDistance() {
-    return Math.tan(Math.toRadians(getTx())) * getXDistance();
+    double YDistance = Math.tan(Math.toRadians(getTx())) * getXDistance();
+    Logger.getInstance().recordOutput("LimeLightSub/YDistance", YDistance);
+    return YDistance;
   }
 
   public double getAngle() {
-    return Math.toRadians(getTx());
+    double angle = Math.toRadians(getTx());
+    Logger.getInstance().recordOutput("LimeLightSub/angle", angle);
+    return angle;
   }
 
   public double getPipeline() {
-    return limelight_comm.get_entry_double("pipeline");
+    double Pipeline = limelight_comm.get_entry_double("pipeline");
+    Logger.getInstance().recordOutput("LimeLightSub/Pipeline", Pipeline);
+    return Pipeline;
   }
 
   public void setPipeline(double pipeline) {

@@ -47,7 +47,6 @@ import frc.robot.subsystems.ArmSubsystems.Claw;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
-import frc.robot.subsystems.LEDSubsystem.LEDMode;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.HashMap;
@@ -81,6 +80,9 @@ public class RobotContainer {
   private final BoreEncoder shaftEncoder = new BoreEncoder(0, 1, "Arm"); // Blue 7 ; Yellow 8
   private final BoreEncoder clawEncoder = new BoreEncoder(2, 3, "Claw");
   private SendableChooser<String> m_chooser;
+
+  // Led status
+  private int status = 1;
 
   private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem(robot);
   private final PoseEstimatorSubsystem poseEstimator =
@@ -246,7 +248,7 @@ public class RobotContainer {
         .onTrue(sideways); // add a button
     // place low
 
-    controller.a().toggleOnTrue(fieldHeadingDriveCommand);
+    // controller.a().toggleOnTrue(fieldHeadingDriveCommand);
 
     controller.x().onTrue(new ChangePipeline(limeLightSub));
     // controller.b().onTrue(rotate);
@@ -431,6 +433,7 @@ public class RobotContainer {
 
   private void configureLimelightBindings() {
     this.startAndBackButton();
+    controller.a().onTrue(Commands.runOnce(() -> m_led.toggleLED()));
     controller.leftBumper().onTrue(rotate);
     controller.rightBumper().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 80)); //
 
@@ -521,13 +524,23 @@ public class RobotContainer {
     // m_chooser.addOption("I 2 piece no Lime", "I2NoLime");
   }
 
-  private void toggleLED() {
-    if (m_led.getLedMode() == LEDMode.YELLOW) {
-      m_led.setLedMode(LEDMode.PURPLE);
-    } else {
-      m_led.setLedMode(LEDMode.YELLOW);
-    }
-  }
+  // if (m_led.getLedMode() == LEDMode.YELLOW) {
+  //   m_led.setLedMode(LEDMode.PURPLE);
+  // } else if (m_led.getLedMode() == LEDMode.PURPLE) {
+  //   m_led.setLedMode(LEDMode.EMERGENCY);
+  // } else if (m_led.getLedMode() == LEDMode.EMERGENCY) {
+  //   m_led.setLedMode(LEDMode.GREEN);
+  // } else if (m_led.getLedMode() == LEDMode.GREEN) {
+  //   m_led.setLedMode(LEDMode.ORANGE);
+  // } else if (m_led.getLedMode() == LEDMode.ORANGE) {
+  //   m_led.setLedMode(LEDMode.TEAMCOLOR);
+  // } else if (m_led.getLedMode() == LEDMode.TEAMCOLOR) {
+  //   m_led.setLedMode(LEDMode.RAINBOW);
+  // } else if (m_led.getLedMode() == LEDMode.RAINBOW) {
+  //   m_led.setLedMode(LEDMode.PINK);
+  // } else {
+  //   m_led.setLedMode(LEDMode.YELLOW);
+  // }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -644,6 +657,7 @@ public class RobotContainer {
     controllertwo.x().onTrue(new ChangePipeline(limeLightSub));
     // needs binding
     controllertwo.y().onTrue(fieldHeadingDriveCommand);
+    controllertwo.b().onTrue(Commands.runOnce(() -> m_led.toggleLED(), m_led));
     controllertwo.leftBumper().onTrue(rotate);
     controllertwo.rightBumper().onTrue(new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
     // controllertwo.rightBumper().onTrue(allLime);
