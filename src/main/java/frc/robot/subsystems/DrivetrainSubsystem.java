@@ -472,7 +472,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   //   // safety)!!
   //   desiredChassisSpeeds = null;
   // }
-  
+
   /**
    * Gets the current drivetrain state (velocity, and angle), as reported by the modules themselves.
    *

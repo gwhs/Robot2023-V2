@@ -41,13 +41,8 @@ public final class TestAutoCommands {
     if (pathName.equals("HajelPath")) {
       return new SequentialCommandGroup(
           new PPSwerveFollower(
-<<<<<<< HEAD
-              driveSystem, poseEstimatorSystem, "move12", status, new PathConstraints(2, 2), true),
-          new MagicMotionPos(mainArm, 210, 0, 0),
-=======
               driveSystem, poseEstimatorSystem, "move12", new PathConstraints(2, 2), true),
           new MagicMotionPos(mainArm, 210, 0, 0, .5),
->>>>>>> main
           Commands.waitSeconds(.5),
           new ParallelCommandGroup(
               new SequentialCommandGroup(
