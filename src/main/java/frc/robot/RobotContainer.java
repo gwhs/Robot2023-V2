@@ -36,7 +36,6 @@ import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
-import frc.robot.commands.PlaceCone.StraightWheel;
 import frc.robot.commands.PlaceCone.rotatesideways;
 import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
@@ -161,7 +160,6 @@ public class RobotContainer {
     configureDashboard();
     mainArm.robotInit();
     officialBindings();
-
 
     setupPathChooser();
   }
@@ -582,8 +580,7 @@ public class RobotContainer {
                 Commands.runOnce(mainArm::resetPosition, mainArm),
                 new MagicMotionPos(mainArm, 40, 1, 1, 5),
                 // this one is for cones
-                new MagicMotionPosShuffleboard(mainArm, 190, 2.75, 5, shaftEncoder),
-
+                new MagicMotionPos(mainArm, 190.0, 2.75, 5.0,1),
                 // for cubes
                 // new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 5, shaftEncoder),
                 Commands.waitSeconds(.25),
@@ -595,28 +592,29 @@ public class RobotContainer {
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
-    /*
-     * controller.b().onTrue(
-     * Commands.sequence(
-     * Commands.print("START"),
-     * // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder,
-     * "Cube").withTimeout(1.5),
-     * // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
-     * // Commands.waitSeconds(.25),
-     * // new MagicMotionPos(mainArm, 40, 1, 1, 5),
-     * new MagicMotionPosShuffleboard(mainArm, 190, 2.75, 5),
-     * // Commands.waitSeconds(.1),
-     * // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
-     * // Commands.waitSeconds(),
-     * new MagicMotionPos(mainArm, 30, 3, 1.5, .5),
-     * Commands.waitSeconds(.5),
-     * // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-     * // Commands.waitSeconds(.3),
-     *
-     * new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5))
-     * );
-     * l
-     */
+  controller
+        .a()
+        .onTrue(
+            Commands.sequence(
+                Commands.print("START"),
+                new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+                // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
+                Commands.waitSeconds(.25),
+                Commands.runOnce(mainArm::resetPosition, mainArm),
+                new MagicMotionPos(mainArm, 40, 1, 1, 5),
+                // this one is for cones
+                new MagicMotionPos(mainArm, 100, 10, 10, 1),
+                // for cubes
+                // new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 5, shaftEncoder),
+                Commands.waitSeconds(.25),
+                // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
+                // Commands.waitSeconds(),
+                new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
+                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+                // Commands.waitSeconds(.3),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
+     
     controller.x().onTrue(new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub));
     // Cube Toss
     controller
@@ -630,7 +628,7 @@ public class RobotContainer {
                 // new MagicMotionPos(mainArm, 40, 1, 1, 5),
                 // for cube throw 100deg, 10vel, 10 accel
                 // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
-                new MagicMotionPosShuffleboard(mainArm, 100, 2.75, 5, shaftEncoder),
+                new MagicMotionPos(mainArm, 210, 2.75, 3.5,1),
                 Commands.waitSeconds(.25),
                 // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
                 // Commands.waitSeconds(),
