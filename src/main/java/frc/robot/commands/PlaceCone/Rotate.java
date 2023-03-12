@@ -29,9 +29,10 @@ public class Rotate extends CommandBase {
   private double[] values = {0, 0, 0};
   private boolean angleDone = false;
   private boolean sideDone = false;
-  private double p = .02;
-  private int times=  0;
-  private double angleP = .01;
+  private double p = .01;
+  private int times = 0;
+  private int noTarg = 0;
+  private double angleP = .005;
   private double anglePDefault;
   private GenericEntry anglePEntry;
 
@@ -114,20 +115,25 @@ public class Rotate extends CommandBase {
     // System.out.printf(
     //     "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // setpoint and atgoal don't work, just brute forced.
-    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < .3) {
+    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < 1) {
       angleDone = true;
     } else {
       angleDone = false;
     }
-    if (Math.abs(limeLight.getTx()) < .3) {
+    if (Math.abs(limeLight.getTx()) < 1) {
       sideDone = true;
     } else {
       sideDone = false;
     }
-    if (sideDone && angleDone){
+    if (sideDone && angleDone) {
       times++;
-    }else{
+    } else {
       times = 0;
+    }
+    if (limeLight.hasTarget()) {
+      noTarg = 0;
+    } else {
+      noTarg++;
     }
   }
 
@@ -141,7 +147,7 @@ public class Rotate extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return angleDone && sideDone && times > 5;
+    return (angleDone && sideDone && times > 5) || (noTarg > 10);
   }
 
   public double[] chassisValuesLower() {
