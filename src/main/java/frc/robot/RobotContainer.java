@@ -579,7 +579,7 @@ public class RobotContainer {
                 Commands.runOnce(mainArm::resetPosition, mainArm),
                 new MagicMotionPos(mainArm, 40, 1, 1, 5),
                 // this one is for cones
-                // new MagicMotionPosShuffleboard(mainArm, 190, 2.75, 5, shaftEncoder),
+                new MagicMotionPosShuffleboard(mainArm, 190, 2.75, 5, shaftEncoder),
 
                 // for cubes
                 // new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 5, shaftEncoder),
@@ -626,7 +626,7 @@ public class RobotContainer {
                 Commands.waitSeconds(.25),
                 // new MagicMotionPos(mainArm, 40, 1, 1, 5),
                 // for cube throw 100deg, 10vel, 10 accel
-                //FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
+                // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
                 new MagicMotionPosShuffleboard(mainArm, 100, 2.75, 5, shaftEncoder),
                 Commands.waitSeconds(.25),
                 // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
@@ -692,6 +692,7 @@ public class RobotContainer {
   /*
    * a = cone
    * y = chuck cube
+   * x = rotate
    * rightbump rotate
    * leftbump = stopeverything
    *

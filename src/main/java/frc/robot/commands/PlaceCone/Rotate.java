@@ -30,7 +30,7 @@ public class Rotate extends CommandBase {
   private boolean angleDone = false;
   private boolean sideDone = false;
   private double p = .02;
-
+  private int times=  0;
   private double angleP = .01;
   private double anglePDefault;
   private GenericEntry anglePEntry;
@@ -124,6 +124,11 @@ public class Rotate extends CommandBase {
     } else {
       sideDone = false;
     }
+    if (sideDone && angleDone){
+      times++;
+    }else{
+      times = 0;
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -136,7 +141,7 @@ public class Rotate extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return angleDone;
+    return angleDone && sideDone && times > 5;
   }
 
   public double[] chassisValuesLower() {
