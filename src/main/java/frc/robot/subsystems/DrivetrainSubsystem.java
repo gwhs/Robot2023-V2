@@ -28,6 +28,7 @@ import frc.robot.swerve.SwerveSpeedController;
 import frc.robot.swerve.SwerveSteerController;
 import java.util.Arrays;
 import java.util.stream.IntStream;
+import org.littletonrobotics.junction.Logger;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
@@ -450,28 +451,27 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return DrivetrainConstants.KINEMATICS.toChassisSpeeds(getModuleStates());
   }
 
-  // @Override
-  // public void periodic() {
-  //   // Set the swerve module states
-  //   if (desiredChassisSpeeds != null) {
-  //     var desiredStates =
-  // DrivetrainConstants.KINEMATICS.toSwerveModuleStates(desiredChassisSpeeds);
-  //     if (desiredChassisSpeeds.vxMetersPerSecond == 0.0
-  //         && desiredChassisSpeeds.vyMetersPerSecond == 0.0
-  //         && desiredChassisSpeeds.omegaRadiansPerSecond == 0.0) {
-  //       var currentStates = getModuleStates();
-  //       // Keep the wheels at their current angle when stopped, don't snap back to straight
-  //       IntStream.range(0, currentStates.length)
-  //           .forEach(i -> desiredStates[i].angle = currentStates[i].angle);
-  //     }
+  @Override
+  public void periodic() {
+    // Set the swerve module states
+    if (desiredChassisSpeeds != null) {
+      var desiredStates = DrivetrainConstants.KINEMATICS.toSwerveModuleStates(desiredChassisSpeeds);
+      if (desiredChassisSpeeds.vxMetersPerSecond == 0.0
+          && desiredChassisSpeeds.vyMetersPerSecond == 0.0
+          && desiredChassisSpeeds.omegaRadiansPerSecond == 0.0) {
+        var currentStates = getModuleStates();
+        // Keep the wheels at their current angle when stopped, don't snap back to straight
+        IntStream.range(0, currentStates.length)
+            .forEach(i -> desiredStates[i].angle = currentStates[i].angle);
+      }
 
-  //     setModuleStates(desiredStates);
-  //     Logger.getInstance().recordOutput("DriveTrainSub/DesireStates", desiredStates);
-  //   }
-  //   // Always reset desiredChassisSpeeds to null to prevent latching to the last state (aka motor
-  //   // safety)!!
-  //   desiredChassisSpeeds = null;
-  // }
+      setModuleStates(desiredStates);
+      Logger.getInstance().recordOutput("DriveTrainSub/DesireStates", desiredStates);
+    }
+    // Always reset desiredChassisSpeeds to null to prevent latching to the last state (aka motor
+    // safety)!!
+    desiredChassisSpeeds = null;
+  }
 
   /**
    * Gets the current drivetrain state (velocity, and angle), as reported by the modules themselves.
