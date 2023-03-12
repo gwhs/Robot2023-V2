@@ -66,8 +66,8 @@ public class RobotContainer {
   // change the same in Robot.java
   private final RobotSetup robot = Constants.chuck;
 
-  private final CommandXboxController controller = new CommandXboxController(0);
-  private final CommandXboxController controllertwo = new CommandXboxController(1);
+  private final CommandXboxController driver = new CommandXboxController(0);
+  private final CommandXboxController operator = new CommandXboxController(1);
   // Set IP to 10.57.12.11
   // Set RoboRio to 10.57.12.2
   private final LimeLightSub limeLightSub = new LimeLightSub("limelight");
@@ -116,15 +116,15 @@ public class RobotContainer {
           drivetrainSubsystem,
           () -> poseEstimator.getCurrentPose().getRotation(),
           () ->
-              -modifyAxis(controller.getLeftY())
+              -modifyAxis(driver.getLeftY())
                   * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
                   * drivetrainAmplificationScale(),
           () ->
-              -modifyAxis(controller.getLeftX())
+              -modifyAxis(driver.getLeftX())
                   * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
                   * drivetrainAmplificationScale(),
-          () -> -controller.getRightY(),
-          () -> -controller.getRightX());
+          () -> -driver.getRightY(),
+          () -> -driver.getRightX());
 
   // private final ShuffleBoardBen angleBenCommand =
   // new ShuffleBoardBen(drivetrainSubsystem); // add a button
@@ -139,15 +139,15 @@ public class RobotContainer {
             drivetrainSubsystem,
             () -> poseEstimator.getCurrentPose().getRotation(),
             () ->
-                -modifyAxis(controller.getLeftY())
+                -modifyAxis(driver.getLeftY())
                     * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
                     * drivetrainAmplificationScale(),
             () ->
-                -modifyAxis(controller.getLeftX())
+                -modifyAxis(driver.getLeftX())
                     * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
                     * drivetrainAmplificationScale(),
             () ->
-                -modifyAxis(controller.getLeftTriggerAxis() - controller.getRightTriggerAxis())
+                -modifyAxis(driver.getLeftTriggerAxis() - driver.getRightTriggerAxis())
                     * drivetrainAmplificationScaleRotation()
                     * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
                     / 2));
@@ -163,7 +163,7 @@ public class RobotContainer {
     mainArm.robotInit();
     // officialBindings();
 
-    controller.a().onTrue(Commands.runOnce(() -> m_led.toggleLED()));
+    driver.a().onTrue(Commands.runOnce(() -> m_led.toggleLED()));
 
     setupPathChooser();
   }
@@ -200,13 +200,13 @@ public class RobotContainer {
 
   public void startAndBackButton() {
     // Start button reseeds the steer motors to fix dead wheel
-    controller
+    driver
         .start()
         .onTrue(
             Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
 
     // Back button resets the robot pose
-    controller
+    driver
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
   }
@@ -222,7 +222,7 @@ public class RobotContainer {
     // Start button reseeds the steer motors to fix dead wheel
     this.startAndBackButton();
 
-    controllertwo
+    operator
         .start()
         .onTrue(
             Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
@@ -231,45 +231,45 @@ public class RobotContainer {
 
     // Auto aim
 
-    // controller.b().onTrue(new ChangePipeline(limeLightSub));
+    // driver.b().onTrue(new ChangePipeline(limeLightSub));
     // rotate
-    controller.leftBumper().onTrue(rotate);
+    driver.leftBumper().onTrue(rotate);
     // rotate
 
-    controller.rightBumper().onTrue(allLime); //
+    driver.rightBumper().onTrue(allLime); //
 
-    controllertwo
+    operator
         .back()
         .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
 
-    controller
+    driver
         // Place mid
         .x // button
         ()
         .onTrue(sideways); // add a button
     // place low
 
-    // controller.a().toggleOnTrue(fieldHeadingDriveCommand);
+    // driver.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    controller.x().onTrue(new ChangePipeline(limeLightSub));
-    // controller.b().onTrue(rotate);
-    // controller.x().onTrue(new ChangePipeline(limeLightSub));
-    // controller.b().onTrue(rotate);
-    // controller.y().onTrue(autoAimLime1);
+    driver.x().onTrue(new ChangePipeline(limeLightSub));
+    // driver.b().onTrue(rotate);
+    // driver.x().onTrue(new ChangePipeline(limeLightSub));
+    // driver.b().onTrue(rotate);
+    // driver.y().onTrue(autoAimLime1);
 
-    controllertwo
+    operator
         .x // button
         ()
         .onTrue(new ChangePipeline(limeLightSub)); // add a button
     // place low
-    controllertwo.a().toggleOnTrue(fieldHeadingDriveCommand);
+    operator.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    controller
+    driver
         .x()
         .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
 
-    controllertwo.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
-    controller
+    operator.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
+    driver
         .b()
         .onTrue(
             new PlaceLow(
@@ -281,7 +281,7 @@ public class RobotContainer {
                 clawEncoder,
                 clawPivot,
                 220));
-    controller
+    driver
         .y()
         .onTrue(
             new PlaceMid(
@@ -292,7 +292,7 @@ public class RobotContainer {
                 clawEncoder,
                 clawPivot,
                 220));
-    controller
+    driver
         .rightBumper()
         .onTrue(
             new PlaceHigh(
@@ -310,7 +310,7 @@ public class RobotContainer {
     // .onTrue(Commands.runOnce(() -> poseEstimator.initializeGyro(0),
     // drivetrainSubsystem));
 
-    // controller
+    // driver
     // .y()
     // .whileTrue(
     // new WPIAStar(
@@ -321,7 +321,7 @@ public class RobotContainer {
     // obstacles,
     // AStarMap));
 
-    // controller.x().whileTrue(new DriveWithPathPlanner(drivetrainSubsystem,
+    // driver.x().whileTrue(new DriveWithPathPlanner(drivetrainSubsystem,
     // poseEstimator, new PathConstraints(2, 2),
     // new PathPoint(new Translation2d(2.33, 2.03),
     // drivetrainSubsystem.getGyroscopeRotation(), Rotation2d.fromDegrees(270)),
@@ -331,12 +331,12 @@ public class RobotContainer {
     // drivetrainSubsystem.getGyroscopeRotation(), Rotation2d.fromDegrees(270)),
     // new PathPoint(new Translation2d(Units.inchesToMeters(200), 2.03),
     // drivetrainSubsystem.getGyroscopeRotation(), Rotation2d.fromDegrees(270))));
-    // controller.x().
+    // driver.x().
     // whileTrue(new PPAStar(drivetrainSubsystem, poseEstimator,
     // new PathConstraints(2, 2), finalNode, obstacles, AStarMap));
 
-    // controller.y().onTrue(straightWheel1);
-    // controllertwo
+    // driver.y().onTrue(straightWheel1);
+    // operator
     // // Place high //5 , 2.5, 5
     // .y()
     // .onTrue(
@@ -358,7 +358,7 @@ public class RobotContainer {
     // new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
     // // CUBE
-    // controllertwo
+    // operator
     // .rightBumper()
     // .onTrue(
     // Commands.either(
@@ -373,12 +373,12 @@ public class RobotContainer {
     // new ClawOpenClose(0, 5, clawOpenClose).withTimeout(2)),
     // clawEncoder::posDown));
 
-    controllertwo
+    operator
         .rightBumper()
         .onTrue(new GrabPiece(mainArm, shaftEncoder, clawPivot, clawEncoder, clawOpenClose, mode));
 
     // CONE
-    controllertwo
+    operator
         // Place high //5 , 2.5, 5
         .y()
         .onTrue(
@@ -403,7 +403,7 @@ public class RobotContainer {
                 // Commands.waitSeconds(.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
     // CUBE
-    // controllertwo
+    // operator
     // .rightBumper()
     // .onTrue(
     // Commands.either(
@@ -419,7 +419,7 @@ public class RobotContainer {
     // clawEncoder::posDown));
 
     // CONE
-    controllertwo
+    operator
         .leftTrigger()
         .onTrue(
             Commands.either(
@@ -434,15 +434,15 @@ public class RobotContainer {
 
   private void configureLimelightBindings() {
     this.startAndBackButton();
-    controller.a().onTrue(Commands.runOnce(() -> m_led.toggleLED()));
-    controller.leftBumper().onTrue(rotate);
-    controller.rightBumper().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 80)); //
+    driver.a().onTrue(Commands.runOnce(() -> m_led.toggleLED()));
+    driver.leftBumper().onTrue(rotate);
+    driver.rightBumper().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 80)); //
 
-    controller.a().onTrue(new ChangePipeline(limeLightSub));
-    controller
+    driver.a().onTrue(new ChangePipeline(limeLightSub));
+    driver
         .x()
         .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
-    controller
+    driver
         .y()
         .onTrue(
             Commands.either(
@@ -463,7 +463,7 @@ public class RobotContainer {
                     clawPivot,
                     215),
                 limeLightSub::checkPipe));
-    controller
+    driver
         .b()
         .onTrue(
             Commands.either(
@@ -490,18 +490,18 @@ public class RobotContainer {
 
   private void configureAutoBalanceBindings() {
     this.startAndBackButton();
-    controller.x().onTrue(sideways);
-    controller.y().onTrue(sideways);
-    controller.a().onTrue(sideways);
-    controller.b().onTrue(sideways);
+    driver.x().onTrue(sideways);
+    driver.y().onTrue(sideways);
+    driver.a().onTrue(sideways);
+    driver.b().onTrue(sideways);
   }
 
   private void configureArmBindings() {
     this.startAndBackButton();
-    controller.x().onTrue(sideways);
-    controller.y().onTrue(sideways);
-    controller.a().onTrue(sideways);
-    controller.b().onTrue(sideways);
+    driver.x().onTrue(sideways);
+    driver.y().onTrue(sideways);
+    driver.a().onTrue(sideways);
+    driver.b().onTrue(sideways);
   }
 
   private void setupPathChooser() {
@@ -580,7 +580,7 @@ public class RobotContainer {
 
     // all need binding
     // Cone
-    controller
+    driver
         .a()
         .onTrue(
             Commands.sequence(
@@ -603,7 +603,7 @@ public class RobotContainer {
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
-    controller
+    driver
         .a()
         .onTrue(
             Commands.sequence(
@@ -626,9 +626,9 @@ public class RobotContainer {
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
-    controller.x().onTrue(new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub));
+    driver.x().onTrue(new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub));
     // Cube Toss
-    controller
+    driver
         .y()
         .onTrue(
             Commands.sequence(
@@ -651,27 +651,27 @@ public class RobotContainer {
                 // Commands.waitSeconds(.3),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
-    controller.leftBumper().onTrue(fieldHeadingDriveCommand);
-    controller.rightBumper().onTrue(rotate);
-    // controller.start().onTrue(fieldHeadingDriveCommand);
-    // controller.back().onTrue(fieldHeadingDriveCommand);
+    driver.leftBumper().onTrue(fieldHeadingDriveCommand);
+    driver.rightBumper().onTrue(rotate);
+    // driver.start().onTrue(fieldHeadingDriveCommand);
+    // driver.back().onTrue(fieldHeadingDriveCommand);
 
-    controllertwo.x().onTrue(new ChangePipeline(limeLightSub));
+    operator.x().onTrue(new ChangePipeline(limeLightSub));
     // needs binding
-    controllertwo.y().onTrue(fieldHeadingDriveCommand);
-    controllertwo.leftBumper().onTrue(rotate);
-    controllertwo.rightBumper().onTrue(new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
-    // controllertwo.rightBumper().onTrue(allLime);
-    controllertwo
+    operator.y().onTrue(fieldHeadingDriveCommand);
+    operator.leftBumper().onTrue(rotate);
+    operator.rightBumper().onTrue(new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
+    // operator.rightBumper().onTrue(allLime);
+    operator
         .start()
         .onTrue(
             Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
-    controllertwo
+    operator
         .back()
         .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
 
     // INTAKE PICK-UP CONE
-    controller
+    driver
         .b()
         .onTrue(
             Commands.either(
@@ -684,7 +684,7 @@ public class RobotContainer {
                 clawEncoder::posDown));
 
     // INTAKE UP & DOWN
-    controllertwo
+    operator
         .a()
         .onTrue(
             Commands.either(
@@ -692,7 +692,7 @@ public class RobotContainer {
                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
                 clawEncoder::posDown2));
 
-    // controllertwo
+    // operator
     //     .rightBumper()
     //     .onTrue(
     //         Commands.sequence(
