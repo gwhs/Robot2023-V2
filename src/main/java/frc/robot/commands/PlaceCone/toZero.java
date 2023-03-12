@@ -107,7 +107,7 @@ public class toZero extends CommandBase {
     // System.out.printf(
     //     "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // setpoint and atgoal don't work, just brute forced.
-    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < 3) {
+    if (Math.abs((180 - poseEstimatorSubsystem.getAngle()) % 360) < 3) {
       angleDone = true;
     } else {
       angleDone = false;
@@ -118,7 +118,7 @@ public class toZero extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     System.out.println("Rotated done");
-    drivetrainSubsystem.drive(new ChassisSpeeds(.001, 0, 0));
+    drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, 0));
   }
 
   // Returns true when the command should end.
