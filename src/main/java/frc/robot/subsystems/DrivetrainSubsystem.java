@@ -28,7 +28,6 @@ import frc.robot.swerve.SwerveSpeedController;
 import frc.robot.swerve.SwerveSteerController;
 import java.util.Arrays;
 import java.util.stream.IntStream;
-
 import org.littletonrobotics.junction.Logger;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -456,8 +455,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void periodic() {
     // Set the swerve module states
     if (desiredChassisSpeeds != null) {
-      var desiredStates =
-  DrivetrainConstants.KINEMATICS.toSwerveModuleStates(desiredChassisSpeeds);
+      var desiredStates = DrivetrainConstants.KINEMATICS.toSwerveModuleStates(desiredChassisSpeeds);
       if (desiredChassisSpeeds.vxMetersPerSecond == 0.0
           && desiredChassisSpeeds.vyMetersPerSecond == 0.0
           && desiredChassisSpeeds.omegaRadiansPerSecond == 0.0) {

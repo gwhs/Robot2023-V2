@@ -6,7 +6,6 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
-import frc.robot.commands.PlaceCone.rotatesideways;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -37,6 +36,7 @@ import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
+import frc.robot.commands.PlaceCone.rotatesideways;
 import frc.robot.commands.PlaceCone.toZero;
 import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
@@ -205,9 +205,7 @@ public class RobotContainer {
             Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
 
     // Back button resets the robot pose
-    driver
-        .back()
-        .onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
+    driver.back().onTrue(Commands.runOnce(poseEstimator::resetFieldPosition, drivetrainSubsystem));
   }
 
   /**
@@ -263,9 +261,7 @@ public class RobotContainer {
     // place low
     operator.a().toggleOnTrue(fieldHeadingDriveCommand);
 
-    driver
-        .x()
-        .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
+    driver.x().onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
 
     operator.leftStick().toggleOnTrue(fieldHeadingDriveCommand);
     driver
@@ -438,9 +434,7 @@ public class RobotContainer {
     driver.rightBumper().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 80)); //
 
     driver.a().onTrue(new ChangePipeline(limeLightSub));
-    driver
-        .x()
-        .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
+    driver.x().onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
     driver
         .y()
         .onTrue(
