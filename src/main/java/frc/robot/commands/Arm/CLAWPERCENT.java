@@ -2,29 +2,39 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.GetCone;
+package frc.robot.commands.Arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ArmSubsystems.Claw;
 
-public class GetCone extends CommandBase {
-  /** Creates a new GetCone. */
-  public GetCone() {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class CLAWPERCENT extends CommandBase {
+  private Claw claw;
+
+  private double angle;
+  private int amps;
+
+  public CLAWPERCENT(double desiredAngle, int desiredAmps, Claw claw) {
+    this.claw = claw;
+    this.angle = desiredAngle;
+    this.amps = desiredAmps;
+    addRequirements(claw);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    claw.setPercent(0.5);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {}
 
-  // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    claw.brake();
+  }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

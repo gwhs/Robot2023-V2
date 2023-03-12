@@ -4,38 +4,29 @@
 
 package frc.robot.subsystems.ArmSubsystems;
 
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.Arm;
-import java.util.Map;
+import org.littletonrobotics.junction.Logger;
 
 public class BoreEncoder extends SubsystemBase {
-  private final Encoder m_encoder =
-      new Encoder(
-          Arm.PWM_CHANNEL_ENCODER_1,
-          Arm.PWM_CHANNEL_ENCODER_2,
-          false,
-          CounterBase.EncodingType.k4X);
+  private final Encoder m_encoder;
 
-  private ShuffleboardTab tab = Shuffleboard.getTab("Encoder");
-  private GenericEntry encoderPosition = tab.add("Encoder Position", 0).getEntry();
-  private GenericEntry encoderRate =
-      tab.add("Encoder Rate", 0)
-          .withWidget(BuiltInWidgets.kDial)
-          .withProperties(Map.of("min", -500, "max", 500))
-          .getEntry();
+  // private ShuffleboardTab tab = Shuffleboard.getTab("Encoder");
+  // private GenericEntry encoderPosition = tab.add("Encoder Position", 0).getEntry();
+  // private GenericEntry encoderRate =
+  //     tab.add("Encoder Rate", 0)
+  //         .withWidget(BuiltInWidgets.kDial)
+  //         .withProperties(Map.of("min", -500, "max", 500))
+  //         .getEntry();
+
   /** Creates a new BoreEncoder. */
-  public BoreEncoder() {
+  public BoreEncoder(int channel1, int channel2) {
+    m_encoder = new Encoder(channel1, channel2, false, CounterBase.EncodingType.k4X);
 
+    m_encoder.reset();
     m_encoder.setSamplesToAverage(5);
     m_encoder.setDistancePerPulse(1. / 256.);
-    // m_encoder.setDistancePerPulse(1.0 / 360.0 * 2.0 * Math.PI * 1.5);
     m_encoder.setMinRate(1.0);
   }
 
@@ -44,7 +35,13 @@ public class BoreEncoder extends SubsystemBase {
   }
 
   public double getRaw() {
+
     return m_encoder.getRaw();
+  }
+
+  public boolean posDown() {
+    double rawAngle = (-m_encoder.getRaw() / 8192. * 360.);
+    return Math.abs(rawAngle) < 57;
   }
 
   public void reset() {
@@ -59,10 +56,11 @@ public class BoreEncoder extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     double ticks = m_encoder.get();
+    Logger.getInstance().recordOutput("Arm/Angle", -m_encoder.getRaw() / 8192. * 360.);
     // SmartDashboard.putNumber("Encoder ticks", ticks);
     // SmartDashboard.putNumber("Encoder Rate", m_encoder.getRate());
-    SmartDashboard.putNumber("Encoder Distance", m_encoder.getDistance());
-    encoderPosition.setDouble(ticks);
-    encoderRate.setDouble(m_encoder.getRate());
+    // SmartDashboard.putNumber("Encoder Distance", m_encoder.getDistance());
+    // encoderPosition.setDouble(ticks);
+    // encoderRate.setDouble(m_encoder.getRate());
   }
 }

@@ -20,12 +20,15 @@ public class MagicMotionPos extends CommandBase {
   private double angle;
   private double velocity;
   private double acceleration;
+  private double tolerance;
 
-  public MagicMotionPos(MagicMotion moto, double angle, double velocity, double acceleration) {
+  public MagicMotionPos(
+      MagicMotion moto, double angle, double velocity, double acceleration, double tolerance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.motor = moto;
     this.angle = angle;
     this.velocity = velocity;
+    this.tolerance = tolerance;
     this.acceleration = acceleration;
     addRequirements(moto);
   }
@@ -34,12 +37,13 @@ public class MagicMotionPos extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("mMPos");
-    motor.setAng(angle, velocity, acceleration);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    motor.setAng(angle, velocity, acceleration);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -49,6 +53,6 @@ public class MagicMotionPos extends CommandBase {
   @Override
   public boolean isFinished() {
     motorAng = motor.getAngDegrees();
-    return Math.abs(motorAng - angle) < .5;
+    return Math.abs(motorAng - angle) < tolerance;
   }
 }

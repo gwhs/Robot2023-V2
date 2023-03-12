@@ -17,38 +17,47 @@ public class MagicMotionAbsoluteZero extends CommandBase {
   private double motorAngle;
   private double difference;
   /** Creates a new MagicMotionAbsoluteZero. */
-  public MagicMotionAbsoluteZero(MagicMotion motor, BoreEncoder encoder) {
+  public MagicMotionAbsoluteZero(
+      MagicMotion motor, BoreEncoder encoder, double velocity, double acceleration) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.motor = motor;
     this.encoder = encoder;
+    this.acceleration = acceleration;
+    this.velocity = velocity;
     addRequirements(motor);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    motorAngle = motor.getAngDegrees();
-    double difference = rawAngle - motorAngle;
-    rawAngle = encoder.getRaw() / 8192. * 360.;
-    motorAngle = motor.getAngDegrees();
-    motor.setAng(difference, velocity, acceleration);
+    System.out.println("RUNNING MMAZ");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    motorAngle = motor.getAngDegrees();
+    rawAngle = encoder.getRaw() / 8192. * 360.;
+    double difference = rawAngle - motorAngle;
+    System.out.println("Difference: " + difference);
+    System.out.println("Raw:" + rawAngle);
+    System.out.println("Motor Angle:" + motorAngle);
+    System.out.println(encoder.getRaw());
+    motor.setAng(-difference, velocity, acceleration);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    rawAngle = encoder.getRaw() / 8192. * 360.;
+    System.out.println("Raw:" + rawAngle);
+    encoder.reset();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // rawAngle = encoder.getRaw() / 8192.0 * 360;
-    //  System.out.println("RAW ANGLE: " + rawAngle);
-    //  return Math.abs(rawAngle) < .5;
-    // return encoder.getStopped();
-    return true;
+    rawAngle = encoder.getRaw() / 8192.0 * 360;
+    return Math.abs(rawAngle) < .5;
   }
 }
