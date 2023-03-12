@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
+import frc.robot.commands.PlaceCone.rotatesideways;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -503,25 +504,21 @@ public class RobotContainer {
     final ShuffleboardTab tab = Shuffleboard.getTab("Drive");
     m_chooser = new SendableChooser<>();
     tab.add(m_chooser);
-    m_chooser.setDefaultOption("Straight No Rotation", "StraightNoRotation");
-    m_chooser.addOption("Straight With Rotation", "StraightWithRotation");
     m_chooser.addOption("D-F Place and engage", "D-F1E");
-    m_chooser.addOption("A 2 piece and engage", "A2E");
-    m_chooser.addOption("D place and hold", "D1+1");
-    m_chooser.addOption("F place and hold", "F1+1");
-    m_chooser.addOption("G 2 piece and engage", "G2E");
-    m_chooser.addOption("G 2 piece and engage No Lime", "G2ENoLime");
-    m_chooser.addOption("I 2 piece and hold", "I2+1");
-    m_chooser.addOption("I 2 piece engage and hold", "I2+1E");
-    m_chooser.addOption("FUN", "FUN"); // why?
+    // m_chooser.addOption("A 2 piece and engage", "A2E");
+    // m_chooser.addOption("D place and hold", "D1+1");
+    // m_chooser.addOption("F place and hold", "F1+1");
+    // m_chooser.addOption("G 2 piece and engage", "G2E");
+    // m_chooser.addOption("G 2 piece and engage No Lime", "G2ENoLime");
+    // m_chooser.addOption("I 2 piece and hold", "I2+1");
+    // m_chooser.addOption("I 2 piece engage and hold", "I2+1E");
     m_chooser.addOption("I 1+ and engage", "HajelPath");
-    m_chooser.addOption("I 2+ and engage", "HajelPathV2");
-    m_chooser.addOption("I 2+ and engage no Lime", "HajelPathV2NoLime");
+    // m_chooser.addOption("I 2+ and engage", "HajelPathV2");
+    // m_chooser.addOption("I 2+ and engage no Lime", "HajelPathV2NoLime");
     m_chooser.addOption("C place and engage", "C1+E");
     m_chooser.addOption("G place and engage", "G1+E");
-    m_chooser.addOption("I 2 piece", "I2");
-    m_chooser.addOption("I 2 piece no Lime", "I2NoLime");
-    m_chooser.addOption("Ben Path", "BenPath");
+    // m_chooser.addOption("I 2 piece", "I2");
+    // m_chooser.addOption("I 2 piece no Lime", "I2NoLime");
   }
 
   private void toggleLED() {
@@ -593,7 +590,7 @@ public class RobotContainer {
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
     controller
-        .b()
+        .a()
         .onTrue(
             Commands.sequence(
                 Commands.print("START"),
@@ -615,25 +612,7 @@ public class RobotContainer {
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
-    controller
-        .x()
-        .onTrue(
-            Commands.sequence(
-                Commands.runOnce(mainArm::resetPosition, mainArm),
-                new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
-                // this one is for cones
-                new MagicMotionPosShuffleboard(mainArm, 10, 5, 5, shaftEncoder),
-                // for cubes
-                // new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 5, shaftEncoder),
-                Commands.waitSeconds(.25),
-                // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
-                // Commands.waitSeconds(),
-                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-
-                // Commands.waitSeconds(.3),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
-
+    controller.x().onTrue(new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub));
     // Cube Toss
     controller
         .y()
