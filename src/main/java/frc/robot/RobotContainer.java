@@ -687,7 +687,6 @@ public class RobotContainer {
     //             Commands.runOnce(shaftEncoder::reset, shaftEncoder),
     //             Commands.runOnce(clawEncoder::reset, clawEncoder)));
   }
-
   // zoey
   /*
    * a = cone
