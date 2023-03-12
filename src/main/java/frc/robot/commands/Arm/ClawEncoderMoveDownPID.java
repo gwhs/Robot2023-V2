@@ -27,8 +27,7 @@ public class ClawEncoderMoveDownPID extends ProfiledPIDCommand {
         () -> angle,
         (value, state) -> {
           initClaw.setPercent(value);
-          System.out.println(
-              "piece: " + piece + " RawAngle: " + (-clawBoreEncoder.getAngle()));
+          System.out.println("piece: " + piece + " RawAngle: " + (-clawBoreEncoder.getAngle()));
         },
         initClaw,
         clawBoreEncoder);

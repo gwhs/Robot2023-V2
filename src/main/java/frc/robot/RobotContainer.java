@@ -6,7 +6,6 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
-import frc.robot.commands.PlaceCone.rotatesideways;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -39,6 +38,7 @@ import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.RotatePID;
 import frc.robot.commands.PlaceCone.Sideways;
+import frc.robot.commands.PlaceCone.rotatesideways;
 import frc.robot.commands.PlaceCone.toZero;
 import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
@@ -89,7 +89,8 @@ public class RobotContainer {
       new PoseEstimatorSubsystem(drivetrainSubsystem);
 
   private final Rotate rotate = new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub);
-  private final RotatePID rotatePid = new RotatePID(drivetrainSubsystem, poseEstimator, limeLightSub);
+  private final RotatePID rotatePid =
+      new RotatePID(drivetrainSubsystem, poseEstimator, limeLightSub);
   private final Sideways sideways = new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   private final AutoBalance autoBalance = new AutoBalance(drivetrainSubsystem);
