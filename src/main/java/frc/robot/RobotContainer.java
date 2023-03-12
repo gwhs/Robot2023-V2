@@ -603,7 +603,7 @@ public class RobotContainer {
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
     driver
-        .a()
+        .b()
         .onTrue(
             Commands.sequence(
                 Commands.print("START"),
