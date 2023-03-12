@@ -36,7 +36,7 @@ public class ClawEncoderMoveUp extends CommandBase {
     this.encoder = weewoo;
     this.desiredAngle = angle;
     this.pieceDefault = piece;
-    addRequirements(initClaw);
+    addRequirements(initClaw, weewoo);
 
     tab = Shuffleboard.getTab("Arm");
 

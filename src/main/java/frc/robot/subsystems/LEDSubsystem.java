@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 
@@ -48,11 +47,6 @@ public class LEDSubsystem extends SubsystemBase {
   private PoseEstimatorSubsystem poseEstimator;
   private BoreEncoder shaftEncoder;
   private MagicMotion mainArm;
-  private int status;
-
-  TestAutoCommands m_status =
-      new TestAutoCommands(
-          drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, "HajelPath", status);
 
   public LEDSubsystem() {
     // PWM port 9
@@ -74,16 +68,6 @@ public class LEDSubsystem extends SubsystemBase {
 
   public void setLedMode(LEDMode ledMode) {
     this.ledMode = ledMode;
-
-    if (status == 1) {
-      ledMode = LEDMode.GREEN;
-    } else if (status == 2) {
-      ledMode = LEDMode.ORANGE;
-    } else if (status == 3) {
-      ledMode = LEDMode.RED;
-    } else {
-      ledMode = LEDMode.PINK;
-    }
   }
 
   public LEDMode getLedMode() {
@@ -330,24 +314,6 @@ public class LEDSubsystem extends SubsystemBase {
     } else {
       setLedMode(LEDMode.YELLOW);
     }
-
-    // if (m_led.getLedMode() == LEDMode.YELLOW) {
-    //   m_led.setLedMode(LEDMode.PURPLE);
-    // } else if (m_led.getLedMode() == LEDMode.PURPLE) {
-    //   m_led.setLedMode(LEDMode.EMERGENCY);
-    // } else if (m_led.getLedMode() == LEDMode.EMERGENCY) {
-    //   m_led.setLedMode(LEDMode.GREEN);
-    // } else if (m_led.getLedMode() == LEDMode.GREEN) {
-    //   m_led.setLedMode(LEDMode.ORANGE);
-    // } else if (m_led.getLedMode() == LEDMode.ORANGE) {
-    //   m_led.setLedMode(LEDMode.TEAMCOLOR);
-    // } else if (m_led.getLedMode() == LEDMode.TEAMCOLOR) {
-    //   m_led.setLedMode(LEDMode.RAINBOW);
-    // } else if (m_led.getLedMode() == LEDMode.RAINBOW) {
-    //   m_led.setLedMode(LEDMode.PINK);
-    // } else {
-    //   m_led.setLedMode(LEDMode.YELLOW);
-    // }
   }
 
   public void setPurple() {
@@ -357,6 +323,4 @@ public class LEDSubsystem extends SubsystemBase {
   public void setYellow() {
     this.setLedMode(LEDMode.YELLOW);
   }
-  // Hi! I caught your attention!
-  // (●'◡'●)❤💚🧡💛💙💜🤎🖤🤍❣💕💞💓💗💖💘💝💟🗿🗿🗿😘💋👄
 }

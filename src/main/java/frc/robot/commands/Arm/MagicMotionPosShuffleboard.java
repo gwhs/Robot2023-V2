@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class MagicMotionPosShuffleboard extends CommandBase {
   private double velocity;
   private final GenericEntry velocityEntry;
   private double velocityDefault;
-
+  private BoreEncoder boreEncoder;
   private double acceleration;
   private final GenericEntry accelerationEntry;
   private double accelerationDefault;
@@ -57,14 +58,15 @@ public class MagicMotionPosShuffleboard extends CommandBase {
       MagicMotion motor,
       double desiredAngleDefault,
       double velocityDefault,
-      double accelerationDefault) {
+      double accelerationDefault,
+      BoreEncoder encoder) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     this.motor = motor;
     this.desiredAngleDefault = desiredAngleDefault;
     this.velocityDefault = velocityDefault;
     this.accelerationDefault = accelerationDefault;
-
+    this.boreEncoder = encoder;
     tab = Shuffleboard.getTab("Arm");
 
     ShuffleboardLayout magicMotionConstants =
@@ -105,6 +107,7 @@ public class MagicMotionPosShuffleboard extends CommandBase {
     angle = desiredAngleEntry.getDouble(desiredAngleDefault);
     velocity = velocityEntry.getDouble(velocityDefault);
     acceleration = accelerationEntry.getDouble(accelerationDefault);
+    motor.enableBrakeMode(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
