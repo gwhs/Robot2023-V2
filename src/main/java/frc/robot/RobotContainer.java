@@ -578,7 +578,11 @@ public class RobotContainer {
                 Commands.waitSeconds(.25),
                 Commands.runOnce(mainArm::resetPosition, mainArm),
                 new MagicMotionPos(mainArm, 40, 1, 1, 5),
-                new MagicMotionPosShuffleboard(mainArm, 190, 2.75, 5, shaftEncoder),
+                // this one is for cones
+                // new MagicMotionPosShuffleboard(mainArm, 190, 2.75, 5, shaftEncoder),
+
+                // for cubes
+                // new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 5, shaftEncoder),
                 Commands.waitSeconds(.25),
                 // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
                 // Commands.waitSeconds(),
@@ -621,14 +625,17 @@ public class RobotContainer {
                 new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
                 // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
                 Commands.waitSeconds(.25),
-                new MagicMotionPos(mainArm, 40, 1, 1, 5),
+                // new MagicMotionPos(mainArm, 40, 1, 1, 5),
+                // for cube throw 100deg, 10vel, 10 accel
+                //FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
                 new MagicMotionPosShuffleboard(mainArm, 100, 2.75, 5, shaftEncoder),
                 Commands.waitSeconds(.25),
                 // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
                 // Commands.waitSeconds(),
                 new MagicMotionPos(mainArm, 20, 3, 1.5, .5),
                 Commands.waitSeconds(.25),
-                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
                 // Commands.waitSeconds(.3),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
