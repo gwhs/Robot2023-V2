@@ -36,6 +36,7 @@ import frc.robot.commands.PlaceCone.PlaceLow;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
+import frc.robot.commands.PlaceCone.StraightWheel;
 import frc.robot.commands.PlaceCone.rotatesideways;
 import frc.robot.commands.autonomous.TestAutoCommands;
 import frc.robot.pathfind.MapCreator;
@@ -160,6 +161,8 @@ public class RobotContainer {
     configureDashboard();
     mainArm.robotInit();
     officialBindings();
+
+
     setupPathChooser();
   }
 
