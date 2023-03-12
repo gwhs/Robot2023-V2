@@ -5,6 +5,7 @@
 package frc.robot.subsystems.ArmSubsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -103,5 +104,17 @@ public class MagicMotion extends SubsystemBase {
 
   public double getAngDegrees() {
     return getAng() / (Constants.Arm.FALCON_TICKS * Constants.Arm.GEAR_RATIO) * 360;
+  }
+
+  public void enableBrakeMode(boolean brake) {
+    if (brake) {
+      testTalon.setNeutralMode(NeutralMode.Brake);
+    } else {
+      testTalon.setNeutralMode(NeutralMode.Coast);
+    }
+  }
+
+  public void neutralOutput() {
+    testTalon.neutralOutput();
   }
 }

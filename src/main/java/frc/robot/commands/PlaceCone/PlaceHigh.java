@@ -33,7 +33,6 @@ public class PlaceHigh extends SequentialCommandGroup {
       Claw clawPivot,
       int degrees) {
     // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.LOWER_DISTANCE_SHOOT),
         new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
@@ -42,7 +41,7 @@ public class PlaceHigh extends SequentialCommandGroup {
         new StraightWheel(drivetrainSubsystem),
         new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.UPPER_DISTANCE_SHOOT),
         new Sideways(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
-        new ClawEncoderMoveDown(-30, clawPivot, clawEncoder, "Cube").withTimeout(.1),
+        new ClawEncoderMoveDown(-80, clawPivot, clawEncoder, "Cube").withTimeout(.1),
         Commands.waitSeconds(.1),
         new MagicMotionPos(mainArm, degrees, 1, 1, .5),
         Commands.waitSeconds(.1),

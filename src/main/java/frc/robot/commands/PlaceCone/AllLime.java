@@ -19,7 +19,8 @@ public class AllLime extends SequentialCommandGroup {
   public AllLime(
       DrivetrainSubsystem drivetrainSubsystem,
       PoseEstimatorSubsystem poseEstimatorSubsystem,
-      LimeLightSub limeLightSub) {
+      LimeLightSub limeLightSub,
+      double degrees) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
