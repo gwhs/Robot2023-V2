@@ -603,7 +603,6 @@ public class RobotContainer {
                 Commands.print("START"),
                 new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
                 // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
-                Commands.waitSeconds(.25),
                 Commands.runOnce(mainArm::resetPosition, mainArm),
 
                 // this one is for cones
@@ -664,17 +663,17 @@ public class RobotContainer {
         .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
 
     // INTAKE PICK-UP CONE
-    driver
-        .b()
-        .onTrue(
-            Commands.either(
-                new ClawEncoderMoveDown(-155, clawPivot, clawEncoder, "CONE").withTimeout(3),
-                Commands.sequence(
-                    Commands.parallel(
-                        new ClawOpenClose(100, 30, clawOpenClose), Commands.waitSeconds(1)),
-                    new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
-                    new ClawOpenClose(20, 30, clawOpenClose)),
-                clawEncoder::posDown));
+    // driver
+    //     .b()
+    //     .onTrue(
+    //         Commands.either(
+    //             new ClawEncoderMoveDown(-155, clawPivot, clawEncoder, "CONE").withTimeout(3),
+    //             Commands.sequence(
+    //                 Commands.parallel(
+    //                     new ClawOpenClose(100, 30, clawOpenClose), Commands.waitSeconds(1)),
+    //                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
+    //                 new ClawOpenClose(20, 30, clawOpenClose)),
+    //             clawEncoder::posDown));
 
     // INTAKE UP & DOWN
     operator
