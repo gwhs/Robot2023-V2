@@ -50,6 +50,11 @@ public class BoreEncoder extends SubsystemBase {
     return Math.abs(rawAngle) < 57;
   }
 
+  public boolean posDown2() {
+    double rawAngle = (-m_encoder.getRaw() / 8192. * 360.);
+    return Math.abs(rawAngle) < 20;
+  }
+
   public void reset() {
     m_encoder.reset();
   }

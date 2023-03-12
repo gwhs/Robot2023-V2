@@ -18,21 +18,17 @@ import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.List;
 
-public class Rotate extends CommandBase {
+public class toZero extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private PoseEstimatorSubsystem poseEstimatorSubsystem;
-  private LimeLightSub limeLight;
   private double[] values = {0, 0, 0};
   private boolean angleDone = false;
-  private boolean sideDone = false;
   private double p = .002;
-  private int times = 0;
   private int noTarg = 0;
-  private double angleP = .003;
+  private double angleP = .03;
   private double anglePDefault;
   private GenericEntry anglePEntry;
 
@@ -54,14 +50,11 @@ public class Rotate extends CommandBase {
   private double angleD = 0;
 
   /** Creates a new Rotate. */
-  public Rotate(
-      DrivetrainSubsystem drivetrainSubsystem,
-      PoseEstimatorSubsystem poseEstimatorSubsystem,
-      LimeLightSub limeLightSub) {
+  public toZero(
+      DrivetrainSubsystem drivetrainSubsystem, PoseEstimatorSubsystem poseEstimatorSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.poseEstimatorSubsystem = poseEstimatorSubsystem;
     this.drivetrainSubsystem = drivetrainSubsystem;
-    this.limeLight = limeLightSub;
 
     anglePDefault = .03;
 
@@ -92,7 +85,6 @@ public class Rotate extends CommandBase {
   @Override
   public void initialize() {
     angleDone = false;
-    sideDone = false;
 
     angleP = anglePEntry.getDouble(anglePDefault);
 
@@ -115,25 +107,10 @@ public class Rotate extends CommandBase {
     // System.out.printf(
     //     "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // setpoint and atgoal don't work, just brute forced.
-    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < 2) {
+    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < 3) {
       angleDone = true;
     } else {
       angleDone = false;
-    }
-    if (Math.abs(limeLight.getTx()) < 2) {
-      sideDone = true;
-    } else {
-      sideDone = false;
-    }
-    if (sideDone && angleDone) {
-      times++;
-    } else {
-      times = 0;
-    }
-    if (limeLight.hasTarget()) {
-      noTarg = 0;
-    } else {
-      noTarg++;
     }
   }
 
@@ -147,7 +124,7 @@ public class Rotate extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (angleDone && sideDone && times > 5) || (noTarg > 10);
+    return (angleDone) || (noTarg > 10);
   }
 
   public double[] chassisValuesLower() {
@@ -161,7 +138,7 @@ public class Rotate extends CommandBase {
     double[] x = new double[3];
 
     x[0] = 0.00001;
-    x[1] = Math.abs(limeLight.getTx()) > 1 ? (-p * limeLight.getTx()) : 0;
+    x[1] = .00001;
     x[2] =
         angleDone
             ? 0

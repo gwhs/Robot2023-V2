@@ -22,6 +22,8 @@ public class rotatesideways extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub),
-        new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub));
+        new StraightWheel(drivetrainSubsystem),
+        new Sideways(drivetrainSubsystem, poseEstimator, limeLightSub),
+        new StraightWheel(drivetrainSubsystem));
   }
 }
