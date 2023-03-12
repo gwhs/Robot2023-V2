@@ -503,7 +503,7 @@ public class RobotContainer {
     // return new TestAutonomous(drivetrainSubsystem, poseEstimator);
     TestAutoCommands vendingMachine =
         new TestAutoCommands(
-            drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, m_chooser.getSelected());
+            drivetrainSubsystem, poseEstimator, mainArm, shaftEncoder, m_chooser.getSelected(), 0);
 
     return vendingMachine.getAutoCommand();
   }
