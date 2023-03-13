@@ -646,8 +646,8 @@ public class RobotContainer {
     driver.rightBumper().onTrue(rotate.withTimeout(3));
     // driver.start().onTrue(fieldHeadingDriveCommand);
     // driver.back().onTrue(fieldHeadingDriveCommand);
+    operator.x().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 70));
 
-    operator.x().onTrue(new ChangePipeline(limeLightSub));
     // needs binding
     operator.y().onTrue(fieldHeadingDriveCommand);
     operator.b().onTrue(Commands.runOnce(() -> m_led.toggleLED(), m_led));
