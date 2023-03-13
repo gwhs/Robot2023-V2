@@ -1,7 +1,5 @@
 package frc.robot.commands.autonomous;
 
-import javax.naming.PartialResultException;
-
 import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -60,7 +58,7 @@ public final class TestAutoCommands {
         new ParallelCommandGroup(
             new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
             new PPSwerveFollower(
-                driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.5, .5), true)),
+                driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.75, .75), true)),
         new MagicMotionPos(mainArm, 40, 1, 1, .5),
         new MagicMotionPos(mainArm, 190, 2.75, 5, .5),
         new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
@@ -101,6 +99,9 @@ public final class TestAutoCommands {
       return new SequentialCommandGroup(
           new PPSwerveFollower(
               driveSystem, poseEstimatorSystem, "TestCurve", new PathConstraints(1, 1), true));
+    }
+    if (pathName.equals("PlaceOne")) {
+      return starting(null, 0, 0);
     }
     if (pathName.equals("StraightWithRotation")) {
       return new SequentialCommandGroup(

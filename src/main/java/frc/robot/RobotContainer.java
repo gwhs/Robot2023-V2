@@ -502,6 +502,7 @@ public class RobotContainer {
     m_chooser = new SendableChooser<>();
     tab.add(m_chooser);
     m_chooser.addOption("D-F Place and engage", "D-F1E");
+    m_chooser.addOption("Place one from any node", "PlaceOne");
     // m_chooser.addOption("A 2 piece and engage", "A2E");
     // m_chooser.addOption("D place and hold", "D1+1");
     // m_chooser.addOption("F place and hold", "F1+1");
