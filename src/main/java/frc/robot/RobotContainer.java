@@ -28,7 +28,6 @@ import frc.robot.commands.Arm.MagicMotionPosShuffleboard;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
-import frc.robot.commands.PlaceCone.AllLime;
 import frc.robot.commands.PlaceCone.ChangePipeline;
 import frc.robot.commands.PlaceCone.PPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceHigh;
@@ -97,7 +96,6 @@ public class RobotContainer {
   final List<Obstacle> cablePath = FieldConstants.cablePath;
   // final List<Obstacle> obstacles = new ArrayList<Obstacle>();
   // final List<Obstacle> obstacles = FieldConstants.obstacles;
-  private final AllLime allLime = new AllLime(drivetrainSubsystem, poseEstimator, limeLightSub, 0);
 
   // VisGraph AStarMap = new VisGraph();
   // final Node finalNode = new Node(4, 4, Rotation2d.fromDegrees(180));
@@ -159,11 +157,10 @@ public class RobotContainer {
 
     // configureButtonBindings();
     // configureArmBindings();
-    // configureLimelightBindings();
+    configureLimelightBindings();
     // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
-    officialBindings();
 
     setupPathChooser();
   }
@@ -233,8 +230,6 @@ public class RobotContainer {
     // rotate
     driver.leftBumper().onTrue(rotate);
     // rotate
-
-    driver.rightBumper().onTrue(allLime); //
 
     operator
         .back()
@@ -431,32 +426,12 @@ public class RobotContainer {
   private void configureLimelightBindings() {
     this.startAndBackButton();
     driver.a().onTrue(Commands.runOnce(() -> m_led.toggleLED()));
-    driver.leftBumper().onTrue(rotate);
-    driver.rightBumper().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 80)); //
+    driver.leftBumper().onTrue(rotate.withTimeout(1.5));
+    driver.rightBumper().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 60)); //
 
     driver.a().onTrue(new ChangePipeline(limeLightSub));
     driver.x().onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
-    driver
-        .y()
-        .onTrue(
-            Commands.either(
-                new PlaceMid(
-                    drivetrainSubsystem,
-                    limeLightSub,
-                    mainArm,
-                    shaftEncoder,
-                    clawEncoder,
-                    clawPivot,
-                    220),
-                new PlaceMid(
-                    drivetrainSubsystem,
-                    limeLightSub,
-                    mainArm,
-                    shaftEncoder,
-                    clawEncoder,
-                    clawPivot,
-                    215),
-                limeLightSub::checkPipe));
+    driver.y().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 60));
     driver
         .b()
         .onTrue(

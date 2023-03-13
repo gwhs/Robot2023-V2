@@ -40,6 +40,7 @@ public class PPIDAutoAim extends CommandBase {
   private GenericEntry angleDEntry;
   private GenericEntry positionPEntry;
 
+  private int counter = 0;
   private final ShuffleboardTab tab;
 
   // second param on constraints is estimated, should be max accel, not max speed,
@@ -59,13 +60,13 @@ public class PPIDAutoAim extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
   // pid for angle
-  private double angleP = 1;
+  private double angleP = .1;
   private double angleI = 0;
   private double angleD = 0;
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
   private double targetDistance = 0;
-  private double positionP = .007;
+  private double positionP = .009;
 
   /** Creates a new PPIDAutoAim. */
   public PPIDAutoAim(
@@ -75,10 +76,11 @@ public class PPIDAutoAim extends CommandBase {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.targetDistance = targetDistance;
 
-    anglePDefault = 3;
+    anglePDefault = .8;
     angleIDefault = 0;
     angleDDefault = 0;
-    positionPDefault = 0.235;
+    positionPDefault = 0.009;
+    counter = 0;
 
     tab = Shuffleboard.getTab("Drive");
 
@@ -153,7 +155,7 @@ public class PPIDAutoAim extends CommandBase {
       noTargets++;
     }
     // atgoal and setpoint do not work, so we just brute force it.
-    if (Math.abs(limeLight.getTx()) < .2) {
+    if (Math.abs(limeLight.getTx()) < 2) {
       angleDone = true;
     } else {
       // sets it to false if position not there yet
@@ -165,11 +167,10 @@ public class PPIDAutoAim extends CommandBase {
       // sets to false if angle not there yet
       sidewaysDone = false;
     }
-
-    if (noTargets >= 10) {
-      sidewaysDone = true;
-      angleDone = true;
-      System.out.println("target is gone!");
+    if (sidewaysDone && angleDone) {
+      counter++;
+    } else {
+      counter = 0;
     }
   }
 
@@ -184,7 +185,7 @@ public class PPIDAutoAim extends CommandBase {
   @Override
   public boolean isFinished() {
 
-    return angleDone && sidewaysDone;
+    return (angleDone && sidewaysDone && counter > 5) || (noTargets > 10);
   }
 
   public double[] chassisValuesLower() {
