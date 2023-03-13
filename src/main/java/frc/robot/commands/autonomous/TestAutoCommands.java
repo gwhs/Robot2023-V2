@@ -1,5 +1,7 @@
 package frc.robot.commands.autonomous;
 
+import javax.naming.PartialResultException;
+
 import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -61,19 +63,18 @@ public final class TestAutoCommands {
                 driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.5, .5), true)),
         new MagicMotionPos(mainArm, 40, 1, 1, .5),
         new MagicMotionPos(mainArm, 190, 2.75, 5, .5),
+        new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
+        Commands.waitSeconds(.25),
+        new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
         new ParallelCommandGroup(
-            new SequentialCommandGroup(
-                new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
-                Commands.waitSeconds(.5),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-                new PPSwerveFollower(
-                    driveSystem,
-                    poseEstimatorSystem,
-                    path,
-                    new PathConstraints(maxVel, maxAcc),
-                    true))));
+            new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+            new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+            new PPSwerveFollower(
+                driveSystem,
+                poseEstimatorSystem,
+                path,
+                new PathConstraints(maxVel, maxAcc),
+                true)));
   }
 
   public SequentialCommandGroup getAutoCommand() {
