@@ -505,8 +505,11 @@ public class RobotContainer {
     m_chooser.addOption("D or F Place and engage", "D||F1E");
     m_chooser.addOption("E place and engage", "E1E");
     m_chooser.addOption("Place one from any node", "PlaceOne");
-    m_chooser.addOption("A Place and Mobility", "AMobile");
-    m_chooser.addOption("B Place and Mobility", "BMobile");
+    m_chooser.addOption("A or I Place and Mobility", "AIMobile");
+    m_chooser.addOption("B or H Place and Mobility", "BHMobile");
+    m_chooser.addOption("I 1+ and engage", "HajelPath");
+    m_chooser.addOption("C place and engage", "C1+E");
+    m_chooser.addOption("G place and engage", "G1+E");
 
     // m_chooser.addOption("A 2 piece and engage", "A2E");
     // m_chooser.addOption("D place and hold", "D1+1");
@@ -515,11 +518,8 @@ public class RobotContainer {
     // m_chooser.addOption("G 2 piece and engage No Lime", "G2ENoLime");
     // m_chooser.addOption("I 2 piece and hold", "I2+1");
     // m_chooser.addOption("I 2 piece engage and hold", "I2+1E");
-    m_chooser.addOption("I 1+ and engage", "HajelPath");
     // m_chooser.addOption("I 2+ and engage", "HajelPathV2");
     // m_chooser.addOption("I 2+ and engage no Lime", "HajelPathV2NoLime");
-    m_chooser.addOption("C place and engage", "C1+E");
-    m_chooser.addOption("G place and engage", "G1+E");
     // m_chooser.addOption("I 2 piece", "I2");
     // m_chooser.addOption("I 2 piece no Lime", "I2NoLime");
   }

@@ -171,12 +171,13 @@ public final class TestAutoCommands {
                       true))),
           new AutoBalance(driveSystem));
     }
-    if (pathName.equals("AMobile")) {
+    if (pathName.equals("AIMobile")) {
       return starting("A+BMobile", 2, 2, "cone");
     }
-    if (pathName.equals("BMobile")) {
+    if (pathName.equals("BHMobile")) {
       return starting("A+BMobile", 2, 2, "cube");
     }
+    
     if (pathName.equals("HajelPathV2")) {
       return new SequentialCommandGroup(
           starting("I2+1", 3, 2, "cone"),
