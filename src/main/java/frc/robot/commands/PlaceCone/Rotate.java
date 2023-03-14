@@ -167,7 +167,7 @@ public class Rotate extends CommandBase {
     x[2] =
         angleDone
             ? 0
-            : -((poseEstimatorSubsystem.getAngle() % 180)
+            : -((MathUtil.inputModulus(poseEstimatorSubsystem.getAngle(), 0,360))
                     - Math.copySign(180, poseEstimatorSubsystem.getAngle()))
                 * angleP;
     // System.out.println(
