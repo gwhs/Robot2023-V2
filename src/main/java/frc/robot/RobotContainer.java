@@ -227,7 +227,7 @@ public class RobotContainer {
     controller.leftBumper().onTrue(rotate);
     // rotate
 
-    controller.rightBumper().onTrue(allLime); //
+
 
     controllertwo
         .back()
