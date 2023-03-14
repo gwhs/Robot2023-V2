@@ -502,9 +502,12 @@ public class RobotContainer {
     final ShuffleboardTab tab = Shuffleboard.getTab("Drive");
     m_chooser = new SendableChooser<>();
     tab.add(m_chooser);
-    m_chooser.addOption("D-F Place and engage", "D-F1E");
+    m_chooser.addOption("D or F Place and engage", "D||F1E");
+    m_chooser.addOption("E place and engage", "E1E");
     m_chooser.addOption("Place one from any node", "PlaceOne");
-    m_chooser.addOption("A-B Place and Mobility", "A+BMobile");
+    m_chooser.addOption("A Place and Mobility", "AMobile");
+    m_chooser.addOption("B Place and Mobility", "BMobile");
+
     // m_chooser.addOption("A 2 piece and engage", "A2E");
     // m_chooser.addOption("D place and hold", "D1+1");
     // m_chooser.addOption("F place and hold", "F1+1");
@@ -611,7 +614,7 @@ public class RobotContainer {
                 // this one is for cones
                 new MagicMotionPos(mainArm, 100, 10, 10, 1),
                 // for cubes
-                // new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 5, shaftEncoder),
+                // new MagicMotionPos(mainArm, 210, 2.75, 3.5, shaftEncoder),
                 Commands.waitSeconds(.25),
                 // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
                 // Commands.waitSeconds(),

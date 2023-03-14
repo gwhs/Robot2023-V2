@@ -53,26 +53,49 @@ public final class TestAutoCommands {
     this.clawOpenClose = clawOP;
   }
 
-  public SequentialCommandGroup starting(String path, double maxVel, double maxAcc) {
-    return new SequentialCommandGroup(
-        new ParallelCommandGroup(
-            new ClawEncoderMoveDown(-80, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
-            new PPSwerveFollower(
-                driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.75, .75), true)),
-        new MagicMotionPos(mainArm, 40, 1, 1, .5),
-        new MagicMotionPos(mainArm, 190, 2.75, 5, .5),
-        new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
-        Commands.waitSeconds(.25),
-        new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-        new ParallelCommandGroup(
-            new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-            new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-            new PPSwerveFollower(
-                driveSystem,
-                poseEstimatorSystem,
-                path,
-                new PathConstraints(maxVel, maxAcc),
-                true)));
+  public SequentialCommandGroup starting(String path, double maxVel, double maxAcc, String piece) {
+    if (piece.equals("cone")) {
+      return new SequentialCommandGroup(
+          new ParallelCommandGroup(
+              new ClawEncoderMoveDown(-80, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+              new PPSwerveFollower(
+                  driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.75, .75), true)),
+          new MagicMotionPos(mainArm, 40, 1, 1, .5),
+          new MagicMotionPos(mainArm, 190, 2.75, 5, .5),
+          new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
+          Commands.waitSeconds(.25),
+          new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+          new ParallelCommandGroup(
+              new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+              new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+              new PPSwerveFollower(
+                  driveSystem,
+                  poseEstimatorSystem,
+                  path,
+                  new PathConstraints(maxVel, maxAcc),
+                  true)));
+    }
+    if (piece.equals("cube")) {
+      return new SequentialCommandGroup(
+          new ParallelCommandGroup(
+              new ClawEncoderMoveDown(-80, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+              new PPSwerveFollower(
+                  driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.75, .75), true)),
+          new MagicMotionPos(mainArm, 210, 2.75, 3.5, .5),
+          Commands.waitSeconds(.25),
+          new MagicMotionPos(mainArm, 20, 3, 1.5, .5),
+          new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+          new ParallelCommandGroup(
+              new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+              new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+              new PPSwerveFollower(
+                  driveSystem,
+                  poseEstimatorSystem,
+                  path,
+                  new PathConstraints(maxVel, maxAcc),
+                  true)));
+    }
+    return null;
   }
 
   public SequentialCommandGroup getAutoCommand() {
@@ -101,7 +124,7 @@ public final class TestAutoCommands {
               driveSystem, poseEstimatorSystem, "TestCurve", new PathConstraints(1, 1), true));
     }
     if (pathName.equals("PlaceOne")) {
-      return starting(null, 0, 0);
+      return starting(null, 0, 0, "cone");
     }
     if (pathName.equals("StraightWithRotation")) {
       return new SequentialCommandGroup(
@@ -113,11 +136,11 @@ public final class TestAutoCommands {
               true));
     }
     if (pathName.equals("HajelPath")) {
-      return starting(pathName, 3, 2).andThen(new AutoBalance(driveSystem));
+      return starting(pathName, 3, 2, "cone").andThen(new AutoBalance(driveSystem));
     }
     if (pathName.equals("HajelPathV2NoLime")) {
       return new SequentialCommandGroup(
-          starting("I2+1", 3, 2),
+          starting("I2+1", 3, 2, "cone"),
           new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
           Commands.waitSeconds(1),
           Commands.sequence(
@@ -148,12 +171,15 @@ public final class TestAutoCommands {
                       true))),
           new AutoBalance(driveSystem));
     }
-    if(pathName.equals("A+BMobile")){
-        return starting(pathName, 2, 2);
+    if (pathName.equals("AMobile")) {
+      return starting("A+BMobile", 2, 2, "cone");
+    }
+    if (pathName.equals("BMobile")) {
+      return starting("A+BMobile", 2, 2, "cube");
     }
     if (pathName.equals("HajelPathV2")) {
       return new SequentialCommandGroup(
-          starting("I2+1", 3, 2),
+          starting("I2+1", 3, 2, "cone"),
           new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
           Commands.waitSeconds(1),
           Commands.sequence(
@@ -179,12 +205,16 @@ public final class TestAutoCommands {
               true),
           new AutoBalance(driveSystem));
     }
-    if (pathName.equals("D-F1E")) {
-      return starting(pathName, 2, 2).andThen(new AutoBalance(driveSystem));
+    if (pathName.equals("D||F1E")) { // DO THIS
+      return starting("D-F1E", 2, 2, "cone").andThen(new AutoBalance(driveSystem));
     }
+    if (pathName.equals("E1E")) {
+      return starting("D-F1E", 2, 2, "cube").andThen(new AutoBalance(driveSystem));
+    }
+
     if (pathName.equals("A2E")) {
       return new SequentialCommandGroup(
-          starting(pathName, 2, 2),
+          starting(pathName, 2, 2, "cone"),
           new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
           Commands.waitSeconds(1),
           Commands.sequence(
@@ -210,7 +240,7 @@ public final class TestAutoCommands {
     }
     if (pathName.equals("D1+1")) {
       return new SequentialCommandGroup(
-          starting(pathName, 2, 2),
+          starting(pathName, 2, 2, "cone"),
           new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
           Commands.waitSeconds(1),
           Commands.sequence(
@@ -221,7 +251,7 @@ public final class TestAutoCommands {
     }
     if (pathName.equals("F1+1")) {
       return new SequentialCommandGroup(
-          starting(pathName, 1, 1),
+          starting(pathName, 1, 1, "cone"),
           new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
           Commands.waitSeconds(1),
           Commands.sequence(
@@ -232,7 +262,7 @@ public final class TestAutoCommands {
     }
     if (pathName.equals("G2E")) {
       return new SequentialCommandGroup(
-          starting(pathName, 2, 2),
+          starting(pathName, 2, 2, "cube"),
           new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
           Commands.waitSeconds(1),
           Commands.sequence(
@@ -256,7 +286,7 @@ public final class TestAutoCommands {
     }
     if (pathName.equals("G2ENoLime")) {
       return new SequentialCommandGroup(
-          starting("G2E", 2, 2),
+          starting("G2E", 2, 2, "cube"),
           new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
           Commands.waitSeconds(1),
           Commands.sequence(
@@ -289,7 +319,7 @@ public final class TestAutoCommands {
     }
     if (pathName.equals("I2+1")) {
       return new SequentialCommandGroup(
-          starting(pathName, 2, 2),
+          starting(pathName, 2, 2, "cone"),
           new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
           Commands.waitSeconds(1),
           Commands.sequence(
@@ -319,7 +349,7 @@ public final class TestAutoCommands {
     }
     if (pathName.equals("I2NoLime")) {
       return new SequentialCommandGroup(
-          starting("I2+1", 1.5, 1),
+          starting("I2+1", 1.5, 1, "cone"),
           new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
           Commands.waitSeconds(1),
           Commands.sequence(
@@ -345,7 +375,7 @@ public final class TestAutoCommands {
     }
     if (pathName.equals("I2")) {
       return new SequentialCommandGroup(
-          starting("I2+1", 1, 1),
+          starting("I2+1", 1, 1, "cone"),
           new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
           Commands.waitSeconds(1),
           Commands.sequence(
@@ -368,7 +398,7 @@ public final class TestAutoCommands {
 
     if (pathName.equals("I2+1E")) {
       return new SequentialCommandGroup(
-          starting("I2+1", 1, 1),
+          starting("I2+1", 1, 1, "cone"),
           new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
           Commands.waitSeconds(1),
           Commands.sequence(
@@ -400,10 +430,10 @@ public final class TestAutoCommands {
           new AutoBalance(driveSystem));
     }
     if (pathName.equals("C1+E")) {
-      return starting(pathName, 3, 2).andThen(new AutoBalance(driveSystem));
+      return starting(pathName, 3, 2, "cone").andThen(new AutoBalance(driveSystem));
     }
     if (pathName.equals("G1+E")) {
-      return starting(pathName, 3, 2).andThen(new AutoBalance(driveSystem));
+      return starting(pathName, 3, 2, "cone").andThen(new AutoBalance(driveSystem));
     }
     return null;
   }
