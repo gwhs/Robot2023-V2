@@ -56,7 +56,7 @@ public final class TestAutoCommands {
   public SequentialCommandGroup starting(String path, double maxVel, double maxAcc) {
     return new SequentialCommandGroup(
         new ParallelCommandGroup(
-            new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+            new ClawEncoderMoveDown(-80, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
             new PPSwerveFollower(
                 driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.75, .75), true)),
         new MagicMotionPos(mainArm, 40, 1, 1, .5),
