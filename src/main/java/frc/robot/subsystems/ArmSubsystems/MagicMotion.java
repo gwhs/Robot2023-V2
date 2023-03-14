@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class MagicMotion extends SubsystemBase {
-  TalonFX testTalon;
+  public int modeNum = 1;
+  private TalonFX testTalon;
+
   /** Creates a new MagicMotion. */
   public MagicMotion(int id, String can) {
     testTalon = new TalonFX(id, can);
@@ -111,6 +113,24 @@ public class MagicMotion extends SubsystemBase {
       testTalon.setNeutralMode(NeutralMode.Brake);
     } else {
       testTalon.setNeutralMode(NeutralMode.Coast);
+    }
+  }
+
+  public int getMode() {
+    return this.modeNum;
+  }
+
+  public boolean isConeMode() {
+    return this.modeNum == 1;
+  }
+
+  public void swapMode() {
+    if (this.modeNum == 1) {
+      this.modeNum = -1;
+      System.out.print(this.modeNum);
+    } else {
+      this.modeNum = 1;
+      System.out.print(this.modeNum);
     }
   }
 
