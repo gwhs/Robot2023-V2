@@ -63,7 +63,6 @@ public final class TestAutoCommands {
           new MagicMotionPos(mainArm, 40, 1, 1, .5),
           new MagicMotionPos(mainArm, 190, 2.75, 5, .5),
           new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
-          Commands.waitSeconds(.25),
           new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
           new ParallelCommandGroup(
               new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
@@ -82,7 +81,6 @@ public final class TestAutoCommands {
               new PPSwerveFollower(
                   driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.75, .75), true)),
           new MagicMotionPos(mainArm, 210, 2.75, 3.5, .5),
-          Commands.waitSeconds(.25),
           new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
           new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
           new ParallelCommandGroup(
@@ -176,7 +174,7 @@ public final class TestAutoCommands {
     if (pathName.equals("BHMobile")) {
       return starting("A+BMobile", 2, 2, "cube");
     }
-    
+
     if (pathName.equals("HajelPathV2")) {
       return new SequentialCommandGroup(
           starting("I2+1", 3, 2, "cone"),

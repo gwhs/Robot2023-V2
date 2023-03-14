@@ -664,8 +664,7 @@ public class RobotContainer {
             Commands.sequence(
                 Commands.runOnce(() -> mainArm.swapMode(), mainArm),
                 Commands.runOnce(() -> System.out.println("Mode Num: " + mainArm.getMode())),
-                Commands.runOnce(() -> m_led.toggleLED(), m_led)
-                ));
+                Commands.runOnce(() -> m_led.toggleLED(), m_led)));
     operator.leftBumper().onTrue(rotate);
     operator.rightBumper().onTrue(new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
     // operator.rightBumper().onTrue(allLime);
