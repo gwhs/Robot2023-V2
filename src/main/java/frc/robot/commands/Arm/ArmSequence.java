@@ -4,10 +4,6 @@
 
 package frc.robot.commands.Arm;
 
-import java.util.function.BooleanSupplier;
-
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
@@ -35,31 +31,33 @@ public class ArmSequence {
     // addCommands(new FooCommand(), new BarCommand());
     System.out.println(mainArm.getMode());
 
-    return new SequentialCommandGroup(Commands.either(
-      Commands.sequence(
-      Commands.print("START Cone -- MODE: " + mainArm.getMode()),
-      new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
-      // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
-      Commands.waitSeconds(.25),
-      Commands.runOnce(mainArm::resetPosition, mainArm),
-      new MagicMotionPos(mainArm, 40, 1, 1, 5),
-      new MagicMotionPos(mainArm, 190.0, 2.75, 5.0, 1),
-      Commands.waitSeconds(.25),
-      new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
-      new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-      new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-      new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)), 
-
-      Commands.sequence(Commands.print("START Cube -- MODE: " + mainArm.getMode()),
-      new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
-      // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
-      Commands.waitSeconds(.25),
-      Commands.runOnce(mainArm::resetPosition, mainArm),
-      new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 5, shaftEncoder),
-      Commands.waitSeconds(.25),
-      new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
-      new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-      new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-      new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)), mainArm::isConeMode));
+    return new SequentialCommandGroup(
+        Commands.either(
+            Commands.sequence(
+                Commands.print("START CONE "),
+                new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+                // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
+                Commands.waitSeconds(.25),
+                Commands.runOnce(mainArm::resetPosition, mainArm),
+                new MagicMotionPos(mainArm, 40, 1, 1, 5),
+                new MagicMotionPos(mainArm, 190.0, 2.75, 5.0, 1),
+                Commands.waitSeconds(.25),
+                new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)),
+            Commands.sequence(
+                Commands.print("START CUBE"),
+                new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+                // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
+                Commands.waitSeconds(.25),
+                Commands.runOnce(mainArm::resetPosition, mainArm),
+                new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 5, shaftEncoder),
+                Commands.waitSeconds(.25),
+                new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)),
+            mainArm::isConeMode));
   }
 }

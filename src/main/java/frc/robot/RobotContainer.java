@@ -48,7 +48,6 @@ import frc.robot.subsystems.ArmSubsystems.BoreEncoder;
 import frc.robot.subsystems.ArmSubsystems.Claw;
 import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.HashMap;
@@ -112,7 +111,7 @@ public class RobotContainer {
   public int mode = 0;
 
   // LEDStrips
-  public final LEDSubsystem m_led = new LEDSubsystem();
+  // public final LEDSubsystem m_led = new LEDSubsystem();
 
   HashMap<String, Command> eventMap = new HashMap<>();
 
@@ -433,7 +432,7 @@ public class RobotContainer {
 
   private void configureLimelightBindings() {
     this.startAndBackButton();
-    driver.a().onTrue(Commands.runOnce(() -> m_led.toggleLED()));
+    // driver.a().onTrue(Commands.runOnce(() -> m_led.toggleLED()));
     driver.leftBumper().onTrue(rotate);
     driver.rightBumper().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 80)); //
 
@@ -658,8 +657,9 @@ public class RobotContainer {
         .onTrue(
             Commands.sequence(
                 Commands.runOnce(() -> mainArm.swapMode(), mainArm),
-                Commands.runOnce(() -> System.out.println("Mode Num: " + mainArm.getMode())),
-                Commands.runOnce(() -> m_led.toggleLED(), m_led)));
+                Commands.runOnce(() -> System.out.println("Mode Num: " + mainArm.getMode()))
+                // Commands.runOnce(() -> m_led.toggleLED(), m_led)
+                ));
     operator.leftBumper().onTrue(rotate);
     operator.rightBumper().onTrue(new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
     // operator.rightBumper().onTrue(allLime);
