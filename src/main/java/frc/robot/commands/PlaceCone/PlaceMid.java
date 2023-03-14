@@ -33,17 +33,7 @@ public class PlaceMid extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.LOWER_DISTANCE_SHOOT),
-        new ClawEncoderMoveDown(-30.0, clawPivot, clawEncoder, "Cube").withTimeout(.1),
-        Commands.waitSeconds(.1),
-        new MagicMotionPos(mainArm, degrees, 1, 1, .5),
-        Commands.waitSeconds(.1),
-        new MagicMotionPos(mainArm, 2, 1, 1, .5),
-        Commands.waitSeconds(.5),
-        new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-        Commands.waitSeconds(.3),
-        new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
-    // missing shoot command
+        new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.LOWER_DISTANCE_SHOOT));
     ;
   }
 }

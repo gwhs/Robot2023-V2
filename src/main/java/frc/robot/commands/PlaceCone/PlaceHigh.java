@@ -41,17 +41,7 @@ public class PlaceHigh extends SequentialCommandGroup {
         new Sideways(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
         new StraightWheel(drivetrainSubsystem),
         new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.UPPER_DISTANCE_SHOOT),
-        new Sideways(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
-        new ClawEncoderMoveDown(-30, clawPivot, clawEncoder, "Cube").withTimeout(.1),
-        Commands.waitSeconds(.1),
-        new MagicMotionPos(mainArm, degrees, 1, 1, .5),
-        Commands.waitSeconds(.1),
-        new MagicMotionPos(mainArm, 2, 1, 1, .5),
-        Commands.waitSeconds(.5),
-        new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-        Commands.waitSeconds(.3),
-        new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
-
-    //
+        new Sideways(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub)
+    );
   }
 }
