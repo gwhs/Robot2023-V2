@@ -1,7 +1,5 @@
 package frc.robot.commands.autonomous;
 
-import javax.naming.PartialResultException;
-
 import com.pathplanner.lib.PathConstraints;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -78,7 +76,6 @@ public final class TestAutoCommands {
   }
 
   public SequentialCommandGroup getAutoCommand() {
-
     if (pathName.equals("StraightNoRotation")) {
       return new SequentialCommandGroup(
           new PPSwerveFollower(
