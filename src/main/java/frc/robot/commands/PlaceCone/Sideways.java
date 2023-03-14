@@ -20,6 +20,8 @@ public class Sideways extends CommandBase {
   private boolean sidewaysDone = false;
   private PoseEstimatorSubsystem poseEstimatorSubsystem;
   private int noTarget = 0;
+  private int counter= 0 ;
+
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
   //// second param on constraints is estimated, should be max accel, not max speed, but lets say it
@@ -54,6 +56,7 @@ public class Sideways extends CommandBase {
     // rotating to align
     pid.reset(Math.toRadians(limeLight.getTx()));
     pid.setGoal(Math.toRadians(0));
+    counter =0;
     pid.setTolerance(Math.toRadians(1));
 
     // configure rotation pid
@@ -76,8 +79,10 @@ public class Sideways extends CommandBase {
     // setpoint just makes sure it's in the tolerance, doesn't work
     if (Math.abs(limeLight.getTx()) < .2) {
       sidewaysDone = true;
+      counter ++;
     } else {
       sidewaysDone = false;
+      counter = 0;
     }
 
     if (noTarget >= 10) {
@@ -95,7 +100,7 @@ public class Sideways extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return sidewaysDone;
+    return sidewaysDone && counter >=5;
   }
 
   public double[] chassisValuesLower() {
