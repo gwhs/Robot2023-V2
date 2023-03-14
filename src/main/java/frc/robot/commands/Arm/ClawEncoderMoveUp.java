@@ -94,6 +94,7 @@ public class ClawEncoderMoveUp extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(error) < 1;
+    return true;
+    //return Math.abs(error) < 1;
   }
 }
