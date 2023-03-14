@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class MagicMotion extends SubsystemBase {
-  public int modeNum = 1;
+  public int modeNum = -1;
   private TalonFX testTalon;
 
   /** Creates a new MagicMotion. */
