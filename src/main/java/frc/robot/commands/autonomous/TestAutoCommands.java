@@ -83,7 +83,7 @@ public final class TestAutoCommands {
                   driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.75, .75), true)),
           new MagicMotionPos(mainArm, 210, 2.75, 3.5, .5),
           Commands.waitSeconds(.25),
-          new MagicMotionPos(mainArm, 20, 3, 1.5, .5),
+          new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
           new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
           new ParallelCommandGroup(
               new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
