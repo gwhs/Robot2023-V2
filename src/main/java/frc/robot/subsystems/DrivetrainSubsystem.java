@@ -198,7 +198,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         new SwerveModule[] {
           createSwerveModule(
               frontLeftLayout,
-              ModuleConfiguration.MK4II_L3,
+              ModuleConfiguration.MK4II_L3_FL,
               driveTrain.FRONT_LEFT_MODULE_DRIVE_MOTOR,
               driveTrain.FRONT_LEFT_MODULE_STEER_MOTOR,
               driveTrain.FRONT_LEFT_MODULE_STEER_ENCODER,
@@ -206,7 +206,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
               canivoreName),
           createSwerveModule(
               frontRightLayout,
-              ModuleConfiguration.MK4II_L3,
+              ModuleConfiguration.MK4II_L3_FR,
               driveTrain.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
               driveTrain.FRONT_RIGHT_MODULE_STEER_MOTOR,
               driveTrain.FRONT_RIGHT_MODULE_STEER_ENCODER,
@@ -246,7 +246,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         new SwerveModule[] {
           createSwerveModule(
               frontLeftLayout,
-              ModuleConfiguration.MK4II_L3,
+              ModuleConfiguration.MK4II_L3_FL,
               driveTrain.FRONT_LEFT_MODULE_DRIVE_MOTOR,
               driveTrain.FRONT_LEFT_MODULE_STEER_MOTOR,
               driveTrain.FRONT_LEFT_MODULE_STEER_ENCODER,
@@ -254,7 +254,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
               canivoreName),
           createSwerveModule(
               frontRightLayout,
-              ModuleConfiguration.MK4II_L3,
+              ModuleConfiguration.MK4II_L3_FR,
               driveTrain.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
               driveTrain.FRONT_RIGHT_MODULE_STEER_MOTOR,
               driveTrain.FRONT_RIGHT_MODULE_STEER_ENCODER,
