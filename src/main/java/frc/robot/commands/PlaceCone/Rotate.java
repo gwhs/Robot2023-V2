@@ -117,7 +117,7 @@ public class Rotate extends CommandBase {
     // System.out.printf(
     //     "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // setpoint and atgoal don't work, just brute forced.
-    if (MathUtil.inputModulus(poseEstimatorSubsystem.getAngle(), 0,360) < 2) {
+    if (    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < 2){
       angleDone = true;
     } else {
       angleDone = false;
