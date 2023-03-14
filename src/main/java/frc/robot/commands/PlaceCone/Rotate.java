@@ -29,10 +29,10 @@ public class Rotate extends CommandBase {
   private double[] values = {0, 0, 0};
   private boolean angleDone = false;
   private boolean sideDone = false;
-  private double mvmtP = .002;
+  private double mvmtP = .02;
   private int times = 0;
   private int noTarg = 0;
-  private double angleP = .0005;
+  private double angleP = .05;
   private double anglePDefault;
   private GenericEntry anglePEntry;
 
@@ -84,7 +84,7 @@ public class Rotate extends CommandBase {
       anglePEntry = ((SimpleWidget) widgets.get(0)).getEntry();
     }
 
-    addRequirements(poseEstimatorSubsystem, drivetrainSubsystem);
+    addRequirements(poseEstimatorSubsystem, drivetrainSubsystem, limeLight);
     // addRequirements(drivetrainSubsystem);
   }
 

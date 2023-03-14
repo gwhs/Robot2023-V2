@@ -427,11 +427,11 @@ public class RobotContainer {
     this.startAndBackButton();
     driver.a().onTrue(Commands.runOnce(() -> m_led.toggleLED()));
     driver.leftBumper().onTrue(rotate.withTimeout(1.5));
-    driver.rightBumper().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 60)); //
+    driver.rightBumper().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 80)); //
 
     driver.a().onTrue(new ChangePipeline(limeLightSub));
     driver.x().onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
-    driver.y().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 60));
+    driver.y().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 47));
     driver
         .b()
         .onTrue(

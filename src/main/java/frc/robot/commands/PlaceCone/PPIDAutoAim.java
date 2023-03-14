@@ -76,7 +76,7 @@ public class PPIDAutoAim extends CommandBase {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.targetDistance = targetDistance;
 
-    anglePDefault = .8;
+    anglePDefault = .5;
     angleIDefault = 0;
     angleDDefault = 0;
     positionPDefault = 0.009;
