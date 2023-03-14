@@ -99,7 +99,6 @@ public final class TestAutoCommands {
   }
 
   public SequentialCommandGroup getAutoCommand() {
-
     if (pathName.equals("StraightNoRotation")) {
       return new SequentialCommandGroup(
           new PPSwerveFollower(

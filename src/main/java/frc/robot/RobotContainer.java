@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.RobotSetup;
+import frc.robot.commands.Arm.ArmSequence;
 import frc.robot.commands.Arm.ClawEncoderMoveDown;
 import frc.robot.commands.Arm.ClawEncoderMoveUp;
 import frc.robot.commands.Arm.ClawOpenClose;
@@ -81,6 +82,8 @@ public class RobotContainer {
   private final BoreEncoder shaftEncoder = new BoreEncoder(0, 1, "Arm"); // Blue 7 ; Yellow 8
   private final BoreEncoder clawEncoder = new BoreEncoder(2, 3, "Claw");
   private SendableChooser<String> m_chooser;
+  private final ArmSequence ArmSequenceCommand =
+      new ArmSequence(mainArm, shaftEncoder, clawEncoder, clawPivot);
 
   // Led status
   private int status = 1;
@@ -430,7 +433,7 @@ public class RobotContainer {
 
   private void configureLimelightBindings() {
     this.startAndBackButton();
-    driver.a().onTrue(Commands.runOnce(() -> m_led.toggleLED()));
+    // driver.a().onTrue(Commands.runOnce(() -> m_led.toggleLED()));
     driver.leftBumper().onTrue(rotate);
     driver.rightBumper().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 80)); //
 
@@ -655,7 +658,14 @@ public class RobotContainer {
     operator.x().onTrue(new ChangePipeline(limeLightSub));
     // needs binding
     operator.y().onTrue(fieldHeadingDriveCommand);
-    operator.b().onTrue(Commands.runOnce(() -> m_led.toggleLED(), m_led));
+    operator
+        .b()
+        .onTrue(
+            Commands.sequence(
+                Commands.runOnce(() -> mainArm.swapMode(), mainArm),
+                Commands.runOnce(() -> System.out.println("Mode Num: " + mainArm.getMode())),
+                Commands.runOnce(() -> m_led.toggleLED(), m_led)
+                ));
     operator.leftBumper().onTrue(rotate);
     operator.rightBumper().onTrue(new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
     // operator.rightBumper().onTrue(allLime);
@@ -690,13 +700,7 @@ public class RobotContainer {
                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
                 clawEncoder::posDown2));
 
-    // operator
-    //     .rightBumper()
-    //     .onTrue(
-    //         Commands.sequence(
-    //             Commands.runOnce(mainArm::resetPosition, mainArm),
-    //             Commands.runOnce(shaftEncoder::reset, shaftEncoder),
-    //             Commands.runOnce(clawEncoder::reset, clawEncoder)));
+    operator.rightBumper().onTrue(ArmSequenceCommand.starting());
   }
   // zoey
   /*
