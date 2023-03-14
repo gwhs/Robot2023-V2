@@ -63,6 +63,7 @@ public class ClawEncoderMoveDown extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(error) < 30;
+    return true;
+    //return Math.abs(error) < 30;
   }
 }
