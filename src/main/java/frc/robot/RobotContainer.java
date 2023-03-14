@@ -29,7 +29,6 @@ import frc.robot.commands.Arm.MagicMotionPosShuffleboard;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
-import frc.robot.commands.PlaceCone.AllLime;
 import frc.robot.commands.PlaceCone.ChangePipeline;
 import frc.robot.commands.PlaceCone.PPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceHigh;
@@ -92,7 +91,6 @@ public class RobotContainer {
   final List<Obstacle> cablePath = FieldConstants.cablePath;
   // final List<Obstacle> obstacles = new ArrayList<Obstacle>();
   // final List<Obstacle> obstacles = FieldConstants.obstacles;
-  private final AllLime allLime = new AllLime(drivetrainSubsystem, poseEstimator, limeLightSub);
 
   // VisGraph AStarMap = new VisGraph();
   // final Node finalNode = new Node(4, 4, Rotation2d.fromDegrees(180));
