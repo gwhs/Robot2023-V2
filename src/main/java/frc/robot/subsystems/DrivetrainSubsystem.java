@@ -511,10 +511,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param states array of states. Must be ordered frontLeft, frontRight, backLeft, backRight
    */
   public void setModuleStates(SwerveModuleState[] states) {
-    states[0].speedMetersPerSecond = states[0].speedMetersPerSecond * 2;
-    states[1].speedMetersPerSecond = states[1].speedMetersPerSecond * 1 / 2;
-    states[2].speedMetersPerSecond = states[2].speedMetersPerSecond * 1/6;
-    states[3].speedMetersPerSecond = states[3].speedMetersPerSecond * 4;
+    states[0].speedMetersPerSecond = states[0].speedMetersPerSecond * 1;
+    states[1].speedMetersPerSecond = states[1].speedMetersPerSecond * 1;
+    states[2].speedMetersPerSecond = states[2].speedMetersPerSecond * 1;
+    states[3].speedMetersPerSecond = states[3].speedMetersPerSecond * 1;
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);
     IntStream.range(0, swerveModules.length)
