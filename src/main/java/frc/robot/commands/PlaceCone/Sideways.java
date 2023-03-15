@@ -20,6 +20,7 @@ public class Sideways extends CommandBase {
   private boolean sidewaysDone = false;
   private PoseEstimatorSubsystem poseEstimatorSubsystem;
   private int noTarget = 0;
+  private int seen;
   // second param on constraints is estimated, should be max accel, not max speed, but lets say it
   // gets there in a second
   //// second param on constraints is estimated, should be max accel, not max speed, but lets say it
@@ -29,7 +30,7 @@ public class Sideways extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50,
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
-  private double P = .0025;
+  private double P = .004;
   private double I = 0;
   private double D = 0;
   private ProfiledPIDController pid = new ProfiledPIDController(P, I, D, constraints);
@@ -89,7 +90,7 @@ public class Sideways extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     System.out.println("Sideways done");
-    drivetrainSubsystem.drive(new ChassisSpeeds(0.01, 0, 0));
+    drivetrainSubsystem.drive(new ChassisSpeeds(0.00, 0, 0));
   }
 
   // Returns true when the command should end.
@@ -111,7 +112,7 @@ public class Sideways extends CommandBase {
     double[] x = new double[3];
 
     x[0] = 0;
-    x[1] = pid.calculate(limeLight.getTx());
+    x[1] = sidewaysDone ? 0 : pid.calculate(limeLight.getTx());
     x[2] = 0;
 
     return x;

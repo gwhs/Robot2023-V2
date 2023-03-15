@@ -29,7 +29,7 @@ public class Rotate extends CommandBase {
   private double[] values = {0, 0, 0};
   private boolean angleDone = false;
   private boolean sideDone = false;
-  private double p = .002;
+  private double p = .004;
   private int times = 0;
   private int noTarg = 0;
   private double angleP = .003;
@@ -84,7 +84,7 @@ public class Rotate extends CommandBase {
       anglePEntry = ((SimpleWidget) widgets.get(0)).getEntry();
     }
 
-    addRequirements(poseEstimatorSubsystem, drivetrainSubsystem);
+    addRequirements(poseEstimatorSubsystem, drivetrainSubsystem, limeLightSub);
     // addRequirements(drivetrainSubsystem);
   }
 
@@ -141,7 +141,7 @@ public class Rotate extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     System.out.println("Rotated done");
-    drivetrainSubsystem.drive(new ChassisSpeeds(.001, 0, 0));
+    drivetrainSubsystem.drive(new ChassisSpeeds(0, 0, 0));
   }
 
   // Returns true when the command should end.
