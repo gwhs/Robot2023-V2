@@ -510,7 +510,8 @@ public class RobotContainer {
     m_chooser.addOption("Place one from any node", "PlaceOne");
     m_chooser.addOption("A or I Place and Mobility", "AIMobile");
     m_chooser.addOption("B or H Place and Mobility", "BHMobile");
-    m_chooser.addOption("I 1+ and engage", "HajelPath");
+    m_chooser.addOption("I 1 Mobility and engage", "HajelPath");
+    m_chooser.addOption("A 1 Mobility and engage", "APlaceME");
     m_chooser.addOption("C place and engage", "C1+E");
     m_chooser.addOption("G place and engage", "G1+E");
 
@@ -583,10 +584,7 @@ public class RobotContainer {
     // all need binding
     // Cone
 
-    driver
-        .b()
-        .onTrue(
-            ArmSequenceCommand.starting());
+    driver.b().onTrue(ArmSequenceCommand.starting());
 
     driver.x().onTrue(new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub));
     // Cube Toss

@@ -60,7 +60,7 @@ public final class TestAutoCommands {
               new ClawEncoderMoveDown(-80, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
               new PPSwerveFollower(
                   driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.75, .75), true)),
-          //new MagicMotionPos(mainArm, 40, 1, 1, .5),
+          // new MagicMotionPos(mainArm, 40, 1, 1, .5),
           new MagicMotionPos(mainArm, 190, 2.75, 5, .5),
           new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
           new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
@@ -135,6 +135,9 @@ public final class TestAutoCommands {
     if (pathName.equals("HajelPath")) {
       return starting(pathName, 3, 2, "cone").andThen(new AutoBalance(driveSystem));
     }
+    if (pathName.equals("APlaceME")) {
+        return starting(pathName, 3, 2, "cone").andThen(new AutoBalance(driveSystem));
+      }
     if (pathName.equals("HajelPathV2NoLime")) {
       return new SequentialCommandGroup(
           starting("I2+1", 3, 2, "cone"),
