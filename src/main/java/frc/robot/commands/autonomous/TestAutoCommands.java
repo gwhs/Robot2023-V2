@@ -133,11 +133,11 @@ public final class TestAutoCommands {
               true));
     }
     if (pathName.equals("HajelPath")) {
-      return starting(pathName, 3, 2, "cone").andThen(new AutoBalance(driveSystem));
+      return starting(pathName, 5, 5, "cone").andThen(new AutoBalance(driveSystem));
     }
     if (pathName.equals("APlaceME")) {
-        return starting(pathName, 3, 2, "cone").andThen(new AutoBalance(driveSystem));
-      }
+      return starting(pathName, 3, 2, "cone").andThen(new AutoBalance(driveSystem));
+    }
     if (pathName.equals("HajelPathV2NoLime")) {
       return new SequentialCommandGroup(
           starting("I2+1", 3, 2, "cone"),
@@ -172,10 +172,10 @@ public final class TestAutoCommands {
           new AutoBalance(driveSystem));
     }
     if (pathName.equals("AIMobile")) {
-      return starting("A+BMobile", 2, 2, "cone");
+      return starting("A+BMobile", 5, 5, "cone");
     }
     if (pathName.equals("BHMobile")) {
-      return starting("A+BMobile", 2, 2, "cube");
+      return starting("A+BMobile", 5, 5, "cube");
     }
 
     if (pathName.equals("HajelPathV2")) {
@@ -206,11 +206,11 @@ public final class TestAutoCommands {
               true),
           new AutoBalance(driveSystem));
     }
-    if (pathName.equals("D||F1E")) { // DO THIS
-      return starting("D-F1E", 2, 2, "cone").andThen(new AutoBalance(driveSystem));
+    if (pathName.equals("D||F1E")) {
+      return starting("D-F1E", 5, 5, "cone").andThen(new AutoBalance(driveSystem));
     }
     if (pathName.equals("E1E")) {
-      return starting("D-F1E", 2, 2, "cube").andThen(new AutoBalance(driveSystem));
+      return starting("D-F1E", 5, 5, "cube").andThen(new AutoBalance(driveSystem));
     }
 
     if (pathName.equals("A2E")) {
@@ -431,10 +431,10 @@ public final class TestAutoCommands {
           new AutoBalance(driveSystem));
     }
     if (pathName.equals("C1+E")) {
-      return starting(pathName, 3, 2, "cone").andThen(new AutoBalance(driveSystem));
+      return starting(pathName, 5, 5, "cone").andThen(new AutoBalance(driveSystem));
     }
     if (pathName.equals("G1+E")) {
-      return starting(pathName, 3, 2, "cone").andThen(new AutoBalance(driveSystem));
+      return starting(pathName, 5, 5, "cone").andThen(new AutoBalance(driveSystem));
     }
     return null;
   }

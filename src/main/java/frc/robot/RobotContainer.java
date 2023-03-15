@@ -586,6 +586,7 @@ public class RobotContainer {
     // Cone
 
     driver.b().onTrue(ArmSequenceCommand.starting());
+    driver.a().toggleOnTrue(autoBalance);
 
     driver.x().onTrue(new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub));
     // Cube Toss
