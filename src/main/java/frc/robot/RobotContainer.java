@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivetrainConstants;
@@ -508,7 +509,7 @@ public class RobotContainer {
     tab.add(m_chooser);
     m_chooser.addOption("D or F Place and engage", "D||F1E");
     m_chooser.addOption("E place and engage", "E1E");
-    m_chooser.addOption("Place one from any node", "PlaceOne");
+    m_chooser.addOption("Place one CONE from any node", "PlaceOne");
     m_chooser.addOption("A or I Place and Mobility", "AIMobile");
     m_chooser.addOption("B or H Place and Mobility", "BHMobile");
     m_chooser.addOption("I 1 Mobility and engage", "HajelPath");
@@ -565,7 +566,10 @@ public class RobotContainer {
             clawPivot,
             clawOpenClose);
 
-    return vendingMachine.getAutoCommand();
+    return new ParallelCommandGroup(vendingMachine.getAutoCommand(), Commands.waitSeconds(14.5))
+        .andThen(new StraightWheel(drivetrainSubsystem, true));
+
+    // return vendingMachine.getAutoCommand();
   }
 
   private static double modifyAxis(double value) {
