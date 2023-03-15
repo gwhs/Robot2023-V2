@@ -60,7 +60,7 @@ public final class TestAutoCommands {
               new ClawEncoderMoveDown(-80, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
               new PPSwerveFollower(
                   driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.75, .75), true)),
-          new MagicMotionPos(mainArm, 40, 1, 1, .5),
+          //new MagicMotionPos(mainArm, 40, 1, 1, .5),
           new MagicMotionPos(mainArm, 190, 2.75, 5, .5),
           new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
           new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
