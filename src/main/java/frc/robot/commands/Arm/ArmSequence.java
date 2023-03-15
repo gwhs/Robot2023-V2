@@ -52,7 +52,7 @@ public class ArmSequence {
                 // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
                 // Commands.waitSeconds(.25),
                 Commands.runOnce(mainArm::resetPosition, mainArm),
-                new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 5, shaftEncoder),
+                new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 3.5, shaftEncoder),
                 Commands.waitSeconds(.25),
                 new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
