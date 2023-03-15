@@ -56,7 +56,7 @@ public final class TestAutoCommands {
   public SequentialCommandGroup starting(String path, double maxVel, double maxAcc, String piece) {
     if (piece.equals("cone")) {
       return new SequentialCommandGroup(
-          new ParallelCommandGroup(
+          //new ParallelCommandGroup(
               new ClawEncoderMoveDown(-80, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
         //       new PPSwerveFollower(
         //           driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.75, .75), true)),
@@ -76,7 +76,7 @@ public final class TestAutoCommands {
     }
     if (piece.equals("cube")) {
       return new SequentialCommandGroup(
-          new ParallelCommandGroup(
+         // new ParallelCommandGroup(
               new ClawEncoderMoveDown(-80, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
             //   new PPSwerveFollower(
             //       driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.75, .75), true)),
