@@ -4,6 +4,7 @@
 
 package frc.robot.commands.PlaceCone;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -21,6 +22,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import java.util.List;
+import edu.wpi.first.math.MathUtil;
 
 public class Rotate extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
@@ -115,7 +117,7 @@ public class Rotate extends CommandBase {
     // System.out.printf(
     //     "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // setpoint and atgoal don't work, just brute forced.
-    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < 2) {
+    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < 2){
       angleDone = true;
     } else {
       angleDone = false;
@@ -165,7 +167,7 @@ public class Rotate extends CommandBase {
     x[2] =
         angleDone
             ? 0
-            : -((poseEstimatorSubsystem.getAngle() % 180)
+           : -((poseEstimatorSubsystem.getAngle() % 180)
                     - Math.copySign(180, poseEstimatorSubsystem.getAngle()))
                 * angleP;
     // System.out.println(
