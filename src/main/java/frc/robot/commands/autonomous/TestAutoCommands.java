@@ -207,10 +207,10 @@ public final class TestAutoCommands {
           new AutoBalance(driveSystem));
     }
     if (pathName.equals("D||F1E")) {
-      return starting("D-F1E", 5, 5, "cone").andThen(new AutoBalance(driveSystem));
+      return starting("D-F1E", 4, 4, "cone").andThen(new AutoBalance(driveSystem));
     }
     if (pathName.equals("E1E")) {
-      return starting("D-F1E", 5, 5, "cube").andThen(new AutoBalance(driveSystem));
+      return starting("D-F1E", 4, 4, "cube").andThen(new AutoBalance(driveSystem));
     }
 
     if (pathName.equals("A2E")) {

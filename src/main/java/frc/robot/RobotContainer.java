@@ -566,7 +566,8 @@ public class RobotContainer {
             clawPivot,
             clawOpenClose);
 
-    return new ParallelCommandGroup(vendingMachine.getAutoCommand(), Commands.waitSeconds(14.5))
+    return new ParallelCommandGroup(
+            vendingMachine.getAutoCommand().withTimeout(14.499999), Commands.waitSeconds(14.5))
         .andThen(new StraightWheel(drivetrainSubsystem, true));
 
     // return vendingMachine.getAutoCommand();
