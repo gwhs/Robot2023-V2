@@ -20,6 +20,7 @@ import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
+import org.littletonrobotics.junction.Logger;
 
 public class SwerveSteerController {
 
@@ -122,6 +123,17 @@ public class SwerveSteerController {
       container.addNumber("Current Angle", () -> getStateRotation().getDegrees());
       container.addNumber("Target Angle", () -> Math.toDegrees(desiredAngleRadians));
       container.addNumber("Absolute Encoder Angle", () -> encoder.getAbsolutePosition());
+      Logger.getInstance()
+          .recordOutput(container.getTitle() + "/CurrentAngle", getStateRotation().getDegrees());
+      Logger.getInstance()
+          .recordOutput(container.getTitle() + "/SupplyCurrent", getSupplyCurrent());
+      Logger.getInstance()
+          .recordOutput(container.getTitle() + "/StatorCurrent", getStatorCurrent());
+      Logger.getInstance()
+          .recordOutput(container.getTitle() + "/MotorOutputPercent", getMotorOutputPercent());
+      Logger.getInstance().recordOutput(container.getTitle() + "/Temperature", getTemperature());
+      Logger.getInstance()
+          .recordOutput(container.getTitle() + "/RotationalVelocity", getVelocity());
     }
   }
 
@@ -217,6 +229,26 @@ public class SwerveSteerController {
     }
 
     return new Rotation2d(motorAngleRadians);
+  }
+
+  public double getSupplyCurrent() {
+    return motor.getSupplyCurrent();
+  }
+
+  public double getStatorCurrent() {
+    return motor.getStatorCurrent();
+  }
+
+  public double getMotorOutputPercent() {
+    return motor.getMotorOutputPercent();
+  }
+
+  public double getTemperature() {
+    return motor.getTemperature();
+  }
+
+  public double getVelocity() {
+    return encoder.getVelocity();
   }
 
   /**

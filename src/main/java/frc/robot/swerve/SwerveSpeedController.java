@@ -15,6 +15,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
+import org.littletonrobotics.junction.Logger;
 
 public class SwerveSpeedController {
 
@@ -78,6 +79,20 @@ public class SwerveSpeedController {
       container.addNumber("Current Velocity", () -> getStateVelocity());
       container.addNumber("Target Velocity", () -> referenceVelocity);
       container.addNumber("Current Position", () -> getStatePosition());
+
+      Logger.getInstance()
+          .recordOutput(container.getTitle() + "/CurrentVelocity", getStateVelocity());
+      Logger.getInstance()
+          .recordOutput(container.getTitle() + "/TargetVelocity", referenceVelocity);
+      Logger.getInstance()
+          .recordOutput(container.getTitle() + "/CurrentPosition", getStatePosition());
+      Logger.getInstance()
+          .recordOutput(container.getTitle() + "/SupplyCurrent", getSupplyCurrent());
+      Logger.getInstance()
+          .recordOutput(container.getTitle() + "/StatorCurrent", getStatorCurrent());
+      Logger.getInstance()
+          .recordOutput(container.getTitle() + "/MotorOutputPercent", getMotorOutputPercent());
+      Logger.getInstance().recordOutput(container.getTitle() + "/Temperature", getTemperature());
     }
   }
 
@@ -99,6 +114,22 @@ public class SwerveSpeedController {
    */
   public double getStateVelocity() {
     return motor.getSelectedSensorVelocity() * sensorVelocityCoefficient;
+  }
+
+  public double getSupplyCurrent() {
+    return motor.getSupplyCurrent();
+  }
+
+  public double getStatorCurrent() {
+    return motor.getStatorCurrent();
+  }
+
+  public double getMotorOutputPercent() {
+    return motor.getMotorOutputPercent();
+  }
+
+  public double getTemperature() {
+    return motor.getTemperature();
   }
 
   /**
