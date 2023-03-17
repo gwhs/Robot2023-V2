@@ -53,6 +53,8 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
+
+import java.sql.Driver;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -584,46 +586,43 @@ public class RobotContainer {
   }
 
   public void officialBindings() {
-    // Start button reseeds the steer motors to fix dead wheel
-    this.startAndBackButton();
+  //reseeds offsets and orientation
+  startAndBackButton();
 
-    // all need binding
-    // Cone
+  driver.b().onTrue(ArmSequenceCommand.starting());
+  driver.y().onTrue(Commands.sequence(
+    Commands.print("START"),
+    // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(0.5),
+    // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
+    // new MagicMotionPos(mainArm, 40, 1, 1, 5),
+    // for cube throw 100deg, 10vel, 10 accel
+    // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
+    new MagicMotionPos(mainArm, 105, 10, 10, 1),
+    Commands.waitSeconds(.25),
+    // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
+    // Commands.waitSeconds(),
+    new MagicMotionPos(mainArm, 20, 3, 1.5, .5),
+    // Commands.waitSeconds(.25),
+    new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+    // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+    // Commands.waitSeconds(.3),
+    new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
+  driver.leftBumper().onTrue(new toZero(drivetrainSubsystem, poseEstimator));
+  driver.back().onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
+  driver
+  .start()
+  .onTrue(
+      Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
+  driver.rightBumper().toggleOnTrue(new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub));
 
-    driver.b().onTrue(ArmSequenceCommand.starting());
-    driver.a().toggleOnTrue(autoBalance);
-
-    driver.x().toggleOnTrue(new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub));
-    // Cube Toss
-    driver
-        .y()
+  operator
+        .b()
         .onTrue(
             Commands.sequence(
-                Commands.print("START"),
-                // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(0.5),
-                // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
-                // new MagicMotionPos(mainArm, 40, 1, 1, 5),
-                // for cube throw 100deg, 10vel, 10 accel
-                // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
-                new MagicMotionPos(mainArm, 105, 10, 10, 1),
-                Commands.waitSeconds(.25),
-                // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
-                // Commands.waitSeconds(),
-                new MagicMotionPos(mainArm, 20, 3, 1.5, .5),
-                // Commands.waitSeconds(.25),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-                // Commands.waitSeconds(.3),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
-
-    driver.leftBumper().onTrue(new toZero(drivetrainSubsystem, poseEstimator));
-    // driver.rightBumper().onTrue(rotate.withTimeout(3));
-    // driver.start().onTrue(fieldHeadingDriveCommand);
-    // driver.back().onTrue(fieldHeadingDriveCommand);
-    operator.x().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 70));
-
-    // needs binding
-    operator
+                Commands.runOnce(() -> mainArm.swapMode(), mainArm),
+                Commands.runOnce(() -> System.out.println("Mode Num: " + mainArm.getMode())),
+                Commands.runOnce(() -> m_led.toggleLED(), m_led)));
+  operator
         .y()
         .onTrue(
             new SequentialCommandGroup(
@@ -637,60 +636,12 @@ public class RobotContainer {
                 // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
                 // Commands.waitSeconds(.3),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
-    operator
-        .b()
-        .onTrue(
-            Commands.sequence(
-                Commands.runOnce(() -> mainArm.swapMode(), mainArm),
-                Commands.runOnce(() -> System.out.println("Mode Num: " + mainArm.getMode())),
-                Commands.runOnce(() -> m_led.toggleLED(), m_led)));
-
-    operator.rightBumper().onTrue(new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
-    // operator.rightBumper().onTrue(allLime);
-    operator.rightTrigger().onTrue(new StraightWheel(drivetrainSubsystem, true));
-    operator
-        .start()
-        .onTrue(
-            Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
-    operator
-        .back()
-        .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
-    operator.a().onTrue(ArmSequenceCommand.starting());
-
-    // INTAKE PICK-UP CONE
-    // driver
-    //     .b()
-    //     .onTrue(
-    //         Commands.either(
-    //             new ClawEncoderMoveDown(-155, clawPivot, clawEncoder, "CONE").withTimeout(3),
-    //             Commands.sequence(
-    //                 Commands.parallel(
-    //                     new ClawOpenClose(100, 30, clawOpenClose), Commands.waitSeconds(1)),
-    //                 new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
-    //                 new ClawOpenClose(20, 30, clawOpenClose)),
-    //             clawEncoder::posDown));
-
-    // INTAKE UP & DOWN
-    // operator
-    //     .a()
-    //     .onTrue(
-    //         Commands.either(
-    //             new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "CONE").withTimeout(3),
-    //             new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
-    //             clawEncoder::posDown2));
+                
+  operator.rightBumper().onTrue(new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
+  operator
+  .start()
+  .onTrue(
+      Commands.runOnce(drivetrainSubsystem::reseedSteerMotorOffsets, drivetrainSubsystem));
 
   }
-  // zoey
-  /*
-   * a = cone
-   * y = chuck cube
-   * x = rotate
-   * rightbump rotate
-   * leftbump = stopeverything
-   *
-   * ben
-   * a, b, y stop everyting
-   * x change pipeline
-   * start
-   */
 }
