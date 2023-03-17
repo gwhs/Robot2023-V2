@@ -649,7 +649,8 @@ public class RobotContainer {
  * FOR TESTING ON PRACTICE DAYS
  * 
  */
+operator.leftBumper().onTrue(new StraightWheel(drivetrainSubsystem, true));
+operator.x().onTrue(new AutoBalance(drivetrainSubsystem));
 
- 
   }
 }
