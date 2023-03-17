@@ -124,16 +124,19 @@ public class SwerveSteerController {
       container.addNumber("Target Angle", () -> Math.toDegrees(desiredAngleRadians));
       container.addNumber("Absolute Encoder Angle", () -> encoder.getAbsolutePosition());
       Logger.getInstance()
-          .recordOutput(container.getTitle() + "/CurrentAngle", getStateRotation().getDegrees());
+          .recordOutput(
+              "Steer/" + container.getTitle() + "/CurrentAngle", getStateRotation().getDegrees());
       Logger.getInstance()
-          .recordOutput(container.getTitle() + "/SupplyCurrent", getSupplyCurrent());
+          .recordOutput("Steer/" + container.getTitle() + "/SupplyCurrent", getSupplyCurrent());
       Logger.getInstance()
-          .recordOutput(container.getTitle() + "/StatorCurrent", getStatorCurrent());
+          .recordOutput("Steer/" + container.getTitle() + "/StatorCurrent", getStatorCurrent());
       Logger.getInstance()
-          .recordOutput(container.getTitle() + "/MotorOutputPercent", getMotorOutputPercent());
-      Logger.getInstance().recordOutput(container.getTitle() + "/Temperature", getTemperature());
+          .recordOutput(
+              "Steer/" + container.getTitle() + "/MotorOutputPercent", getMotorOutputPercent());
       Logger.getInstance()
-          .recordOutput(container.getTitle() + "/RotationalVelocity", getVelocity());
+          .recordOutput("Steer/" + container.getTitle() + "/Temperature", getTemperature());
+      Logger.getInstance()
+          .recordOutput("Steer/" + container.getTitle() + "/RotationalVelocity", getVelocity());
     }
   }
 
