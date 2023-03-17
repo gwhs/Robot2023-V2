@@ -34,6 +34,7 @@ public class Sideways extends CommandBase {
   private double I = 0;
   private double D = 0;
   private ProfiledPIDController pid = new ProfiledPIDController(P, I, D, constraints);
+  private int times = 0;
 
   /** Creates a new AutoAimLime. */
   public Sideways(
@@ -56,6 +57,7 @@ public class Sideways extends CommandBase {
     pid.reset(Math.toRadians(limeLight.getTx()));
     pid.setGoal(Math.toRadians(0));
     pid.setTolerance(Math.toRadians(1));
+    times = 0;
 
     // configure rotation pid
     System.out.println(poseEstimatorSubsystem.getAngle());
@@ -75,10 +77,12 @@ public class Sideways extends CommandBase {
     }
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
     // setpoint just makes sure it's in the tolerance, doesn't work
-    if (Math.abs(limeLight.getTx()) < .2) {
+    if (Math.abs(limeLight.getTx()) < .5) {
       sidewaysDone = true;
+      times ++;
     } else {
       sidewaysDone = false;
+      times = 0;
     }
 
     if (noTarget >= 10) {
@@ -96,7 +100,7 @@ public class Sideways extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return sidewaysDone;
+    return sidewaysDone && times > 5;
   }
 
   public double[] chassisValuesLower() {
