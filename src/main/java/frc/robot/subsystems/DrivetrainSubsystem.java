@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -28,7 +29,6 @@ import frc.robot.swerve.SwerveSpeedController;
 import frc.robot.swerve.SwerveSteerController;
 import java.util.Arrays;
 import java.util.stream.IntStream;
-import org.littletonrobotics.junction.Logger;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
@@ -467,13 +467,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
       SwerveModuleState moduleStates[] = getModuleStates();
       Logger.getInstance()
-          .recordOutput("DriveSpeed/Front Left Drive Speed", moduleStates[0].speedMetersPerSecond);
+          .recordOutput("DriveSpeed/Front Left Drive Speed",
+      moduleStates[0].speedMetersPerSecond);
       Logger.getInstance()
-          .recordOutput("DriveSpeed/Front Right Drive Speed", moduleStates[1].speedMetersPerSecond);
+          .recordOutput("DriveSpeed/Front Right Drive Speed",
+      moduleStates[1].speedMetersPerSecond);
       Logger.getInstance()
-          .recordOutput("DriveSpeed/Back Left Drive Speed", moduleStates[2].speedMetersPerSecond);
+          .recordOutput("DriveSpeed/Back Left Drive Speed",
+      moduleStates[2].speedMetersPerSecond);
       Logger.getInstance()
-          .recordOutput("DriveSpeed/Back Right Drive Speed", moduleStates[3].speedMetersPerSecond);
+          .recordOutput("DriveSpeed/Back Right Drive Speed",
+      moduleStates[3].speedMetersPerSecond);
 
       setModuleStates(desiredStates);
       Logger.getInstance().recordOutput("DriveTrainSub/DesireStates", desiredStates);

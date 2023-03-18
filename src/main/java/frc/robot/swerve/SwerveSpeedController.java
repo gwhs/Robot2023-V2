@@ -80,20 +80,21 @@ public class SwerveSpeedController {
       container.addNumber("Target Velocity", () -> referenceVelocity);
       container.addNumber("Current Position", () -> getStatePosition());
 
-      Logger.getInstance()
-          .recordOutput(container.getTitle() + "/DriveCurrentVelocity", getStateVelocity());
-      Logger.getInstance()
-          .recordOutput(container.getTitle() + "/DriveTargetVelocity", referenceVelocity);
-      Logger.getInstance()
-          .recordOutput(container.getTitle() + "/DriveCurrentPosition", getStatePosition());
-      Logger.getInstance()
-          .recordOutput(container.getTitle() + "/DriveSupplyCurrent", getSupplyCurrent());
-      Logger.getInstance()
-          .recordOutput(container.getTitle() + "/DriveStatorCurrent", getStatorCurrent());
-      Logger.getInstance()
-          .recordOutput(container.getTitle() + "/DriveMotorOutputPercent", getMotorOutputPercent());
-      Logger.getInstance()
-          .recordOutput(container.getTitle() + "/DriveTemperature", getTemperature());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/DriveCurrentVelocity", getStateVelocity());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/DriveTargetVelocity", referenceVelocity);
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/DriveCurrentPosition", getStatePosition());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/DriveSupplyCurrent", getSupplyCurrent());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/DriveStatorCurrent", getStatorCurrent());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/DriveMotorOutputPercent",
+      // getMotorOutputPercent());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/DriveTemperature", getTemperature());
     }
   }
 

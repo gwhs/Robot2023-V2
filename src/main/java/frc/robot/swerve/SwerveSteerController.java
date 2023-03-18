@@ -20,7 +20,6 @@ import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
-import org.littletonrobotics.junction.Logger;
 
 public class SwerveSteerController {
 
@@ -123,19 +122,20 @@ public class SwerveSteerController {
       container.addNumber("Current Angle", () -> getStateRotation().getDegrees());
       container.addNumber("Target Angle", () -> Math.toDegrees(desiredAngleRadians));
       container.addNumber("Absolute Encoder Angle", () -> encoder.getAbsolutePosition());
-      Logger.getInstance()
-          .recordOutput(
-              container.getTitle() + "/SteerCurrentAngle", getStateRotation().getDegrees());
-      Logger.getInstance()
-          .recordOutput(container.getTitle() + "/SteerSupplyCurrent", getSupplyCurrent());
-      Logger.getInstance()
-          .recordOutput(container.getTitle() + "/SteerStatorCurrent", getStatorCurrent());
-      Logger.getInstance()
-          .recordOutput(container.getTitle() + "/SteerMotorOutputPercent", getMotorOutputPercent());
-      Logger.getInstance()
-          .recordOutput(container.getTitle() + "/SteerTemperature", getTemperature());
-      Logger.getInstance()
-          .recordOutput(container.getTitle() + "/SteerRotationalVelocity", getVelocity());
+      // Logger.getInstance()
+      //     .recordOutput(
+      //         container.getTitle() + "/SteerCurrentAngle", getStateRotation().getDegrees());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/SteerSupplyCurrent", getSupplyCurrent());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/SteerStatorCurrent", getStatorCurrent());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/SteerMotorOutputPercent",
+      // getMotorOutputPercent());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/SteerTemperature", getTemperature());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/SteerRotationalVelocity", getVelocity());
     }
   }
 
