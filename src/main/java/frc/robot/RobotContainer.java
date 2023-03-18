@@ -599,7 +599,7 @@ public class RobotContainer {
     driver
         .rightBumper()
         .onTrue(
-            new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub).withTimeout(1.2));
+            new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub).withTimeout(2));
     // Cube Toss
     driver
         .y()
@@ -629,6 +629,7 @@ public class RobotContainer {
 
     // needs binding
     operator.a().onTrue(fieldHeadingDriveCommand);
+    operator.rightTrigger().onTrue(new ChangePipeline(limeLightSub));
     operator.x().onTrue(new AutoBalance(drivetrainSubsystem));
     operator
         .b()
@@ -636,7 +637,8 @@ public class RobotContainer {
             Commands.sequence(
                 Commands.runOnce(() -> mainArm.swapMode(), mainArm),
                 Commands.runOnce(() -> System.out.println("Mode Num: " + mainArm.getMode())),
-                Commands.runOnce(() -> m_led.toggleLED(), m_led)));
+                Commands.runOnce(() -> m_led.toggleLED(), m_led),
+                new ChangePipeline(limeLightSub)));
     operator.rightBumper().onTrue(new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
     // operator.rightBumper().onTrue(allLime);
     operator.leftBumper().onTrue(new StraightWheel(drivetrainSubsystem, true));
@@ -647,7 +649,6 @@ public class RobotContainer {
     operator
         .back()
         .onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
-    operator.a().onTrue(ArmSequenceCommand.starting());
 
     operator
         .y()
