@@ -70,7 +70,7 @@ public class AutoBalance extends CommandBase {
     requiredEngageTimeDefault = 0.1;
     requiredStateChangeTimeDefault = 0.001;
     initialSpeedDefault = 0.4;
-    epsilonRateDefault = 1;
+    epsilonRateDefault = 2;
 
     engageTimer = new Timer();
     engageTimer.stop();

@@ -623,6 +623,7 @@ public class RobotContainer {
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
     driver.leftBumper().onTrue(new toZero(drivetrainSubsystem, poseEstimator));
+    driver.x().onTrue(new StraightWheel(drivetrainSubsystem, true));
     // driver.start().onTrue(fieldHeadingDriveCommand);
     // driver.back().onTrue(fieldHeadingDriveCommand);
     // operator.x().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 70));

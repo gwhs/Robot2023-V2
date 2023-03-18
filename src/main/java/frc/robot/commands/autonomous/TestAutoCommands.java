@@ -62,7 +62,8 @@ public final class TestAutoCommands {
           //           driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.75, .75),
           // true)),
           //    new MagicMotionPos(mainArm, 40, 1, 1, .5),
-          new MagicMotionPos(mainArm, 190, 2.75, 5, .5),
+          new MagicMotionPos(mainArm, 195.0, 2.75, 5.5, 1),
+          Commands.waitSeconds(.25),
           new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
           new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
           new ParallelCommandGroup(
@@ -157,7 +158,8 @@ public final class TestAutoCommands {
               new PPSwerveFollower(
                   driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.5, .5), true)),
           new MagicMotionPos(mainArm, 40, 1, 1, .5),
-          new MagicMotionPos(mainArm, 190, 2.75, 5, .5),
+          new MagicMotionPos(mainArm, 195.0, 2.75, 5.5, 1),
+          Commands.waitSeconds(.25),
           new ParallelCommandGroup(
               new SequentialCommandGroup(
                   new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
@@ -304,7 +306,8 @@ public final class TestAutoCommands {
               new PPSwerveFollower(
                   driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.5, .5), true)),
           new MagicMotionPos(mainArm, 40, 1, 1, .5),
-          new MagicMotionPos(mainArm, 190, 2.75, 5, .5),
+          new MagicMotionPos(mainArm, 195.0, 2.75, 5.5, 1),
+          Commands.waitSeconds(.25),
           new ParallelCommandGroup(
               new SequentialCommandGroup(
                   new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
@@ -367,7 +370,8 @@ public final class TestAutoCommands {
               new PPSwerveFollower(
                   driveSystem, poseEstimatorSystem, "move12", new PathConstraints(.5, .5), true)),
           new MagicMotionPos(mainArm, 40, 1, 1, .5),
-          new MagicMotionPos(mainArm, 190, 2.75, 5, .5),
+          new MagicMotionPos(mainArm, 195.0, 2.75, 5.5, 1),
+          Commands.waitSeconds(.25),
           new ParallelCommandGroup(
               new SequentialCommandGroup(
                   new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
