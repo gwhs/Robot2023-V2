@@ -124,7 +124,7 @@ public class CubePPIDAutoAim extends CommandBase {
     angleDone = false;
     sidewaysDone = false;
     // calculates how far it is from target
-    distanceError = limeLight.getXDistance() - targetDistance;
+    distanceError = limeLight.getCubeXDistance() - targetDistance;
 
     angleP = anglePEntry.getDouble(anglePDefault);
     angleI = angleIEntry.getDouble(angleIDefault);
@@ -197,7 +197,7 @@ public class CubePPIDAutoAim extends CommandBase {
      * use sin and cos to get values to reach max speed
      * not really sure about the angle yet.
      */
-    distanceError = limeLight.getXDistance() - targetDistance;
+    distanceError = limeLight.getCubeXDistance() - targetDistance;
     double[] x = new double[3];
 
     double d = (positionP) * distanceError;
