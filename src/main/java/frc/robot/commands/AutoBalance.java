@@ -179,7 +179,7 @@ public class AutoBalance extends CommandBase {
     // double currentAngle = gyro.getRoll();
     // double currentDPS = gyro.getRollRate();
 
-    // for chuck
+    // for ryker
     double currentAngle = -gyro.getPitch();
     double currentDPS = -gyro.getPitchRate();
 
