@@ -122,6 +122,20 @@ public class SwerveSteerController {
       container.addNumber("Current Angle", () -> getStateRotation().getDegrees());
       container.addNumber("Target Angle", () -> Math.toDegrees(desiredAngleRadians));
       container.addNumber("Absolute Encoder Angle", () -> encoder.getAbsolutePosition());
+      // Logger.getInstance()
+      //     .recordOutput(
+      //         container.getTitle() + "/SteerCurrentAngle", getStateRotation().getDegrees());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/SteerSupplyCurrent", getSupplyCurrent());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/SteerStatorCurrent", getStatorCurrent());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/SteerMotorOutputPercent",
+      // getMotorOutputPercent());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/SteerTemperature", getTemperature());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/SteerRotationalVelocity", getVelocity());
     }
   }
 
@@ -217,6 +231,26 @@ public class SwerveSteerController {
     }
 
     return new Rotation2d(motorAngleRadians);
+  }
+
+  public double getSupplyCurrent() {
+    return motor.getSupplyCurrent();
+  }
+
+  public double getStatorCurrent() {
+    return motor.getStatorCurrent();
+  }
+
+  public double getMotorOutputPercent() {
+    return motor.getMotorOutputPercent();
+  }
+
+  public double getTemperature() {
+    return motor.getTemperature();
+  }
+
+  public double getVelocity() {
+    return encoder.getVelocity();
   }
 
   /**

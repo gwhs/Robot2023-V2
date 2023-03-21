@@ -11,6 +11,8 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.Logger;
 
 public class MagicMotion extends SubsystemBase {
   public int modeNum = -1;
@@ -20,6 +22,13 @@ public class MagicMotion extends SubsystemBase {
   public MagicMotion(int id, String can) {
     testTalon = new TalonFX(id, can);
     resetPosition();
+  }
+
+  @Override
+  public void periodic() {
+    updateInputs(inputs);
+    Logger.getInstance().processInputs(getName(), inputs);
+    // This method will be called once per scheduler run
   }
 
   public void robotInit() {
@@ -136,5 +145,22 @@ public class MagicMotion extends SubsystemBase {
 
   public void neutralOutput() {
     testTalon.neutralOutput();
+  }
+
+  @AutoLog
+  public static class ArmInputs {
+    public double BusVoltage = 0;
+    public double StatorCurrent = 0;
+    public double SupplyCurrent = 0;
+    public double MotorOutputPercent = 0;
+  }
+
+  public ArmInputsAutoLogged inputs = new ArmInputsAutoLogged();
+
+  public void updateInputs(ArmInputs inputs) {
+    inputs.BusVoltage = testTalon.getBusVoltage();
+    inputs.SupplyCurrent = testTalon.getSupplyCurrent();
+    inputs.StatorCurrent = testTalon.getStatorCurrent();
+    inputs.MotorOutputPercent = testTalon.getMotorOutputPercent();
   }
 }
