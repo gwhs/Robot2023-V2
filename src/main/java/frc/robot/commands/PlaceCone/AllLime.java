@@ -30,7 +30,6 @@ public class AllLime extends SequentialCommandGroup {
         new StraightWheel(drivetrainSubsystem),
         new Sideways(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
         new StraightWheel(drivetrainSubsystem),
-        new PPIDAutoAim(
-            drivetrainSubsystem, limeLightSub, LimeLightConstants.UPPER_DISTANCE_SHOOT));
+        new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.TOP_DISTANCE_SHOOT));
   }
 }

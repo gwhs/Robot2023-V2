@@ -17,9 +17,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.CubeLightConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.RobotSetup;
-import frc.robot.commands.Arm.ArmSequence;
+import frc.robot.commands.Arm.ArmSequenceTop;
 import frc.robot.commands.Arm.ClawEncoderMoveDown;
 import frc.robot.commands.Arm.ClawEncoderMoveUp;
 import frc.robot.commands.Arm.ClawOpenClose;
@@ -35,6 +36,7 @@ import frc.robot.commands.PlaceCone.ChangePipeline;
 import frc.robot.commands.PlaceCone.PPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceHigh;
 import frc.robot.commands.PlaceCone.PlaceLow;
+import frc.robot.commands.PlaceCone.CubePPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
@@ -83,8 +85,8 @@ public class RobotContainer {
   private final BoreEncoder shaftEncoder = new BoreEncoder(0, 1, "Arm"); // Blue 7 ; Yellow 8
   private final BoreEncoder clawEncoder = new BoreEncoder(2, 3, "Claw");
   private SendableChooser<String> m_chooser;
-  private final ArmSequence ArmSequenceCommand =
-      new ArmSequence(mainArm, shaftEncoder, clawEncoder, clawPivot);
+  private final ArmSequenceTop ArmSequenceCommand =
+      new ArmSequenceTop(mainArm, shaftEncoder, clawEncoder, clawPivot);
 
   // Led status
   private int status = 1;
@@ -488,18 +490,26 @@ public class RobotContainer {
 
   private void configureAutoBalanceBindings() {
     this.startAndBackButton();
-    driver.x().onTrue(sideways);
-    driver.y().onTrue(sideways);
-    driver.a().onTrue(sideways);
-    driver.b().onTrue(sideways);
   }
 
   private void configureArmBindings() {
     this.startAndBackButton();
     driver.x().onTrue(sideways);
-    driver.y().onTrue(sideways);
-    driver.a().onTrue(sideways);
-    driver.b().onTrue(sideways);
+    driver.y().onTrue(ArmSequenceCommand.starting());
+    driver
+        .a()
+        .onTrue(
+            Commands.sequence(
+                new CubePPIDAutoAim(
+                    drivetrainSubsystem, limeLightSub, CubeLightConstants.MID_DISTANCE_SHOOT)));
+    driver
+        .b()
+        .onTrue(
+            Commands.sequence(
+                Commands.runOnce(() -> mainArm.swapMode(), mainArm),
+                Commands.runOnce(() -> System.out.println("Mode Num: " + mainArm.getMode())),
+                Commands.runOnce(() -> m_led.toggleLED(), m_led),
+                new ChangePipeline(limeLightSub)));
   }
 
   private void setupPathChooser() {
@@ -515,37 +525,7 @@ public class RobotContainer {
     m_chooser.addOption("A 1 Mobility and engage", "APlaceME");
     m_chooser.addOption("C place and engage", "C1+E");
     m_chooser.addOption("G place and engage", "G1+E");
-
-    // m_chooser.addOption("A 2 piece and engage", "A2E");
-    // m_chooser.addOption("D place and hold", "D1+1");
-    // m_chooser.addOption("F place and hold", "F1+1");
-    // m_chooser.addOption("G 2 piece and engage", "G2E");
-    // m_chooser.addOption("G 2 piece and engage No Lime", "G2ENoLime");
-    // m_chooser.addOption("I 2 piece and hold", "I2+1");
-    // m_chooser.addOption("I 2 piece engage and hold", "I2+1E");
-    // m_chooser.addOption("I 2+ and engage", "HajelPathV2");
-    // m_chooser.addOption("I 2+ and engage no Lime", "HajelPathV2NoLime");
-    // m_chooser.addOption("I 2 piece", "I2");
-    // m_chooser.addOption("I 2 piece no Lime", "I2NoLime");
   }
-
-  // if (m_led.getLedMode() == LEDMode.YELLOW) {
-  //   m_led.setLedMode(LEDMode.PURPLE);
-  // } else if (m_led.getLedMode() == LEDMode.PURPLE) {
-  //   m_led.setLedMode(LEDMode.EMERGENCY);
-  // } else if (m_led.getLedMode() == LEDMode.EMERGENCY) {
-  //   m_led.setLedMode(LEDMode.GREEN);
-  // } else if (m_led.getLedMode() == LEDMode.GREEN) {
-  //   m_led.setLedMode(LEDMode.ORANGE);
-  // } else if (m_led.getLedMode() == LEDMode.ORANGE) {
-  //   m_led.setLedMode(LEDMode.TEAMCOLOR);
-  // } else if (m_led.getLedMode() == LEDMode.TEAMCOLOR) {
-  //   m_led.setLedMode(LEDMode.RAINBOW);
-  // } else if (m_led.getLedMode() == LEDMode.RAINBOW) {
-  //   m_led.setLedMode(LEDMode.PINK);
-  // } else {
-  //   m_led.setLedMode(LEDMode.YELLOW);
-  // }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
