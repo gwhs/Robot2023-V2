@@ -70,7 +70,7 @@ public class RobotContainer {
   // change robot name
   // change this to change robot -----------------v
   // change the same in Robot.java
-  private final RobotSetup robot = Constants.chuck;
+  private final RobotSetup robot = Constants.ryker;
 
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
@@ -677,7 +677,7 @@ public class RobotContainer {
   // zoey
   /*
    * a = cone
-   * y = chuck cube
+   * y = ryker cube
    * x = rotate
    * rightbump rotate
    * leftbump = stopeverything
