@@ -62,9 +62,9 @@ public class AutoBalance extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
 
-    pConstantDefault = 0.0035; // 0.0045 original these are the default values set on the robot and
+    pConstantDefault = 0.009; // 0.0045 original these are the default values set on the robot and
     // shuffleboard
-    dConstantDefault = 0.00048;
+    dConstantDefault = 0.0001;
     toleranceDefault = 2;
     maxSpeedDefault = 0.5;
     requiredEngageTimeDefault = 0.1;
