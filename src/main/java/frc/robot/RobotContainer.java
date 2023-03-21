@@ -488,18 +488,19 @@ public class RobotContainer {
 
   private void configureAutoBalanceBindings() {
     this.startAndBackButton();
-    driver.x().onTrue(sideways);
-    driver.y().onTrue(sideways);
-    driver.a().onTrue(sideways);
-    driver.b().onTrue(sideways);
   }
 
   private void configureArmBindings() {
     this.startAndBackButton();
     driver.x().onTrue(sideways);
     driver.y().onTrue(sideways);
-    driver.a().onTrue(sideways);
-    driver.b().onTrue(sideways);
+    driver.a().onTrue(Commands.sequence(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, )));
+    driver.b().onTrue(
+        Commands.sequence(
+            Commands.runOnce(() -> mainArm.swapMode(), mainArm),
+            Commands.runOnce(() -> System.out.println("Mode Num: " + mainArm.getMode())),
+            Commands.runOnce(() -> m_led.toggleLED(), m_led),
+            new ChangePipeline(limeLightSub)));
   }
 
   private void setupPathChooser() {
@@ -516,36 +517,7 @@ public class RobotContainer {
     m_chooser.addOption("C place and engage", "C1+E");
     m_chooser.addOption("G place and engage", "G1+E");
 
-    // m_chooser.addOption("A 2 piece and engage", "A2E");
-    // m_chooser.addOption("D place and hold", "D1+1");
-    // m_chooser.addOption("F place and hold", "F1+1");
-    // m_chooser.addOption("G 2 piece and engage", "G2E");
-    // m_chooser.addOption("G 2 piece and engage No Lime", "G2ENoLime");
-    // m_chooser.addOption("I 2 piece and hold", "I2+1");
-    // m_chooser.addOption("I 2 piece engage and hold", "I2+1E");
-    // m_chooser.addOption("I 2+ and engage", "HajelPathV2");
-    // m_chooser.addOption("I 2+ and engage no Lime", "HajelPathV2NoLime");
-    // m_chooser.addOption("I 2 piece", "I2");
-    // m_chooser.addOption("I 2 piece no Lime", "I2NoLime");
   }
-
-  // if (m_led.getLedMode() == LEDMode.YELLOW) {
-  //   m_led.setLedMode(LEDMode.PURPLE);
-  // } else if (m_led.getLedMode() == LEDMode.PURPLE) {
-  //   m_led.setLedMode(LEDMode.EMERGENCY);
-  // } else if (m_led.getLedMode() == LEDMode.EMERGENCY) {
-  //   m_led.setLedMode(LEDMode.GREEN);
-  // } else if (m_led.getLedMode() == LEDMode.GREEN) {
-  //   m_led.setLedMode(LEDMode.ORANGE);
-  // } else if (m_led.getLedMode() == LEDMode.ORANGE) {
-  //   m_led.setLedMode(LEDMode.TEAMCOLOR);
-  // } else if (m_led.getLedMode() == LEDMode.TEAMCOLOR) {
-  //   m_led.setLedMode(LEDMode.RAINBOW);
-  // } else if (m_led.getLedMode() == LEDMode.RAINBOW) {
-  //   m_led.setLedMode(LEDMode.PINK);
-  // } else {
-  //   m_led.setLedMode(LEDMode.YELLOW);
-  // }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
