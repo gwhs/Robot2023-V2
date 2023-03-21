@@ -78,6 +78,22 @@ public class SwerveSpeedController {
       container.addNumber("Current Velocity", () -> getStateVelocity());
       container.addNumber("Target Velocity", () -> referenceVelocity);
       container.addNumber("Current Position", () -> getStatePosition());
+
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/DriveCurrentVelocity", getStateVelocity());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/DriveTargetVelocity", referenceVelocity);
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/DriveCurrentPosition", getStatePosition());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/DriveSupplyCurrent", getSupplyCurrent());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/DriveStatorCurrent", getStatorCurrent());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/DriveMotorOutputPercent",
+      // getMotorOutputPercent());
+      // Logger.getInstance()
+      //     .recordOutput(container.getTitle() + "/DriveTemperature", getTemperature());
     }
   }
 
@@ -89,6 +105,20 @@ public class SwerveSpeedController {
         velocity / sensorVelocityCoefficient,
         DemandType.ArbitraryFeedForward,
         arbFeedForward);
+
+    // Logger.getInstance()
+    //     .recordOutput("Motor_" + motor.getDeviceID() + "/DriveSupplyCurrent",
+    // getSupplyCurrent());
+    // Logger.getInstance()
+    //     .recordOutput("Motor_" + motor.getDeviceID() + "/DriveStatorCurrent",
+    // getStatorCurrent());
+    // Logger.getInstance()
+    //     .recordOutput(
+    //         "Motor_" + motor.getDeviceID() + "/DriveMotorOutputPercent",
+    // getMotorOutputPercent());
+    // Logger.getInstance()
+    //     .recordOutput("Motor_" + motor.getDeviceID() + "/DriveTemperature", getTemperature());
+    //
     motor.feed();
   }
 
@@ -99,6 +129,22 @@ public class SwerveSpeedController {
    */
   public double getStateVelocity() {
     return motor.getSelectedSensorVelocity() * sensorVelocityCoefficient;
+  }
+
+  public double getSupplyCurrent() {
+    return motor.getSupplyCurrent();
+  }
+
+  public double getStatorCurrent() {
+    return motor.getStatorCurrent();
+  }
+
+  public double getMotorOutputPercent() {
+    return motor.getMotorOutputPercent();
+  }
+
+  public double getTemperature() {
+    return motor.getTemperature();
   }
 
   /**

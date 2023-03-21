@@ -28,7 +28,7 @@ public class toZero extends CommandBase {
   private boolean angleDone = false;
   private double p = .002;
   private int noTarg = 0;
-  private double angleP = .03;
+  private double angleP = .04;
   private double anglePDefault;
   private GenericEntry anglePEntry;
 
@@ -137,8 +137,8 @@ public class toZero extends CommandBase {
 
     double[] x = new double[3];
 
-    x[0] = 0.00001;
-    x[1] = .00001;
+    x[0] = 0.0000001;
+    x[1] = .0000001;
     x[2] =
         angleDone
             ? 0
