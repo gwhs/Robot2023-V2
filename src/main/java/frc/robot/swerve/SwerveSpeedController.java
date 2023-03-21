@@ -7,6 +7,8 @@ import static frc.robot.Constants.DrivetrainConstants.DRIVE_kP;
 import static frc.robot.Constants.DrivetrainConstants.DRIVE_kS;
 import static frc.robot.Constants.DrivetrainConstants.DRIVE_kV;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -106,18 +108,18 @@ public class SwerveSpeedController {
         DemandType.ArbitraryFeedForward,
         arbFeedForward);
 
-    // Logger.getInstance()
-    //     .recordOutput("Motor_" + motor.getDeviceID() + "/DriveSupplyCurrent",
-    // getSupplyCurrent());
-    // Logger.getInstance()
-    //     .recordOutput("Motor_" + motor.getDeviceID() + "/DriveStatorCurrent",
-    // getStatorCurrent());
-    // Logger.getInstance()
-    //     .recordOutput(
-    //         "Motor_" + motor.getDeviceID() + "/DriveMotorOutputPercent",
-    // getMotorOutputPercent());
-    // Logger.getInstance()
-    //     .recordOutput("Motor_" + motor.getDeviceID() + "/DriveTemperature", getTemperature());
+    Logger.getInstance()
+        .recordOutput("Motor_" + motor.getDeviceID() + "/DriveSupplyCurrent",
+    getSupplyCurrent());
+    Logger.getInstance()
+        .recordOutput("Motor_" + motor.getDeviceID() + "/DriveStatorCurrent",
+    getStatorCurrent());
+    Logger.getInstance()
+        .recordOutput(
+            "Motor_" + motor.getDeviceID() + "/DriveMotorOutputPercent",
+    getMotorOutputPercent());
+    Logger.getInstance()
+        .recordOutput("Motor_" + motor.getDeviceID() + "/DriveTemperature", getTemperature());
     //
     motor.feed();
   }

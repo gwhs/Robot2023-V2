@@ -467,13 +467,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
       SwerveModuleState moduleStates[] = getModuleStates();
       Logger.getInstance()
-          .recordOutput("DriveSpeed/Front Left Drive Speed", moduleStates[0].speedMetersPerSecond);
+          .recordOutput("DriveSpeed/Front Left Drive Speed", Math.abs(moduleStates[0].speedMetersPerSecond));
       Logger.getInstance()
-          .recordOutput("DriveSpeed/Front Right Drive Speed", moduleStates[1].speedMetersPerSecond);
+          .recordOutput("DriveSpeed/Front Right Drive Speed", Math.abs(moduleStates[1].speedMetersPerSecond));
       Logger.getInstance()
-          .recordOutput("DriveSpeed/Back Left Drive Speed", moduleStates[2].speedMetersPerSecond);
+          .recordOutput("DriveSpeed/Back Left Drive Speed", Math.abs(moduleStates[2].speedMetersPerSecond));
       Logger.getInstance()
-          .recordOutput("DriveSpeed/Back Right Drive Speed", moduleStates[3].speedMetersPerSecond);
+          .recordOutput("DriveSpeed/Back Right Drive Speed", Math.abs(moduleStates[3].speedMetersPerSecond));
 
       setModuleStates(desiredStates);
       Logger.getInstance().recordOutput("DriveTrainSub/DesireStates", desiredStates);
