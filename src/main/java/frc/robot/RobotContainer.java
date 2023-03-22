@@ -32,7 +32,6 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.ChangePipeline;
-import frc.robot.commands.PlaceCone.CubePPIDAutoAim;
 import frc.robot.commands.PlaceCone.PPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceHigh;
 import frc.robot.commands.PlaceCone.PlaceLow;

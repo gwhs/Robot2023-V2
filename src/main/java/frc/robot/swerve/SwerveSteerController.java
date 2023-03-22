@@ -224,14 +224,17 @@ public class SwerveSteerController {
     this.desiredAngleRadians = desiredAngleRadians;
 
     Logger.getInstance()
-        .recordOutput("Motor_" + motor.getDeviceID() + "/DriveSupplyCurrent", getSupplyCurrent());
-    Logger.getInstance()
-        .recordOutput("Motor_" + motor.getDeviceID() + "/DriveStatorCurrent", getStatorCurrent());
+        .recordOutput(
+            "SteerMotor_" + motor.getDeviceID() + "/DriveSupplyCurrent", getSupplyCurrent());
     Logger.getInstance()
         .recordOutput(
-            "Motor_" + motor.getDeviceID() + "/DriveMotorOutputPercent", getMotorOutputPercent());
+            "SteerMotor_" + motor.getDeviceID() + "/DriveStatorCurrent", getStatorCurrent());
     Logger.getInstance()
-        .recordOutput("Motor_" + motor.getDeviceID() + "/DriveTemperature", getTemperature());
+        .recordOutput(
+            "SteerMotor_" + motor.getDeviceID() + "/DriveMotorOutputPercent",
+            getMotorOutputPercent());
+    Logger.getInstance()
+        .recordOutput("SteerMotor_" + motor.getDeviceID() + "/DriveTemperature", getTemperature());
   }
 
   public Rotation2d getStateRotation() {
