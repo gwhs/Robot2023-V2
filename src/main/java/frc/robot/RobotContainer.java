@@ -17,8 +17,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.CubeLightConstants;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.RobotSetup;
 import frc.robot.commands.Arm.ArmSequenceTop;
 import frc.robot.commands.Arm.ClawEncoderMoveDown;
@@ -32,7 +32,6 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.ChangePipeline;
-import frc.robot.commands.PlaceCone.CubePPIDAutoAim;
 import frc.robot.commands.PlaceCone.PPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceHigh;
 import frc.robot.commands.PlaceCone.PlaceLow;
@@ -497,8 +496,8 @@ public class RobotContainer {
         .a()
         .onTrue(
             Commands.sequence(
-                new CubePPIDAutoAim(
-                    drivetrainSubsystem, limeLightSub, CubeLightConstants.MID_DISTANCE_SHOOT)));
+                new PPIDAutoAim(
+                    drivetrainSubsystem, limeLightSub, LimeLightConstants.MID_DISTANCE_SHOOT)));
     driver
         .b()
         .onTrue(

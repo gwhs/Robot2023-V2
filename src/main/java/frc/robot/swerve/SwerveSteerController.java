@@ -20,6 +20,7 @@ import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
+import org.littletonrobotics.junction.Logger;
 
 public class SwerveSteerController {
 
@@ -221,6 +222,16 @@ public class SwerveSteerController {
         adjustedReferenceAngleRadians / motorEncoderPositionCoefficient);
 
     this.desiredAngleRadians = desiredAngleRadians;
+
+    Logger.getInstance()
+        .recordOutput("Motor_" + motor.getDeviceID() + "/DriveSupplyCurrent", getSupplyCurrent());
+    Logger.getInstance()
+        .recordOutput("Motor_" + motor.getDeviceID() + "/DriveStatorCurrent", getStatorCurrent());
+    Logger.getInstance()
+        .recordOutput(
+            "Motor_" + motor.getDeviceID() + "/DriveMotorOutputPercent", getMotorOutputPercent());
+    Logger.getInstance()
+        .recordOutput("Motor_" + motor.getDeviceID() + "/DriveTemperature", getTemperature());
   }
 
   public Rotation2d getStateRotation() {
