@@ -32,6 +32,7 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.ChangePipeline;
+import frc.robot.commands.PlaceCone.CubePPIDAutoAim;
 import frc.robot.commands.PlaceCone.PPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceHigh;
 import frc.robot.commands.PlaceCone.PlaceLow;
@@ -521,6 +522,7 @@ public class RobotContainer {
     m_chooser.addOption("A 1 Mobility and engage", "APlaceME");
     m_chooser.addOption("C place and engage", "C1+E");
     m_chooser.addOption("G place and engage", "G1+E");
+    m_chooser.addOption("straight with rotation", "StraightWithRotation");
   }
 
   /**

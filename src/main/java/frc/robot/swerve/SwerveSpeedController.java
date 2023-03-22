@@ -107,16 +107,19 @@ public class SwerveSpeedController {
         DemandType.ArbitraryFeedForward,
         arbFeedForward);
 
-    Logger.getInstance()
-        .recordOutput("Motor_" + motor.getDeviceID() + "/DriveSupplyCurrent", getSupplyCurrent());
-    Logger.getInstance()
-        .recordOutput("Motor_" + motor.getDeviceID() + "/DriveStatorCurrent", getStatorCurrent());
-    Logger.getInstance()
-        .recordOutput(
-            "Motor_" + motor.getDeviceID() + "/DriveMotorOutputPercent", getMotorOutputPercent());
-    Logger.getInstance()
-        .recordOutput("Motor_" + motor.getDeviceID() + "/DriveTemperature", getTemperature());
-
+    // Logger.getInstance()
+    //     .recordOutput("Motor_" + motor.getDeviceID() + "/DriveSupplyCurrent",
+    // getSupplyCurrent());
+    // Logger.getInstance()
+    //     .recordOutput("Motor_" + motor.getDeviceID() + "/DriveStatorCurrent",
+    // getStatorCurrent());
+    // Logger.getInstance()
+    //     .recordOutput(
+    //         "Motor_" + motor.getDeviceID() + "/DriveMotorOutputPercent",
+    // getMotorOutputPercent());
+    // Logger.getInstance()
+    //     .recordOutput("Motor_" + motor.getDeviceID() + "/DriveTemperature", getTemperature());
+    //
     motor.feed();
   }
 
