@@ -100,10 +100,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
               backLeftLayout,
               backRightLayout,
               setup.canivore_name());
-    } else if (setup.name().equals("chuck")) {
-      driveTrain = DriveTrainConstants.chuck;
+    } else if (setup.name().equals("ryker")) {
+      driveTrain = DriveTrainConstants.ryker;
       swerveModules =
-          swerveModuleChuck(
+          swerveModuleryker(
               frontLeftLayout,
               frontRightLayout,
               backLeftLayout,
@@ -232,7 +232,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return swerveModules;
   }
 
-  private SwerveModule[] swerveModuleChuck(
+  private SwerveModule[] swerveModuleryker(
       ShuffleboardLayout frontLeftLayout,
       ShuffleboardLayout frontRightLayout,
       ShuffleboardLayout backLeftLayout,

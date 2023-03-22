@@ -52,7 +52,7 @@ public class ToPole extends CommandBase {
   @Override
   public void initialize() {
     done = false;
-    distanceError = limeLight.getXDistance() - LimeLightConstants.UPPER_DISTANCE_SHOOT;
+    distanceError = limeLight.getConeXDistance() - LimeLightConstants.TOP_DISTANCE_SHOOT;
 
     // rotating to align
     // Pid.reset(distanceError);
@@ -108,7 +108,7 @@ public class ToPole extends CommandBase {
     3 is degrees rotation
     */
 
-    distanceError = limeLight.getXDistance() - LimeLightConstants.UPPER_DISTANCE_SHOOT;
+    distanceError = limeLight.getConeXDistance() - LimeLightConstants.TOP_DISTANCE_SHOOT;
     // pid is broken, so we just do the proportional by self.
     double[] x = new double[3];
     x[0] = P * distanceError;
