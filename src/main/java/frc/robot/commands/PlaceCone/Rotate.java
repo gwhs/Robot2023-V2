@@ -30,8 +30,8 @@ public class Rotate extends CommandBase {
   private double[] values = {0, 0, 0};
   private boolean angleDone = false;
   private boolean sideDone = false;
-  private double p = .015; // these ones are for sideways
-  private double d = .0001;
+  private double p = .04; // these ones are for sideways
+  private double d = .003;
   private double prevAng;
   private int times = 0;
   private int noTarg = 0;
@@ -55,7 +55,7 @@ public class Rotate extends CommandBase {
   // gets there in a second
 
   private double angleI = 0;
-  private double angleD = .001;
+  private double angleD = .002;
 
   /** Creates a new Rotate. */
   public Rotate(
@@ -67,7 +67,7 @@ public class Rotate extends CommandBase {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.limeLight = limeLightSub;
 
-    anglePDefault = .1;
+    anglePDefault = .04;
 
     tab = Shuffleboard.getTab("Drive");
 
@@ -119,12 +119,12 @@ public class Rotate extends CommandBase {
     // System.out.printf(
     //     "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // setpoint and atgoal don't work, just brute forced.
-    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < 2) {
+    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < 1.5) {
       angleDone = true;
     } else {
       angleDone = false;
     }
-    if (Math.abs(limeLight.getTx()) < 10) {
+    if (Math.abs(limeLight.getTx()) < 1.5) {
       sideDone = true;
     } else {
       sideDone = false;
