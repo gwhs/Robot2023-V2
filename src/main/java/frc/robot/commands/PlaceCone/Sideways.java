@@ -30,9 +30,10 @@ public class Sideways extends CommandBase {
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50,
           DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND / 50);
 
-  private double P = .007;
+  private double P = .06;
   private double I = 0;
-  private double D = 0;
+  private double D = 0.002;
+  private double prevDist;
   private ProfiledPIDController pid = new ProfiledPIDController(P, I, D, constraints);
 
   /** Creates a new AutoAimLime. */
@@ -75,14 +76,12 @@ public class Sideways extends CommandBase {
     }
     // atgoal is not working, it needs it to be == setpoint and be in setpoint.
     // setpoint just makes sure it's in the tolerance, doesn't work
-    if (Math.abs(limeLight.getTx()) < .2) {
+    if (Math.abs(limeLight.getTx()) < .5) {
       sidewaysDone = true;
+      seen++;
     } else {
       sidewaysDone = false;
-    }
-
-    if (noTarget >= 10) {
-      sidewaysDone = true;
+      seen = 0;
     }
   }
 
@@ -96,7 +95,7 @@ public class Sideways extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return sidewaysDone;
+    return (sidewaysDone && seen > 5) || noTarget > 10;
   }
 
   public double[] chassisValuesLower() {

@@ -17,8 +17,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.CubeLightConstants;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.RobotSetup;
 import frc.robot.commands.Arm.ArmSequenceTop;
 import frc.robot.commands.Arm.ClawEncoderMoveDown;
@@ -35,7 +35,6 @@ import frc.robot.commands.PlaceCone.ChangePipeline;
 import frc.robot.commands.PlaceCone.PPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceHigh;
 import frc.robot.commands.PlaceCone.PlaceLow;
-import frc.robot.commands.PlaceCone.CubePPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
@@ -167,7 +166,8 @@ public class RobotContainer {
     // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
-    officialBindings();
+    // officialBindings();
+    configureArmBindings();
 
     setupPathChooser();
   }
@@ -237,7 +237,6 @@ public class RobotContainer {
     // rotate
     driver.leftBumper().onTrue(rotate);
     // rotate
-
 
     operator
         .back()
@@ -491,14 +490,14 @@ public class RobotContainer {
 
   private void configureArmBindings() {
     this.startAndBackButton();
-    driver.x().onTrue(sideways);
-    driver.y().onTrue(ArmSequenceCommand.starting());
+    driver.x().onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
+    driver.y().onTrue(new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub));
     driver
         .a()
         .onTrue(
             Commands.sequence(
-                new CubePPIDAutoAim(
-                    drivetrainSubsystem, limeLightSub, CubeLightConstants.MID_DISTANCE_SHOOT)));
+                new PPIDAutoAim(
+                    drivetrainSubsystem, limeLightSub, LimeLightConstants.MID_DISTANCE_SHOOT)));
     driver
         .b()
         .onTrue(
@@ -522,6 +521,7 @@ public class RobotContainer {
     m_chooser.addOption("A 1 Mobility and engage", "APlaceME");
     m_chooser.addOption("C place and engage", "C1+E");
     m_chooser.addOption("G place and engage", "G1+E");
+    m_chooser.addOption("straight with rotation", "StraightWithRotation");
   }
 
   /**
