@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.GyroMoment.WrappedGyro;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
@@ -29,12 +30,15 @@ public class Rotate extends CommandBase {
   private double[] values = {0, 0, 0};
   private boolean angleDone = false;
   private boolean sideDone = false;
-  private double p = .005;
+  private double p = .04; // these ones are for sideways
+  private double d = .003;
+  private double prevAng;
   private int times = 0;
   private int noTarg = 0;
-  private double angleP = .006;
+  private double angleP = .0;
   private double anglePDefault;
   private GenericEntry anglePEntry;
+  private WrappedGyro gyro;
 
   private final ShuffleboardTab tab;
 
@@ -51,7 +55,7 @@ public class Rotate extends CommandBase {
   // gets there in a second
 
   private double angleI = 0;
-  private double angleD = 0;
+  private double angleD = .002;
 
   /** Creates a new Rotate. */
   public Rotate(
@@ -63,7 +67,7 @@ public class Rotate extends CommandBase {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.limeLight = limeLightSub;
 
-    anglePDefault = .03;
+    anglePDefault = .04;
 
     tab = Shuffleboard.getTab("Drive");
 
@@ -115,16 +119,17 @@ public class Rotate extends CommandBase {
     // System.out.printf(
     //     "X equals %.2f PID moves %.2f%n", poseEstimatorSubsystem.getAngle(), values[2]);
     // setpoint and atgoal don't work, just brute forced.
-    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < 2) {
+    if (Math.abs(180 - poseEstimatorSubsystem.getAngle()) < 1.5) {
       angleDone = true;
     } else {
       angleDone = false;
     }
-    if (Math.abs(limeLight.getTx()) < 2) {
+    if (Math.abs(limeLight.getTx()) < 1.5) {
       sideDone = true;
     } else {
       sideDone = false;
     }
+
     if (sideDone && angleDone) {
       times++;
     } else {
@@ -135,6 +140,7 @@ public class Rotate extends CommandBase {
     } else {
       noTarg++;
     }
+    prevAng = limeLight.getTx();
   }
 
   // Called once the command ends or is interrupted.
@@ -161,13 +167,17 @@ public class Rotate extends CommandBase {
     double[] x = new double[3];
 
     x[0] = 0.00001;
-    x[1] = Math.abs(limeLight.getTx()) > 1 ? (-p * limeLight.getTx()) : 0;
+    x[1] =
+        Math.abs(limeLight.getTx()) > 1
+            ? (-p * limeLight.getTx() + (limeLight.getTx() - prevAng) * -d)
+            : 0;
     x[2] =
         angleDone
             ? 0
             : -((poseEstimatorSubsystem.getAngle() % 180)
-                    - Math.copySign(180, poseEstimatorSubsystem.getAngle()))
-                * angleP;
+                        - Math.copySign(180, poseEstimatorSubsystem.getAngle()))
+                    * angleP
+                + drivetrainSubsystem.getGyro().getYawRate() * -angleD;
     // System.out.println(
     //     "sideways speed"
     //         + x[1]
