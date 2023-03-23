@@ -491,7 +491,7 @@ public class RobotContainer {
   private void configureArmBindings() {
     this.startAndBackButton();
     driver.x().onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
-    driver.y().onTrue(ArmSequenceCommand.starting());
+    driver.y().onTrue(new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub));
     driver
         .a()
         .onTrue(

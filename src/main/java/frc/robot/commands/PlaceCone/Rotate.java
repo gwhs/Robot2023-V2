@@ -29,10 +29,10 @@ public class Rotate extends CommandBase {
   private double[] values = {0, 0, 0};
   private boolean angleDone = false;
   private boolean sideDone = false;
-  private double p = .005;
+  private double p = .008;
   private int times = 0;
   private int noTarg = 0;
-  private double angleP = .006;
+  private double angleP = .01;
   private double anglePDefault;
   private GenericEntry anglePEntry;
 

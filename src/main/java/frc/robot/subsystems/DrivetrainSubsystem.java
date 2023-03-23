@@ -517,6 +517,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void setModuleStates(SwerveModuleState[] states) {
     states[1].speedMetersPerSecond = states[1].speedMetersPerSecond * 1.07;
     states[3].speedMetersPerSecond = states[3].speedMetersPerSecond * 1.226;
+    states[0].speedMetersPerSecond = states[0].speedMetersPerSecond * 1.14;
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);
     IntStream.range(0, swerveModules.length)

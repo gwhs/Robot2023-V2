@@ -41,6 +41,7 @@ public class PPIDAutoAim extends CommandBase {
   private GenericEntry positionPEntry;
 
   private final ShuffleboardTab tab;
+  private int times = 0;
 
   // second param on constraints is estimated, should be max accel, not max speed,
   // but lets say it
@@ -75,10 +76,10 @@ public class PPIDAutoAim extends CommandBase {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.targetDistance = targetDistance;
 
-    anglePDefault = 3;
+    anglePDefault = 2;
     angleIDefault = 0;
     angleDDefault = 0;
-    positionPDefault = 0.05;
+    positionPDefault = 0.025;
 
     tab = Shuffleboard.getTab("Drive");
 
@@ -153,7 +154,7 @@ public class PPIDAutoAim extends CommandBase {
       noTargets++;
     }
     // atgoal and setpoint do not work, so we just brute force it.
-    if (Math.abs(limeLight.getTx()) < .2) {
+    if (Math.abs(limeLight.getTx()) < 1) {
       angleDone = true;
     } else {
       // sets it to false if position not there yet
@@ -165,11 +166,8 @@ public class PPIDAutoAim extends CommandBase {
       // sets to false if angle not there yet
       sidewaysDone = false;
     }
-
-    if (noTargets >= 10) {
-      sidewaysDone = true;
-      angleDone = true;
-      System.out.println("target is gone!");
+    if (sidewaysDone && angleDone) {
+      times++;
     }
   }
 
@@ -184,7 +182,7 @@ public class PPIDAutoAim extends CommandBase {
   @Override
   public boolean isFinished() {
 
-    return angleDone && sidewaysDone;
+    return (angleDone && sidewaysDone && times > 5) || noTargets > 5;
   }
 
   public double[] chassisValuesLower() {

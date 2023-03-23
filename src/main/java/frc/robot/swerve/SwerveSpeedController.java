@@ -111,10 +111,12 @@ public class SwerveSpeedController {
         .recordOutput(
             "Drive_Motor" + motor.getDeviceID() + "/DriveSupplyCurrent", getSupplyCurrent());
     Logger.getInstance()
-        .recordOutput("Drive_Motor" + motor.getDeviceID() + "/DriveStatorCurrent", getStatorCurrent());
+        .recordOutput(
+            "Drive_Motor" + motor.getDeviceID() + "/DriveStatorCurrent", getStatorCurrent());
     Logger.getInstance()
         .recordOutput(
-            "Drive_Motor" + motor.getDeviceID() + "/DriveMotorOutputPercent", getMotorOutputPercent());
+            "Drive_Motor" + motor.getDeviceID() + "/DriveMotorOutputPercent",
+            getMotorOutputPercent());
     Logger.getInstance()
         .recordOutput("Drive_Motor" + motor.getDeviceID() + "/DriveTemperature", getTemperature());
 
