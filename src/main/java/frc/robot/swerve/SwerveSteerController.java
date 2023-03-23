@@ -115,6 +115,18 @@ public class SwerveSteerController {
             StatusFrameEnhanced.Status_1_General, STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
         "Failed to configure Falcon status frame period");
 
+    CtreUtils.checkCtreError(
+        motor.setStatusFramePeriod(
+            StatusFrameEnhanced.Status_2_Feedback0, STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
+        "Failed to configure Falcon status frame period");
+
+    CtreUtils.checkCtreError(
+        motor.setStatusFramePeriod(
+            StatusFrameEnhanced.Status_Brushless_Current,
+            STATUS_FRAME_GENERAL_PERIOD_MS,
+            CAN_TIMEOUT_MS),
+        "Failed to configure Falcon status frame period");
+
     addDashboardEntries(container);
   }
 
@@ -123,20 +135,6 @@ public class SwerveSteerController {
       container.addNumber("Current Angle", () -> getStateRotation().getDegrees());
       container.addNumber("Target Angle", () -> Math.toDegrees(desiredAngleRadians));
       container.addNumber("Absolute Encoder Angle", () -> encoder.getAbsolutePosition());
-      // Logger.getInstance()
-      //     .recordOutput(
-      //         container.getTitle() + "/SteerCurrentAngle", getStateRotation().getDegrees());
-      // Logger.getInstance()
-      //     .recordOutput(container.getTitle() + "/SteerSupplyCurrent", getSupplyCurrent());
-      // Logger.getInstance()
-      //     .recordOutput(container.getTitle() + "/SteerStatorCurrent", getStatorCurrent());
-      // Logger.getInstance()
-      //     .recordOutput(container.getTitle() + "/SteerMotorOutputPercent",
-      // getMotorOutputPercent());
-      // Logger.getInstance()
-      //     .recordOutput(container.getTitle() + "/SteerTemperature", getTemperature());
-      // Logger.getInstance()
-      //     .recordOutput(container.getTitle() + "/SteerRotationalVelocity", getVelocity());
     }
   }
 
@@ -224,17 +222,14 @@ public class SwerveSteerController {
     this.desiredAngleRadians = desiredAngleRadians;
 
     Logger.getInstance()
-        .recordOutput(
-            "SteerMotor_" + motor.getDeviceID() + "/DriveSupplyCurrent", getSupplyCurrent());
+        .recordOutput("Steer_Motor_" + motor.getDeviceID() + "/SupplyCurrent", getSupplyCurrent());
+    Logger.getInstance()
+        .recordOutput("Steer_Motor_" + motor.getDeviceID() + "/StatorCurrent", getStatorCurrent());
     Logger.getInstance()
         .recordOutput(
-            "SteerMotor_" + motor.getDeviceID() + "/DriveStatorCurrent", getStatorCurrent());
+            "Steer_Motor_" + motor.getDeviceID() + "/MotorOutputPercent", getMotorOutputPercent());
     Logger.getInstance()
-        .recordOutput(
-            "SteerMotor_" + motor.getDeviceID() + "/DriveMotorOutputPercent",
-            getMotorOutputPercent());
-    Logger.getInstance()
-        .recordOutput("SteerMotor_" + motor.getDeviceID() + "/DriveTemperature", getTemperature());
+        .recordOutput("Steer_Motor_" + motor.getDeviceID() + "/Temperature", getTemperature());
   }
 
   public Rotation2d getStateRotation() {

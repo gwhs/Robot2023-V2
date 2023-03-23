@@ -71,6 +71,18 @@ public class SwerveSpeedController {
             StatusFrameEnhanced.Status_1_General, STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
         "Failed to configure Falcon status frame period");
 
+    CtreUtils.checkCtreError(
+        motor.setStatusFramePeriod(
+            StatusFrameEnhanced.Status_2_Feedback0, STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
+        "Failed to configure Falcon status frame period");
+
+    CtreUtils.checkCtreError(
+        motor.setStatusFramePeriod(
+            StatusFrameEnhanced.Status_Brushless_Current,
+            STATUS_FRAME_GENERAL_PERIOD_MS,
+            CAN_TIMEOUT_MS),
+        "Failed to configure Falcon status frame period");
+
     addDashboardEntries(container);
   }
 
@@ -79,22 +91,6 @@ public class SwerveSpeedController {
       container.addNumber("Current Velocity", () -> getStateVelocity());
       container.addNumber("Target Velocity", () -> referenceVelocity);
       container.addNumber("Current Position", () -> getStatePosition());
-
-      // Logger.getInstance()
-      //     .recordOutput(container.getTitle() + "/DriveCurrentVelocity", getStateVelocity());
-      // Logger.getInstance()
-      //     .recordOutput(container.getTitle() + "/DriveTargetVelocity", referenceVelocity);
-      // Logger.getInstance()
-      //     .recordOutput(container.getTitle() + "/DriveCurrentPosition", getStatePosition());
-      // Logger.getInstance()
-      //     .recordOutput(container.getTitle() + "/DriveSupplyCurrent", getSupplyCurrent());
-      // Logger.getInstance()
-      //     .recordOutput(container.getTitle() + "/DriveStatorCurrent", getStatorCurrent());
-      // Logger.getInstance()
-      //     .recordOutput(container.getTitle() + "/DriveMotorOutputPercent",
-      // getMotorOutputPercent());
-      // Logger.getInstance()
-      //     .recordOutput(container.getTitle() + "/DriveTemperature", getTemperature());
     }
   }
 
@@ -108,17 +104,14 @@ public class SwerveSpeedController {
         arbFeedForward);
 
     Logger.getInstance()
-        .recordOutput(
-            "Drive_Motor" + motor.getDeviceID() + "/DriveSupplyCurrent", getSupplyCurrent());
+        .recordOutput("Drive_Motor" + motor.getDeviceID() + "/SupplyCurrent", getSupplyCurrent());
+    Logger.getInstance()
+        .recordOutput("Drive_Motor" + motor.getDeviceID() + "/StatorCurrent", getStatorCurrent());
     Logger.getInstance()
         .recordOutput(
-            "Drive_Motor" + motor.getDeviceID() + "/DriveStatorCurrent", getStatorCurrent());
+            "Drive_Motor" + motor.getDeviceID() + "/MotorOutputPercent", getMotorOutputPercent());
     Logger.getInstance()
-        .recordOutput(
-            "Drive_Motor" + motor.getDeviceID() + "/DriveMotorOutputPercent",
-            getMotorOutputPercent());
-    Logger.getInstance()
-        .recordOutput("Drive_Motor" + motor.getDeviceID() + "/DriveTemperature", getTemperature());
+        .recordOutput("Drive_Motor" + motor.getDeviceID() + "/Temperature", getTemperature());
 
     motor.feed();
   }
