@@ -55,7 +55,8 @@ public class DynamicDefaultDriveCommand extends CommandBase {
       Supplier<Rotation2d> robotAngleSupplier,
       DoubleSupplier translationXSupplier,
       DoubleSupplier translationYSupplier,
-      DoubleSupplier rotationSupplier, boolean useSlewRate) {
+      DoubleSupplier rotationSupplier,
+      boolean useSlewRate) {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.robotAngleSupplier = robotAngleSupplier;
     this.translationXSupplier = translationXSupplier;
@@ -90,23 +91,20 @@ public class DynamicDefaultDriveCommand extends CommandBase {
   public void execute() {
     // You can use `new ChassisSpeeds(...)` for robot-oriented movement instead of field-oriented
     // movement
-    if (useSlewRate)
-    {
-    drivetrainSubsystem.drive(
-        ChassisSpeeds.fromFieldRelativeSpeeds(
-            translateXRateLimiter.calculate(translationXSupplier.getAsDouble()),
-            translateYRateLimiter.calculate(translationYSupplier.getAsDouble()),
-            -rotationRateLimiter.calculate(rotationSupplier.getAsDouble()),
-            robotAngleSupplier.get()));
-    }
-    else 
-    {
+    if (useSlewRate) {
       drivetrainSubsystem.drive(
-        ChassisSpeeds.fromFieldRelativeSpeeds(
-            translationXSupplier.getAsDouble(),
-            translationYSupplier.getAsDouble(),
-            -rotationSupplier.getAsDouble(),
-            robotAngleSupplier.get()));
+          ChassisSpeeds.fromFieldRelativeSpeeds(
+              translateXRateLimiter.calculate(translationXSupplier.getAsDouble()),
+              translateYRateLimiter.calculate(translationYSupplier.getAsDouble()),
+              -rotationRateLimiter.calculate(rotationSupplier.getAsDouble()),
+              robotAngleSupplier.get()));
+    } else {
+      drivetrainSubsystem.drive(
+          ChassisSpeeds.fromFieldRelativeSpeeds(
+              translationXSupplier.getAsDouble(),
+              translationYSupplier.getAsDouble(),
+              -rotationSupplier.getAsDouble(),
+              robotAngleSupplier.get()));
     }
   }
 
@@ -115,9 +113,7 @@ public class DynamicDefaultDriveCommand extends CommandBase {
     drivetrainSubsystem.stop();
   }
 
-  public void toggleSlewRate()
-  {
+  public void toggleSlewRate() {
     this.useSlewRate = !this.useSlewRate;
   }
-
 }

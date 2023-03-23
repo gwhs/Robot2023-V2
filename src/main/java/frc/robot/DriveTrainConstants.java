@@ -33,9 +33,8 @@ public class DriveTrainConstants {
 
   public static DriveTrainConstants chris = new DriveTrainConstants(108.60, 261.51, 4.37, 356.07);
 
-
   public static DriveTrainConstants ryker =
-      new DriveTrainConstants(231.262, 250.789 - 180.0, 128.85, 43.4191 - 180.0);
+      new DriveTrainConstants(163.3 + 180, 78.7 + 180.0, 127.6, 45.2 + 180);
 
   // 108.60, 261.51, 4.37, 356.07 - chris
 

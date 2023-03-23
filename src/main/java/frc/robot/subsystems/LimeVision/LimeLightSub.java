@@ -56,7 +56,7 @@ public class LimeLightSub extends SubsystemBase {
     SmartDashboard.putNumber("X-cone-Distance", getConeXDistance());
     SmartDashboard.putNumber("X-cube-Distance", getCubeXDistance());
     SmartDashboard.putNumber("AngleToTarget", getAngle());
-    
+
     // This method will be called once per scheduler run
   }
 
@@ -89,6 +89,7 @@ public class LimeLightSub extends SubsystemBase {
     Logger.getInstance().recordOutput("LimeLightSub/XDistance", XDistance);
     return XDistance;
   }
+
   public double getCubeXDistance() {
     double XDistance =
         (kTargetHeight - kCameraHeight)

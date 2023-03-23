@@ -29,14 +29,13 @@ import frc.robot.commands.Arm.MagicMotionAbsoluteZero;
 import frc.robot.commands.Arm.MagicMotionPos;
 import frc.robot.commands.Arm.MagicMotionPosShuffleboard;
 import frc.robot.commands.AutoBalance;
-import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.DynamicDefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.ChangePipeline;
+import frc.robot.commands.PlaceCone.CubePPIDAutoAim;
 import frc.robot.commands.PlaceCone.PPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceHigh;
 import frc.robot.commands.PlaceCone.PlaceLow;
-import frc.robot.commands.PlaceCone.CubePPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceMid;
 import frc.robot.commands.PlaceCone.Rotate;
 import frc.robot.commands.PlaceCone.Sideways;
@@ -133,23 +132,24 @@ public class RobotContainer {
           () -> -driver.getRightY(),
           () -> -driver.getRightX());
 
-    private final DynamicDefaultDriveCommand dynamicDefaultDriveCommand =
-    new DynamicDefaultDriveCommand(
-            drivetrainSubsystem,
-            () -> poseEstimator.getCurrentPose().getRotation(),
-            () ->
-                -modifyAxis(driver.getLeftY())
-                    * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
-                    * drivetrainDynamicAmplificationScale(),
-            () ->
-                -modifyAxis(driver.getLeftX())
-                    * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
-                    * drivetrainDynamicAmplificationScale(),
-            () ->
-                -modifyAxis(driver.getLeftTriggerAxis() - driver.getRightTriggerAxis())
-                    * drivetrainDynamicAmplificationScaleRotation()
-                    * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
-                    / 2);
+  private final DynamicDefaultDriveCommand dynamicDefaultDriveCommand =
+      new DynamicDefaultDriveCommand(
+          drivetrainSubsystem,
+          () -> poseEstimator.getCurrentPose().getRotation(),
+          () ->
+              -modifyAxis(driver.getLeftY())
+                  * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
+                  * drivetrainDynamicAmplificationScale(),
+          () ->
+              -modifyAxis(driver.getLeftX())
+                  * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
+                  * drivetrainDynamicAmplificationScale(),
+          () ->
+              -modifyAxis(driver.getLeftTriggerAxis() - driver.getRightTriggerAxis())
+                  * drivetrainDynamicAmplificationScaleRotation()
+                  * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
+                  / 2,
+          true);
 
   // private final ShuffleBoardBen angleBenCommand =
   // new ShuffleBoardBen(drivetrainSubsystem); // add a button
@@ -159,8 +159,7 @@ public class RobotContainer {
 
     Logger logger = Logger.getInstance();
     // Set up the default command for the drivetrain.
-    drivetrainSubsystem.setDefaultCommand(dynamicDefaultDriveCommand
-        );
+    drivetrainSubsystem.setDefaultCommand(dynamicDefaultDriveCommand);
 
     drivetrainSubsystem.reseedSteerMotorOffsets();
     // Configure the button bindings
@@ -179,12 +178,11 @@ public class RobotContainer {
   private GenericEntry maxSpeedAdjustment;
   private GenericEntry maxRotationSpeedAdjustment;
 
-  //true = speed
-  //false = prescision
+  // true = speed
+  // false = prescision
   private boolean speedState = true;
 
-  private void toggleSpeedState()
-  {
+  private void toggleSpeedState() {
     speedState = !speedState;
   }
 
@@ -218,26 +216,20 @@ public class RobotContainer {
   private double drivetrainDynamicAmplificationScale() {
     // This function multiplies the controller input to reduce the maximum speed,
     // 1 = full speed forward, 0.5 is half speed.
-    if (speedState)
-    {
-        return 0.8;
-    }
-    else 
-    {
-        return 0.4;
+    if (speedState) {
+      return 0.8;
+    } else {
+      return 0.4;
     }
   }
 
   private double drivetrainDynamicAmplificationScaleRotation() {
     // This fun ction multiplies the controller input to reduce the maximum speed,
     // 1 = full speed, 0.5 = speed
-    if (speedState)
-    {
-        return 0.8;
-    }
-    else 
-    {
-        return 0.4;
+    if (speedState) {
+      return 0.8;
+    } else {
+      return 0.4;
     }
   }
 
@@ -276,7 +268,6 @@ public class RobotContainer {
     // rotate
     driver.leftBumper().onTrue(rotate);
     // rotate
-
 
     operator
         .back()
@@ -710,10 +701,11 @@ public class RobotContainer {
                 clawEncoder::posDown2));
 
     operator
-    .leftTrigger()
-    .onTrue(
-        Commands.sequence(Commands.runOnce(() -> dynamicDefaultDriveCommand.toggleSlewRate()), Commands.runOnce(() -> toggleSpeedState()))
-    );
+        .leftTrigger()
+        .onTrue(
+            Commands.sequence(
+                Commands.runOnce(() -> dynamicDefaultDriveCommand.toggleSlewRate()),
+                Commands.runOnce(() -> toggleSpeedState())));
 
     // operator
     //     .a()
