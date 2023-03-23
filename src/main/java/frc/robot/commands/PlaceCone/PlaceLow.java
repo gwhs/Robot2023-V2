@@ -35,8 +35,7 @@ public class PlaceLow extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new PPIDAutoAim(
-            drivetrainSubsystem, limeLightSub, LimeLightConstants.BOTTOM_DISTANCE_SHOOT),
+        new PPIDAutoAim(drivetrainSubsystem, limeLightSub, LimeLightConstants.LOWER_DISTANCE_SHOOT),
         new Rotate(drivetrainSubsystem, poseEstimatorSubsystem, limeLightSub),
         new ClawEncoderMoveDown(-30.0, clawPivot, clawEncoder, "Cube").withTimeout(.1),
         Commands.waitSeconds(.1),

@@ -26,7 +26,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
-  private final RobotSetup robot = Constants.chuck;
+  private final RobotSetup robot = Constants.ryker;
 
   private RobotContainer robotContainer;
 
@@ -68,7 +68,7 @@ public class Robot extends LoggedRobot {
       case "calliope":
         LoggedPowerDistribution.getInstance(1, ModuleType.kRev);
         break;
-      case "chuck":
+      case "ryker":
         LoggedPowerDistribution.getInstance(1, ModuleType.kRev);
         break;
       default:

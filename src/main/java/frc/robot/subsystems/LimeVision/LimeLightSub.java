@@ -53,10 +53,10 @@ public class LimeLightSub extends SubsystemBase {
     SmartDashboard.putNumber("ty", ty.getDouble(0));
     SmartDashboard.putNumber("ta", ta.getDouble(0));
     SmartDashboard.putNumber("theta", getTheta());
-    SmartDashboard.putNumber("X-Distance", getXDistance());
-    SmartDashboard.putNumber("Y-Distance", getYDistance());
+    SmartDashboard.putNumber("X-cone-Distance", getConeXDistance());
+    SmartDashboard.putNumber("X-cube-Distance", getCubeXDistance());
     SmartDashboard.putNumber("AngleToTarget", getAngle());
-    SmartDashboard.putNumber("error", getXDistance() - 120);
+    
     // This method will be called once per scheduler run
   }
 
@@ -82,18 +82,19 @@ public class LimeLightSub extends SubsystemBase {
     return Theta;
   }
 
-  public double getXDistance() {
+  public double getConeXDistance() {
     double XDistance =
         (kTargetHeight - kCameraHeight)
             / (Math.tan(Math.toRadians(getTy() + LimeLightConstants.MOUNTING_ANGLE)));
     Logger.getInstance().recordOutput("LimeLightSub/XDistance", XDistance);
     return XDistance;
   }
-
-  public double getYDistance() {
-    double YDistance = Math.tan(Math.toRadians(getTx())) * getXDistance();
-    Logger.getInstance().recordOutput("LimeLightSub/YDistance", YDistance);
-    return YDistance;
+  public double getCubeXDistance() {
+    double XDistance =
+        (kTargetHeight - kCameraHeight)
+            / (Math.tan(Math.toRadians(getTy() + LimeLightConstants.MOUNTING_ANGLE)));
+    Logger.getInstance().recordOutput("LimeLightSub/XDistance", XDistance);
+    return XDistance;
   }
 
   public double getAngle() {

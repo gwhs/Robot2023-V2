@@ -21,7 +21,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import java.util.List;
 
-public class PPIDAutoAim extends CommandBase {
+public class CubePPIDAutoAim extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private LimeLightSub limeLight;
   private double[] values = {0, 0, 0};
@@ -68,7 +68,7 @@ public class PPIDAutoAim extends CommandBase {
   private double positionP = .007;
 
   /** Creates a new PPIDAutoAim. */
-  public PPIDAutoAim(
+  public CubePPIDAutoAim(
       DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub, double targetDistance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLight = limeLightSub;
@@ -124,7 +124,7 @@ public class PPIDAutoAim extends CommandBase {
     angleDone = false;
     sidewaysDone = false;
     // calculates how far it is from target
-    distanceError = limeLight.getConeXDistance() - targetDistance;
+    distanceError = limeLight.getCubeXDistance() - targetDistance;
 
     angleP = anglePEntry.getDouble(anglePDefault);
     angleI = angleIEntry.getDouble(angleIDefault);
@@ -197,7 +197,7 @@ public class PPIDAutoAim extends CommandBase {
      * use sin and cos to get values to reach max speed
      * not really sure about the angle yet.
      */
-    distanceError = limeLight.getConeXDistance() - targetDistance;
+    distanceError = limeLight.getCubeXDistance() - targetDistance;
     double[] x = new double[3];
 
     double d = (positionP) * distanceError;
