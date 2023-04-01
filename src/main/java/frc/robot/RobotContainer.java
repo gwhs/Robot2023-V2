@@ -694,13 +694,13 @@ public class RobotContainer {
     //             clawEncoder::posDown));
 
     // INTAKE UP & DOWN
-    operator
-        .a()
-        .onTrue(
-            Commands.either(
-                new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "CONE").withTimeout(3),
-                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
-                clawEncoder::posDown2));
+    // operator
+    //     .a()
+    //     .onTrue(
+    //         Commands.either(
+    //             new ClawEncoderMoveDown(-125, clawPivot, clawEncoder, "CONE").withTimeout(3),
+    //             new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "CONE").withTimeout(3),
+    //             clawEncoder::posDown2));
 
     operator
         .leftTrigger()
