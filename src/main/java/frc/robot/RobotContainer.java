@@ -169,8 +169,8 @@ public class RobotContainer {
     // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
-    // officialBindings();
     officialBindings();
+    // configureArmBindings()   ;
 
     setupPathChooser();
   }
@@ -533,10 +533,23 @@ public class RobotContainer {
         .b()
         .onTrue(
             Commands.sequence(
-                Commands.runOnce(() -> mainArm.swapMode(), mainArm),
-                Commands.runOnce(() -> System.out.println("Mode Num: " + mainArm.getMode())),
-                Commands.runOnce(() -> m_led.toggleLED(), m_led),
-                new ChangePipeline(limeLightSub)));
+                Commands.print("START"),
+                // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(0.5),
+                // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
+                // new MagicMotionPos(mainArm, 40, 1, 1, 5),
+                // for cube throw 100deg, 10vel, 10 accel
+                // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
+                new MagicMotionPosShuffleboard(mainArm, 190, 2.75, 5, shaftEncoder),
+
+                // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
+                // Commands.waitSeconds(),
+                new MagicMotionPos(mainArm, 20, 3, 1.5, .5),
+                // Commands.waitSeconds(.25),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+                // Commands.waitSeconds(.3),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
+    // INTAKE PICK-UP CONE
   }
 
   private void setupPathChooser() {
