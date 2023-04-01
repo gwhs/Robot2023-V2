@@ -15,7 +15,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
-import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -60,14 +59,14 @@ public class SwerveSteerController {
     config.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
 
     encoder = new CANCoder(canCoderPort, canivoreName);
-    CtreUtils.checkCtreError(
-        encoder.configAllSettings(config, 250), "Failed to configure CANCoder");
-    CtreUtils.checkCtreError(
-        encoder.setPositionToAbsolute(250), "Failed to set CANCoder to absolute");
+    // CtreUtils.checkCtreError(
+    //     encoder.configAllSettings(config, 250), "Failed to configure CANCoder");
+    // CtreUtils.checkCtreError(
+    //     encoder.setPositionToAbsolute(250), "Failed to set CANCoder to absolute");
 
-    CtreUtils.checkCtreError(
-        encoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 100, 250),
-        "Failed to configure CANCoder update rate");
+    // CtreUtils.checkCtreError(
+    //     encoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 100, 250),
+    //     "Failed to configure CANCoder update rate");
 
     // Configure Motor
     motorEncoderPositionCoefficient =
