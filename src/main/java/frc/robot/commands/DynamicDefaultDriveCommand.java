@@ -103,7 +103,7 @@ public class DynamicDefaultDriveCommand extends CommandBase {
     resetSlewRate();
   }
 
-  public void resetSlewRate(){
+  public void resetSlewRate() {
     var robotAngle = robotAngleSupplier.get();
 
     // Calculate field relative speeds
@@ -122,4 +122,3 @@ public class DynamicDefaultDriveCommand extends CommandBase {
     rotationRateLimiter.reset(robotSpeeds.omegaRadiansPerSecond);
   }
 }
-

@@ -32,7 +32,6 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DynamicDefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.ChangePipeline;
-import frc.robot.commands.PlaceCone.CubePPIDAutoAim;
 import frc.robot.commands.PlaceCone.PPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceHigh;
 import frc.robot.commands.PlaceCone.PlaceLow;
@@ -171,7 +170,7 @@ public class RobotContainer {
     configureDashboard();
     mainArm.robotInit();
     // officialBindings();
-    configureArmBindings();
+    officialBindings();
 
     setupPathChooser();
   }
@@ -633,6 +632,12 @@ public class RobotContainer {
 
     driver.leftBumper().onTrue(new toZero(drivetrainSubsystem, poseEstimator));
     driver.x().onTrue(new StraightWheel(drivetrainSubsystem, true));
+    driver
+        .a()
+        .onTrue(
+            Commands.sequence(
+                Commands.runOnce(() -> dynamicDefaultDriveCommand.toggleSlewRate()),
+                Commands.runOnce(() -> toggleSpeedState())));
     // driver.start().onTrue(fieldHeadingDriveCommand);
     // driver.back().onTrue(fieldHeadingDriveCommand);
     // operator.x().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 70));
