@@ -220,7 +220,7 @@ public class RobotContainer {
     if (speedState) {
       return 0.8;
     } else {
-      return 0.4;
+      return 0.25;
     }
   }
 
@@ -230,7 +230,7 @@ public class RobotContainer {
     if (speedState) {
       return 0.8;
     } else {
-      return 0.4;
+      return 0.25;
     }
   }
 
