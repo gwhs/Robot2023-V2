@@ -69,22 +69,7 @@ public class DynamicDefaultDriveCommand extends CommandBase {
 
   @Override
   public void initialize() {
-    var robotAngle = robotAngleSupplier.get();
-
-    // Calculate field relative speeds
-    var chassisSpeeds = drivetrainSubsystem.getChassisSpeeds();
-    var robotSpeeds =
-        new ChassisSpeeds(
-            chassisSpeeds.vxMetersPerSecond * robotAngle.getCos()
-                - chassisSpeeds.vyMetersPerSecond * robotAngle.getSin(),
-            chassisSpeeds.vyMetersPerSecond * robotAngle.getCos()
-                + chassisSpeeds.vxMetersPerSecond * robotAngle.getSin(),
-            chassisSpeeds.omegaRadiansPerSecond);
-
-    // Reset the slew rate limiters, in case the robot is already moving
-    translateXRateLimiter.reset(robotSpeeds.vxMetersPerSecond);
-    translateYRateLimiter.reset(robotSpeeds.vyMetersPerSecond);
-    rotationRateLimiter.reset(robotSpeeds.omegaRadiansPerSecond);
+    resetSlewRate();
   }
 
   @Override
@@ -115,5 +100,26 @@ public class DynamicDefaultDriveCommand extends CommandBase {
 
   public void toggleSlewRate() {
     this.useSlewRate = !this.useSlewRate;
+    resetSlewRate();
+  }
+
+  public void resetSlewRate(){
+    var robotAngle = robotAngleSupplier.get();
+
+    // Calculate field relative speeds
+    var chassisSpeeds = drivetrainSubsystem.getChassisSpeeds();
+    var robotSpeeds =
+        new ChassisSpeeds(
+            chassisSpeeds.vxMetersPerSecond * robotAngle.getCos()
+                - chassisSpeeds.vyMetersPerSecond * robotAngle.getSin(),
+            chassisSpeeds.vyMetersPerSecond * robotAngle.getCos()
+                + chassisSpeeds.vxMetersPerSecond * robotAngle.getSin(),
+            chassisSpeeds.omegaRadiansPerSecond);
+
+    // Reset the slew rate limiters, in case the robot is already moving
+    translateXRateLimiter.reset(robotSpeeds.vxMetersPerSecond);
+    translateYRateLimiter.reset(robotSpeeds.vyMetersPerSecond);
+    rotationRateLimiter.reset(robotSpeeds.omegaRadiansPerSecond);
   }
 }
+
