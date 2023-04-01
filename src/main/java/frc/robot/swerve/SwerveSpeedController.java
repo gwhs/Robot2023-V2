@@ -71,17 +71,17 @@ public class SwerveSpeedController {
     //         StatusFrameEnhanced.Status_1_General, STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
     //     "Failed to configure Falcon status frame period");
 
-    CtreUtils.checkCtreError(
-        motor.setStatusFramePeriod(
-            StatusFrameEnhanced.Status_2_Feedback0, STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
-        "Failed to configure Falcon status frame period");
+    // CtreUtils.checkCtreError(
+    //     motor.setStatusFramePeriod(
+    //         StatusFrameEnhanced.Status_2_Feedback0, STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
+    //     "Failed to configure Falcon status frame period");
 
-    CtreUtils.checkCtreError(
-        motor.setStatusFramePeriod(
-            StatusFrameEnhanced.Status_Brushless_Current,
-            STATUS_FRAME_GENERAL_PERIOD_MS,
-            CAN_TIMEOUT_MS),
-        "Failed to configure Falcon status frame period");
+    // CtreUtils.checkCtreError(
+    //     motor.setStatusFramePeriod(
+    //         StatusFrameEnhanced.Status_Brushless_Current,
+    //         STATUS_FRAME_GENERAL_PERIOD_MS,
+    //         CAN_TIMEOUT_MS),
+    //     "Failed to configure Falcon status frame period");
 
     addDashboardEntries(container);
   }
