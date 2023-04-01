@@ -100,10 +100,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
               backLeftLayout,
               backRightLayout,
               setup.canivore_name());
-    } else if (setup.name().equals("chuck")) {
-      driveTrain = DriveTrainConstants.chuck;
+    } else if (setup.name().equals("ryker")) {
+      driveTrain = DriveTrainConstants.ryker;
       swerveModules =
-          swerveModuleChuck(
+          swerveModuleryker(
               frontLeftLayout,
               frontRightLayout,
               backLeftLayout,
@@ -232,7 +232,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return swerveModules;
   }
 
-  private SwerveModule[] swerveModuleChuck(
+  private SwerveModule[] swerveModuleryker(
       ShuffleboardLayout frontLeftLayout,
       ShuffleboardLayout frontRightLayout,
       ShuffleboardLayout backLeftLayout,
@@ -467,13 +467,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
       SwerveModuleState moduleStates[] = getModuleStates();
       Logger.getInstance()
-          .recordOutput("DriveSpeed/Front Left Drive Speed", moduleStates[0].speedMetersPerSecond);
+          .recordOutput(
+              "DriveSpeed/Front Left Drive Speed", Math.abs(moduleStates[0].speedMetersPerSecond));
       Logger.getInstance()
-          .recordOutput("DriveSpeed/Front Right Drive Speed", moduleStates[1].speedMetersPerSecond);
+          .recordOutput(
+              "DriveSpeed/Front Right Drive Speed", Math.abs(moduleStates[1].speedMetersPerSecond));
       Logger.getInstance()
-          .recordOutput("DriveSpeed/Back Left Drive Speed", moduleStates[2].speedMetersPerSecond);
+          .recordOutput(
+              "DriveSpeed/Back Left Drive Speed", Math.abs(moduleStates[2].speedMetersPerSecond));
       Logger.getInstance()
-          .recordOutput("DriveSpeed/Back Right Drive Speed", moduleStates[3].speedMetersPerSecond);
+          .recordOutput(
+              "DriveSpeed/Back Right Drive Speed", Math.abs(moduleStates[3].speedMetersPerSecond));
 
       setModuleStates(desiredStates);
       Logger.getInstance().recordOutput("DriveTrainSub/DesireStates", desiredStates);
@@ -511,6 +515,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param states array of states. Must be ordered frontLeft, frontRight, backLeft, backRight
    */
   public void setModuleStates(SwerveModuleState[] states) {
+    states[1].speedMetersPerSecond = states[1].speedMetersPerSecond * 1.07;
+    states[3].speedMetersPerSecond = states[3].speedMetersPerSecond * 1.226;
+    states[0].speedMetersPerSecond = states[0].speedMetersPerSecond * 1.14;
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND);
     IntStream.range(0, swerveModules.length)

@@ -62,15 +62,15 @@ public class AutoBalance extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrainSubsystem = drivetrainSubsystem;
 
-    pConstantDefault = 0.0015; // 0.0045 original these are the default values set on the robot and
+    pConstantDefault = 0.009; // 0.0045 original these are the default values set on the robot and
     // shuffleboard
-    dConstantDefault = 0.000021;
+    dConstantDefault = 0.0001;
     toleranceDefault = 2;
     maxSpeedDefault = 0.5;
     requiredEngageTimeDefault = 0.1;
-    requiredStateChangeTimeDefault = 0.01;
+    requiredStateChangeTimeDefault = 0.001;
     initialSpeedDefault = 0.4;
-    epsilonRateDefault = 4;
+    epsilonRateDefault = 2;
 
     engageTimer = new Timer();
     engageTimer.stop();
@@ -179,7 +179,7 @@ public class AutoBalance extends CommandBase {
     // double currentAngle = gyro.getRoll();
     // double currentDPS = gyro.getRollRate();
 
-    // for chuck
+    // for ryker
     double currentAngle = -gyro.getPitch();
     double currentDPS = -gyro.getPitchRate();
 
@@ -195,7 +195,7 @@ public class AutoBalance extends CommandBase {
       stateChangeTimer.reset();
     }
 
-    if (stateChangeTimer.hasElapsed(requiredStateChangeTime) && Math.abs(error) <= 11) {
+    if (stateChangeTimer.hasElapsed(requiredStateChangeTime) && Math.abs(error) <= 12.5) {
       state = 1;
     }
 

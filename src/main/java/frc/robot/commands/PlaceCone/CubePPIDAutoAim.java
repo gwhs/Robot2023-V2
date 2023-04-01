@@ -21,7 +21,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.LimeVision.LimeLightSub;
 import java.util.List;
 
-public class PPIDAutoAim extends CommandBase {
+public class CubePPIDAutoAim extends CommandBase {
   private DrivetrainSubsystem drivetrainSubsystem;
   private LimeLightSub limeLight;
   private double[] values = {0, 0, 0};
@@ -41,7 +41,6 @@ public class PPIDAutoAim extends CommandBase {
   private GenericEntry positionPEntry;
 
   private final ShuffleboardTab tab;
-  private int times = 0;
 
   // second param on constraints is estimated, should be max accel, not max speed,
   // but lets say it
@@ -69,14 +68,14 @@ public class PPIDAutoAim extends CommandBase {
   private double positionP = .007;
 
   /** Creates a new PPIDAutoAim. */
-  public PPIDAutoAim(
+  public CubePPIDAutoAim(
       DrivetrainSubsystem drivetrainSubsystem, LimeLightSub limeLightSub, double targetDistance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.limeLight = limeLightSub;
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.targetDistance = targetDistance;
 
-    anglePDefault = 2;
+    anglePDefault = 3;
     angleIDefault = 0;
     angleDDefault = 0;
     positionPDefault = 0.025;
@@ -125,7 +124,7 @@ public class PPIDAutoAim extends CommandBase {
     angleDone = false;
     sidewaysDone = false;
     // calculates how far it is from target
-    distanceError = limeLight.getConeXDistance() - targetDistance;
+    distanceError = limeLight.getCubeXDistance() - targetDistance;
 
     angleP = anglePEntry.getDouble(anglePDefault);
     angleI = angleIEntry.getDouble(angleIDefault);
@@ -154,7 +153,7 @@ public class PPIDAutoAim extends CommandBase {
       noTargets++;
     }
     // atgoal and setpoint do not work, so we just brute force it.
-    if (Math.abs(limeLight.getTx()) < 1) {
+    if (Math.abs(limeLight.getTx()) < .2) {
       angleDone = true;
     } else {
       // sets it to false if position not there yet
@@ -166,8 +165,11 @@ public class PPIDAutoAim extends CommandBase {
       // sets to false if angle not there yet
       sidewaysDone = false;
     }
-    if (sidewaysDone && angleDone) {
-      times++;
+
+    if (noTargets >= 10) {
+      sidewaysDone = true;
+      angleDone = true;
+      System.out.println("target is gone!");
     }
   }
 
@@ -182,7 +184,7 @@ public class PPIDAutoAim extends CommandBase {
   @Override
   public boolean isFinished() {
 
-    return (angleDone && sidewaysDone && times > 5) || noTargets > 5;
+    return angleDone && sidewaysDone;
   }
 
   public double[] chassisValuesLower() {
@@ -195,7 +197,7 @@ public class PPIDAutoAim extends CommandBase {
      * use sin and cos to get values to reach max speed
      * not really sure about the angle yet.
      */
-    distanceError = limeLight.getConeXDistance() - targetDistance;
+    distanceError = limeLight.getCubeXDistance() - targetDistance;
     double[] x = new double[3];
 
     double d = (positionP) * distanceError;

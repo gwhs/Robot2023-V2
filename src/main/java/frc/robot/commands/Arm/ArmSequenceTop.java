@@ -13,13 +13,13 @@ import frc.robot.subsystems.ArmSubsystems.MagicMotion;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ArmSequence {
+public class ArmSequenceTop {
   private MagicMotion mainArm;
   private BoreEncoder shaftEncoder;
   private BoreEncoder clawEncoder;
   private Claw clawPivot;
   /** Creates a new MasterConeSequence. */
-  public ArmSequence(MagicMotion m, BoreEncoder b, BoreEncoder c, Claw clawP) {
+  public ArmSequenceTop(MagicMotion m, BoreEncoder b, BoreEncoder c, Claw clawP) {
     this.mainArm = m;
     this.shaftEncoder = b;
     this.clawEncoder = c;
@@ -35,28 +35,28 @@ public class ArmSequence {
         Commands.either(
             Commands.sequence(
                 Commands.print("START CONE "),
-                new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+                // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
                 // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
-                Commands.waitSeconds(.25),
+                // Commands.waitSeconds(.25),
                 Commands.runOnce(mainArm::resetPosition, mainArm),
-                new MagicMotionPos(mainArm, 40, 1, 1, 5),
-                new MagicMotionPos(mainArm, 190.0, 2.75, 5.0, 1),
+                // new MagicMotionPos(mainArm, 40, 1, 1, 5),
+                new MagicMotionPos(mainArm, 195.0, 2.75, 5.5, 1),
                 Commands.waitSeconds(.25),
                 new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)),
             Commands.sequence(
                 Commands.print("START CUBE"),
-                new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
+                // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(1.5),
                 // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
-                Commands.waitSeconds(.25),
+                // Commands.waitSeconds(.25),
                 Commands.runOnce(mainArm::resetPosition, mainArm),
-                new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 5, shaftEncoder),
+                new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 3.5, shaftEncoder),
                 Commands.waitSeconds(.25),
                 new MagicMotionPos(mainArm, 10, 3, 1.5, .5),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-                new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)),
             mainArm::isConeMode));
   }

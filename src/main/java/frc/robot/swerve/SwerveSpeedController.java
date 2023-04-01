@@ -15,6 +15,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
+import org.littletonrobotics.junction.Logger;
 
 public class SwerveSpeedController {
 
@@ -70,6 +71,18 @@ public class SwerveSpeedController {
     //         StatusFrameEnhanced.Status_1_General, STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
     //     "Failed to configure Falcon status frame period");
 
+    CtreUtils.checkCtreError(
+        motor.setStatusFramePeriod(
+            StatusFrameEnhanced.Status_2_Feedback0, STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
+        "Failed to configure Falcon status frame period");
+
+    CtreUtils.checkCtreError(
+        motor.setStatusFramePeriod(
+            StatusFrameEnhanced.Status_Brushless_Current,
+            STATUS_FRAME_GENERAL_PERIOD_MS,
+            CAN_TIMEOUT_MS),
+        "Failed to configure Falcon status frame period");
+
     addDashboardEntries(container);
   }
 
@@ -89,6 +102,17 @@ public class SwerveSpeedController {
         velocity / sensorVelocityCoefficient,
         DemandType.ArbitraryFeedForward,
         arbFeedForward);
+
+    Logger.getInstance()
+        .recordOutput("Drive_Motor" + motor.getDeviceID() + "/SupplyCurrent", getSupplyCurrent());
+    Logger.getInstance()
+        .recordOutput("Drive_Motor" + motor.getDeviceID() + "/StatorCurrent", getStatorCurrent());
+    Logger.getInstance()
+        .recordOutput(
+            "Drive_Motor" + motor.getDeviceID() + "/MotorOutputPercent", getMotorOutputPercent());
+    Logger.getInstance()
+        .recordOutput("Drive_Motor" + motor.getDeviceID() + "/Temperature", getTemperature());
+
     motor.feed();
   }
 
@@ -99,6 +123,22 @@ public class SwerveSpeedController {
    */
   public double getStateVelocity() {
     return motor.getSelectedSensorVelocity() * sensorVelocityCoefficient;
+  }
+
+  public double getSupplyCurrent() {
+    return motor.getSupplyCurrent();
+  }
+
+  public double getStatorCurrent() {
+    return motor.getStatorCurrent();
+  }
+
+  public double getMotorOutputPercent() {
+    return motor.getMotorOutputPercent();
+  }
+
+  public double getTemperature() {
+    return motor.getTemperature();
   }
 
   /**
