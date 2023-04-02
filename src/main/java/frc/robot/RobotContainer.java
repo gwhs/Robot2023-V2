@@ -618,7 +618,7 @@ public class RobotContainer {
     driver.b().onTrue(ArmSequenceCommand.starting());
 
     driver
-        .rightBumper()
+        .leftBumper()
         .onTrue(
             new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub).withTimeout(2));
     // Cube Toss
@@ -643,7 +643,7 @@ public class RobotContainer {
                 // Commands.waitSeconds(.3),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
-    driver.leftBumper().onTrue(new toZero(drivetrainSubsystem, poseEstimator));
+    driver.rightBumper().onTrue(new toZero(drivetrainSubsystem, poseEstimator));
     driver.x().onTrue(new PPIDAutoAim(
         drivetrainSubsystem, limeLightSub, LimeLightConstants.MID_DISTANCE_SHOOT));
     driver
