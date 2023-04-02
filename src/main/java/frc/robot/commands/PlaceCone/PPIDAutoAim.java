@@ -62,7 +62,7 @@ public class PPIDAutoAim extends CommandBase {
   // pid for angle
   private double angleP = 1;
   private double angleI = 0;
-  private double angleD = 0;
+  private double angleD = .06;
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
   private double targetDistance = 0;
@@ -78,7 +78,7 @@ public class PPIDAutoAim extends CommandBase {
 
     anglePDefault = 2;
     angleIDefault = 0;
-    angleDDefault = 0;
+    angleDDefault = .08;
     positionPDefault = 0.025;
 
     tab = Shuffleboard.getTab("Drive");
@@ -136,7 +136,7 @@ public class PPIDAutoAim extends CommandBase {
 
     // configuring rotation pid
     anglePid.reset(Math.toRadians(limeLight.getAngle()));
-    anglePid.setGoal(Math.toRadians(0));
+    anglePid.setGoal(Math.toRadians(-3.7));
     anglePid.setTolerance(Math.toRadians(1));
   }
 
@@ -154,13 +154,13 @@ public class PPIDAutoAim extends CommandBase {
       noTargets++;
     }
     // atgoal and setpoint do not work, so we just brute force it.
-    if (Math.abs(limeLight.getTx()) < 1) {
+    if (Math.abs(limeLight.getTx() + 3.7) < 1) {
       angleDone = true;
     } else {
       // sets it to false if position not there yet
       angleDone = false;
     }
-    if (Math.abs(distanceError) < 2) {
+    if (Math.abs(distanceError) < 1) {
       sidewaysDone = true;
     } else {
       // sets to false if angle not there yet
@@ -168,6 +168,8 @@ public class PPIDAutoAim extends CommandBase {
     }
     if (sidewaysDone && angleDone) {
       times++;
+    } else {
+      times = 0;
     }
   }
 
