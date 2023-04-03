@@ -170,7 +170,7 @@ public class RobotContainer {
     configureDashboard();
     mainArm.robotInit();
     // officialBindings();
-    officialBindings();
+    configureArmBindings();
 
     setupPathChooser();
   }
@@ -533,10 +533,23 @@ public class RobotContainer {
         .b()
         .onTrue(
             Commands.sequence(
-                Commands.runOnce(() -> mainArm.swapMode(), mainArm),
-                Commands.runOnce(() -> System.out.println("Mode Num: " + mainArm.getMode())),
-                Commands.runOnce(() -> m_led.toggleLED(), m_led),
-                new ChangePipeline(limeLightSub)));
+                Commands.print("START"),
+                // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(0.5),
+                // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
+                // new MagicMotionPos(mainArm, 40, 1, 1, 5),
+                // for cube throw 100deg, 10vel, 10 accel
+                // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
+                new MagicMotionPosShuffleboard(mainArm, 197, 2.75, 5.5, shaftEncoder),
+
+                // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
+                // Commands.waitSeconds(),
+                new MagicMotionPos(mainArm, 20, 3, 1.5, .5),
+                // Commands.waitSeconds(.25),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+                // Commands.waitSeconds(.3),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
+    // INTAKE PICK-UP CONE
   }
 
   private void setupPathChooser() {
@@ -605,7 +618,7 @@ public class RobotContainer {
     driver.b().onTrue(ArmSequenceCommand.starting());
 
     driver
-        .rightBumper()
+        .leftBumper()
         .onTrue(
             new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub).withTimeout(2));
     // Cube Toss
@@ -630,8 +643,9 @@ public class RobotContainer {
                 // Commands.waitSeconds(.3),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
 
-    driver.leftBumper().onTrue(new toZero(drivetrainSubsystem, poseEstimator));
-    driver.x().onTrue(new StraightWheel(drivetrainSubsystem, true));
+    driver.rightBumper().onTrue(new toZero(drivetrainSubsystem, poseEstimator));
+    driver.x().onTrue(new PPIDAutoAim(
+        drivetrainSubsystem, limeLightSub, LimeLightConstants.MID_DISTANCE_SHOOT));
     driver
         .a()
         .onTrue(
@@ -645,7 +659,7 @@ public class RobotContainer {
     // needs binding
     operator.a().onTrue(fieldHeadingDriveCommand);
     operator.rightTrigger().onTrue(new ChangePipeline(limeLightSub));
-    operator.x().onTrue(new AutoBalance(drivetrainSubsystem));
+    operator.x().onTrue(new StraightWheel(drivetrainSubsystem, true));
     operator
         .b()
         .onTrue(
@@ -655,8 +669,9 @@ public class RobotContainer {
                 Commands.runOnce(() -> m_led.toggleLED(), m_led),
                 new ChangePipeline(limeLightSub)));
     operator.rightBumper().onTrue(new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
-    // operator.rightBumper().onTrue(allLime);
-    operator.leftBumper().onTrue(new StraightWheel(drivetrainSubsystem, true));
+
+    //FREE BUTTONT
+    //operator.leftBumper().onTrue();
     operator
         .start()
         .onTrue(
