@@ -10,6 +10,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.CubeLightConstants;
 import frc.robot.Constants.LimeLightConstants;
 import org.littletonrobotics.junction.Logger;
 
@@ -92,7 +93,7 @@ public class LimeLightSub extends SubsystemBase {
 
   public double getCubeXDistance() {
     double XDistance =
-        (kTargetHeight - kCameraHeight)
+        (CubeLightConstants.TARGET_HEIGHT - kCameraHeight)
             / (Math.tan(Math.toRadians(getTy() + LimeLightConstants.MOUNTING_ANGLE)));
     Logger.getInstance().recordOutput("LimeLightSub/XDistance", XDistance);
     return XDistance;
@@ -115,6 +116,6 @@ public class LimeLightSub extends SubsystemBase {
   }
 
   public boolean checkPipe() {
-    return limelight_comm.get_entry_double("pipeline") < .5;
+    return !(limelight_comm.get_entry_double("pipeline") < .5);
   }
 }

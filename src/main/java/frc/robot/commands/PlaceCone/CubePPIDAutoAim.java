@@ -41,6 +41,7 @@ public class CubePPIDAutoAim extends CommandBase {
   private GenericEntry positionPEntry;
 
   private final ShuffleboardTab tab;
+  private int times = 0;
 
   // second param on constraints is estimated, should be max accel, not max speed,
   // but lets say it
@@ -61,7 +62,7 @@ public class CubePPIDAutoAim extends CommandBase {
   // pid for angle
   private double angleP = 1;
   private double angleI = 0;
-  private double angleD = 0;
+  private double angleD = .06;
   private ProfiledPIDController anglePid =
       new ProfiledPIDController(angleP, angleI, angleD, angleConstraints);
   private double targetDistance = 0;
@@ -77,7 +78,7 @@ public class CubePPIDAutoAim extends CommandBase {
 
     anglePDefault = 3;
     angleIDefault = 0;
-    angleDDefault = 0;
+    angleDDefault = .1;
     positionPDefault = 0.025;
 
     tab = Shuffleboard.getTab("Drive");
@@ -135,7 +136,7 @@ public class CubePPIDAutoAim extends CommandBase {
 
     // configuring rotation pid
     anglePid.reset(Math.toRadians(limeLight.getAngle()));
-    anglePid.setGoal(Math.toRadians(0));
+    anglePid.setGoal(Math.toRadians(-3.7));
     anglePid.setTolerance(Math.toRadians(1));
   }
 
@@ -153,23 +154,22 @@ public class CubePPIDAutoAim extends CommandBase {
       noTargets++;
     }
     // atgoal and setpoint do not work, so we just brute force it.
-    if (Math.abs(limeLight.getTx()) < .2) {
+    if (Math.abs(limeLight.getTx() + 3.7) < 1) {
       angleDone = true;
     } else {
       // sets it to false if position not there yet
       angleDone = false;
     }
-    if (Math.abs(distanceError) < 2) {
+    if (Math.abs(distanceError) < 1) {
       sidewaysDone = true;
     } else {
       // sets to false if angle not there yet
       sidewaysDone = false;
     }
-
-    if (noTargets >= 10) {
-      sidewaysDone = true;
-      angleDone = true;
-      System.out.println("target is gone!");
+    if (sidewaysDone && angleDone) {
+      times++;
+    } else {
+      times = 0;
     }
   }
 
@@ -184,7 +184,7 @@ public class CubePPIDAutoAim extends CommandBase {
   @Override
   public boolean isFinished() {
 
-    return angleDone && sidewaysDone;
+    return (angleDone && sidewaysDone && times > 5) || noTargets > 5;
   }
 
   public double[] chassisValuesLower() {
