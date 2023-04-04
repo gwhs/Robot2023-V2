@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.CubeLightConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.RobotSetup;
@@ -32,6 +33,7 @@ import frc.robot.commands.AutoBalance;
 import frc.robot.commands.DynamicDefaultDriveCommand;
 import frc.robot.commands.FieldHeadingDriveCommand;
 import frc.robot.commands.PlaceCone.ChangePipeline;
+import frc.robot.commands.PlaceCone.CubePPIDAutoAim;
 import frc.robot.commands.PlaceCone.PPIDAutoAim;
 import frc.robot.commands.PlaceCone.PlaceHigh;
 import frc.robot.commands.PlaceCone.PlaceLow;
@@ -169,8 +171,8 @@ public class RobotContainer {
     // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
-    // officialBindings();
-    configureArmBindings();
+    officialBindings();
+    // configureArmBindings();
 
     setupPathChooser();
   }
@@ -522,7 +524,15 @@ public class RobotContainer {
   private void configureArmBindings() {
     this.startAndBackButton();
     driver.x().onTrue(Commands.runOnce(poseEstimator::set180FieldPosition, drivetrainSubsystem));
-    driver.y().onTrue(new Rotate(drivetrainSubsystem, poseEstimator, limeLightSub));
+    driver
+        .x()
+        .onTrue(
+            Commands.either(
+                new CubePPIDAutoAim(
+                    drivetrainSubsystem, limeLightSub, CubeLightConstants.MID_DISTANCE_SHOOT),
+                new PPIDAutoAim(
+                    drivetrainSubsystem, limeLightSub, LimeLightConstants.MID_DISTANCE_SHOOT),
+                limeLightSub::checkPipe));
     driver
         .a()
         .onTrue(
@@ -550,6 +560,7 @@ public class RobotContainer {
                 // Commands.waitSeconds(.3),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
     // INTAKE PICK-UP CONE
+    driver.rightBumper().onTrue(new ChangePipeline(limeLightSub));
   }
 
   private void setupPathChooser() {
@@ -632,7 +643,7 @@ public class RobotContainer {
                 // new MagicMotionPos(mainArm, 40, 1, 1, 5),
                 // for cube throw 100deg, 10vel, 10 accel
                 // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
-                new MagicMotionPos(mainArm, 100, 10, 10, 1),
+                new MagicMotionPos(mainArm, 235, 2.75, 3, 1),
                 Commands.waitSeconds(.25),
                 // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
                 // Commands.waitSeconds(),
@@ -642,10 +653,38 @@ public class RobotContainer {
                 // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
                 // Commands.waitSeconds(.3),
                 new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
+    // driver.y().onTrue(new MagicMotionPosShuffleboard(mainArm, 235, 2.75, 3, clawEncoder));
+    driver
+        .y()
+        .onTrue(
+            Commands.sequence(
+                Commands.print("START"),
+                // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(0.5),
+                // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
+                // new MagicMotionPos(mainArm, 40, 1, 1, 5),
+                // for cube throw 100deg, 10vel, 10 accel
+                // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
+                new MagicMotionPos(mainArm, 235, 2.75, 3, 1),
 
+                // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
+                // Commands.waitSeconds(),
+                new MagicMotionPos(mainArm, 20, 3, 1.5, .5),
+                // Commands.waitSeconds(.25),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+                // Commands.waitSeconds(.3),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
     driver.rightBumper().onTrue(new toZero(drivetrainSubsystem, poseEstimator));
-    driver.x().onTrue(new PPIDAutoAim(
-        drivetrainSubsystem, limeLightSub, LimeLightConstants.MID_DISTANCE_SHOOT));
+    driver
+        .x()
+        .onTrue(
+            Commands.either(
+                new CubePPIDAutoAim(
+                    drivetrainSubsystem, limeLightSub, CubeLightConstants.MID_DISTANCE_SHOOT),
+                new PPIDAutoAim(
+                    drivetrainSubsystem, limeLightSub, LimeLightConstants.MID_DISTANCE_SHOOT),
+                limeLightSub::checkPipe));
+
     driver
         .a()
         .onTrue(
@@ -657,7 +696,10 @@ public class RobotContainer {
     // operator.x().onTrue(new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 70));
 
     // needs binding
-    operator.a().onTrue(fieldHeadingDriveCommand);
+    // operator
+    //     .a()
+    //     .onTrue(
+    //         );
     operator.rightTrigger().onTrue(new ChangePipeline(limeLightSub));
     operator.x().onTrue(new StraightWheel(drivetrainSubsystem, true));
     operator
@@ -670,8 +712,8 @@ public class RobotContainer {
                 new ChangePipeline(limeLightSub)));
     operator.rightBumper().onTrue(new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5));
 
-    //FREE BUTTONT
-    //operator.leftBumper().onTrue();
+    // FREE BUTTONT
+    // operator.leftBumper().onTrue();
     operator
         .start()
         .onTrue(
@@ -729,6 +771,30 @@ public class RobotContainer {
                 Commands.runOnce(() -> dynamicDefaultDriveCommand.toggleSlewRate()),
                 Commands.runOnce(() -> toggleSpeedState())));
 
+    operator
+        .leftBumper()
+        .onTrue(new MagicMotionPosShuffleboard(mainArm, 235, 2.75, 3, clawEncoder));
+
+    operator
+        .leftBumper()
+        .onTrue(
+            Commands.sequence(
+                Commands.print("START"),
+                // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(0.5),
+                // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
+                // new MagicMotionPos(mainArm, 40, 1, 1, 5),
+                // for cube throw 100deg, 10vel, 10 accel
+                // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
+                new MagicMotionPos(mainArm, 100, 10, 10, 1),
+                Commands.waitSeconds(.25),
+                // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
+                // Commands.waitSeconds(),
+                new MagicMotionPos(mainArm, 20, 3, 1.5, .5),
+                // Commands.waitSeconds(.25),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
+                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
+                // Commands.waitSeconds(.3),
+                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
     // operator
     //     .a()
     //     .onTrue(
