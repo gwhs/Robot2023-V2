@@ -124,8 +124,8 @@ public class SwerveSpeedController {
         DemandType.ArbitraryFeedForward,
         arbFeedForward);
 
-    Logger.getInstance()
-        .recordOutput("Drive_Motor" + motor.getDeviceID() + "/SupplyCurrent", getSupplyCurrent());
+    // Logger.getInstance()
+    //     .recordOutput("Drive_Motor" + motor.getDeviceID() + "/SupplyCurrent", getSupplyCurrent());
     Logger.getInstance()
         .recordOutput("Drive_Motor" + motor.getDeviceID() + "/StatorCurrent", getStatorCurrent());
     Logger.getInstance()
