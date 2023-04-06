@@ -147,7 +147,7 @@ public class RobotContainer {
                   * drivetrainDynamicAmplificationScale(),
           () ->
               -modifyAxis(driver.getLeftTriggerAxis() - driver.getRightTriggerAxis())
-                  * drivetrainDynamicAmplificationScaleRotation()
+                  * drivetrainDynamicAmplificationScale()
                   * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
                   / 2,
           true);
@@ -197,7 +197,7 @@ public class RobotContainer {
             .getEntry();
     maxRotationSpeedAdjustment =
         Shuffleboard.getTab("Drive")
-            .add("Max Rotation Speed", 0.2)
+            .add("Max Rotation Speed", 0.5)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 1)) // specify widget properties here
             .getEntry();
@@ -212,7 +212,7 @@ public class RobotContainer {
   private double drivetrainAmplificationScaleRotation() {
     // This fun ction multiplies the controller input to reduce the maximum speed,
     // 1 = full speed, 0.5 = speed
-    return maxRotationSpeedAdjustment.getDouble(0.2);
+    return maxRotationSpeedAdjustment.getDouble(0.5);
   }
 
   private double drivetrainDynamicAmplificationScale() {

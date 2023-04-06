@@ -125,7 +125,8 @@ public class SwerveSpeedController {
         arbFeedForward);
 
     // Logger.getInstance()
-    //     .recordOutput("Drive_Motor" + motor.getDeviceID() + "/SupplyCurrent", getSupplyCurrent());
+    //     .recordOutput("Drive_Motor" + motor.getDeviceID() + "/SupplyCurrent",
+    // getSupplyCurrent());
     Logger.getInstance()
         .recordOutput("Drive_Motor" + motor.getDeviceID() + "/StatorCurrent", getStatorCurrent());
     Logger.getInstance()
