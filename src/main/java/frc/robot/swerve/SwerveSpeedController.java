@@ -9,6 +9,7 @@ import static frc.robot.Constants.DrivetrainConstants.DRIVE_kV;
 
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
@@ -55,6 +56,10 @@ public class SwerveSpeedController {
     motorConfiguration.slot0.kP = DRIVE_kP;
     motorConfiguration.slot0.kI = DRIVE_kI;
     motorConfiguration.slot0.kD = DRIVE_kD;
+
+    //    motorConfiguration.supplyCurrLimit = new SupplyCurrentLimitConfiguration(true, 40, 65,
+    // 0.5);
+    motorConfiguration.statorCurrLimit = new StatorCurrentLimitConfiguration(true, 100, 120, 1);
 
     motor = new WPI_TalonFX(port, canivoreName);
     CtreUtils.checkCtreError(
