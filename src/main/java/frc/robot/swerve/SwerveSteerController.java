@@ -15,6 +15,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -59,14 +60,14 @@ public class SwerveSteerController {
     config.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
 
     encoder = new CANCoder(canCoderPort, canivoreName);
-    // CtreUtils.checkCtreError(
-    //     encoder.configAllSettings(config, 250), "Failed to configure CANCoder");
-    // CtreUtils.checkCtreError(
-    //     encoder.setPositionToAbsolute(250), "Failed to set CANCoder to absolute");
+   CtreUtils.checkCtreError(
+         encoder.configAllSettings(config, 250), "Failed to configure CANCoder");
+     CtreUtils.checkCtreError(
+         encoder.setPositionToAbsolute(250), "Failed to set CANCoder to absolute");
 
-    // CtreUtils.checkCtreError(
-    //     encoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 100, 250),
-    //     "Failed to configure CANCoder update rate");
+     CtreUtils.checkCtreError(
+         encoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 100, 250),
+         "Failed to configure CANCoder update rate");
 
     // Configure Motor
     motorEncoderPositionCoefficient =
@@ -109,23 +110,46 @@ public class SwerveSteerController {
     configMotorOffset(true);
 
     // Reduce CAN status frame rates
+     /**
+   * Set the CAN status frames.
+   *
+   * @param CANStatus1       Applied Motor Output, Fault Information, Limit Switch Information
+   * @param CANStatus2       Selected Sensor Position (PID 0), Selected Sensor Velocity (PID 0), Brushed Supply Current
+   *                         Measurement, Sticky Fault Information
+   * @param CANStatus3       Quadrature Information
+   * @param CANStatus4       Analog Input, Supply Battery Voltage, Controller Temperature
+   * @param CANStatus8       Pulse Width Information
+   * @param CANStatus10      Motion Profiling/Motion Magic Information
+   * @param CANStatus12      Selected Sensor Position (Aux PID 1), Selected Sensor Velocity (Aux PID 1)
+   * @param CANStatus13      PID0 (Primary PID) Information
+   * @param CANStatus14      PID1 (Auxiliary PID) Information
+   * @param CANStatus21      Integrated Sensor Position (Talon FX), Integrated Sensor Velocity (Talon FX)
+   * @param CANStatusCurrent Brushless Supply Current Measurement, Brushless Stator Current Measurement
+   */
      CtreUtils.checkCtreError(
          motor.setStatusFramePeriod(
-             StatusFrameEnhanced.Status_1_General, STATUS_FRAME_GENERAL_PERIOD_MS,
-     CAN_TIMEOUT_MS),
+             StatusFrameEnhanced.Status_1_General, 20,
+     1000),
          "Failed to configure Falcon status frame period");
 
      CtreUtils.checkCtreError(
          motor.setStatusFramePeriod(
-             StatusFrameEnhanced.Status_2_Feedback0, STATUS_FRAME_GENERAL_PERIOD_MS,
-     CAN_TIMEOUT_MS),
+             StatusFrameEnhanced.Status_2_Feedback0, 15,
+     1000),
          "Failed to configure Falcon status frame period");
+
+         CtreUtils.checkCtreError(
+          motor.setStatusFramePeriod(
+              StatusFrameEnhanced.Status_4_AinTempVbat, 211,
+      1000),
+          "Failed to configure Falcon status frame period");
+
 
      CtreUtils.checkCtreError(
          motor.setStatusFramePeriod(
              StatusFrameEnhanced.Status_Brushless_Current,
-             STATUS_FRAME_GENERAL_PERIOD_MS,
-             CAN_TIMEOUT_MS),
+             251,
+             1000),
          "Failed to configure Falcon status frame period");
 
     addDashboardEntries(container);
