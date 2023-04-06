@@ -6,6 +6,7 @@ import static frc.robot.Constants.DrivetrainConstants.STEER_kP;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
@@ -108,24 +109,24 @@ public class SwerveSteerController {
     configMotorOffset(true);
 
     // Reduce CAN status frame rates
-    // CtreUtils.checkCtreError(
-    //     motor.setStatusFramePeriod(
-    //         StatusFrameEnhanced.Status_1_General, STATUS_FRAME_GENERAL_PERIOD_MS,
-    // CAN_TIMEOUT_MS),
-    //     "Failed to configure Falcon status frame period");
+     CtreUtils.checkCtreError(
+         motor.setStatusFramePeriod(
+             StatusFrameEnhanced.Status_1_General, STATUS_FRAME_GENERAL_PERIOD_MS,
+     CAN_TIMEOUT_MS),
+         "Failed to configure Falcon status frame period");
 
-    // CtreUtils.checkCtreError(
-    //     motor.setStatusFramePeriod(
-    //         StatusFrameEnhanced.Status_2_Feedback0, STATUS_FRAME_GENERAL_PERIOD_MS,
-    // CAN_TIMEOUT_MS),
-    //     "Failed to configure Falcon status frame period");
+     CtreUtils.checkCtreError(
+         motor.setStatusFramePeriod(
+             StatusFrameEnhanced.Status_2_Feedback0, STATUS_FRAME_GENERAL_PERIOD_MS,
+     CAN_TIMEOUT_MS),
+         "Failed to configure Falcon status frame period");
 
-    // CtreUtils.checkCtreError(
-    //     motor.setStatusFramePeriod(
-    //         StatusFrameEnhanced.Status_Brushless_Current,
-    //         STATUS_FRAME_GENERAL_PERIOD_MS,
-    //         CAN_TIMEOUT_MS),
-    //     "Failed to configure Falcon status frame period");
+     CtreUtils.checkCtreError(
+         motor.setStatusFramePeriod(
+             StatusFrameEnhanced.Status_Brushless_Current,
+             STATUS_FRAME_GENERAL_PERIOD_MS,
+             CAN_TIMEOUT_MS),
+         "Failed to configure Falcon status frame period");
 
     addDashboardEntries(container);
   }
