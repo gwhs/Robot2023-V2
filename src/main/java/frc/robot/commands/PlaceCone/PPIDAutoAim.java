@@ -76,9 +76,9 @@ public class PPIDAutoAim extends CommandBase {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.targetDistance = targetDistance;
 
-    anglePDefault = 2;
+    anglePDefault = 1.8;
     angleIDefault = 0;
-    angleDDefault = .08;
+    angleDDefault = .12;
     positionPDefault = 0.025;
 
     tab = Shuffleboard.getTab("Drive");

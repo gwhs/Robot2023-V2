@@ -219,7 +219,7 @@ public class RobotContainer {
     // This function multiplies the controller input to reduce the maximum speed,
     // 1 = full speed forward, 0.5 is half speed.
     if (speedState) {
-      return 0.8;
+      return 0.9;
     } else {
       return 0.25;
     }
@@ -229,7 +229,7 @@ public class RobotContainer {
     // This fun ction multiplies the controller input to reduce the maximum speed,
     // 1 = full speed, 0.5 = speed
     if (speedState) {
-      return 0.8;
+      return 0.9;
     } else {
       return 0.25;
     }
