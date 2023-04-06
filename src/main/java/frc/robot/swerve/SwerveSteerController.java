@@ -129,19 +129,23 @@ public class SwerveSteerController {
      *     Measurement
      */
     CtreUtils.checkCtreError(
-        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20, 1000),
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 61),
         "Failed to configure Falcon status frame period");
 
     CtreUtils.checkCtreError(
-        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 15, 1000),
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 71),
         "Failed to configure Falcon status frame period");
 
     CtreUtils.checkCtreError(
-        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 211, 1000),
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 89),
         "Failed to configure Falcon status frame period");
 
     CtreUtils.checkCtreError(
-        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_Brushless_Current, 251, 1000),
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 211),
+        "Failed to configure Falcon status frame period");
+
+    CtreUtils.checkCtreError(
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_Brushless_Current, 43),
         "Failed to configure Falcon status frame period");
 
     addDashboardEntries(container);
