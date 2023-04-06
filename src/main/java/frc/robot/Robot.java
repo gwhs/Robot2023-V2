@@ -123,7 +123,9 @@ public class Robot extends LoggedRobot {
   public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    System.out.println("disabnlepedpereiodic \n\n\n\n\n\n\n\n\n\n\n\n r disabled periodic");
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override

@@ -680,9 +680,11 @@ public class RobotContainer {
         .onTrue(
             Commands.either(
                 new CubePPIDAutoAim(
-                    drivetrainSubsystem, limeLightSub, CubeLightConstants.MID_DISTANCE_SHOOT),
+                        drivetrainSubsystem, limeLightSub, CubeLightConstants.MID_DISTANCE_SHOOT)
+                    .withTimeout(2),
                 new PPIDAutoAim(
-                    drivetrainSubsystem, limeLightSub, LimeLightConstants.MID_DISTANCE_SHOOT),
+                        drivetrainSubsystem, limeLightSub, LimeLightConstants.MID_DISTANCE_SHOOT)
+                    .withTimeout(2),
                 limeLightSub::checkPipe));
 
     driver
