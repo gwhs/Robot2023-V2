@@ -171,8 +171,8 @@ public class RobotContainer {
     // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
-    officialBindings();
-    // configureArmBindings();
+    // officialBindings();
+    configureArmBindings();
 
     setupPathChooser();
   }
@@ -664,6 +664,7 @@ public class RobotContainer {
                 // new MagicMotionPos(mainArm, 40, 1, 1, 5),
                 // for cube throw 100deg, 10vel, 10 accel
                 // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
+                // new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 5.5, clawEncoder),
                 new MagicMotionPos(mainArm, 235, 2.75, 3, 1),
 
                 // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),

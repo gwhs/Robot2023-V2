@@ -22,7 +22,8 @@ public class MagicMotionPos extends CommandBase {
   private double acceleration;
   private double tolerance;
 
-  public MagicMotionPos(
+  public 
+  MagicMotionPos(
       MagicMotion moto, double angle, double velocity, double acceleration, double tolerance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.motor = moto;
