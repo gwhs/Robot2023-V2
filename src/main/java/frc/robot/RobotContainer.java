@@ -21,6 +21,7 @@ import frc.robot.Constants.CubeLightConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.RobotSetup;
+import frc.robot.commands.Arm.ArmSequenceMid;
 import frc.robot.commands.Arm.ArmSequenceTop;
 import frc.robot.commands.Arm.ClawEncoderMoveDown;
 import frc.robot.commands.Arm.ClawEncoderMoveUp;
@@ -88,6 +89,8 @@ public class RobotContainer {
   private final ArmSequenceTop ArmSequenceCommand =
       new ArmSequenceTop(mainArm, shaftEncoder, clawEncoder, clawPivot);
 
+  private final ArmSequenceMid armSequenceMid =
+      new ArmSequenceMid(mainArm, shaftEncoder, clawEncoder, clawPivot);
   // Led status
   private int status = 1;
 
@@ -171,8 +174,8 @@ public class RobotContainer {
     // configureAutoBalanceBindings();
     configureDashboard();
     mainArm.robotInit();
-    // officialBindings();
-    configureArmBindings();
+    officialBindings();
+    // configureArmBindings();
 
     setupPathChooser();
   }
@@ -633,48 +636,9 @@ public class RobotContainer {
         .onTrue(
             new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub).withTimeout(2));
     // Cube Toss
-    driver
-        .y()
-        .onTrue(
-            Commands.sequence(
-                Commands.print("START"),
-                // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(0.5),
-                // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
-                // new MagicMotionPos(mainArm, 40, 1, 1, 5),
-                // for cube throw 100deg, 10vel, 10 accel
-                // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
-                new MagicMotionPos(mainArm, 235, 2.75, 3, 1),
-                Commands.waitSeconds(.25),
-                // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
-                // Commands.waitSeconds(),
-                new MagicMotionPos(mainArm, 20, 3, 1.5, .5),
-                // Commands.waitSeconds(.25),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-                // Commands.waitSeconds(.3),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
+    driver.y().onTrue(armSequenceMid.starting());
     // driver.y().onTrue(new MagicMotionPosShuffleboard(mainArm, 235, 2.75, 3, clawEncoder));
-    driver
-        .y()
-        .onTrue(
-            Commands.sequence(
-                Commands.print("START"),
-                // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(0.5),
-                // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
-                // new MagicMotionPos(mainArm, 40, 1, 1, 5),
-                // for cube throw 100deg, 10vel, 10 accel
-                // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
-                // new MagicMotionPosShuffleboard(mainArm, 210, 2.75, 5.5, clawEncoder),
-                new MagicMotionPos(mainArm, 235, 2.75, 3, 1),
 
-                // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
-                // Commands.waitSeconds(),
-                new MagicMotionPos(mainArm, 20, 3, 1.5, .5),
-                // Commands.waitSeconds(.25),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-                // Commands.waitSeconds(.3),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
     driver.rightBumper().onTrue(new toZero(drivetrainSubsystem, poseEstimator));
     driver
         .x()
@@ -774,9 +738,9 @@ public class RobotContainer {
                 Commands.runOnce(() -> dynamicDefaultDriveCommand.toggleSlewRate()),
                 Commands.runOnce(() -> toggleSpeedState())));
 
-    operator
-        .leftBumper()
-        .onTrue(new MagicMotionPosShuffleboard(mainArm, 235, 2.75, 3, clawEncoder));
+    // operator
+    //     .leftBumper()
+    //     .onTrue(new MagicMotionPosShuffleboard(mainArm, 235, 2.75, 3, clawEncoder));
 
     operator
         .leftBumper()

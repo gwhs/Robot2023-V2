@@ -67,7 +67,7 @@ public class AutoBalance extends CommandBase {
     dConstantDefault = 0.0001;
     toleranceDefault = 2;
     maxSpeedDefault = 0.5;
-    requiredEngageTimeDefault = 0.1;
+    requiredEngageTimeDefault = 0.13;
     requiredStateChangeTimeDefault = 0.001;
     initialSpeedDefault = 0.4;
     epsilonRateDefault = 2;

@@ -215,7 +215,7 @@ public final class Constants {
     public static final double TARGET_HEIGHT = 61;
     public static final double MOUNTING_ANGLE = -10;
     public static final double LOWER_DISTANCE_SHOOT = 114;
-    public static final double MID_DISTANCE_SHOOT = 72;
+    public static final double MID_DISTANCE_SHOOT = 67.5;
     public static final double TOP_DISTANCE_SHOOT = 42;
   }
 
