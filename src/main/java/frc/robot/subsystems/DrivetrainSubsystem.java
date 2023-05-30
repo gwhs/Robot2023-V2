@@ -65,7 +65,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
               .withPosition(2, 0);
 
       backLeftLayout =
-          tab.getLayout("Back Left Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(4, 0);
+          tab.getLayout("Back Left Module", BuiltInLayouts.kList)
+              .withSize(2, 4)
+              .withPosition(4, 0);
 
       backRightLayout =
           tab.getLayout("Back Right Module", BuiltInLayouts.kList)
@@ -516,6 +518,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public void setModuleStates(SwerveModuleState[] states) {
     states[0].speedMetersPerSecond = states[0].speedMetersPerSecond * 10 / 8.5;
+    states[1].speedMetersPerSecond = states[1].speedMetersPerSecond * 10 / 10;
     states[2].speedMetersPerSecond = states[2].speedMetersPerSecond * 10 / 9.75;
     states[3].speedMetersPerSecond = states[3].speedMetersPerSecond * 10 / 9.5;
     SwerveDriveKinematics.desaturateWheelSpeeds(

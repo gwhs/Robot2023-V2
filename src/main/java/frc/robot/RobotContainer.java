@@ -70,7 +70,7 @@ public class RobotContainer {
   // change robot name
   // change this to change robot -----------------v
   // change the same in Robot.java
-  private final RobotSetup robot = Constants.ryker;
+  private final RobotSetup robot = Constants.hana;
 
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
@@ -774,7 +774,6 @@ public class RobotContainer {
     operator
         .leftBumper()
         .onTrue(new MagicMotionPosShuffleboard(mainArm, 235, 2.75, 3, clawEncoder));
-
     operator
         .leftBumper()
         .onTrue(
