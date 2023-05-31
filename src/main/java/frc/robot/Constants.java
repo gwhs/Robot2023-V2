@@ -198,7 +198,7 @@ public final class Constants {
     // public static final double UPPER_DISTANCE_SHOOT = 42;
     // public static final double BOTTOM_DISTANCE_SHOOT = 100;
 
-    // for ryker
+    // for ss ryker
     // public static final double MAX_LIMELIGHT_ERROR_DEGREES =
     //     1; // limelight max degrees off, max degrees error
     // public static final double CAMERA_HEIGHT = 84.5;
