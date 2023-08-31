@@ -128,11 +128,13 @@ public class RobotContainer {
           () ->
               -modifyAxis(driver.getLeftY())
                   * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
-                  * drivetrainAmplificationScale(),
+                  * drivetrainAmplificationScale()
+                  * .2,
           () ->
               -modifyAxis(driver.getLeftX())
                   * DrivetrainConstants.MAX_VELOCITY_METERS_PER_SECOND
-                  * drivetrainAmplificationScale(),
+                  * drivetrainAmplificationScale()
+                  * .2,
           () -> -driver.getRightY(),
           () -> -driver.getRightX());
 
