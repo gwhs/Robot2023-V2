@@ -5,6 +5,7 @@
 package frc.robot.subsystems.ArmSubsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -15,7 +16,6 @@ import frc.robot.Constants;
 public class Claw extends SubsystemBase {
   /** Creates a new claw. */
   private CANSparkMax m_motor;
-
   private SparkMaxPIDController m_pidController;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
   private RelativeEncoder m_encoder;
@@ -26,6 +26,7 @@ public class Claw extends SubsystemBase {
     m_motor.setInverted(inverted);
     m_encoder = m_motor.getEncoder();
     m_encoder.setPosition(0);
+    m_motor.setSecondaryCurrentLimit(80);
 
     /**
      * In order to use PID functionality for a controller, a SparkMaxPIDController object is
