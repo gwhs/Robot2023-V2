@@ -26,7 +26,7 @@ public class Claw extends SubsystemBase {
     m_motor.setInverted(inverted);
     m_encoder = m_motor.getEncoder();
     m_encoder.setPosition(0);
-    m_motor.setSecondaryCurrentLimit(80);
+    m_motor.setSecondaryCurrentLimit(80.0); //This is supposed to set the current limit to 80.0 amps
 
     /**
      * In order to use PID functionality for a controller, a SparkMaxPIDController object is
