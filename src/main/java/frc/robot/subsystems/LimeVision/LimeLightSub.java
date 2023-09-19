@@ -56,7 +56,7 @@ public class LimeLightSub extends SubsystemBase {
     SmartDashboard.putNumber("X-cone-Distance", getConeXDistance());
     SmartDashboard.putNumber("X-cube-Distance", getCubeXDistance());
     SmartDashboard.putNumber("AngleToTarget", getAngle());
-    
+
     // This method will be called once per scheduler run
   }
 
@@ -64,31 +64,32 @@ public class LimeLightSub extends SubsystemBase {
     return tv.getDouble(0) >= .9;
   }
 
-  public double getTx() {
+  public double getTx() { // left from camera is negative, right from camera is positive from crosshair
     double Tx = tx.getDouble(0);
     Logger.getInstance().recordOutput("LimeLightSub/Tx", Tx);
     return Tx;
   }
 
-  public double getTy() {
+  public double getTy() { // up is positive, down is negative
     double Ty = ty.getDouble(0);
     Logger.getInstance().recordOutput("LimeLightSub/Ty", Ty);
     return Ty;
   }
 
-  public double getTheta() {
+  public double getTheta() { // adds constant to ty
     double Theta = getTy() + LimeLightConstants.MOUNTING_ANGLE;
     Logger.getInstance().recordOutput("LimeLightSub/Theta", Theta);
     return Theta;
   }
 
-  public double getConeXDistance() {
+  public double getConeXDistance() {   
     double XDistance =
         (kTargetHeight - kCameraHeight)
             / (Math.tan(Math.toRadians(getTy() + LimeLightConstants.MOUNTING_ANGLE)));
     Logger.getInstance().recordOutput("LimeLightSub/XDistance", XDistance);
     return XDistance;
   }
+
   public double getCubeXDistance() {
     double XDistance =
         (kTargetHeight - kCameraHeight)
@@ -97,7 +98,7 @@ public class LimeLightSub extends SubsystemBase {
     return XDistance;
   }
 
-  public double getAngle() {
+  public double getAngle() { // convert tx to radians
     double angle = Math.toRadians(getTx());
     Logger.getInstance().recordOutput("LimeLightSub/angle", angle);
     return angle;

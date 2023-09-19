@@ -426,8 +426,6 @@ public class LimelightHelpers {
     }
     return null;
   }
-  /////
-  /////
 
   public static double getTX(String limelightName) {
     return getLimelightNTDouble(limelightName, "tx");

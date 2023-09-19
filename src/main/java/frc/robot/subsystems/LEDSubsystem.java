@@ -24,6 +24,7 @@ public class LEDSubsystem extends SubsystemBase {
     GREEN,
     ORANGE,
     RED,
+    FUNSIES
   }
 
   private final AddressableLED m_led;
@@ -90,6 +91,18 @@ public class LEDSubsystem extends SubsystemBase {
   // public void setStatus() {
   // if (drivetrainSubsystem
   // }
+
+  public void funsies() {
+
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+
+      int r = (int) ((Math.random() * 255) + 1);
+      int g = (int) ((Math.random() * 100) + 1);
+      int b = (int) ((Math.random() * 170) + 1);
+
+      generalLED(i, NUMBER_LED, r, g, b);
+    }
+  }
 
   public void rainbow() {
     // For every pixel
@@ -293,6 +306,11 @@ public class LEDSubsystem extends SubsystemBase {
       case RED:
         red();
         break;
+
+        // cool one
+      case FUNSIES:
+        funsies();
+        break;
     }
 
     m_led.setData(m_ledBuffer);
@@ -310,7 +328,9 @@ public class LEDSubsystem extends SubsystemBase {
 
   public void toggleLED() {
     if (getLedMode() == LEDMode.YELLOW) {
-      setLedMode(LEDMode.PURPLE);
+      setLedMode(LEDMode.FUNSIES);
+    } else if (getLedMode() == LEDMode.FUNSIES) {
+      setLedMode(LEDMode.RAINBOW);
     } else {
       setLedMode(LEDMode.YELLOW);
     }
