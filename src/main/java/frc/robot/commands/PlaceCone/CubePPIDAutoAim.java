@@ -76,7 +76,7 @@ public class CubePPIDAutoAim extends CommandBase {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.targetDistance = targetDistance;
 
-    anglePDefault = 3;
+    anglePDefault = 2;
     angleIDefault = 0;
     angleDDefault = .1;
     positionPDefault = 0.025;

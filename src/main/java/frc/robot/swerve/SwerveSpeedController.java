@@ -9,6 +9,8 @@ import static frc.robot.Constants.DrivetrainConstants.DRIVE_kV;
 
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -55,6 +57,10 @@ public class SwerveSpeedController {
     motorConfiguration.slot0.kI = DRIVE_kI;
     motorConfiguration.slot0.kD = DRIVE_kD;
 
+    //    motorConfiguration.supplyCurrLimit = new SupplyCurrentLimitConfiguration(true, 40, 65,
+    // 0.5);
+    motorConfiguration.statorCurrLimit = new StatorCurrentLimitConfiguration(true, 100, 120, 1);
+
     motor = new WPI_TalonFX(port, canivoreName);
     CtreUtils.checkCtreError(
         motor.configAllSettings(motorConfiguration), "Failed to configure Falcon 500");
@@ -65,24 +71,43 @@ public class SwerveSpeedController {
     motor.setSafetyEnabled(true);
 
     // Reduce CAN status frame rates
-    // CtreUtils.checkCtreError(
-    //     motor.setStatusFramePeriod(
-    //         StatusFrameEnhanced.Status_1_General, STATUS_FRAME_GENERAL_PERIOD_MS,
-    // CAN_TIMEOUT_MS),
-    //     "Failed to configure Falcon status frame period");
+    /**
+     * Set the CAN status frames.
+     *
+     * @param CANStatus1 Applied Motor Output, Fault Information, Limit Switch Information
+     * @param CANStatus2 Selected Sensor Position (PID 0), Selected Sensor Velocity (PID 0), Brushed
+     *     Supply Current Measurement, Sticky Fault Information
+     * @param CANStatus3 Quadrature Information
+     * @param CANStatus4 Analog Input, Supply Battery Voltage, Controller Temperature
+     * @param CANStatus8 Pulse Width Information
+     * @param CANStatus10 Motion Profiling/Motion Magic Information
+     * @param CANStatus12 Selected Sensor Position (Aux PID 1), Selected Sensor Velocity (Aux PID 1)
+     * @param CANStatus13 PID0 (Primary PID) Information
+     * @param CANStatus14 PID1 (Auxiliary PID) Information
+     * @param CANStatus21 Integrated Sensor Position (Talon FX), Integrated Sensor Velocity (Talon
+     *     FX)
+     * @param CANStatusCurrent Brushless Supply Current Measurement, Brushless Stator Current
+     *     Measurement
+     */
+    CtreUtils.checkCtreError(
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 61),
+        "Failed to configure Falcon status frame period");
 
-    // CtreUtils.checkCtreError(
-    //     motor.setStatusFramePeriod(
-    //         StatusFrameEnhanced.Status_2_Feedback0, STATUS_FRAME_GENERAL_PERIOD_MS,
-    // CAN_TIMEOUT_MS),
-    //     "Failed to configure Falcon status frame period");
+    CtreUtils.checkCtreError(
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 71),
+        "Failed to configure Falcon status frame period");
 
-    // CtreUtils.checkCtreError(
-    //     motor.setStatusFramePeriod(
-    //         StatusFrameEnhanced.Status_Brushless_Current,
-    //         STATUS_FRAME_GENERAL_PERIOD_MS,
-    //         CAN_TIMEOUT_MS),
-    //     "Failed to configure Falcon status frame period");
+    CtreUtils.checkCtreError(
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 89),
+        "Failed to configure Falcon status frame period");
+
+    CtreUtils.checkCtreError(
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 211),
+        "Failed to configure Falcon status frame period");
+
+    CtreUtils.checkCtreError(
+        motor.setStatusFramePeriod(StatusFrameEnhanced.Status_Brushless_Current, 43),
+        "Failed to configure Falcon status frame period");
 
     addDashboardEntries(container);
   }
@@ -104,8 +129,9 @@ public class SwerveSpeedController {
         DemandType.ArbitraryFeedForward,
         arbFeedForward);
 
-    Logger.getInstance()
-        .recordOutput("Drive_Motor" + motor.getDeviceID() + "/SupplyCurrent", getSupplyCurrent());
+    // Logger.getInstance()
+    //     .recordOutput("Drive_Motor" + motor.getDeviceID() + "/SupplyCurrent",
+    // getSupplyCurrent());
     Logger.getInstance()
         .recordOutput("Drive_Motor" + motor.getDeviceID() + "/StatorCurrent", getStatorCurrent());
     Logger.getInstance()

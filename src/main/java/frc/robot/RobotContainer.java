@@ -21,6 +21,7 @@ import frc.robot.Constants.CubeLightConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.RobotSetup;
+import frc.robot.commands.Arm.ArmSequenceMid;
 import frc.robot.commands.Arm.ArmSequenceTop;
 import frc.robot.commands.Arm.ClawEncoderMoveDown;
 import frc.robot.commands.Arm.ClawEncoderMoveUp;
@@ -88,6 +89,8 @@ public class RobotContainer {
   private final ArmSequenceTop ArmSequenceCommand =
       new ArmSequenceTop(mainArm, shaftEncoder, clawEncoder, clawPivot);
 
+  private final ArmSequenceMid armSequenceMid =
+      new ArmSequenceMid(mainArm, shaftEncoder, clawEncoder, clawPivot);
   // Led status
   private int status = 1;
 
@@ -147,7 +150,7 @@ public class RobotContainer {
                   * drivetrainDynamicAmplificationScale(),
           () ->
               -modifyAxis(driver.getLeftTriggerAxis() - driver.getRightTriggerAxis())
-                  * drivetrainDynamicAmplificationScaleRotation()
+                  * drivetrainDynamicAmplificationScale()
                   * DrivetrainConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
                   / 2,
           true);
@@ -197,7 +200,7 @@ public class RobotContainer {
             .getEntry();
     maxRotationSpeedAdjustment =
         Shuffleboard.getTab("Drive")
-            .add("Max Rotation Speed", 0.2)
+            .add("Max Rotation Speed", 0.5)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 1)) // specify widget properties here
             .getEntry();
@@ -212,14 +215,14 @@ public class RobotContainer {
   private double drivetrainAmplificationScaleRotation() {
     // This fun ction multiplies the controller input to reduce the maximum speed,
     // 1 = full speed, 0.5 = speed
-    return maxRotationSpeedAdjustment.getDouble(0.2);
+    return maxRotationSpeedAdjustment.getDouble(0.5);
   }
 
   private double drivetrainDynamicAmplificationScale() {
     // This function multiplies the controller input to reduce the maximum speed,
     // 1 = full speed forward, 0.5 is half speed.
     if (speedState) {
-      return 0.8;
+      return 0.9;
     } else {
       return 0.25;
     }
@@ -229,7 +232,7 @@ public class RobotContainer {
     // This fun ction multiplies the controller input to reduce the maximum speed,
     // 1 = full speed, 0.5 = speed
     if (speedState) {
-      return 0.8;
+      return 0.9;
     } else {
       return 0.25;
     }
@@ -633,56 +636,20 @@ public class RobotContainer {
         .onTrue(
             new rotatesideways(drivetrainSubsystem, poseEstimator, limeLightSub).withTimeout(2));
     // Cube Toss
-    driver
-        .y()
-        .onTrue(
-            Commands.sequence(
-                Commands.print("START"),
-                // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(0.5),
-                // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
-                // new MagicMotionPos(mainArm, 40, 1, 1, 5),
-                // for cube throw 100deg, 10vel, 10 accel
-                // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
-                new MagicMotionPos(mainArm, 235, 2.75, 3, 1),
-                Commands.waitSeconds(.25),
-                // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
-                // Commands.waitSeconds(),
-                new MagicMotionPos(mainArm, 20, 3, 1.5, .5),
-                // Commands.waitSeconds(.25),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-                // Commands.waitSeconds(.3),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
+    driver.y().onTrue(armSequenceMid.starting());
     // driver.y().onTrue(new MagicMotionPosShuffleboard(mainArm, 235, 2.75, 3, clawEncoder));
-    driver
-        .y()
-        .onTrue(
-            Commands.sequence(
-                Commands.print("START"),
-                // new ClawEncoderMoveDown(-100, clawPivot, clawEncoder, "Cube").withTimeout(0.5),
-                // new PPIDAutoAim(drivetrainSubsystem, limeLightSub, 44),
-                // new MagicMotionPos(mainArm, 40, 1, 1, 5),
-                // for cube throw 100deg, 10vel, 10 accel
-                // FOR CUBE PLACE, 210, 2.75 VELO, 3.5 ACCEL
-                new MagicMotionPos(mainArm, 235, 2.75, 3, 1),
 
-                // new MagicMotionPosShuffleboard(mainArm, 180, 1, 1),
-                // Commands.waitSeconds(),
-                new MagicMotionPos(mainArm, 20, 3, 1.5, .5),
-                // Commands.waitSeconds(.25),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5),
-                // new ClawEncoderMoveUp(0, clawPivot, clawEncoder, "Cube"),
-                // Commands.waitSeconds(.3),
-                new MagicMotionAbsoluteZero(mainArm, shaftEncoder, 5, 2.5)));
     driver.rightBumper().onTrue(new toZero(drivetrainSubsystem, poseEstimator));
     driver
         .x()
         .onTrue(
             Commands.either(
                 new CubePPIDAutoAim(
-                    drivetrainSubsystem, limeLightSub, CubeLightConstants.MID_DISTANCE_SHOOT),
+                        drivetrainSubsystem, limeLightSub, CubeLightConstants.MID_DISTANCE_SHOOT)
+                    .withTimeout(2),
                 new PPIDAutoAim(
-                    drivetrainSubsystem, limeLightSub, LimeLightConstants.MID_DISTANCE_SHOOT),
+                        drivetrainSubsystem, limeLightSub, LimeLightConstants.MID_DISTANCE_SHOOT)
+                    .withTimeout(2),
                 limeLightSub::checkPipe));
 
     driver
@@ -771,9 +738,9 @@ public class RobotContainer {
                 Commands.runOnce(() -> dynamicDefaultDriveCommand.toggleSlewRate()),
                 Commands.runOnce(() -> toggleSpeedState())));
 
-    operator
-        .leftBumper()
-        .onTrue(new MagicMotionPosShuffleboard(mainArm, 235, 2.75, 3, clawEncoder));
+    // operator
+    //     .leftBumper()
+    //     .onTrue(new MagicMotionPosShuffleboard(mainArm, 235, 2.75, 3, clawEncoder));
 
     operator
         .leftBumper()

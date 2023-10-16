@@ -215,7 +215,7 @@ public final class Constants {
     public static final double TARGET_HEIGHT = 61;
     public static final double MOUNTING_ANGLE = -10;
     public static final double LOWER_DISTANCE_SHOOT = 114;
-    public static final double MID_DISTANCE_SHOOT = 76;
+    public static final double MID_DISTANCE_SHOOT = 67.5;
     public static final double TOP_DISTANCE_SHOOT = 42;
   }
 
@@ -223,10 +223,10 @@ public final class Constants {
     public static final double MAX_LIMELIGHT_ERROR_DEGREES =
         1; // limelight max degrees off, max degrees error
     public static final double CAMERA_HEIGHT = 84.5;
-    public static final double TARGET_HEIGHT = 45.95;
+    public static final double TARGET_HEIGHT = 46.1;
     public static final double MOUNTING_ANGLE = -10;
     public static final double LOWER_DISTANCE_SHOOT = 114;
-    public static final double MID_DISTANCE_SHOOT = 45.95;
+    public static final double MID_DISTANCE_SHOOT = 62; // was 46
     public static final double TOP_DISTANCE_SHOOT = 114;
   }
 
